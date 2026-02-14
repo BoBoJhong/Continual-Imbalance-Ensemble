@@ -1,0 +1,88 @@
+baselines:
+  retraining:
+    description: "Retrain model using historical + new operating data combined"
+    data_sources: ["historical", "new_operating"]
+    models: ["lightgbm", "xgboost"]
+    sampling: ["undersampling", "oversampling", "hybrid"]
+    
+  finetuning:
+    description: "Pretrain on historical, finetune on new operating data"
+    pretrain_data: "historical"
+    finetune_data: "new_operating"
+    models: ["lightgbm", "xgboost"]
+    sampling: ["undersampling", "oversampling", "hybrid"]
+    learning_rate_reduction: 0.1  # Reduce LR for finetuning
+
+ensemble_experiments:
+  pool_definition:
+    old_models:  # Trained on historical data
+      - name: "old_1_under"
+        sampling: "undersampling"
+      - name: "old_2_over"
+        sampling: "oversampling"
+      - name: "old_3_hybrid"
+        sampling: "hybrid"
+        
+    new_models:  # Trained on new operating data
+      - name: "new_4_under"
+        sampling: "undersampling"
+      - name: "new_5_over"
+        sampling: "oversampling"
+      - name: "new_6_hybrid"
+        sampling: "hybrid"
+  
+  # Reference to des_config.yaml for combinations
+  combinations_ref: "config/des_config.yaml#ensemble_combinations"
+
+feature_selection_study:
+  control_variable: "feature_selection_enabled"
+  conditions:
+    without_fs:
+      enabled: false
+      description: "Run all experiments without feature selection"
+      
+    with_fs:
+      enabled: true
+      description: "Run all experiments with selected features"
+      feature_selection_config: "config/feature_config.yaml"
+  
+  comparison_metrics:
+    - "performance_difference"
+    - "feature_importance_analysis"
+    - "computational_cost"
+
+evaluation:
+  primary_metrics:
+    - "roc_auc"
+    - "f1_macro"
+    - "g_mean"
+    
+  secondary_metrics:
+    - "recall_minority"
+    - "precision_minority"
+    - "balanced_accuracy"
+    - "cohen_kappa"
+    
+  statistical_test:
+    method: "wilcoxon"  # Wilcoxon signed-rank test
+    alpha: 0.05
+    correction: "bonferroni"  # For multiple comparisons
+    
+  cross_validation:
+    method: "TimeSeriesSplit"
+    n_splits: 5
+    test_size: null  # Auto-calculated
+
+reproducibility:
+  random_seeds: [42, 123, 456, 789, 2024]
+  n_runs: 5
+  save_all_runs: true
+  aggregate_method: "mean_std"  # Report mean ± std
+
+experiment_tracking:
+  save_config: true
+  save_model: true
+  save_predictions: true
+  save_metrics: true
+  save_feature_importance: true
+  log_hyperparameters: true

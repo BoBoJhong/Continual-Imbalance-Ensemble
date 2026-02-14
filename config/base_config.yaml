@@ -1,0 +1,51 @@
+base_config:
+  project_name: "Continual-Imbalance-Ensemble"
+  random_seed: 42
+  n_runs: 5
+  random_seeds: [42, 123, 456, 789, 2024]
+  
+paths:
+  data_dir: "data"
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  splits_dir: "data/splits"
+  results_dir: "results"
+  logs_dir: "logs"
+  models_dir: "results/models"
+
+datasets:
+  bankruptcy:
+    name: "Taiwan_Bankruptcy_Prediction"
+    source: "Kaggle"
+    target_column: "Bankrupt?"
+    time_column: "Year"
+    
+  medical:
+    name: "MIMIC-III"
+    source: "PhysioNet"
+    target_column: "mortality"
+    time_column: "charttime"
+    
+  stock:
+    name: "Stock_Market_Crash"
+    source: "Kaggle"
+    target_column: "crash_event"
+    time_column: "date"
+
+split_modes:
+  chronological:
+    historical_ratio: 0.65    # 1999-2011 (13 years / 20 years)
+    new_operating_ratio: 0.15  # 2012-2014 (3 years / 20 years)
+    testing_ratio: 0.20        # 2015-2018 (4 years / 20 years)
+    
+  block_cv:
+    n_folds: 5
+    historical_folds: [1, 2]
+    new_operating_folds: [3, 4]
+    testing_fold: 5
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  console: true
+  file: true

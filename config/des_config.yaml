@@ -1,0 +1,83 @@
+des_algorithm:
+  method: "KNORAE"  # K-Nearest Oracles Eliminate
+  params:
+    k: 7  # Number of neighbors (odd number recommended)
+    DFP: true  # Dynamic Frienemy Pruning
+    with_IH: true  # Instance Hardness
+    safe_k: 3
+    IH_rate: 0.3
+    mode: "selection"  # or "hybrid"
+    
+alternative_des:
+  knoraeu:
+    method: "KNORAU"
+    params:
+      k: 7
+      DFP: true
+      with_IH: true
+      
+  meta_des:
+    method: "METADES"
+    params:
+      k: 7
+      Hc: 1.0
+      selection_method: "best"
+      mode: "selection"
+      
+  ola:
+    method: "OLA"
+    params:
+      k: 7
+      DFP: true
+      with_IH: true
+      
+  lca:
+    method: "LCA"
+    params:
+      k: 7
+      DFP: true
+      with_IH: true
+
+ensemble_combinations:
+  # 2 Models: Old + New (9 combinations)
+  two_models:
+    - ["old_1_under", "new_4_under"]
+    - ["old_1_under", "new_5_over"]
+    - ["old_1_under", "new_6_hybrid"]
+    - ["old_2_over", "new_4_under"]
+    - ["old_2_over", "new_5_over"]
+    - ["old_2_over", "new_6_hybrid"]
+    - ["old_3_hybrid", "new_4_under"]
+    - ["old_3_hybrid", "new_5_over"]
+    - ["old_3_hybrid", "new_6_hybrid"]  # Best expected combination
+    
+  # 3 Models: Type A (2 Old + 1 New)
+  three_models_type_a:
+    - ["old_1_under", "old_2_over", "new_6_hybrid"]
+    - ["old_1_under", "old_3_hybrid", "new_6_hybrid"]
+    - ["old_2_over", "old_3_hybrid", "new_6_hybrid"]  # Recommended
+    
+  # 3 Models: Type B (1 Old + 2 New)
+  three_models_type_b:
+    - ["old_3_hybrid", "new_5_over", "new_6_hybrid"]  # Recommended
+    - ["old_3_hybrid", "new_4_under", "new_6_hybrid"]
+    - ["old_3_hybrid", "new_4_under", "new_5_over"]
+    
+  # 4 Models
+  four_models:
+    - ["old_1_under", "old_2_over", "new_5_over", "new_6_hybrid"]
+    - ["old_1_under", "old_3_hybrid", "new_5_over", "new_6_hybrid"]
+    - ["old_2_over", "old_3_hybrid", "new_5_over", "new_6_hybrid"]  # Recommended
+    
+  # 5 Models
+  five_models:
+    - ["old_1_under", "old_2_over", "old_3_hybrid", "new_5_over", "new_6_hybrid"]  # Recommended
+    - ["old_1_under", "old_2_over", "new_4_under", "new_5_over", "new_6_hybrid"]
+    
+  # 6 Models: All models
+  six_models:
+    - ["old_1_under", "old_2_over", "old_3_hybrid", "new_4_under", "new_5_over", "new_6_hybrid"]
+
+aggregation:
+  voting: "soft"  # or "hard"
+  weighting: "competence"  # DES competence-based weighting

@@ -1,0 +1,57 @@
+# Core ML Libraries
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+
+# Imbalanced Learning
+imbalanced-learn>=0.11.0
+
+# Gradient Boosting Models
+lightgbm>=4.0.0
+xgboost>=2.0.0
+catboost>=1.2.0
+
+# Dynamic Ensemble Selection
+deslib>=0.3.7
+
+# Feature Selection
+mrmr-selection>=0.2.8
+# Note: scikit-feature-py3 is not available, use scikit-learn's feature_selection instead
+
+# Configuration Management
+pyyaml>=6.0
+python-dotenv>=1.0.0
+
+# Data Processing
+scipy>=1.11.0
+statsmodels>=0.14.0
+
+# Time Series
+ta>=0.11.0  # Technical Analysis library for stock features
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.17.0
+
+# Experiment Tracking
+mlflow>=2.8.0  # Optional but recommended
+wandb>=0.16.0  # Optional but recommended
+
+# Utilities
+tqdm>=4.66.0
+joblib>=1.3.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Jupyter
+jupyter>=1.0.0
+jupyterlab>=4.0.0
+ipywidgets>=8.1.0
+
+# Code Quality
+black>=23.0.0
+flake8>=6.1.0
+isort>=5.12.0

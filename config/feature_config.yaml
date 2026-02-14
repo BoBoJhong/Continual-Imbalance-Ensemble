@@ -1,0 +1,75 @@
+feature_selection:
+  # Phase 1: Filter Method (Fast initial screening)
+  filter:
+    method: "mRMR"  # minimum Redundancy Maximum Relevance
+    params:
+      n_features: 50  # Select top 50 features
+      relevance: "f_classif"  # F-statistic
+      redundancy: "c"  # Correlation
+      
+  # Phase 2: Embedded Method (Model-based selection)
+  embedded:
+    method: "LASSO"
+    params:
+      cv: 5
+      max_iter: 10000
+      tol: 0.0001
+      selection: "random"
+      
+  # Alternative Methods
+  alternative:
+    chi2:
+      method: "SelectKBest"
+      params:
+        score_func: "chi2"
+        k: 50
+        
+    mutual_info:
+      method: "SelectKBest"
+      params:
+        score_func: "mutual_info_classif"
+        k: 50
+        
+    recursive_feature_elimination:
+      method: "RFECV"
+      params:
+        estimator: "LightGBM"
+        step: 1
+        cv: 5
+        scoring: "roc_auc"
+        min_features_to_select: 10
+
+time_series_features:
+  # Lag features
+  lag_features:
+    lags: [1, 2, 3, 6, 12]  # Based on ACF/PACF analysis
+    
+  # Rolling statistics
+  rolling_features:
+    windows: [3, 6, 12]
+    statistics: ["mean", "std", "min", "max", "median", "skew", "kurt"]
+    
+  # Difference features
+  diff_features:
+    orders: [1, 2]  # First and second order differences
+    
+  # Temporal features
+  temporal:
+    - "year"
+    - "quarter"
+    - "month"
+    - "is_year_end"
+    - "is_quarter_end"
+    - "is_month_end"
+    
+  # Technical indicators (for stock data)
+  technical_indicators:
+    - "SMA"   # Simple Moving Average
+    - "EMA"   # Exponential Moving Average
+    - "RSI"   # Relative Strength Index
+    - "MACD"  # Moving Average Convergence Divergence
+    - "Bollinger_Bands"
+    - "ATR"   # Average True Range
+
+# Feature importance threshold
+importance_threshold: 0.01  # Features below this importance will be removed
