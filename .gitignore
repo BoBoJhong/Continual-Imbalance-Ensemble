@@ -37,19 +37,19 @@ ENV/
 .ipynb_checkpoints
 *.ipynb
 
-# Data (keep structure but ignore large files)
-data/raw/*
-!data/raw/.gitkeep
-data/processed/*
-!data/processed/.gitkeep
-data/splits/*
-!data/splits/.gitkeep
+# Data (keep structure but ignore large files) -> 應使用者要求全部加入版控
+# data/raw/*
+# !data/raw/.gitkeep
+# data/processed/*
+# !data/processed/.gitkeep
+# data/splits/*
+# !data/splits/.gitkeep
 
-# Results (too large to commit)
-results/
-!results/.gitkeep
+# Results (too large to commit) -> 應使用者要求全部加入版控
+# results/
+# !results/.gitkeep
 logs/
-!logs/.gitkeep
+# !logs/.gitkeep
 
 # Models (binary files)
 *.pkl

@@ -23,7 +23,8 @@ def _load_stock(logger):
     df = df.dropna(subset=["Crash_Event"])
     df["Crash_Event"] = df["Crash_Event"].astype(int)
     y = df["Crash_Event"]
-    X = df.drop(columns=["Date", "Crash_Event"])
+    # 移除 Future_Returns_20（Crash_Event 由此衍生，若保留則造成資料洩漏 AUC≈1.0）
+    X = df.drop(columns=["Date", "Crash_Event", "Future_Returns_20"])
     for c in X.columns:
         X[c] = pd.to_numeric(X[c], errors="coerce")
     X = X.fillna(X.median())
@@ -32,15 +33,33 @@ def _load_stock(logger):
 
 
 def _load_medical(logger):
-    """載入 Medical 資料（UCI/synthetic，目標 mortality）。"""
-    path = project_root / "data/raw/medical/synthetic/synthetic_medical_data.csv"
-    if not path.exists():
-        raise FileNotFoundError(f"Medical 資料不存在: {path}")
+    """載入 Medical 資料（UCI Diabetes 130-US Hospitals 1999-2008，目標: 30天再入院）。
+    
+    資料來源: UCI ML Repository #296
+    https://archive.ics.uci.edu/dataset/296/diabetes-130-us-hospitals-for-years-1999-2008
+    正類（<30d readmission）比例約 11%（少數類）。
+    """
+    # Priority: real UCI data > synthetic fallback
+    uci_path = project_root / "data/raw/medical/diabetes130/diabetes130_medical.csv"
+    synthetic_path = project_root / "data/raw/medical/synthetic/synthetic_medical_data.csv"
+    
+    if uci_path.exists():
+        path = uci_path
+        logger.info("使用真實 UCI Diabetes 130-US Hospitals 資料")
+    elif synthetic_path.exists():
+        path = synthetic_path
+        logger.info("[WARNING] 使用合成 Medical 資料（建議換成真實 UCI 資料）")
+    else:
+        raise FileNotFoundError(
+            f"Medical 資料不存在，請執行:\n"
+            f"  python scripts/download_real_medical_data.py"
+        )
+    
     df = pd.read_csv(path)
     y = df["mortality"]
     X = df.drop(columns=["date", "mortality"])
     X = X.astype(np.float64)
-    logger.info(f"Medical 資料大小: {X.shape}, 死亡率: {y.mean()*100:.2f}%")
+    logger.info(f"Medical 資料大小: {X.shape}, 正類率: {y.mean()*100:.2f}%")
     return X, y
 
 
