@@ -1,113 +1,139 @@
-# 專案結構說明
+# Continual-Imbalance-Ensemble — 目錄結構說明
 
-本文件說明目前程式碼與檔案的組織方式，方便維護與擴充。
+> 最後更新：2026-02-23
 
----
-
-## 一、目錄總覽
+## 整體架構
 
 ```
 Continual-Imbalance-Ensemble/
-├── config/                    # 設定檔（YAML）
-├── data/                      # 資料目錄（raw/processed 依 .gitignore）
-├── docs/                      # 文件
-│   ├── STRUCTURE.md          # 本檔：結構說明
-│   ├── EXPERIMENT_CHECKLIST.md  # 實驗對照表（老師要求 vs 狀態）
-│   └── ...
-├── experiments/               # 實驗腳本（依編號執行）
-│   ├── common_bankruptcy.py  # 共用：Bankruptcy 載入與切割
-│   ├── common_dataset.py     # 共用：Stock / Medical 載入與切割
-│   ├── common_des.py         # 共用：KNORA-E DES 邏輯
-│   ├── 01_bankruptcy_baseline.py
-│   ├── 02_bankruptcy_ensemble.py
-│   ├── 03_bankruptcy_des.py
-│   ├── 04_bankruptcy_feature_selection_study.py
+│
+├── .agent/
+│   ├── rules.md                    ← 專案規範（Antigravity 自動讀取）
+│   └── workflows/                  ← Antigravity 工作流程
+│
+├── README.md                       ← 專案入口（Quick Start）
+├── requirements.txt                ← 完整依賴
+├── requirements-core.txt           ← 核心依賴（精簡版）
+├── run_all_experiments.bat         ← Windows 一鍵執行
+├── run_experiment.bat              ← 單一實驗執行
+├── company-bankruptcy-prediction.zip ← Bankruptcy 原始資料
+│
+├── config/                         ← 所有 YAML 設定（禁止在 Python 中硬編碼超參數）
+│   ├── base_config.yaml            ← 全局基本設定（路徑、seed、log）
+│   ├── model_config.yaml           ← 模型超參數（LightGBM、XGBoost）
+│   ├── sampling_config.yaml        ← 採樣策略設定
+│   ├── des_config.yaml             ← DES/DCS 設定（k、metric）
+│   ├── feature_config.yaml         ← 特徵選擇設定（method、k_features）
+│   └── experiment_config.yaml      ← 實驗流程設定（split_mode、seeds）
+│
+├── src/                            ← 可 import 的函式庫（禁止含實驗邏輯）
+│   ├── __init__.py                 ← 版本 v0.2.0，列出所有子模組
+│   ├── data/
+│   │   ├── loader.py               ← 各資料集載入（Bankruptcy/Stock/Medical）
+│   │   ├── preprocessor.py         ← 缺值處理、特徵縮放（StandardScaler）
+│   │   ├── sampler.py              ← Under/Over/Hybrid Sampling（SMOTE/ENN）
+│   │   └── splitter.py             ← 兩種切割：chronological、block_cv (5-fold)
+│   ├── models/
+│   │   ├── lightgbm_wrapper.py     ← LightGBM 封裝（fit/predict/predict_proba）
+│   │   ├── xgboost_wrapper.py      ← XGBoost 封裝
+│   │   └── model_pool.py           ← ModelPool（6 個基分類器管理）
+│   ├── ensemble/                   ← [v0.2.0 補完]
+│   │   ├── __init__.py
+│   │   └── selector.py             ← DynamicEnsembleSelector (KNORA-E)
+│   │                                  EnsembleCombiner (2~6 模型組合)
+│   ├── features/                   ← [v0.2.0 補完]
+│   │   ├── __init__.py
+│   │   └── selector.py             ← FeatureSelector (kbest_f/chi2/lasso)
+│   ├── evaluation/                 ← [v0.2.0 補完]
+│   │   ├── __init__.py
+│   │   └── metrics.py              ← compute_metrics (AUC/F1/G-Mean/Recall)
+│   │                                  print_results_table, results_to_dataframe
+│   └── utils/
+│       ├── config_loader.py        ← YAML 設定載入器
+│       ├── logger.py               ← 統一 Logger（console + file）
+│       └── seed.py                 ← set_seed（numpy/random/torch）
+│
+├── experiments/                    ← 可直接執行的實驗腳本（只 import src/）
+│   ├── common_bankruptcy.py        ← Bankruptcy 資料載入共用函式
+│   ├── common_dataset.py           ← Stock/Medical 資料載入共用函式
+│   ├── common_des.py               ← DES 實驗共用邏輯
+│   ├── common_des_advanced.py      ← 進階 DES 共用邏輯
+│   ├── 01_bankruptcy_baseline.py   ← Baseline: Re-train / Fine-tune
+│   ├── 02_bankruptcy_ensemble.py   ← 靜態集成（2~6 模型組合）
+│   ├── 03_bankruptcy_des.py        ← Dynamic Ensemble Selection (KNORA-E)
+│   ├── 04_bankruptcy_feature_selection_study.py  ← Study II: 特徵選擇效果
 │   ├── 05_stock_baseline_ensemble.py
 │   ├── 06_medical_baseline_ensemble.py
 │   ├── 07_stock_des.py
-│   └── 08_medical_des.py
-├── scripts/                  # 工具腳本（非單一實驗）
-│   ├── run_all_experiments.py    # 一鍵執行 01~08
-│   ├── compare_baseline_ensemble.py  # Bankruptcy 合併表
-│   ├── compare_all_results.py      # 三資料集彙總
-│   ├── run_multi_seed.py           # 多 seed mean±std
-│   └── download_*.py               # 資料下載（可選）
-├── src/                      # 核心程式庫
-│   ├── data/                 # 資料：loader, preprocessor, splitter, sampler
-│   ├── models/               # 模型：LightGBM, XGBoost, ModelPool
-│   └── utils/                # 工具：logger, config, seed
-├── results/                  # 實驗結果（CSV，依 .gitignore 可不提交）
-├── logs/                     # 日誌（依 .gitignore）
-├── examples/                 # 示範與測試用
-├── tests/                    # 單元測試
-├── EXECUTION_GUIDE.md        # 執行步驟與流程
-├── run_experiment.bat        # Windows：單跑 01
-└── run_all_experiments.bat   # Windows：一鍵跑 01~08
+│   ├── 08_medical_des.py
+│   ├── 09_bankruptcy_des_advanced.py   ← 進階 DES（時間/少數類加權）
+│   └── 10_bankruptcy_proportion_study.py ← New data 比例研究
+│
+├── scripts/                        ← 工具腳本（非實驗）
+│   ├── README.md                   ← 腳本說明
+│   ├── run_all_experiments.py      ← 依序執行 01~10
+│   ├── run_multi_seed.py           ← 多 Seed 重現性（mean±std）
+│   ├── compare_baseline_ensemble.py ← Bankruptcy 結果彙總
+│   ├── compare_all_results.py      ← 三資料集彙總（summary CSV）
+│   ├── download_medical_data.py    ← UCI 醫療資料下載
+│   ├── download_stock_data.py      ← Stock 資料下載
+│   └── download_us_bankruptcy.py   ← US Bankruptcy 資料下載
+│
+├── data/                           ← 資料（raw/ 已 .gitignore）
+│   ├── raw/
+│   │   ├── bankruptcy/             ← american_bankruptcy_dataset.csv 或 data.csv
+│   │   ├── stock/                  ← data.csv（私有）
+│   │   └── medical/                ← data.csv（UCI）
+│   ├── processed/                  ← 前處理後資料
+│   └── splits/                     ← 切割後快取
+│
+├── results/                        ← 實驗結果（由腳本自動輸出）
+│   ├── baseline/                   ← 01 的輸出
+│   ├── ensemble/                   ← 02 的輸出
+│   ├── des/                        ← 03/07/08 的輸出
+│   ├── des_advanced/               ← 09 的輸出
+│   ├── feature_study/              ← 04 的輸出（Study II）
+│   ├── proportion_study/           ← 10 的輸出
+│   ├── stock/                      ← 05/07 的股票結果
+│   ├── medical/                    ← 06/08 的醫療結果
+│   └── visualizations/             ← 產出圖表
+│
+├── docs/                           ← 核心文件（~10 個，全 UPPER_CASE.md）
+│   ├── STRUCTURE.md                ← 本文件（目錄說明）
+│   ├── EXECUTION_GUIDE.md          ← 執行步驟與結果解讀
+│   ├── RESEARCH_SPEC.md            ← 指導教授研究方向規格
+│   ├── EXPERIMENT_CHECKLIST.md     ← 實驗完成進度追蹤
+│   ├── TEACHER_REQUIREMENTS_CHECKLIST.md ← 指導教授需求對照
+│   ├── DATASET_DOWNLOAD_GUIDE.md   ← 資料集下載說明
+│   ├── DATA_BANKRUPTCY_US.md       ← US Bankruptcy 資料格式說明
+│   ├── MIMIC_III_APPLICATION_GUIDE.md ← MIMIC-III 申請指南
+│   ├── MEDICAL_ALTERNATIVES.md     ← 醫療資料集替代方案
+│   ├── RESEARCH_EXTENSIONS.md      ← 研究延伸方向
+│   └── RESULTS_09_10_INTERPRETATION.md ← 實驗 9/10 結果解讀
+│
+├── examples/                       ← 示範腳本
+├── notebooks/                      ← Jupyter Notebooks（EDA）
+└── tests/                          ← 單元測試
 ```
 
----
+## Import 範例
 
-## 二、experiments/ 說明
+```python
+# 資料處理
+from src.data import DataLoader, DataPreprocessor, DataSplitter, ImbalanceSampler
 
-| 檔案 | 用途 | 依賴共用模組 |
-|------|------|----------------|
-| **common_bankruptcy.py** | Bankruptcy 資料載入、5-fold block CV 切割、前處理 | DataSplitter, DataPreprocessor |
-| **common_dataset.py** | Stock / Medical 載入、切割、前處理 | 同上 |
-| **common_des.py** | KNORA-E 風格 DES（建池 → DSEL → 動態選擇） | ModelPool |
-| **common_des_advanced.py** | 進階 DES：時間加權 + 少數類加權（後續論文用） | common_des, ModelPool |
-| **01_bankruptcy_baseline.py** | Baseline：retrain / finetune / ensemble_old | common_bankruptcy |
-| **02_bankruptcy_ensemble.py** | 靜態 ensemble（2/3/4/5/6 模型組合） | common_bankruptcy |
-| **03_bankruptcy_des.py** | DES (KNORA-E) | common_bankruptcy, common_des |
-| **04_bankruptcy_feature_selection_study.py** | Study II：有/無特徵選擇 | common_bankruptcy |
-| **05_stock_baseline_ensemble.py** | Stock baseline + ensemble | common_dataset |
-| **06_medical_baseline_ensemble.py** | Medical baseline + ensemble | common_dataset |
-| **07_stock_des.py** | Stock DES | common_dataset, common_des |
-| **08_medical_des.py** | Medical DES | common_dataset, common_des |
-| **09_bankruptcy_des_advanced.py** | 進階 DES 比較（baseline / 時間加權 / 少數類加權 / combined） | common_bankruptcy, common_des, common_des_advanced |
-| **10_bankruptcy_proportion_study.py** | 比例實驗（hist vs new 20%/50%/80%） | common_bankruptcy, common_des, common_des_advanced |
+# 模型
+from src.models import LightGBMWrapper, XGBoostWrapper, ModelPool
 
-**切割模式**：各實驗頂端有 `SPLIT_MODE = "block_cv"`（5-fold：1+2 歷史、3+4 新營運、5 測試）；可改為 `"random"` 使用 60-20-20 隨機切。
+# 集成選擇
+from src.ensemble import DynamicEnsembleSelector, EnsembleCombiner
 
----
+# 特徵選擇
+from src.features import FeatureSelector
 
-## 三、scripts/ 說明
+# 評估指標（禁止單用 Accuracy）
+from src.evaluation import compute_metrics, print_results_table
 
-| 腳本 | 用途 | 產出 |
-|------|------|------|
-| **run_all_experiments.py** | 依序執行 01→02→…→10 | 各實驗的 results/、logs/ |
-| **compare_baseline_ensemble.py** | 合併 Bankruptcy 的 baseline + ensemble + DES | results/bankruptcy_all_results.csv |
-| **compare_all_results.py** | 彙總三資料集所有方法 | results/summary_all_datasets.csv |
-| **run_multi_seed.py** | Bankruptcy baseline 多 seed 重跑 | results/baseline/bankruptcy_baseline_mean_std.csv |
-
----
-
-## 四、src/ 說明
-
-| 模組 | 內容 |
-|------|------|
-| **src.data** | DataLoader, DataPreprocessor, DataSplitter, ImbalanceSampler |
-| **src.models** | LightGBMWrapper, XGBoostWrapper, ModelPool |
-| **src.utils** | get_logger, get_config_loader, set_seed |
-
-實驗與腳本皆從**專案根目錄**執行，並依賴 `sys.path` 或 `PYTHONPATH` 包含專案根目錄。
-
----
-
-## 五、config/ 說明
-
-- **base_config.yaml**：基礎設定  
-- **model_config.yaml**：模型超參數  
-- **sampling_config.yaml**：取樣策略  
-- **des_config.yaml**：DES 與 ensemble 組合  
-- **feature_config.yaml**：特徵選擇  
-- **experiment_config.yaml**：實驗設計、可重複性、評估  
-
----
-
-## 六、建議工作流程
-
-1. **單次跑完**：`python scripts/run_all_experiments.py`（或 `run_all_experiments.bat`）  
-2. **看結果**：`python scripts/compare_baseline_ensemble.py`、`python scripts/compare_all_results.py`  
-3. **可選**：`python scripts/run_multi_seed.py` 產出 mean±std  
-
-詳細步驟見 **EXECUTION_GUIDE.md**，實驗對照見 **docs/EXPERIMENT_CHECKLIST.md**。
+# 工具
+from src.utils import get_logger, set_seed, get_config_loader
+```

@@ -11,11 +11,12 @@ from ..utils import get_logger, get_config_loader
 class ImbalanceSampler:
     """Handle imbalanced data using various sampling strategies."""
     
-    def __init__(self):
+    def __init__(self, random_state: int = 42):
         """Initialize ImbalanceSampler."""
         self.logger = get_logger("ImbalanceSampler", console=True, file=False)
         self.config = get_config_loader()
         self.sampler = None
+        self.random_state = random_state
         
     def apply_undersampling(
         self,
@@ -42,7 +43,7 @@ class ImbalanceSampler:
         if method == "tomek":
             self.sampler = TomekLinks(n_jobs=-1)
         elif method == "random":
-            self.sampler = RandomUnderSampler(random_state=42)
+            self.sampler = RandomUnderSampler(random_state=self.random_state)
         else:
             raise ValueError(f"Unknown undersampling method: {method}")
         
@@ -78,15 +79,15 @@ class ImbalanceSampler:
         if method == "smote":
             self.sampler = SMOTE(
                 k_neighbors=5,
-                random_state=42
+                random_state=self.random_state
             )
         elif method == "adasyn":
             self.sampler = ADASYN(
                 n_neighbors=5,
-                random_state=42
+                random_state=self.random_state
             )
         elif method == "random":
-            self.sampler = RandomOverSampler(random_state=42)
+            self.sampler = RandomOverSampler(random_state=self.random_state)
         else:
             raise ValueError(f"Unknown oversampling method: {method}")
         
@@ -128,11 +129,11 @@ class ImbalanceSampler:
         
         if method == "smoteenn":
             self.sampler = SMOTEENN(
-                random_state=42
+                random_state=self.random_state
             )
         elif method == "smotetomek":
             self.sampler = SMOTETomek(
-                random_state=42
+                random_state=self.random_state
             )
         else:
             raise ValueError(f"Unknown hybrid method: {method}")

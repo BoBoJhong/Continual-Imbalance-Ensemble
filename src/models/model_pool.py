@@ -10,17 +10,19 @@ from ..utils import get_logger
 class ModelPool:
     """Manage a pool of models for ensemble."""
     
-    def __init__(self, pool_name: str = "default"):
+    def __init__(self, pool_name: str = "default", random_state: int = 42):
         """
         Initialize ModelPool.
         
         Args:
             pool_name: Name of the pool ('old' or 'new')
+            random_state: Random seed for reproducibility
         """
         self.pool_name = pool_name
         self.logger = get_logger(f"ModelPool-{pool_name}", console=True, file=False)
         self.models: Dict[str, Any] = {}
-        self.sampler = ImbalanceSampler()
+        self.random_state = random_state
+        self.sampler = ImbalanceSampler(random_state=random_state)
         
     def create_model_with_sampling(
         self,

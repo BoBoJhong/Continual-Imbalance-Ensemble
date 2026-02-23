@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 import pandas as pd
 import numpy as np
-from sklearn.metrics import roc_auc_score, f1_score, precision_score, recall_score
+from src.evaluation import compute_metrics
 
 # 添加專案路徑
 project_root = Path(__file__).parent.parent
@@ -63,12 +63,7 @@ def main():
     y_pred = model_retrain.predict(X_test_scaled)
     y_proba = model_retrain.predict_proba(X_test_scaled)
     
-    results['retrain'] = {
-        'AUC': roc_auc_score(y_test, y_proba),
-        'F1': f1_score(y_test, y_pred),
-        'Precision': precision_score(y_test, y_pred),
-        'Recall': recall_score(y_test, y_pred)
-    }
+    results['retrain'] = compute_metrics(y_test, y_proba, y_pred)
     
     logger.info(f"Re-training Results: {results['retrain']}")
     
@@ -93,12 +88,7 @@ def main():
     y_pred = model_finetune.predict(X_test_scaled)
     y_proba = model_finetune.predict_proba(X_test_scaled)
     
-    results['finetune'] = {
-        'AUC': roc_auc_score(y_test, y_proba),
-        'F1': f1_score(y_test, y_pred),
-        'Precision': precision_score(y_test, y_pred),
-        'Recall': recall_score(y_test, y_pred)
-    }
+    results['finetune'] = compute_metrics(y_test, y_proba, y_pred)
     
     logger.info(f"Fine-tuning Results: {results['finetune']}")
     
@@ -116,12 +106,7 @@ def main():
     y_proba_avg = np.mean(list(old_predictions.values()), axis=0)
     y_pred_avg = (y_proba_avg > 0.5).astype(int)
     
-    results['ensemble_old'] = {
-        'AUC': roc_auc_score(y_test, y_proba_avg),
-        'F1': f1_score(y_test, y_pred_avg),
-        'Precision': precision_score(y_test, y_pred_avg),
-        'Recall': recall_score(y_test, y_pred_avg)
-    }
+    results['ensemble_old'] = compute_metrics(y_test, y_proba_avg, y_pred_avg)
     
     logger.info(f"Ensemble (Old) Results: {results['ensemble_old']}")
     

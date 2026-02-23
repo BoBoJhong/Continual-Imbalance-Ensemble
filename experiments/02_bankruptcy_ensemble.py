@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 import pandas as pd
 import numpy as np
-from sklearn.metrics import roc_auc_score, f1_score, precision_score, recall_score
+from src.evaluation import compute_metrics
 
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
@@ -21,15 +21,7 @@ from experiments.common_bankruptcy import get_bankruptcy_splits
 SPLIT_MODE = "block_cv"
 
 
-def _evaluate(y_true, y_proba, y_pred=None):
-    if y_pred is None:
-        y_pred = (y_proba > 0.5).astype(int)
-    return {
-        'AUC': roc_auc_score(y_true, y_proba),
-        'F1': f1_score(y_true, y_pred),
-        'Precision': precision_score(y_true, y_pred),
-        'Recall': recall_score(y_true, y_pred),
-    }
+
 
 
 def main():
@@ -73,9 +65,8 @@ def main():
     for combo_name, model_names in combinations.items():
         probs = [all_proba[n] for n in model_names]
         y_proba_avg = np.mean(probs, axis=0)
-        y_pred_avg = (y_proba_avg > 0.5).astype(int)
-        results[combo_name] = _evaluate(y_test.values, y_proba_avg, y_pred_avg)
-        logger.info(f"{combo_name}: AUC={results[combo_name]['AUC']:.4f}")
+        results[combo_name] = compute_metrics(y_test.values, y_proba_avg)
+        logger.info(f"{combo_name}: AUC={results[combo_name]['AUC']:.4f}, G-Mean={results[combo_name]['G_Mean']:.4f}")
 
     # ========== 結果總結與儲存 ==========
     logger.info("\n" + "=" * 80)

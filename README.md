@@ -1,152 +1,167 @@
 # Continual-Imbalance-Ensemble
 
-A framework for handling class imbalance in non-stationary datasets (Bankruptcy, Stock, Medical) using Dynamic Ensemble Selection (DES) and Hybrid Sampling.
+非平穩環境下類別不平衡之持續學習集成框架
 
-## 🎯 Research Objective
+A continual learning framework for class imbalance in non-stationary datasets, combining **Dynamic Ensemble Selection (DES)** and **Hybrid Sampling**.
 
-This project addresses the performance degradation of prediction models in non-stationary environments with class imbalance by proposing a continual learning framework that combines:
+---
 
-- **Dynamic Ensemble Selection (DES)** with KNORA-E
-- **Hybrid Sampling** with SMOTEENN
-- **Feature Selection** impact analysis
+## 📊 研究現況 (Current Progress)
 
-## 📊 Datasets
+> 最後更新：2026-02-23
 
-1. **Bankruptcy Prediction** - Taiwan Economic Journal (1999-2018)
-2. **Medical Time Series** - MIMIC-III ICU mortality prediction
-3. **Stock Market Crash** - Stock market crash prediction dataset
+### 實驗完成狀況
 
-## 🏗️ Project Structure
+| 實驗 | 資料集 | 狀態 | 最佳 AUC |
+|------|--------|------|----------|
+| 01 Baseline (Re-train / Fine-tune) | Bankruptcy | ✅ 完成 | 0.8552 (finetune) |
+| 02 Static Ensemble (2~6 models) | Bankruptcy | ✅ 完成 | 0.8693 (new_3) |
+| 03 DES (KNORA-E) | Bankruptcy | ✅ 完成 | 0.8560 |
+| 04 Study II: Feature Selection | Bankruptcy | ⚠️ 完成（FS 無差異，待調查） | — |
+| 05 Baseline + Ensemble | Stock | ✅ 完成 | 1.0000 |
+| 06 Baseline + Ensemble | Medical | ✅ 完成 | 1.0000 |
+| 07 DES | Stock | ✅ 完成 | 1.0000 |
+| 08 DES | Medical | ✅ 完成 | 0.9545 |
+| 09 DES Advanced | Bankruptcy | ✅ 完成 | — |
+| 10 Proportion Study | Bankruptcy | ✅ 完成 | — |
+
+### Bankruptcy 實驗結果快覽
+
+| 方法 | AUC | F1 |
+|------|-----|----|
+| Re-training | 0.8047 | 0.134 |
+| Fine-tuning | 0.8552 | 0.194 |
+| Ensemble (Old 3) | 0.8086 | 0.133 |
+| **Ensemble (New 3)** | **0.8693** | **0.239** |
+| Ensemble (All 6) | 0.8575 | 0.216 |
+| DES KNORA-E | 0.8560 | 0.222 |
+
+### 專案架構 (v0.2.0)
 
 ```
-Continual-Imbalance-Ensemble/
-├── config/                 # Configuration (YAML)
-├── src/                    # Core library (data, models, utils)
-├── experiments/            # Experiment scripts 01~08 + common_*.py
-├── scripts/                # Run-all, compare, multi-seed
-├── results/                # Experiment outputs (CSV)
-├── docs/                   # Documentation (STRUCTURE.md, EXPERIMENT_CHECKLIST.md)
-├── examples/               # Demos
-└── tests/                  # Unit tests
+src/
+├── data/        ← DataLoader, Preprocessor, Splitter, Sampler ✅
+├── models/      ← LightGBM, XGBoost, ModelPool ✅
+├── ensemble/    ← DynamicEnsembleSelector, EnsembleCombiner ✅ (v0.2.0)
+├── features/    ← FeatureSelector (kbest/lasso) ✅ (v0.2.0)
+├── evaluation/  ← compute_metrics (AUC/F1/G-Mean/Recall) ✅ (v0.2.0)
+└── utils/       ← Logger, Seed, ConfigLoader ✅
 ```
 
-詳細目錄與檔案說明見 **docs/STRUCTURE.md**。
+### 待辦 (TODO)
+
+- [x] ~~Study II 特徵選擇結果為 0 差異~~ → 修正（改用 `FS_RATIO=0.5` 比例篩選，`src.features.FeatureSelector`）
+- [x] ~~Stock / Medical DES 腳本較陽春~~ → 強化（加入 G-Mean，使用 `src.evaluation.compute_metrics`）
+- [x] ~~多 Seed 重現性實驗~~ → 擴展 `run_multi_seed.py`（支援 3 個資料集，`--seeds`/`--dataset` 參數）
+- [x] ~~統計顯著性檢定（Wilcoxon）~~ → 新增 `scripts/statistical_test.py`（pairwise Wilcoxon, p-value 矩陣 CSV）
+- [x] ~~結果視覺化圖表~~ → 新增 `scripts/visualize_results.py`（4 張 PNG，存於 `results/visualizations/`）
+
+---
+
+## 🎯 研究目標
+
+解決**非平穩資料環境**中**類別不平衡**對預測模型的效能衰退問題，提出結合 Dynamic Ensemble Selection 與 Hybrid Sampling 的持續學習框架，並探討特徵選擇的影響。
+
+詳見 [`docs/RESEARCH_SPEC.md`](docs/RESEARCH_SPEC.md)。
+
+---
+
+## 🗂️ 資料集
+
+| 資料集 | 來源 | 時間範圍 | 切割方式 |
+|--------|------|----------|----------|
+| Bankruptcy Prediction | Kaggle | 1999–2018 | Chronological (2011/2014) |
+| Stock Prediction | 私有 | — | Block 5-fold CV |
+| Medical (UCI) | UCI | — | Block 5-fold CV |
+
+資料放置路徑：`data/raw/{bankruptcy,stock,medical}/data.csv`
+
+下載說明：[`docs/DATASET_DOWNLOAD_GUIDE.md`](docs/DATASET_DOWNLOAD_GUIDE.md)
+
+---
+
+## 🏗️ 模型架構
+
+**Old Models**（Historical Data 訓練）：
+
+- Model 1: Undersampling
+- Model 2: Oversampling (ADASYN)
+- Model 3: Hybrid (SMOTEENN)
+
+**New Models**（New Operating Data 訓練）：
+
+- Model 4: Undersampling
+- Model 5: Oversampling (ADASYN)
+- Model 6: Hybrid (SMOTEENN)
+
+**集成組合**：2 / 3 (type A: 2 Old+1 New, type B: 1 Old+2 New) / 4 / 5 / 6 models
+
+---
+
+## 📈 評估指標
+
+> 類別不平衡資料：**禁止單獨使用 Accuracy**
+
+- **AUC-ROC** — 排序能力
+- **F1-Score** — Precision × Recall 平衡
+- **G-Mean** — 多數類與少數類平衡準確率
+- **Recall (Sensitivity)** — 少數類抓取能力
+
+---
 
 ## 🚀 Quick Start
 
-### Installation
+```powershell
+# 1. 啟動虛擬環境
+.\venv\Scripts\activate
 
-```bash
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
+# 2. 安裝依賴
 pip install -r requirements.txt
+
+# 3. 放入資料（見 docs/DATASET_DOWNLOAD_GUIDE.md）
+
+# 4. 一鍵執行所有實驗
+python scripts\run_all_experiments.py
+
+# 5. 查看彙總結果
+python scripts\compare_all_results.py
 ```
 
-### Configuration
+完整執行步驟：[`docs/EXECUTION_GUIDE.md`](docs/EXECUTION_GUIDE.md)
 
-All configurations are in `config/` directory:
+---
 
-- `base_config.yaml` - Basic settings
-- `model_config.yaml` - Model hyperparameters
-- `sampling_config.yaml` - Sampling strategies
-- `des_config.yaml` - Ensemble configurations
-- `feature_config.yaml` - Feature selection
-- `experiment_config.yaml` - Experiment setup
+## 📁 Import 快速參考
 
-### Running Experiments
-
-**一鍵跑完所有實驗（推薦）：**
-
-```bash
-python scripts/run_all_experiments.py
+```python
+from src.data import DataLoader, DataSplitter, ImbalanceSampler
+from src.models import LightGBMWrapper, ModelPool
+from src.ensemble import DynamicEnsembleSelector, EnsembleCombiner
+from src.features import FeatureSelector
+from src.evaluation import compute_metrics   # AUC / F1 / G-Mean / Recall
+from src.utils import get_logger, set_seed
 ```
 
-**或手動逐個執行：**
+---
 
-```bash
-python experiments/01_bankruptcy_baseline.py
-python experiments/02_bankruptcy_ensemble.py
-python experiments/03_bankruptcy_des.py
-python experiments/04_bankruptcy_feature_selection_study.py
-python experiments/05_stock_baseline_ensemble.py
-python experiments/06_medical_baseline_ensemble.py
-python experiments/07_stock_des.py
-python experiments/08_medical_des.py
-```
+## 🛠️ 技術棧
 
-**看結果彙總：**
+- **Python** 3.8+
+- **ML**: LightGBM, XGBoost, scikit-learn
+- **Imbalanced**: imbalanced-learn (SMOTEENN, ADASYN)
+- **DES**: 自行實作 KNORA-E（`src/ensemble`）
+- **Feature Selection**: scikit-learn SelectKBest / LASSO
 
-```bash
-python scripts/compare_baseline_ensemble.py   # Bankruptcy 合併表
-python scripts/compare_all_results.py          # 三資料集彙總
-```
+---
 
-完整步驟與切割說明見 **EXECUTION_GUIDE.md**。
+## � 文件索引
 
-## 📈 Experiment Design
-
-### Data Splitting
-
-- **Mode A**: Chronological (1999-2011 historical, 2012-2014 new, 2015-2018 test)
-- **Mode B**: 5-fold block CV
-
-### Model Pool
-
-**Old Models** (trained on historical data):
-
-1. Model 1: Undersampling
-2. Model 2: Oversampling (ADASYN)
-3. Model 3: Hybrid (SMOTEENN)
-
-**New Models** (trained on new operating data):
-4. Model 4: Undersampling
-5. Model 5: Oversampling (ADASYN)
-6. Model 6: Hybrid (SMOTEENN)
-
-### Baselines
-
-- Re-training: Combine historical + new data
-- Fine-tuning: Pretrain on historical, finetune on new data
-
-### Ensemble Combinations
-
-- 2 models (Old + New pairs)
-- 3 models (2 Old + 1 New / 1 Old + 2 New)
-- 4, 5, 6 models
-
-## 📊 Evaluation Metrics
-
-- **Primary**: AUC-ROC, F1-Score, G-Mean
-- **Secondary**: Recall, Precision, Balanced Accuracy
-- **Statistical Test**: Wilcoxon signed-rank test
-
-## 🛠️ Technical Stack
-
-- **Language**: Python 3.8+
-- **ML Framework**: LightGBM, XGBoost
-- **Imbalanced Learning**: imbalanced-learn
-- **DES**: deslib
-- **Feature Selection**: mRMR, LASSO
-
-## 📝 Research Contributions
-
-1. Systematic comparison of DES in imbalanced continual learning
-2. Validation of SMOTEENN effectiveness in time series
-3. Optimal ensemble combination strategy (Old + New models)
-4. Feature selection impact on ensemble models
-
-## 👥 Authors
-
-- Your Name - Master's Thesis Research
-
-## 📄 License
-
-This project is for academic research purposes.
-
-## 🙏 Acknowledgments
-
-- Advisor guidance
-- Dataset sources: Kaggle, PhysioNet, UCI Repository
+| 文件 | 說明 |
+|------|------|
+| [`docs/STRUCTURE.md`](docs/STRUCTURE.md) | 完整目錄結構說明 |
+| [`docs/EXECUTION_GUIDE.md`](docs/EXECUTION_GUIDE.md) | 執行步驟與結果解讀 |
+| [`docs/RESEARCH_SPEC.md`](docs/RESEARCH_SPEC.md) | 指導教授研究方向規格 |
+| [`docs/EXPERIMENT_CHECKLIST.md`](docs/EXPERIMENT_CHECKLIST.md) | 實驗完成進度追蹤 |
+| [`docs/TEACHER_REQUIREMENTS_CHECKLIST.md`](docs/TEACHER_REQUIREMENTS_CHECKLIST.md) | 指導教授需求對照 |
+| [`docs/DATASET_DOWNLOAD_GUIDE.md`](docs/DATASET_DOWNLOAD_GUIDE.md) | 資料集下載說明 |
+| [`.agent/rules.md`](.agent/rules.md) | 專案規範（目錄、命名、import 規則） |
