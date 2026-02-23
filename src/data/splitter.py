@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import TimeSeriesSplit
-from typing import Tuple, List, Dict, Optional
+from typing import Tuple, List, Dict, Optional, Union
 from ..utils import get_logger, get_config_loader
 
 
@@ -19,8 +19,8 @@ class DataSplitter:
         X: pd.DataFrame,
         y: pd.Series,
         time_column: str,
-        historical_end: str,
-        new_operating_end: str
+        historical_end: Union[int, float, str],
+        new_operating_end: Union[int, float, str]
     ) -> Dict[str, Tuple[pd.DataFrame, pd.Series]]:
         """
         Split data chronologically into historical, new operating, and testing.

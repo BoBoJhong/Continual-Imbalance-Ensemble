@@ -1,5 +1,8 @@
 # 實驗方向對照表（老師要求 vs 目前狀態）
 
+**老師方向逐條對照（Class Imbalance 3）**：見 **docs/TEACHER_REQUIREMENTS_CHECKLIST.md**（依老師條文逐項對應程式與結果位置）。  
+**碩論適用性說明**：見 **docs/THESIS_READINESS.md**（實驗可否當碩論、論文中建議寫法、可選補強）。
+
 **專案結構與腳本說明**：見 **docs/STRUCTURE.md**、**EXECUTION_GUIDE.md**、**scripts/README.md**。
 
 ## 一、資料集與切割
@@ -7,11 +10,17 @@
 | 老師要求 | 目前狀態 | 說明 |
 |----------|----------|------|
 | **Continual learning + class imbalance** | ✅ 有 | 所有實驗皆用 imbalance 取樣（under/over/hybrid） |
-| **Bankruptcy (1999~2018 Kaggle)** | ✅ 有 | 實驗 01~04，5-fold block CV（資料無 Year 欄故未用時間切） |
-| **切割 a：1999~2011 歷史、2012~2014 新營運、2015~2018 測試** | ⚠️ 程式有 | `DataSplitter.chronological_split()` 已實作；Bankruptcy CSV 無 Year 欄，無法使用。若有帶年份資料可改 `split_mode="chronological"` |
+| **Bankruptcy (1999~2018 Kaggle)** | ✅ **已支援** | **改用 US 1999–2018**：將 `american_bankruptcy_dataset.csv` 放到 `data/raw/bankruptcy/` 即可自動啟用（見 **docs/DATA_BANKRUPTCY_US.md**）。若未放該檔，則仍使用 Taiwan data.csv（1999–2009）。 |
+| **切割 a：1999~2011 歷史、2012~2014 新營運、2015~2018 測試** | ✅ **已支援** | 使用 US 1999–2018 時會**自動**改為 chronological 切割（1999–2011 / 2012–2014 / 2015–2018）。Taiwan 資料無年份欄，仍用切割 b。 |
 | **切割 b：5-fold CV（1+2 折=歷史、3+4 折=新營運、第 5 折=測試）** | ✅ **已用** | 所有實驗預設使用 `get_bankruptcy_splits` / `get_splits` 的 `split_mode="block_cv"` |
 | **Stock 預測（學長論文）** | ✅ **已跑** | 實驗 05 baseline+ensemble、實驗 07 DES，結果在 `results/stock/`、`results/des/stock_des_results.csv` |
 | **Time series medical (UCI)** | ✅ **已跑** | 實驗 06 baseline+ensemble、實驗 08 DES，結果在 `results/medical/`、`results/des/medical_des_results.csv` |
+
+### 破產資料：改用 US 1999–2018（已實作）
+
+- **做法**：下載 **american_bankruptcy_dataset.csv**（GitHub: [sowide/bankruptcy_dataset](https://github.com/sowide/bankruptcy_dataset) 或 Kaggle: American Companies Bankruptcy Prediction），放到 **`data/raw/bankruptcy/`**。
+- **程式**：`common_bankruptcy.py` 會自動偵測該檔；若存在則載入 US 1999–2018，並使用**切割 a**（1999–2011 歷史、2012–2014 新營運、2015–2018 測試）。無需改各實驗腳本。
+- **詳見**：**docs/DATA_BANKRUPTCY_US.md**。
 
 ---
 
@@ -52,7 +61,7 @@
 | 項目 | 目前狀態 |
 |------|----------|
 | **多 seed 重跑（mean±std）** | ✅ **已實作**（`scripts/run_multi_seed.py`，產出 `results/baseline/bankruptcy_baseline_mean_std.csv`） |
-| **一鍵跑完所有實驗** | ✅ **已實作**（`scripts/run_all_experiments.py`，依序執行 01~08） |
+| **一鍵跑完所有實驗** | ✅ **已實作**（`scripts/run_all_experiments.py`，依序執行 01~10，含進階 DES 09、比例實驗 10） |
 | **跨資料集結果彙總** | ✅ **已實作**（`scripts/compare_all_results.py`，產出 `results/summary_all_datasets.csv`） |
 
 ---
@@ -69,7 +78,9 @@
 | 06 | `experiments/06_medical_baseline_ensemble.py` | Medical | Baseline + 靜態 ensemble | results/medical/ |
 | 07 | `experiments/07_stock_des.py` | Stock | DES (KNORA-E) | results/des/ |
 | 08 | `experiments/08_medical_des.py` | Medical | DES (KNORA-E) | results/des/ |
-| — | `scripts/run_all_experiments.py` | — | 一鍵執行 01~08 | — |
+| 09 | `experiments/09_bankruptcy_des_advanced.py` | Bankruptcy | 進階 DES（時間/少數類加權、combined） | results/des_advanced/ |
+| 10 | `experiments/10_bankruptcy_proportion_study.py` | Bankruptcy | 比例實驗（hist vs new 20%/50%/80%） | results/proportion_study/ |
+| — | `scripts/run_all_experiments.py` | — | 一鍵執行 01~10 | — |
 | — | `scripts/compare_baseline_ensemble.py` | Bankruptcy | 合併 baseline + ensemble + DES | results/bankruptcy_all_results.csv |
 | — | `scripts/compare_all_results.py` | 全部 | 彙總各資料集 AUC/F1、最佳方法 | results/summary_all_datasets.csv |
 | — | `scripts/run_multi_seed.py` | Bankruptcy | 多 seed baseline → mean±std | results/baseline/bankruptcy_baseline_mean_std.csv |
@@ -78,10 +89,12 @@
 
 ## 七、結論
 
-**老師指定的實驗方向已全部實作並可執行。**
+**老師指定的方向（Class Imbalance 3）已全部對應並可執行。**
 
-- 切割：使用 5-fold block CV（1+2 / 3+4 / 5）；時間切割 a 需資料具 Year 欄方可啟用。
-- 三資料集：Bankruptcy、Stock、Medical 皆具 baseline、靜態 ensemble、DES。
-- Study II、多 seed、一鍵跑完、跨資料集彙總腳本均已就緒。
+- **Continual learning + class imbalance**：三資料集（Bankruptcy 1999–2018、Stock、Medical）皆以 imbalance 取樣與 historical/new/test 切割實作。
+- **切割**：a. 1999–2011 / 2012–2014 / 2015–2018（US 破產資料自動啟用）；b. 5-fold CV（1+2 / 3+4 / 5）全資料集支援。
+- **Baselines**：Re-training（historical+new）、Fine-tuning（僅用 new 做第二階段訓練）。
+- **Ensemble**：Old 1/2/3、New 4/5/6（under/over/hybrid），組合 a～e（2/3/4/5/6 模型），DES（KNORA-E）。
+- **Study II**：特徵選擇對 ensemble 的影響（實驗 04、結果在 feature_study/）。
 
-執行方式見 **EXECUTION_GUIDE.md**。
+逐條對照見 **docs/TEACHER_REQUIREMENTS_CHECKLIST.md**。執行方式見 **EXECUTION_GUIDE.md**。

@@ -95,6 +95,8 @@ python scripts\compare_all_results.py        # 三資料集彙總 + 終端顯示
 | **results/baseline/bankruptcy_baseline_results.csv** | 僅 Bankruptcy baseline（retrain / finetune / ensemble_old） | 三個 baseline 的詳細指標。 |
 | **results/ensemble/bankruptcy_ensemble_results.csv** | Bankruptcy 靜態 ensemble（2～6 模型組合） | 各組合的 AUC、F1 等。 |
 | **results/des/bankruptcy_des_results.csv** | Bankruptcy DES (KNORA-E) | DES 單一結果。 |
+| **results/des_advanced/bankruptcy_des_advanced_comparison.csv** | 進階 DES（baseline / 時間加權 / 少數類加權 / combined） | 後續論文用。 |
+| **results/proportion_study/bankruptcy_ratio_comparison.csv** | 比例實驗（new 20%/50%/80%） | 後續論文用。 |
 | **results/feature_study/bankruptcy_fs_comparison.csv** | Study II：有/無特徵選擇 | 比較無 FS vs 有 FS 的 AUC。 |
 | **results/stock/stock_baseline_ensemble_results.csv** | Stock baseline + ensemble | 同結構。 |
 | **results/medical/medical_baseline_ensemble_results.csv** | Medical baseline + ensemble | 同結構。 |
@@ -119,10 +121,11 @@ python scripts\run_multi_seed.py
 
 ### 6. 接下來可選
 
-- **畫圖**：`pip install matplotlib` 後再跑一次比較腳本（會嘗試產出 AUC 比較圖）。
-- **其他資料集**：把 Stock / Medical 資料放到 `data/raw/` 後，可仿照 01/02/03 寫對應實驗。
-- **多 seed / 統計**：用不同 `random_state` 重跑數次，算 mean±std、做 Wilcoxon 等（見 `config/experiment_config.yaml`）。
-- **寫論文**：用 `results/bankruptcy_all_results.csv` 做表格與討論（baseline vs 靜態 ensemble vs DES）。
+- **寫碩論**：對照 **docs/TEACHER_REQUIREMENTS_CHECKLIST.md**、**docs/EXPERIMENT_VALIDATION.md**、**docs/THESIS_READINESS.md**；結果用 `summary_all_datasets.csv`、`bankruptcy_all_results.csv`、`feature_study/`、`des_advanced/`、`proportion_study/`。
+- **完整「接下來」清單**：見 **docs/NEXT_STEPS.md**（碩論、後續論文、可選加強、一鍵檢查清單）。
+- **畫圖**：`pip install matplotlib` 後再跑比較腳本（會嘗試產出 AUC 比較圖）。
+- **多 seed / 統計**：`python scripts\run_multi_seed.py` 產 mean±std；若老師要求，在多 seed 結果上做 Wilcoxon 等。
+- **進階 DES 與比例實驗**：結果在 `results/des_advanced/`、`results/proportion_study/`，可寫進碩論或後續論文。
 
 ---
 

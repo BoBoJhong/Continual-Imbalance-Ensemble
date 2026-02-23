@@ -54,6 +54,7 @@ Continual-Imbalance-Ensemble/
 | **common_bankruptcy.py** | Bankruptcy 資料載入、5-fold block CV 切割、前處理 | DataSplitter, DataPreprocessor |
 | **common_dataset.py** | Stock / Medical 載入、切割、前處理 | 同上 |
 | **common_des.py** | KNORA-E 風格 DES（建池 → DSEL → 動態選擇） | ModelPool |
+| **common_des_advanced.py** | 進階 DES：時間加權 + 少數類加權（後續論文用） | common_des, ModelPool |
 | **01_bankruptcy_baseline.py** | Baseline：retrain / finetune / ensemble_old | common_bankruptcy |
 | **02_bankruptcy_ensemble.py** | 靜態 ensemble（2/3/4/5/6 模型組合） | common_bankruptcy |
 | **03_bankruptcy_des.py** | DES (KNORA-E) | common_bankruptcy, common_des |
@@ -62,6 +63,8 @@ Continual-Imbalance-Ensemble/
 | **06_medical_baseline_ensemble.py** | Medical baseline + ensemble | common_dataset |
 | **07_stock_des.py** | Stock DES | common_dataset, common_des |
 | **08_medical_des.py** | Medical DES | common_dataset, common_des |
+| **09_bankruptcy_des_advanced.py** | 進階 DES 比較（baseline / 時間加權 / 少數類加權 / combined） | common_bankruptcy, common_des, common_des_advanced |
+| **10_bankruptcy_proportion_study.py** | 比例實驗（hist vs new 20%/50%/80%） | common_bankruptcy, common_des, common_des_advanced |
 
 **切割模式**：各實驗頂端有 `SPLIT_MODE = "block_cv"`（5-fold：1+2 歷史、3+4 新營運、5 測試）；可改為 `"random"` 使用 60-20-20 隨機切。
 
@@ -71,7 +74,7 @@ Continual-Imbalance-Ensemble/
 
 | 腳本 | 用途 | 產出 |
 |------|------|------|
-| **run_all_experiments.py** | 依序執行 01→02→…→08 | 各實驗的 results/、logs/ |
+| **run_all_experiments.py** | 依序執行 01→02→…→10 | 各實驗的 results/、logs/ |
 | **compare_baseline_ensemble.py** | 合併 Bankruptcy 的 baseline + ensemble + DES | results/bankruptcy_all_results.csv |
 | **compare_all_results.py** | 彙總三資料集所有方法 | results/summary_all_datasets.csv |
 | **run_multi_seed.py** | Bankruptcy baseline 多 seed 重跑 | results/baseline/bankruptcy_baseline_mean_std.csv |

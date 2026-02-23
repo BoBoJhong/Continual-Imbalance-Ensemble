@@ -1,251 +1,50 @@
-# 下一步實驗指南
+# 接下來可以做什麼
 
-## 🎉 恭喜！第一個實驗完成
-
-您已經完成了 **Bankruptcy Baseline 實驗**！
+實驗 01～10 與進階 DES、比例實驗都已完成，以下是依目標整理的**下一步**。
 
 ---
 
-## 📊 查看實驗結果
+## 一、以碩論畢業為目標
 
-### 1. 結果檔案
-
-```powershell
-# 查看 CSV 結果
-type results\baseline\bankruptcy_baseline_results.csv
-
-# 或用 Excel/試算表打開
-start results\baseline\bankruptcy_baseline_results.csv
-```
-
-### 2. 詳細日誌
-
-```powershell
-# 查看完整日誌
-Get-ChildItem logs -Filter "*.log" | Sort-Object LastWriteTime -Descending | Select-Object -First 1 | cat
-```
-
-### 3. 快速分析結果
-
-創建一個簡單的結果視覺化：
-
-```python
-import pandas as pd
-import matplotlib.pyplot as plt
-
-# 讀取結果
-results = pd.read_csv('results/baseline/bankruptcy_baseline_results.csv', index_col=0)
-
-# 顯示結果
-print(results)
-
-# 繪製比較圖
-results.plot(kind='bar', figsize=(10, 6))
-plt.title('Bankruptcy Baseline Methods Comparison')
-plt.ylabel('Score')
-plt.xticks(rotation=45)
-plt.legend(loc='best')
-plt.tight_layout()
-plt.savefig('results/baseline/bankruptcy_comparison.png')
-print("圖表已保存到: results/baseline/bankruptcy_comparison.png")
-```
+| 步驟 | 做什麼 | 參考 |
+|------|--------|------|
+| **1. 寫論文** | 依「方法」「實驗」「結果與討論」章節撰寫；對照老師方向用 **docs/TEACHER_REQUIREMENTS_CHECKLIST.md**，實驗正當性用 **docs/EXPERIMENT_VALIDATION.md**，碩論適用性用 **docs/THESIS_READINESS.md** | 結果表：`results/summary_all_datasets.csv`、`results/bankruptcy_all_results.csv`、`results/feature_study/`、`results/des_advanced/`、`results/proportion_study/` |
+| **2. 補 mean±std（若老師要求）** | 跑多 seed：`python scripts\run_multi_seed.py`，產出 baseline 的 mean±std；若要 09/10 的 mean±std，可改腳本用多個 `random_state` 重跑並彙總 | `results/baseline/bankruptcy_baseline_mean_std.csv` |
+| **3. 統計檢定（若老師要求）** | 在多 seed 結果上做 Wilcoxon signed-rank test（R 或 Python），在論文中加一小節「方法間顯著性」 | 可用現有 CSV 事後分析 |
+| **4. 口試準備** | 用 **docs/TEACHER_REQUIREMENTS_CHECKLIST.md** 對照「每條老師要求對應到哪裡」；用 **docs/EXPERIMENT_VALIDATION.md** 說明無洩漏、切割、baseline 定義 | — |
 
 ---
 
-## 🚀 下一步選項
+## 二、以後續論文投稿為目標
 
-### 選項 A: 完成所有資料集的 Baseline（推薦）
-
-#### 1. Stock 資料集 Baseline
-
-```powershell
-# 創建 Stock baseline 實驗
-# （複製並修改 01_bankruptcy_baseline.py）
-python experiments\02_stock_baseline.py
-```
-
-#### 2. Medical 資料集 Baseline
-
-```powershell
-python experiments\03_medical_baseline.py
-```
-
-**目的**: 驗證方法在不同領域的通用性
+| 步驟 | 做什麼 | 參考 |
+|------|--------|------|
+| **1. 跑齊並檢查結果** | 確認 09、10 都跑過：`results/des_advanced/bankruptcy_des_advanced_comparison.csv`、`results/proportion_study/bankruptcy_ratio_comparison.csv`；必要時重跑 `python experiments\09_bankruptcy_des_advanced.py`、`python experiments\10_bankruptcy_proportion_study.py` | **docs/RESEARCH_EXTENSIONS.md** 第五節 |
+| **2. 分析與寫作** | 進階 DES：比較 baseline vs 時間加權 vs 少數類加權 vs combined，寫「方法→實驗→討論」；比例實驗：畫「比例 vs AUC」圖、寫「何時適應策略領先 retrain」 | 09 結果：時間/combined 略優於 baseline；10 結果：可畫表與圖 |
+| **3. 可選加強** | (1) 多 seed 跑 09/10 報 mean±std；(2) 調 `time_weight_new`、`minority_weight`（如 1.5, 2.0, 2.5）做小實驗；(3) 把進階 DES 套到 Stock/Medical（改 07、08 或加 11、12） | `common_des_advanced.run_des_advanced(..., time_weight_new=, minority_weight=)` |
+| **4. 選會議/期刊** | 依主題選：continual learning、imbalanced learning、ensemble、applications（bankruptcy/finance） | — |
 
 ---
 
-### 選項 B: 深入 Bankruptcy - Ensemble 實驗
+## 三、可選的技術加強（有時間再做）
 
-#### 1. 不同模型組合
-
-測試不同的 ensemble 組合：
-
-- 2 models vs 3 models vs 6 models
-- Old only vs New only vs Mixed
-- 不同 sampling 策略組合
-
-#### 2. 創建進階實驗腳本
-
-```powershell
-python experiments\04_bankruptcy_ensemble.py
-```
-
-**目的**: 找出最佳 ensemble 配置
+| 項目 | 說明 |
+|------|------|
+| **進階 DES 用於 Stock/Medical** | 在 07、08 或新腳本中改為呼叫 `run_des_advanced`，比較 baseline DES vs time/minority/combined，產出三資料集對照表 |
+| **權重搜尋** | 對 `time_weight_new`、`minority_weight` 做小網格（如 1.0, 1.5, 2.0, 2.5），記錄 AUC/F1，寫入 CSV 或圖表 |
+| **比例實驗多 seed** | 實驗 10 用多個 `random_state` 重跑，產出各比例、各方法的 mean±std，方便做誤差棒或檢定 |
+| **G-mean / balanced accuracy** | 在評估流程加算 G-mean 或 balanced accuracy，寫入結果表與論文 |
 
 ---
 
-### 選項 C: Feature Selection 研究
+## 四、一鍵檢查清單
 
-#### 1. 使用 mRMR 特徵選擇
-
-```powershell
-python experiments\05_bankruptcy_feature_selection.py
-```
-
-#### 2. 比較不同特徵數量
-
-- Top 20 features
-- Top 50 features  
-- All features
-
-**目的**: 減少特徵維度，提升效率
+- [ ] 論文初稿：方法、實驗設計、結果表與討論
+- [ ] 結果檔齊全：`summary_all_datasets.csv`、`bankruptcy_all_results.csv`、`feature_study/`、`des_advanced/`、`proportion_study/`
+- [ ] （可選）多 seed：`run_multi_seed.py` 跑過、mean±std 已寫進論文
+- [ ] （可選）統計檢定：若老師要求，已做並寫入論文
+- [ ] 口試對照：TEACHER_REQUIREMENTS_CHECKLIST、EXPERIMENT_VALIDATION 已看過
 
 ---
 
-### 選項 D: 參數調整
-
-#### 1. 調整 LightGBM 參數
-
-編輯 `config/model_config.yaml`:
-
-```yaml
-lightgbm:
-  base_params:
-    learning_rate: 0.05  # 試試降低學習率
-    num_leaves: 63       # 增加樹的複雜度
-    max_depth: 8
-```
-
-#### 2. 調整 Sampling 策略
-
-編輯 `config/sampling_config.yaml`
-
-#### 3. 重新運行實驗
-
-```powershell
-python experiments\01_bankruptcy_baseline.py
-```
-
-**目的**: 優化模型性能
-
----
-
-## 📋 推薦的實驗順序
-
-### 第 1 週（當前）
-
-1. ✅ Bankruptcy Baseline（已完成）
-2. ⏳ Stock Baseline
-3. ⏳ Medical Baseline
-4. ⏳ 比較三個資料集的結果
-
-**輸出**: 基準性能表格
-
-### 第 2 週
-
-1. Bankruptcy Ensemble 實驗
-2. Stock Ensemble 實驗  
-3. Medical Ensemble 實驗
-4. 分析 Ensemble 效果
-
-**輸出**: Ensemble vs Baseline 比較
-
-### 第 3 週
-
-1. Feature Selection 研究
-2. 參數優化
-3. 跨資料集分析
-
-**輸出**: 最佳配置和完整結果
-
-### 第 4 週
-
-1. 撰寫論文實驗章節
-2. 製作結果圖表
-3. 統計檢定
-
-**輸出**: 論文初稿
-
----
-
-## 💡 立即行動（今天）
-
-### 推薦路徑 1: 快速完成所有 Baseline
-
-```powershell
-# 1. 檢查 Bankruptcy 結果
-type results\baseline\bankruptcy_baseline_results.csv
-
-# 2. 創建 Stock baseline（複製腳本並修改）
-# 修改資料載入路徑為 Stock
-
-# 3. 執行 Stock baseline
-python experiments\02_stock_baseline.py
-
-# 4. 創建 Medical baseline
-python experiments\03_medical_baseline.py
-```
-
-**時間**: ~30 分鐘
-**成果**: 3 個資料集的基準結果
-
-### 推薦路徑 2: 深入分析當前結果
-
-```powershell
-# 1. 視覺化結果
-pip install matplotlib
-python -c "import pandas as pd; import matplotlib.pyplot as plt; df = pd.read_csv('results/baseline/bankruptcy_baseline_results.csv', index_col=0); df.plot(kind='bar'); plt.savefig('results/baseline/comparison.png')"
-
-# 2. 分析哪個方法最好
-# 3. 調整參數再試一次
-```
-
-**時間**: ~1 小時
-**成果**: 深入理解結果
-
----
-
-## 🎯 建議
-
-**我的推薦**: 選擇**推薦路徑 1**
-
-**原因**:
-
-1. 快速建立所有資料集的 baseline
-2. 可以比較跨領域性能
-3. 為論文提供完整的實驗數據
-4. 之後可以針對性優化
-
-**今天的目標**:
-
-- ✅ Bankruptcy Baseline（已完成）
-- ⏳ Stock Baseline
-- ⏳ Medical Baseline
-- ⏳ 創建結果比較表
-
----
-
-## 📞 需要幫助？
-
-如果您想：
-
-1. 我幫您創建 Stock 和 Medical 的 baseline 腳本
-2. 分析當前結果
-3. 創建視覺化圖表
-4. 調整配置參數
-
-隨時告訴我！
-
----
-
-**下一步建議**: 執行 Stock baseline 實驗 🚀
+**結論**：**接下來**優先「寫碩論」＋「必要時補 mean±std／統計」；若要衝後續論文，再以 09/10 為主做分析與寫作，並可依時間加權上述可選加強。
