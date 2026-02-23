@@ -14,11 +14,16 @@ STOCK_COLUMNS = [
 ]
 
 
-def _load_stock(logger):
+def _load_stock(logger, ticker="spx"):
     """載入 Stock 資料（Kaggle/學長論文格式，skip 前兩列標題）。"""
-    path = project_root / "data/raw/stock/stock_data.csv"
+    path = project_root / f"data/raw/stock/stock_{ticker}.csv"
     if not path.exists():
-        raise FileNotFoundError(f"Stock 資料不存在: {path}")
+        # Fallback to stock_data.csv if specific ticker file not found
+        fallback_path = project_root / "data/raw/stock/stock_data.csv"
+        if fallback_path.exists():
+            path = fallback_path
+        else:
+            raise FileNotFoundError(f"Stock 資料不存在: {path}")
     df = pd.read_csv(path, skiprows=2, names=STOCK_COLUMNS, header=None)
     df = df.dropna(subset=["Crash_Event"])
     df["Crash_Event"] = df["Crash_Event"].astype(int)
@@ -75,8 +80,11 @@ def get_splits(dataset_name, logger, split_mode="block_cv"):
     from src.data import DataSplitter, DataPreprocessor
 
     logger.info(f"步驟 1: 載入 {dataset_name} 資料")
-    if dataset_name == "stock":
-        X, y = _load_stock(logger)
+    if dataset_name.startswith("stock"):
+        # 允許 "stock_spx", "stock_dji", "stock_ndx" 格式
+        parts = dataset_name.split("_")
+        ticker = parts[1] if len(parts) > 1 else "spx"
+        X, y = _load_stock(logger, ticker=ticker)
     elif dataset_name == "medical":
         X, y = _load_medical(logger)
     else:

@@ -167,7 +167,7 @@
 |---|------------|----------|------|
 | 1 | Continual learning with class imbalance (non-stationary datasets) | 以歷史期→新期間→測試的時序切法模擬非平穩，全程使用 under/over/hybrid 採樣 | ✅ 完全滿足 |
 | 2 | bankruptcy prediction (1999~2018) (Kaggle) | 使用 US 破產資料，切割 a 為 1999-2011 / 2012-2014 / 2015-2018 | ✅ 完全滿足 |
-| 3 | stock prediction（學長的論文） | ✅ 使用 Stooq S&P 500 真實歷史資料（2000-2020），計算 Returns/SMA/RSI/Crash_Event | ✅ 完全滿足 |
+| 3 | stock prediction（學長的論文） | ✅ 使用美國三大指數 (S&P 500, Dow Jones, NASDAQ) 真實資料（2000-2020），計算 Returns/SMA/RSI/Crash_Event | ✅ 完全滿足 |
 | 4 | time series medical datasets (UCI) | ✅ 使用 UCI #296 Diabetes 130-US Hospitals 真實資料（101,766 筆，1999-2008）| ✅ 完全滿足 |
 | 5 | 切割 a：1999-2011 歷史 / 2012-2014 新營運 / 2015-2018 測試 | 完全照老師描述實作 | ✅ 完全滿足 |
 | 6 | 切割 b：5-fold CV（1+2 折歷史 / 3+4 新營運 / 5 測試） | 完全照老師描述實作 | ✅ 完全滿足 |
