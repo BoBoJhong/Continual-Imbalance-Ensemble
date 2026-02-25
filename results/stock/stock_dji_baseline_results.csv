@@ -1,0 +1,9 @@
+,AUC,F1,G_Mean,Recall,Precision,Type1_Error,Type2_Error
+retrain_none,0.506742782078873,0.0,0.0,0.0,0.0,0.0,1.0
+retrain_undersampling,0.45063445037591887,0.0,0.0,0.0,0.0,0.0,1.0
+retrain_oversampling,0.47357388412197093,0.0,0.0,0.0,0.0,0.0,1.0
+retrain_hybrid,0.4865563598759049,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_none,0.613397523687079,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_undersampling,0.559001090024875,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_oversampling,0.588906900695939,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_hybrid,0.5845118645015233,0.0,0.0,0.0,0.0,0.0,1.0

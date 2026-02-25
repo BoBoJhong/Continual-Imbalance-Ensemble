@@ -45,12 +45,20 @@ def compute_metrics(y_true, y_proba, y_pred=None, threshold: float = 0.5) -> dic
     specificity = tn / (tn + fp) if (tn + fp) > 0 else 0.0
     g_mean = float(np.sqrt(sensitivity * specificity))
 
+    # Type 1 Error (False Positive Rate) = FP / (FP + TN)
+    type1_error = fp / (fp + tn) if (fp + tn) > 0 else 0.0
+    
+    # Type 2 Error (False Negative Rate) = FN / (FN + TP)
+    type2_error = fn / (fn + tp) if (fn + tp) > 0 else 0.0
+
     return {
         "AUC": float(roc_auc_score(y_true, y_proba)),
         "F1": float(f1_score(y_true, y_pred, zero_division=0)),
         "G_Mean": g_mean,
         "Recall": float(recall_score(y_true, y_pred, zero_division=0)),
         "Precision": float(precision_score(y_true, y_pred, zero_division=0)),
+        "Type1_Error": type1_error,
+        "Type2_Error": type2_error,
     }
 
 

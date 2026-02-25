@@ -7,11 +7,12 @@ import sys
 from pathlib import Path
 import pandas as pd
 import numpy as np
-from src.evaluation import compute_metrics
 
 # 添加專案路徑
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
+
+from src.evaluation import compute_metrics
 
 from src.utils import set_seed, get_logger, get_config_loader
 from src.data import DataPreprocessor, DataSplitter, ImbalanceSampler
@@ -43,6 +44,9 @@ def main():
     # ========== 4. Baseline 實驗 ==========
     results = {}
     
+    sampler = ImbalanceSampler()
+    sampling_strategies = ["none", "undersampling", "oversampling", "hybrid"]
+    
     # --- Baseline 1: Re-training (Historical + New) ---
     logger.info("\n" + "="*80)
     logger.info("Baseline 1: Re-training (Historical + New Operating)")
@@ -51,46 +55,47 @@ def main():
     X_combined = pd.concat([X_hist_scaled, X_new_scaled])
     y_combined = pd.concat([y_hist, y_new])
     
-    sampler = ImbalanceSampler()
-    X_resampled, y_resampled = sampler.apply_sampling(
-        X_combined, y_combined.values,
-        strategy="hybrid"
-    )
+    for strategy in sampling_strategies:
+        logger.info(f"\n[Retrain] Testing sampling strategy: {strategy}")
+        X_resampled, y_resampled = sampler.apply_sampling(
+            X_combined, y_combined.values, strategy=strategy
+        )
+        
+        model_retrain = LightGBMWrapper(name=f"retrain_{strategy}")
+        model_retrain.fit(X_resampled, y_resampled)
+        
+        y_pred = model_retrain.predict(X_test_scaled)
+        y_proba = model_retrain.predict_proba(X_test_scaled)
+        
+        results[f'retrain_{strategy}'] = compute_metrics(y_test, y_proba, y_pred)
+        logger.info(f"Re-training ({strategy}) Results: {results[f'retrain_{strategy}']}")
     
-    model_retrain = LightGBMWrapper(name="retrain")
-    model_retrain.fit(X_resampled, y_resampled)
-    
-    y_pred = model_retrain.predict(X_test_scaled)
-    y_proba = model_retrain.predict_proba(X_test_scaled)
-    
-    results['retrain'] = compute_metrics(y_test, y_proba, y_pred)
-    
-    logger.info(f"Re-training Results: {results['retrain']}")
-    
-    # --- Baseline 2: Fine-tuning (僅用新資料做第二階段訓練，符合老師「solely using new data」) ---
+    # --- Baseline 2: Fine-tuning (僅用新資料做第二階段訓練) ---
     logger.info("\n" + "="*80)
     logger.info("Baseline 2: Fine-tuning")
     logger.info("="*80)
 
-    # 先用 Historical 訓練
-    X_hist_resampled, y_hist_resampled = sampler.apply_sampling(
-        X_hist_scaled, y_hist.values, strategy="hybrid"
-    )
-    model_finetune = LightGBMWrapper(name="finetune")
-    model_finetune.fit(X_hist_resampled, y_hist_resampled)
+    for strategy in sampling_strategies:
+        logger.info(f"\n[Finetune] Testing sampling strategy: {strategy}")
+        
+        # 先用 Historical 訓練
+        X_hist_resampled, y_hist_resampled = sampler.apply_sampling(
+            X_hist_scaled, y_hist.values, strategy=strategy
+        )
+        model_finetune = LightGBMWrapper(name=f"finetune_{strategy}")
+        model_finetune.fit(X_hist_resampled, y_hist_resampled)
 
-    # 僅用 New Operating 做第二階段訓練（微調階段不使用 historical，評估僅在 test）
-    X_new_resampled, y_new_resampled = sampler.apply_sampling(
-        X_new_scaled, y_new.values, strategy="hybrid"
-    )
-    model_finetune.fit(X_new_resampled, y_new_resampled)
-    
-    y_pred = model_finetune.predict(X_test_scaled)
-    y_proba = model_finetune.predict_proba(X_test_scaled)
-    
-    results['finetune'] = compute_metrics(y_test, y_proba, y_pred)
-    
-    logger.info(f"Fine-tuning Results: {results['finetune']}")
+        # 僅用 New Operating 做第二階段訓練
+        X_new_resampled, y_new_resampled = sampler.apply_sampling(
+            X_new_scaled, y_new.values, strategy=strategy
+        )
+        model_finetune.fit(X_new_resampled, y_new_resampled)
+        
+        y_pred = model_finetune.predict(X_test_scaled)
+        y_proba = model_finetune.predict_proba(X_test_scaled)
+        
+        results[f'finetune_{strategy}'] = compute_metrics(y_test, y_proba, y_pred)
+        logger.info(f"Fine-tuning ({strategy}) Results: {results[f'finetune_{strategy}']}")
     
     # --- Baseline 3: Ensemble (Old Models Pool) ---
     logger.info("\n" + "="*80)
@@ -106,9 +111,8 @@ def main():
     y_proba_avg = np.mean(list(old_predictions.values()), axis=0)
     y_pred_avg = (y_proba_avg > 0.5).astype(int)
     
-    results['ensemble_old'] = compute_metrics(y_test, y_proba_avg, y_pred_avg)
-    
-    logger.info(f"Ensemble (Old) Results: {results['ensemble_old']}")
+    results['ensemble_old_pool'] = compute_metrics(y_test, y_proba_avg, y_pred_avg)
+    logger.info(f"Ensemble (Old) Results: {results['ensemble_old_pool']}")
     
     # ========== 5. 結果總結 ==========
     logger.info("\n" + "="*80)

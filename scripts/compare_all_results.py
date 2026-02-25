@@ -57,7 +57,7 @@ def main():
         print("未找到任何結果檔。請先執行實驗。")
         return
 
-    # 只取有 AUC 的表格，合併成 (method, dataset, AUC, F1)
+    # 只取有 AUC 的表格，合併成 (method, dataset, AUC, F1, etc)
     summary_rows = []
     for df in rows:
         if "AUC" not in df.columns:
@@ -67,8 +67,12 @@ def main():
                 row = {
                     "dataset": df.loc[idx].get("dataset", ""),
                     "method": str(idx),
-                    "AUC": float(df.loc[idx, "AUC"]),
+                    "AUC": float(df.loc[idx, "AUC"]) if "AUC" in df.columns else None,
                     "F1": float(df.loc[idx, "F1"]) if "F1" in df.columns else None,
+                    "Precision": float(df.loc[idx, "Precision"]) if "Precision" in df.columns else None,
+                    "Recall": float(df.loc[idx, "Recall"]) if "Recall" in df.columns else None,
+                    "Type1_Error(FPR)": float(df.loc[idx, "Type 1 Error (FPR)"]) if "Type 1 Error (FPR)" in df.columns else (float(df.loc[idx, "Type1_Error"]) if "Type1_Error" in df.columns else None),
+                    "Type2_Error(FNR)": float(df.loc[idx, "Type 2 Error (FNR)"]) if "Type 2 Error (FNR)" in df.columns else (float(df.loc[idx, "Type2_Error"]) if "Type2_Error" in df.columns else None),
                 }
                 summary_rows.append(row)
             except Exception:
@@ -77,14 +81,23 @@ def main():
     if summary.empty:
         print("無 AUC 欄位可彙總")
         return
-    out_csv = results_dir / "summary_all_datasets.csv"
-    summary.to_csv(out_csv, index=False)
-    print(f"已保存: {out_csv}")
+    
+    # 針對比較需求：顯示各方法的優劣
+    summary = summary.sort_values(by=["dataset", "AUC"], ascending=[True, False])
+
+    out_csv = results_dir / "summary_all_datasets_detailed.csv"
+    try:
+        summary.to_csv(out_csv, index=False)
+        print(f"已保存: {out_csv}")
+    except PermissionError:
+        out_csv = results_dir / "summary_all_datasets_detailed_new.csv"
+        summary.to_csv(out_csv, index=False)
+        print(f"警告：原檔案被鎖定，已儲存至新檔: {out_csv}")
     print("\n各資料集最佳 AUC：")
     for ds in summary["dataset"].dropna().unique():
         sub = summary[summary["dataset"] == ds]
         best = sub.loc[sub["AUC"].idxmax()]
-        print(f"  {ds}: {best['method']} AUC={best['AUC']:.4f}")
+        print(f"  {ds}: {best['method']} AUC={best['AUC']:.4f}, F1={best['F1']:.4f}, Type1_Error={best['Type1_Error(FPR)']:.4f}")
 
 
 if __name__ == "__main__":

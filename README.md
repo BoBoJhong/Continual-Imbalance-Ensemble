@@ -17,13 +17,15 @@ A continual learning framework for class imbalance in non-stationary datasets, c
 | 01 Baseline (Re-train / Fine-tune) | Bankruptcy | ✅ 完成 | 0.8552 (finetune) |
 | 02 Static Ensemble (2~6 models) | Bankruptcy | ✅ 完成 | 0.8693 (new_3) |
 | 03 DES (KNORA-E) | Bankruptcy | ✅ 完成 | 0.8560 |
-| 04 Study II: Feature Selection | Bankruptcy | ⚠️ 完成（FS 無差異，待調查） | — |
-| 05 Baseline + Ensemble | Stock | ✅ 完成 | 1.0000 |
-| 06 Baseline + Ensemble | Medical | ✅ 完成 | 1.0000 |
-| 07 DES | Stock | ✅ 完成 | 1.0000 |
-| 08 DES | Medical | ✅ 完成 | 0.9545 |
-| 09 DES Advanced | Bankruptcy | ✅ 完成 | — |
-| 10 Proportion Study | Bankruptcy | ✅ 完成 | — |
+| 04 Study II: Feature Selection | Bankruptcy | ✅ 完成 (已修正特徵篩選比例) | 0.8720 (new_3) |
+| 05 Baseline (Re-train / Fine-tune) | Stock | ✅ 完成 | 0.5911 (finetune) |
+| 06 Static Ensemble | Stock | ✅ 完成 | |
+| 07 Baseline (Re-train / Fine-tune) | Medical | ✅ 完成 | |
+| 08 Static Ensemble | Medical | ✅ 完成 | 0.6665 (new_3) |
+| 09 DES | Stock | ✅ 完成 | 0.5564 |
+| 10 DES | Medical | ✅ 完成 | 0.6374 |
+| 11 DES Advanced | Bankruptcy | ✅ 完成 | 0.8626 (time_weighted) |
+| 12 Proportion Study | Bankruptcy | ✅ 完成 | 0.8593 (DES_combined, new_20) |
 
 ### Bankruptcy 實驗結果快覽
 
@@ -36,16 +38,45 @@ A continual learning framework for class imbalance in non-stationary datasets, c
 | Ensemble (All 6) | 0.8575 | 0.216 |
 | DES KNORA-E | 0.8560 | 0.222 |
 
-### 專案架構 (v0.2.0)
+### 專案現況目錄 (Project Inventory)
 
+包含專案當前的程式碼、資料目錄與結果紀錄清單。
+
+**1. 程式碼 (Source Code)**
+
+```text
+src/             ← 核心模組 (資料處理, 模型, 集成, 評估, 視覺化等)
+experiments/     ← 各項實驗腳本 (01~10 系列, baselines, DES 等)
+scripts/         ← 輔助及工具腳本 (自動化執行, 分析, 繪圖, 下載器等)
+config/          ← 存放實驗參數與模型超參數的 YAML 設定檔
 ```
-src/
-├── data/        ← DataLoader, Preprocessor, Splitter, Sampler ✅
-├── models/      ← LightGBM, XGBoost, ModelPool ✅
-├── ensemble/    ← DynamicEnsembleSelector, EnsembleCombiner ✅ (v0.2.0)
-├── features/    ← FeatureSelector (kbest/lasso) ✅ (v0.2.0)
-├── evaluation/  ← compute_metrics (AUC/F1/G-Mean/Recall) ✅ (v0.2.0)
-└── utils/       ← Logger, Seed, ConfigLoader ✅
+
+> 💡 **備註**：`experiments/common_*.py` 是供各個執行腳本共用的基礎流程邏輯，以減少重複程式碼並提升未來的實驗擴展性。
+
+**2. 原始資料與處理 (Data)**
+
+```text
+data/
+├── raw/         ← 原始下載的公開資料集 (Bankruptcy, Stock, Medical)
+├── processed/   ← 經過預處理、正規化後的資料
+└── splits/      ← 依據時序或 CV 切分好的訓練集與測試集
+```
+
+**3. 實驗結果 (Results)**
+
+```text
+results/
+├── *.csv                ← 各種綜合比較報表 (如 summary_all_datasets.csv)
+├── baseline/            ← Baseline 實驗分析數據
+├── ensemble/            ← 靜態集成實驗分析數據
+├── des/                 ← 動態集成 (DES) 實驗分析數據
+├── des_advanced/        ← 進階 DES 分析數據
+├── feature_study/       ← 特徵選取研究結果
+├── proportion_study/    ← 資料比例分析結果
+├── multi_seed/          ← 多隨機數種子實驗結果
+├── stock/               ← Stock 資料集專屬實驗結果 (含 Baseline, Ensemble, DES)
+├── medical/             ← Medical 資料集專屬實驗結果 (含 Baseline, Ensemble, DES)
+└── visualizations/      ← 統計圖表與視覺化圖檔 (.png)
 ```
 
 ### 待辦 (TODO)

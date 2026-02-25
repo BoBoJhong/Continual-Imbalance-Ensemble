@@ -7,10 +7,11 @@ import sys
 from pathlib import Path
 import pandas as pd
 import numpy as np
-from src.evaluation import compute_metrics
 
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
+
+from src.evaluation import compute_metrics
 
 from src.utils import set_seed, get_logger, get_config_loader
 from src.data import DataPreprocessor, DataSplitter, ImbalanceSampler
