@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研究流程圖</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</head>
+<body>
+    <h2>研究流程圖</h2>
+    
+    <div class="mermaid">
+    graph TD
+        classDef dataBox fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+        classDef modelBox fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+        classDef baselineBox fill:#fff3e0,stroke:#e65100,stroke-width:2px;
+        classDef testBox fill:#fce4ec,stroke:#880e4f,stroke-width:2px;
+
+        RawData["原始資料集"]:::dataBox --> SplitMethod{"資料切割方法"}
+        
+        SplitMethod -->|"a. 年份切割"| YearSplit["1999~2011: 歷史<br>2012~2014: 新營運<br>2015~2018: 測試"]
+        SplitMethod -->|"b. 5折交叉驗證"| CVSplit["折 1,2: 歷史<br>折 3,4: 新營運<br>折 5: 測試"]
+
+        YearSplit --> HistData["歷史資料"]:::dataBox
+        YearSplit --> NewData["新營運資料"]:::dataBox
+        YearSplit --> TestData["測試資料"]:::testBox
+        
+        CVSplit --> HistData
+        CVSplit --> NewData
+        CVSplit --> TestData
+
+        HistData --> Base1["Baseline 1: <br>歷史+新營運合併重新訓練"]:::baselineBox
+        NewData --> Base1
+        NewData --> Base2["Baseline 2: <br>僅使用新資料微調"]:::baselineBox
+
+        HistData --> SamplingOld["採樣技術:<br>欠採樣 / 過採樣 / 混合"]
+        NewData --> SamplingNew["採樣技術:<br>欠採樣 / 過採樣 / 混合"]
+
+        SamplingOld --> OldModels["舊模型 1, 2, 3"]:::modelBox
+        SamplingNew --> NewModels["新模型 4, 5, 6"]:::modelBox
+
+        OldModels --> ModelCombo["模型組合 (Pool):<br>a. 2個 (舊+新)<br>b. 3個 (2舊+1新 / 1舊+2新)<br>c. 4個模型<br>d. 5個模型<br>e. 6個模型"]:::modelBox
+        NewModels --> ModelCombo
+
+        ModelCombo --> DCS_DES{"是否具備<br>DCS / DES 機制?"}
+        
+        Study2[["研究二 (Study II):<br>特徵選擇的影響"]] -. "探討變數" .-> DCS_DES
+        
+        DCS_DES --> FinalEnsemble["最終集成決策分類器"]:::modelBox
+
+        Base1 --> Eval1(("模型評估"))
+        Base2 --> Eval2(("模型評估"))
+        FinalEnsemble --> Eval3(("模型評估"))
+
+        TestData -. "進行測試" .-> Eval1
+        TestData -. "進行測試" .-> Eval2
+        TestData -. "進行測試" .-> Eval3
+    </div>
+</body>
+</html>

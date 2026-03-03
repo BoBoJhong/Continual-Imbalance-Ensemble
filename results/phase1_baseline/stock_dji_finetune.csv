@@ -1,0 +1,5 @@
+,AUC,F1,G_Mean,Recall,Precision,Type1_Error,Type2_Error
+finetune_none,0.613397523687079,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_undersampling,0.559001090024875,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_oversampling,0.588906900695939,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_hybrid,0.5845118645015233,0.0,0.0,0.0,0.0,0.0,1.0

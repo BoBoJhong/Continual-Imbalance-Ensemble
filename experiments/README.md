@@ -1,34 +1,70 @@
-# 實驗腳本目錄 (Experiments)
+﻿# 實驗腳本目錄 (Experiments)
 
-本目錄存放所有可直接執行的實驗 Python 腳本。
+本目錄存放所有可直接執行的實驗腳本，依**研究階段與方法類型**分資料夾。  
+每個腳本均跨全部資料集（Bankruptcy / Stock / Medical），一次執行出結果。
 
-根據專案規範 **Rule 8 (實驗腳本細粒度控制)**，為了確保實驗數據的可讀性與未來擴展彈性，所有的基準實驗 (Baseline) 與靜態集成 (Static Ensemble) 皆獨立為不同的腳本，並輸出獨立的結果檔案。
+## 目錄結構
 
-## 🧪 實驗腳本清單
+```
+experiments/
+├── _shared/                      # 共用資料載入 / 模型流程（不可直接執行）
+│   ├── common_bankruptcy.py      # Bankruptcy 資料集切割
+│   ├── common_dataset.py         # Stock / Medical 資料集切割
+│   ├── common_des.py             # DES KNORA-E 核心流程
+│   ├── common_des_advanced.py    # 進階 DES（時間加權 / 少數類加權）
+│   └── common_dcs.py             # DCS OLA/LCA/TW 流程
+│
+├── phase1_baseline/              # Phase 1：基準方法
+│   ├── retrain.py                # Re-training（全資料集 × 4種取樣策略）
+│   └── finetune.py               # Fine-tuning（全資料集 × 4種取樣策略）
+│
+├── phase2_ensemble/              # Phase 2：靜態集成
+│   ├── undersampling.py          # Undersampling 模型池（old/new/pair）
+│   ├── oversampling.py           # Oversampling 模型池（old/new/pair）
+│   ├── hybrid.py                 # Hybrid 模型池（old/new/pair）
+│   └── all_combinations.py       # 全組合系統性測試（2~6 模型）
+│
+├── phase3_dynamic/               # Phase 3：動態集成選擇（核心貢獻）
+│   ├── des/
+│   │   ├── standard.py           # KNORA-E DES（全資料集）
+│   │   └── advanced.py           # 時間加權 / 少數類加權 DES（全資料集）
+│   └── dcs/
+│       └── comparison.py         # OLA / LCA / OLA_TW / LCA_TW 比較（全資料集）
+│
+├── phase4_feature/               # Phase 4：Study II—特徵選擇的影響
+│   ├── fs_study.py               # 基本特徵選擇研究（KBest_F, ratio=0.5）
+│   └── fs_sweep.py               # 方法 × 比例全掃描（KBest_F/Chi2/LASSO × 0.2/0.5/0.8）
+│
+└── phase5_analysis/              # Phase 5：補充分析
+    ├── split_comparison.py       # Chronological vs Block-CV 比較（全資料集）
+    ├── proportion_study.py       # 新資料比例研究 [0.1–1.0]（全資料集）
+    ├── base_learner_comparison.py# Base Learner 比較（LightGBM / XGBoost / RF）
+    └── stock_threshold_cost.py   # Stock：決策閾值 & 成本分析
+```
 
-| 編號 | 檔名 | 資料集 | 實驗說明 |
-| :--- | :--- | :--- | :--- |
-| **01** | `01_bankruptcy_baseline.py` | Bankruptcy | **基準實驗**：執行 Re-training 與 Fine-tuning。 |
-| **02** | `02_bankruptcy_ensemble.py` | Bankruptcy | **靜態集成**：執行 Old 3, New 3, Type A/B 等組合。 |
-| **03** | `03_bankruptcy_des.py` | Bankruptcy | **動態集成 (DES)**：執行 KNORA-E 等動態選擇策略。 |
-| **04** | `04_bankruptcy_feature_selection_study.py` | Bankruptcy | **特徵選擇研究**：探討特徵篩選比例對模型效能的影響。 |
-| **05** | `05_stock_baseline.py` | Stock (US) | **基準實驗**：針對 SPX, DJI, NDX 執行 Re-training 與 Fine-tuning。 |
-| **06** | `06_stock_ensemble.py` | Stock (US) | **靜態集成**：針對 SPX, DJI, NDX 執行靜態集成組合。 |
-| **07** | `07_medical_baseline.py` | Medical | **基準實驗**：醫療資料集的 Re-training 與 Fine-tuning。 |
-| **08** | `08_medical_ensemble.py` | Medical | **靜態集成**：醫療資料集的靜態集成組合。 |
-| **09** | `09_stock_des.py` | Stock (US) | **動態集成 (DES)**：針對 SPX, DJI, NDX 執行 DES。 |
-| **10** | `10_medical_des.py` | Medical | **動態集成 (DES)**：執行醫療資料集的 DES。 |
-| **11** | `11_bankruptcy_des_advanced.py` | Bankruptcy | **進階 DES**：加入 Time-weighted 等進階策略。 |
-| **12** | `12_bankruptcy_proportion_study.py` | Bankruptcy | **資料比例研究**：分析不同比例新資料對集成的影響。 |
+## 共用輔助函式速查
 
-## 🛠️ 共用腳本 (Common Scripts)
+| 函式 | 所在模組 | 功能 |
+|------|----------|------|
+| `get_bankruptcy_splits(logger, split_mode)` | `common_bankruptcy` | 取得 bankruptcy 三段切割資料 |
+| `get_splits(dataset, logger, split_mode)` | `common_dataset` | 取得 stock/medical 三段切割資料 |
+| `run_des(X_h,y_h,X_n,y_n,X_t,y_t,logger,k=7)` | `common_des` | KNORA-E DES 流程，回傳 metrics dict |
+| `run_des_advanced(...,time_weight,minority_weight)` | `common_des_advanced` | 進階 DES，回傳 metrics dict |
+| `run_dcs_all_variants(X_h,y_h,X_n,y_n,X_t,y_t,logger,k=7)` | `common_dcs` | DCS 全變體，回傳 variants dict |
 
-開頭為 `common_` 的腳本，是提供各資料集執行的「**基礎流程邏輯**」或「**資料加載邏輯**」，**不能直接執行**，而是由 `01`~`12` 的主腳本引用。
+## 執行方式
 
-- `common_dataset.py`：負責載入 Stock (預設為 SPX) 與 Medical 等資料集，並進行基本的資料分割 (Split)。
-- `common_bankruptcy.py`：專門負責 Bankruptcy 資料集的下載、清洗、特徵處理與分割。
-- `common_des.py`：動態集成 (DES) 模型的核心訓練與預測流程封裝，供 `03`, `09`, `10` 呼叫。
-- `common_des_advanced.py`：進階 DES 的流程邏輯封裝，供 `11`, `12` 呼叫。
+```powershell
+# 執行單一腳本
+python experiments/phase1_baseline/retrain.py
 
-> ⚠️ **開發規範提醒**
-> 任何新增的腳本都必須依序編號 (例如 `13_new_experiment.py`)。若新增了全新的資料集，請先查閱 `.agents/rules/rules.md` 中的 **Rule 7：新增資料集擴展 SOP**。
+# 一鍵執行全部（依階段順序）
+python scripts/run_all_experiments.py
+```
+
+## 重要慣例
+
+- `project_root`：位於 `_shared/` 及 phase1~5 的腳本 → `Path(__file__).parent.parent.parent`  
+  位於 `des/` 或 `dcs/` 子目錄的腳本 → `Path(__file__).parent.parent.parent.parent`
+- 所有結果輸出至 `results/phase?_??*/`，命名格式：`{dataset}_{description}.csv`
+- 所有 import 使用 `from experiments._shared.common_*`

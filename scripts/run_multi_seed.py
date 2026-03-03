@@ -94,11 +94,16 @@ def _run_stock_once(seed: int) -> pd.DataFrame:
     m = LightGBMWrapper(name="retrain", seed=seed, verbose=-1); m.fit(Xr, yr)
     results["retrain"] = compute_metrics(y_test_arr, m.predict_proba(X_test))
 
-    old_pool = ModelPool(pool_name="old"); old_pool.create_pool(X_hist, y_hist.values, prefix="old", random_state=seed)
-    new_pool = ModelPool(pool_name="new"); new_pool.create_pool(X_new,  y_new.values,  prefix="new", random_state=seed)
+    old_pool = ModelPool(pool_name="old", random_state=seed); old_pool.create_pool(X_hist, y_hist.values, prefix="old")
+    new_pool = ModelPool(pool_name="new", random_state=seed); new_pool.create_pool(X_new,  y_new.values,  prefix="new")
     all_proba = {**old_pool.predict_proba(X_test), **new_pool.predict_proba(X_test)}
-    p_avg = np.mean(list(all_proba.values()), axis=0)
-    results["ensemble_all_6"] = compute_metrics(y_test_arr, p_avg)
+    for name, keys in [
+        ("ensemble_old_3", ["old_under", "old_over", "old_hybrid"]),
+        ("ensemble_new_3", ["new_under", "new_over", "new_hybrid"]),
+        ("ensemble_all_6", list(all_proba.keys())),
+    ]:
+        p_avg = np.mean([all_proba[k] for k in keys], axis=0)
+        results[name] = compute_metrics(y_test_arr, p_avg)
     results["DES_KNORAE"] = run_des(X_hist, y_hist, X_new, y_new, X_test, y_test, logger)
 
     return pd.DataFrame(results).T
@@ -125,11 +130,16 @@ def _run_medical_once(seed: int) -> pd.DataFrame:
     m = LightGBMWrapper(name="retrain", seed=seed, verbose=-1); m.fit(Xr, yr)
     results["retrain"] = compute_metrics(y_test_arr, m.predict_proba(X_test))
 
-    old_pool = ModelPool(pool_name="old"); old_pool.create_pool(X_hist, y_hist.values, prefix="old", random_state=seed)
-    new_pool = ModelPool(pool_name="new"); new_pool.create_pool(X_new,  y_new.values,  prefix="new", random_state=seed)
+    old_pool = ModelPool(pool_name="old", random_state=seed); old_pool.create_pool(X_hist, y_hist.values, prefix="old")
+    new_pool = ModelPool(pool_name="new", random_state=seed); new_pool.create_pool(X_new,  y_new.values,  prefix="new")
     all_proba = {**old_pool.predict_proba(X_test), **new_pool.predict_proba(X_test)}
-    p_avg = np.mean(list(all_proba.values()), axis=0)
-    results["ensemble_all_6"] = compute_metrics(y_test_arr, p_avg)
+    for name, keys in [
+        ("ensemble_old_3", ["old_under", "old_over", "old_hybrid"]),
+        ("ensemble_new_3", ["new_under", "new_over", "new_hybrid"]),
+        ("ensemble_all_6", list(all_proba.keys())),
+    ]:
+        p_avg = np.mean([all_proba[k] for k in keys], axis=0)
+        results[name] = compute_metrics(y_test_arr, p_avg)
     results["DES_KNORAE"] = run_des(X_hist, y_hist, X_new, y_new, X_test, y_test, logger)
 
     return pd.DataFrame(results).T

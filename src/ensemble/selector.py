@@ -202,3 +202,172 @@ class EnsembleCombiner:
         for name, y_proba in combos.items():
             results[name] = evaluate_fn(y_test, y_proba)
         return results
+
+
+class DynamicClassifierSelector:
+    """
+    Dynamic Classifier Selection (DCS)。
+
+    與 DES（選出「一群」模型做集成投票）不同，DCS 對每個測試樣本
+    只選出「單一最佳分類器」進行預測。
+
+    本類別實作兩種主流 DCS 方法：
+      - OLA (Overall Local Accuracy)：
+          選在 K 個最近鄰上整體正確率最高的分類器。
+          直覺：找在該局部區域最準的單一模型。
+      - LCA (Local Class Accuracy)：
+          只計算分類器在鄰域中「與其預測類別相同的鄰居」上的正確率。
+          直覺：對每個分類器，只看它敢出手的樣本，有沒有真的出手正確。
+
+    若多個分類器同分，則對同分者做軟投票平均（退化為集成）。
+
+    Args:
+        k      : 鄰居數，預設 7
+        method : 'OLA'（預設）或 'LCA'
+        metric : 距離指標，預設 'minkowski'
+
+    Example:
+        dcs = DynamicClassifierSelector(k=7, method='OLA')
+        dcs.fit(pool_models, X_dsel, y_dsel)
+        y_proba, y_pred = dcs.predict(X_test)
+    """
+
+    SUPPORTED_METHODS = ("OLA", "LCA")
+
+    def __init__(
+        self,
+        k: int = 7,
+        method: str = "OLA",
+        metric: str = "minkowski",
+    ):
+        if method not in self.SUPPORTED_METHODS:
+            raise ValueError(f"method 必須為 {self.SUPPORTED_METHODS}，收到 '{method}'")
+        self.k = k
+        self.method = method
+        self.metric = metric
+
+        self._nn = None
+        self._pool_models = None
+        self._dsel_preds: Optional[np.ndarray] = None
+        self._y_dsel: Optional[np.ndarray] = None
+
+    # ------------------------------------------------------------------
+    def fit(
+        self, pool_models: list, X_dsel, y_dsel
+    ) -> "DynamicClassifierSelector":
+        """
+        在 DSEL 資料集上建立 kNN 索引並記錄各模型的預測。
+
+        Args:
+            pool_models : 模型列表，需有 predict(X) 與 predict_proba(X) 方法
+            X_dsel      : DSEL 特徵（Historical + New Operating 合併）
+            y_dsel      : DSEL 標籤（0/1）
+        Returns:
+            self
+        """
+        self._pool_models = pool_models
+        X_arr = np.asarray(X_dsel, dtype=np.float64)
+        self._y_dsel = np.asarray(y_dsel)
+
+        n_pool = len(pool_models)
+        self._dsel_preds = np.zeros((len(X_arr), n_pool), dtype=np.int64)
+        for i, model in enumerate(pool_models):
+            self._dsel_preds[:, i] = model.predict(X_arr)
+
+        self._nn = NearestNeighbors(
+            n_neighbors=self.k, metric=self.metric, p=2
+        ).fit(X_arr)
+        return self
+
+    # ------------------------------------------------------------------
+    def predict(self, X_test) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        DCS 預測。
+
+        Returns:
+            (y_proba_pos, y_pred):
+                y_proba_pos: 正類機率 (n_test,)
+                y_pred     : 預測標籤 (n_test,)
+        """
+        if self._nn is None:
+            raise RuntimeError("請先呼叫 fit() 再使用 predict()。")
+
+        X_arr = np.asarray(X_test, dtype=np.float64)
+        n_test = X_arr.shape[0]
+        n_pool = len(self._pool_models)
+
+        # 各模型在 test 上的正類機率
+        test_proba = np.zeros((n_test, n_pool))
+        for i, model in enumerate(self._pool_models):
+            p = model.predict_proba(X_arr)
+            test_proba[:, i] = p[:, 1] if p.shape[1] == 2 else p.ravel()
+
+        # 各模型在 test 上的預測類別（供 LCA 使用）
+        test_preds = np.zeros((n_test, n_pool), dtype=np.int64)
+        for i, model in enumerate(self._pool_models):
+            test_preds[:, i] = model.predict(X_arr)
+
+        # kNN 查詢
+        _, idx = self._nn.kneighbors(X_arr)
+
+        y_proba_pos = np.zeros(n_test)
+        for j in range(n_test):
+            neighbors_y    = self._y_dsel[idx[j]]           # (k,)
+            neighbors_pred = self._dsel_preds[idx[j]]        # (k, n_pool)
+
+            if self.method == "OLA":
+                scores = self._ola_scores(neighbors_y, neighbors_pred, n_pool)
+            else:  # LCA
+                scores = self._lca_scores(
+                    neighbors_y, neighbors_pred, n_pool, test_preds[j]
+                )
+
+            # 選分數最高的模型（若同分則平均）
+            best_mask = scores == scores.max()
+            y_proba_pos[j] = test_proba[j, best_mask].mean()
+
+        y_pred = (y_proba_pos >= 0.5).astype(int)
+        return y_proba_pos, y_pred
+
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _ola_scores(
+        neighbors_y: np.ndarray,
+        neighbors_pred: np.ndarray,
+        n_pool: int,
+    ) -> np.ndarray:
+        """
+        OLA：每個模型在 k 個鄰居上的整體正確率。
+
+        scores[i] = Σ_k 1[pred_i(x_k) == y_k] / k
+        """
+        correct = (neighbors_pred == neighbors_y.reshape(-1, 1))  # (k, n_pool)
+        return correct.mean(axis=0)  # (n_pool,)
+
+    @staticmethod
+    def _lca_scores(
+        neighbors_y: np.ndarray,
+        neighbors_pred: np.ndarray,
+        n_pool: int,
+        test_pred_i: np.ndarray,
+    ) -> np.ndarray:
+        """
+        LCA：每個模型只在它「預測為某類別」的鄰居子集上計算正確率。
+
+        對模型 i，預測類別 c_i = test_pred_i[i]：
+          - 找出模型 i 在 k 個鄰居中預測為 c_i 的樣本集合 S_i
+          - scores[i] = 在 S_i 中真實標籤也是 c_i 的比例
+          - 若 S_i 為空（模型在鄰域都不預測此類），退回 OLA 分數
+        """
+        scores = np.zeros(n_pool)
+        for i in range(n_pool):
+            c_i = test_pred_i[i]
+            # S_i：模型 i 在鄰居中預測為 c_i 的樣本
+            mask_pred_c = neighbors_pred[:, i] == c_i  # (k,)
+            if mask_pred_c.sum() == 0:
+                # 退回 OLA
+                scores[i] = (neighbors_pred[:, i] == neighbors_y).mean()
+            else:
+                # 在 S_i 中，真實標籤也是 c_i 的比例
+                scores[i] = (neighbors_y[mask_pred_c] == c_i).mean()
+        return scores

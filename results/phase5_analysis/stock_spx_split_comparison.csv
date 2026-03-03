@@ -1,0 +1,15 @@
+,AUC,F1,G_Mean,Recall,Precision,Type1_Error,Type2_Error
+retrain_none_chrono,0.5753505750661172,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_none_chrono,0.5765037825204502,0.0,0.0,0.0,0.0,0.0,1.0
+retrain_undersampling_chrono,0.556683990405314,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_undersampling_chrono,0.5547850421305123,0.0,0.0,0.0,0.0,0.0,1.0
+retrain_hybrid_chrono,0.5723676117842426,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_hybrid_chrono,0.6069253951657543,0.0,0.0,0.0,0.0,0.0,1.0
+DES_KNORAE_chrono,0.5655021834061136,0.0,0.0,0.0,0.0,0.0,1.0
+retrain_none_blockcv,0.5979889647161318,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_none_blockcv,0.577769711049804,0.0,0.0,0.0,0.0,0.004123711340206186,1.0
+retrain_undersampling_blockcv,0.554639175257732,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_undersampling_blockcv,0.5995208363583564,0.0,0.0,0.0,0.0,0.01752577319587629,1.0
+retrain_hybrid_blockcv,0.5529475824016263,0.0,0.0,0.0,0.0,0.0,1.0
+finetune_hybrid_blockcv,0.6134165819660229,0.0,0.0,0.0,0.0,0.0,1.0
+DES_KNORAE_blockcv,0.5143313489182518,0.0,0.0,0.0,0.0,0.0,1.0

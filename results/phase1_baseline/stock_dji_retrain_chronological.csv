@@ -1,0 +1,4 @@
+,AUC,F1,G_Mean,Recall,Precision,Type1_Error,Type2_Error
+retrain_none,0.49822385364554034,0.0,0.0,0.0,0.0,0.0,1.0
+retrain_undersampling,0.48935052248305266,0.0,0.0,0.0,0.0,0.0,1.0
+retrain_hybrid,0.5312009709600072,0.0,0.0,0.0,0.0,0.0,1.0

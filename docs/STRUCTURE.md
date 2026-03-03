@@ -1,24 +1,21 @@
 # Continual-Imbalance-Ensemble — 目錄結構說明
 
-> 最後更新：2026-02-23
+> 最後更新：2026-03-03
 
 ## 整體架構
 
 ```
 Continual-Imbalance-Ensemble/
 │
-├── .agent/
-│   ├── rules.md                    ← 專案規範（Antigravity 自動讀取）
-│   └── workflows/                  ← Antigravity 工作流程
-│
 ├── README.md                       ← 專案入口（Quick Start）
 ├── requirements.txt                ← 完整依賴
 ├── requirements-core.txt           ← 核心依賴（精簡版）
 ├── run_all_experiments.bat         ← Windows 一鍵執行
-├── run_experiment.bat              ← 單一實驗執行
-├── company-bankruptcy-prediction.zip ← Bankruptcy 原始資料
+├── advisor_report_20260302.md      ← 指導教授報告（2026-03-02）
+├── _fix_bom.py                     ← BOM 修正工具腳本
 │
 ├── config/                         ← 所有 YAML 設定（禁止在 Python 中硬編碼超參數）
+│   ├── README.md
 │   ├── base_config.yaml            ← 全局基本設定（路徑、seed、log）
 │   ├── model_config.yaml           ← 模型超參數（LightGBM、XGBoost）
 │   ├── sampling_config.yaml        ← 採樣策略設定
@@ -28,6 +25,7 @@ Continual-Imbalance-Ensemble/
 │
 ├── src/                            ← 可 import 的函式庫（禁止含實驗邏輯）
 │   ├── __init__.py                 ← 版本 v0.2.0，列出所有子模組
+│   ├── README.md
 │   ├── data/
 │   │   ├── loader.py               ← 各資料集載入（Bankruptcy/Stock/Medical）
 │   │   ├── preprocessor.py         ← 缺值處理、特徵縮放（StandardScaler）
@@ -36,15 +34,16 @@ Continual-Imbalance-Ensemble/
 │   ├── models/
 │   │   ├── lightgbm_wrapper.py     ← LightGBM 封裝（fit/predict/predict_proba）
 │   │   ├── xgboost_wrapper.py      ← XGBoost 封裝
+│   │   ├── random_forest_wrapper.py← RandomForest 封裝
 │   │   └── model_pool.py           ← ModelPool（6 個基分類器管理）
-│   ├── ensemble/                   ← [v0.2.0 補完]
+│   ├── ensemble/
 │   │   ├── __init__.py
 │   │   └── selector.py             ← DynamicEnsembleSelector (KNORA-E)
 │   │                                  EnsembleCombiner (2~6 模型組合)
-│   ├── features/                   ← [v0.2.0 補完]
+│   ├── features/
 │   │   ├── __init__.py
 │   │   └── selector.py             ← FeatureSelector (kbest_f/chi2/lasso)
-│   ├── evaluation/                 ← [v0.2.0 補完]
+│   ├── evaluation/
 │   │   ├── __init__.py
 │   │   └── metrics.py              ← compute_metrics (AUC/F1/G-Mean/Recall)
 │   │                                  print_results_table, results_to_dataframe
@@ -54,66 +53,99 @@ Continual-Imbalance-Ensemble/
 │       └── seed.py                 ← set_seed（numpy/random/torch）
 │
 ├── experiments/                    ← 可直接執行的實驗腳本（只 import src/）
-│   ├── common_bankruptcy.py        ← Bankruptcy 資料載入共用函式
-│   ├── common_dataset.py           ← Stock/Medical 資料載入共用函式
-│   ├── common_des.py               ← DES 實驗共用邏輯
-│   ├── common_des_advanced.py      ← 進階 DES 共用邏輯
-│   ├── 01_bankruptcy_baseline.py   ← Baseline: Re-train / Fine-tune
-│   ├── 02_bankruptcy_ensemble.py   ← 靜態集成（2~6 模型組合）
-│   ├── 03_bankruptcy_des.py        ← Dynamic Ensemble Selection (KNORA-E)
-│   ├── 04_bankruptcy_feature_selection_study.py  ← Study II: 特徵選擇效果
-│   ├── 05_stock_baseline_ensemble.py
-│   ├── 06_medical_baseline_ensemble.py
-│   ├── 07_stock_des.py
-│   ├── 08_medical_des.py
-│   ├── 09_bankruptcy_des_advanced.py   ← 進階 DES（時間/少數類加權）
-│   └── 10_bankruptcy_proportion_study.py ← New data 比例研究
+│   ├── __init__.py
+│   ├── README.md
+│   ├── _shared/                    ← 跨 phase 共用函式
+│   │   ├── common_bankruptcy.py    ← Bankruptcy 資料載入共用函式
+│   │   ├── common_dataset.py       ← Stock/Medical 資料載入共用函式
+│   │   ├── common_des.py           ← DES 實驗共用邏輯
+│   │   ├── common_des_advanced.py  ← 進階 DES 共用邏輯
+│   │   └── common_dcs.py           ← DCS 實驗共用邏輯
+│   ├── phase1_baseline/            ← Baseline 實驗
+│   │   ├── retrain.py              ← Re-train（歷史 + 新資料合訓）
+│   │   └── finetune.py             ← Fine-tune（歷史預訓 + 新資料微調）
+│   ├── phase2_ensemble/            ← 靜態集成實驗
+│   │   ├── undersampling.py        ← 欠採樣集成
+│   │   ├── oversampling.py         ← 過採樣集成
+│   │   ├── hybrid.py               ← 混合採樣集成
+│   │   └── all_combinations.py     ← 2~6 模型全組合枚舉
+│   ├── phase3_dynamic/             ← 動態選擇實驗
+│   │   ├── des/
+│   │   │   ├── standard.py         ← DES（KNORA-E）標準實驗
+│   │   │   └── advanced.py         ← 進階 DES（時間/少數類加權）
+│   │   └── dcs/
+│   │       └── comparison.py       ← DCS 跨資料集比較
+│   ├── phase4_feature/             ← 特徵選擇研究
+│   │   ├── fs_study.py             ← 特徵選擇方法比較
+│   │   └── fs_sweep.py             ← 特徵數量 sweep
+│   └── phase5_analysis/            ← 深度分析
+│       ├── base_learner_comparison.py  ← 基學習器比較（LGB/XGB/RF）
+│       ├── proportion_study.py         ← New data 比例研究
+│       ├── split_comparison.py         ← chronological vs. block_cv 比較
+│       └── stock_threshold_cost.py     ← 股票門檻/成本分析
 │
 ├── scripts/                        ← 工具腳本（非實驗）
-│   ├── README.md                   ← 腳本說明
-│   ├── run_all_experiments.py      ← 依序執行 01~10
+│   ├── README.md
+│   ├── run_all_experiments.py      ← 依序執行所有 phase
 │   ├── run_multi_seed.py           ← 多 Seed 重現性（mean±std）
-│   ├── compare_baseline_ensemble.py ← Bankruptcy 結果彙總
+│   ├── compare_baseline_ensemble.py← Bankruptcy 結果彙總
 │   ├── compare_all_results.py      ← 三資料集彙總（summary CSV）
-│   ├── download_medical_data.py    ← UCI 醫療資料下載
-│   ├── download_stock_data.py      ← Stock 資料下載
-│   └── download_us_bankruptcy.py   ← US Bankruptcy 資料下載
+│   ├── statistical_test.py         ← 統計顯著性檢定
+│   ├── visualize_results.py        ← 結果視覺化（PNG 輸出）
+│   ├── generate_advisor_excel.py   ← 產生指導教授報告 Excel
+│   ├── generate_synthetic_data.py  ← 合成資料產生
+│   ├── download_medical_data.py    ← UCI 醫療資料下載（合成版）
+│   ├── download_real_medical_data.py   ← 真實醫療資料下載
+│   ├── download_stock_data.py      ← Stock 資料下載（合成版）
+│   ├── download_real_stock_data.py ← 真實 Stock 資料下載
+│   ├── download_us_bankruptcy.py   ← US Bankruptcy 資料下載
+│   ├── _gen_exps.py                ← 實驗腳本自動產生工具
+│   └── _write_common_dcs.py        ← common_dcs.py 產生工具
 │
 ├── data/                           ← 資料（raw/ 已 .gitignore）
 │   ├── raw/
-│   │   ├── bankruptcy/             ← american_bankruptcy_dataset.csv 或 data.csv
-│   │   ├── stock/                  ← data.csv（私有）
-│   │   └── medical/                ← data.csv（UCI）
-│   ├── processed/                  ← 前處理後資料
-│   └── splits/                     ← 切割後快取
+│   │   ├── bankruptcy/
+│   │   │   └── american_bankruptcy_dataset.csv
+│   │   ├── stock/
+│   │   │   ├── stock_data.csv      ← 合成/舊版資料
+│   │   │   ├── stock_spx.csv       ← S&P 500
+│   │   │   ├── stock_dji.csv       ← 道瓊工業
+│   │   │   └── stock_ndx.csv       ← NASDAQ-100
+│   │   └── medical/
+│   │       ├── diabetes130/
+│   │       │   └── diabetes130_medical.csv  ← Diabetes 130-US Hospitals
+│   │       └── synthetic/          ← 合成醫療資料
+│   ├── processed/                  ← 前處理後資料（執行時產生）
+│   └── splits/                     ← 切割後快取（執行時產生）
 │
 ├── results/                        ← 實驗結果（由腳本自動輸出）
-│   ├── baseline/                   ← 01 的輸出
-│   ├── ensemble/                   ← 02 的輸出
-│   ├── des/                        ← 03/07/08 的輸出
-│   ├── des_advanced/               ← 09 的輸出
-│   ├── feature_study/              ← 04 的輸出（Study II）
-│   ├── proportion_study/           ← 10 的輸出
-│   ├── stock/                      ← 05/07 的股票結果
-│   ├── medical/                    ← 06/08 的醫療結果
-│   └── visualizations/             ← 產出圖表
+│   ├── README.md
+│   ├── summary_all_datasets.csv    ← 三資料集總覽
+│   ├── summary_all_datasets_detailed.csv
+│   ├── phase1_baseline/            ← retrain / finetune 輸出
+│   ├── phase2_ensemble/            ← 靜態集成輸出
+│   ├── phase3_dynamic/             ← DES / DCS 輸出
+│   ├── phase4_feature/             ← 特徵選擇研究輸出
+│   ├── phase5_analysis/            ← 深度分析輸出
+│   ├── multi_seed/                 ← 多 Seed 重現性結果
+│   │   ├── bankruptcy_multi_seed.csv
+│   │   ├── medical_multi_seed.csv
+│   │   └── stock_multi_seed.csv
+│   └── visualizations/             ← 產出圖表（PNG）
 │
-├── docs/                           ← 核心文件（~10 個，全 UPPER_CASE.md）
+├── docs/                           ← 核心文件
 │   ├── STRUCTURE.md                ← 本文件（目錄說明）
-│   ├── EXECUTION_GUIDE.md          ← 執行步驟與結果解讀
 │   ├── RESEARCH_SPEC.md            ← 指導教授研究方向規格
-│   ├── EXPERIMENT_CHECKLIST.md     ← 實驗完成進度追蹤
-│   ├── TEACHER_REQUIREMENTS_CHECKLIST.md ← 指導教授需求對照
-│   ├── DATASET_DOWNLOAD_GUIDE.md   ← 資料集下載說明
-│   ├── DATA_BANKRUPTCY_US.md       ← US Bankruptcy 資料格式說明
-│   ├── MIMIC_III_APPLICATION_GUIDE.md ← MIMIC-III 申請指南
-│   ├── MEDICAL_ALTERNATIVES.md     ← 醫療資料集替代方案
-│   ├── RESEARCH_EXTENSIONS.md      ← 研究延伸方向
-│   └── RESULTS_09_10_INTERPRETATION.md ← 實驗 9/10 結果解讀
+│   ├── reserch_summary.md          ← 研究摘要
+│   └── 研究方向.md                 ← 研究方向規劃
 │
 ├── examples/                       ← 示範腳本
-├── notebooks/                      ← Jupyter Notebooks（EDA）
+│   ├── demo_complete_workflow.py   ← 完整流程示範
+│   └── test_modules.py             ← 模組測試示範
+│
 └── tests/                          ← 單元測試
+    ├── quick_test.py
+    └── test_setup.py
 ```
 
 ## Import 範例

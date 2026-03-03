@@ -18,9 +18,9 @@ trigger: always_on
 ## Rule 1 — 目錄職責 (Directory Responsibilities)
 
 | 目錄 | 用途 | 限制 |
-|------|------|------|
+| :--- | :--- | :--- |
 | `src/` | **可 import 的函式庫**。資料處理、模型、集成、特徵選擇、評估指標 | 禁止放實驗邏輯、禁止硬編碼路徑 |
-| `experiments/` | **可直接執行的實驗腳本**（`python experiments/XX_*.py`） | 只 import `src/`，不含可重用邏輯 |
+| `experiments/` | **可直接執行的實驗腳本**，依研究階段分子目錄 | 腳本只 import `src/` 及 `experiments._shared`，不含可重用邏輯 |
 | `scripts/` | **工具腳本**：一鍵執行、資料下載、結果比較 | 非實驗邏輯 |
 | `config/` | **所有 YAML 設定檔** | 禁止在 Python 程式碼中硬編碼超參數 |
 | `data/raw/` | **原始資料**（.gitignore 排除） | 禁止修改，只讀 |
@@ -31,13 +31,18 @@ trigger: always_on
 
 根目錄：只保留 `README.md`、`requirements*.txt`、`*.bat`、`.gitignore`。
 
+`experiments/` 子目錄慣例：
+- `_shared/`：資料載入 & 流程封裝，**不可直接執行**
+- `phase1_baseline/`、`phase2_ensemble/`、`phase3_dynamic/{des,dcs}/`、`phase4_feature/`、`phase5_analysis/`：各階段執行腳本
+- 每支腳本跨全部資料集（Bankruptcy / Stock / Medical）一次執行完畢
+
 ---
 
 ## Rule 2 — `src/` 模組結構
 
 每個子模組必須有 `__init__.py` 並 export 公開 API：
 
-```
+```text
 src/
 ├── data/         → DataLoader, DataPreprocessor, DataSplitter, ImbalanceSampler
 ├── models/       → LightGBMWrapper, XGBoostWrapper, ModelPool
@@ -60,10 +65,10 @@ from src.features import FeatureSelector
 ## Rule 3 — 命名規範 (Naming Conventions)
 
 | 對象 | 規範 | 範例 |
-|------|------|------|
-| 實驗腳本 | `NN_dataset_description.py`（兩位數編號） | `01_bankruptcy_baseline.py` |
-| 共用函式檔 | `common_dataset.py` | `common_bankruptcy.py` |
-| 結果目錄 | 小寫，底線分隔 | `results/feature_study/` |
+| :--- | :--- | :--- |
+| 實驗腳本 | `{description}.py`，放在對應 phase 子目錄 | `retrain.py`, `standard.py` |
+| 共用函式檔 | `common_{scope}.py`，放在 `_shared/` | `common_bankruptcy.py` |
+| 結果目錄 | `results/phase?_???/`，小寫底線分隔 | `results/phase1_baseline/` |
 | 文件檔案 | `UPPER_CASE.md` | `EXECUTION_GUIDE.md` |
 | 設定檔 | `snake_case_config.yaml` | `des_config.yaml` |
 | Python 類別 | PascalCase | `DynamicEnsembleSelector` |
@@ -104,19 +109,22 @@ from src.features import FeatureSelector
 
 若未來需新增其他資料集（例如 `new_dataset`），請嚴格遵守以下擴展流程：
 
-1. **資料放置**：將原始資料存放於 `data/raw/new_dataset/data.csv`。
-2. **共用讀取腳本**：於 `experiments/` 專案目錄下新增 `common_new_dataset.py`，封裝該資料集獨立的前處理與載入邏輯。
-3. **實驗命名與腳本**：新增該資料集的執行腳本並依序編號，例如 `11_new_dataset_baseline.py`。
-4. **結果輸出**：確保該資料集的結果統一存放於 `results/new_dataset/`，並在 README 更新對應紀錄。
+1. **資料放置**：原始資料存放於 `data/raw/new_dataset/`。
+2. **共用讀取腳本**：在 `experiments/_shared/` 新增 `common_new_dataset.py`，封裝載入 & 前處理邏輯。
+3. **整合現有腳本**：在各 phase 的現有腳本（`retrain.py`、`standard.py` 等）中加入新資料集的迴圈項目，**不新增獨立腳本**。
+4. **結果輸出**：結果統一輸出至對應的 `results/phase?_???/`，命名格式為 `{new_dataset}_{description}.csv`。
+5. **更新 README**：同步更新根目錄 `README.md` 的資料集表格。
 
 ---
 
 ## Rule 8 — 實驗腳本細粒度控制 (Fine-Grained Control)
 
-為了確保實驗數據的可讀性與未來擴展的彈性，所有資料集的實驗腳本必須保持**細粒度切割**：
+切割維度為**方法 (method)**，而非資料集：
 
-- **基準實驗 (Baseline)** 與 **靜態集成 (Static Ensemble)** 必須拆分為兩支獨立的腳本。
-- 各實驗必須能對應與輸出獨立的結果檔案 (例如 `baseline.csv` 與 `ensemble.csv`)，避免混合導致判讀困難與後續抽換模組的困擾。
+- Phase 2 依取樣策略分檔：`undersampling.py` / `oversampling.py` / `hybrid.py`
+- Phase 3 依演算法分子目錄：`des/standard.py` / `des/advanced.py` / `dcs/comparison.py`
+- 每支腳本跨全部資料集執行，輸出結果命名格式：`{dataset}_{description}.csv`
+- **禁止**為單一資料集新增獨立腳本（如 `bankruptcy_baseline.py`），應整合進對應 phase 腳本的迴圈
 
 ---
 
@@ -156,19 +164,31 @@ from src.features import FeatureSelector
 
 這是為了防止實驗邏輯與資料處理混雜在一起，導致程式碼難以閱讀與維護：
 
-1. 所有位於 `experiments/` 並且以編號開頭的主實驗腳本（如 `01_*.py`, `13_*.py` 等），**嚴禁撰寫任何「特徵工程 (Feature Engineering)」、「遺失值填補 (Imputation)」或「異常值剃除」的底層邏輯**。
-2. 實驗腳本的作用應極度單純，僅限於：**載入處理好的資料 ➔ 呼叫模型池 ➔ 計算指標 ➔ 報表匯出**。
-3. 任何針對資料欄位的變動計算，必須下沉 (Push-down) 到 `src/data/preprocessor.py` 或對應的 `common_*.py` 中統一維護。
+1. `experiments/phase?_*/` 下的主實驗腳本，**嚴禁撰寫任何「特徵工程」、「遺失值填補」或「異常值剃除」的底層邏輯**。
+2. 實驗腳本的作用應極度單純，僅限於：**呼叫 `_shared/common_*.py` 取得資料 ➔ 呼叫模型池 ➔ 計算指標 ➔ 報表匯出**。
+3. 任何資料處理邏輯必須下沉到 `src/data/` 或 `experiments/_shared/common_*.py` 中維護。
+
+---
+
+## Rule 13 — 實驗成果與洞察彙整 (Research Summary Synchronization - **STRICT ENFORCEMENT**)
+
+為了確保論文撰寫時有最即時、最詳盡的參考依據，所有最新的實驗數據、比較圖表與結果分析，都必須統整至 `docs/reserch_summary.md` 中。**絕對不允許有任何實驗已經執行，但數據或方法卻未同步紀錄於該文件中的情況發生。**
+
+1. **數據與流程同步**：當實驗腳本產出新的數據結果，或是重跑實驗後數據發生變動，必須同步將**最完整、最詳細的數據指標（包含各個 Sampling 策略、各種細度比較數值表）與實驗步驟流程**摘要至該文件中。
+   - **涵蓋範圍要求**：三大資料集 (Bankruptcy, Stock, Medical) 均必須詳列完整的 (1) Baseline 與靜態集成 (2) 動態集成選擇 (DES) (3) 進階研究如特徵選擇、加權 DES 與比例衰退研究。
+2. **洞察紀錄強制填寫 (No Placeholders)**：除了冰冷的數據表，文件中的「實驗說明與洞察」區塊**絕對不允許留下 `[描述...]` 這種待填寫的佔位符**。每次更新數據時，AI 務必根據最新實驗的 AUC, F1 等交叉數據，直接幫忙填入具體的分析結論（例如：指出何種策略勝出、特徵選擇對該資料集的實際負面/正面影響等），以確保總結文件能立刻被應用於論文撰寫。
 
 ---
 
 ## 資料集位置
 
-```
+```text
 data/raw/
-├── bankruptcy/   → american_bankruptcy_dataset.csv (或 data.csv)
-├── stock/        → data.csv
-└── medical/      → data.csv
+├── bankruptcy/   → american_bankruptcy_dataset.csv
+├── stock/        → stock_spx.csv, stock_dji.csv, stock_ndx.csv
+└── medical/
+    ├── diabetes130/  → diabetes130_medical.csv   (真實 UCI)
+    └── synthetic/    → synthetic_medical_data.csv (備用)
 ```
 
 下載說明見 `docs/DATASET_DOWNLOAD_GUIDE.md`。
@@ -178,15 +198,22 @@ data/raw/
 ## 常用指令
 
 ```powershell
-# 啟動環境
-.\\venv\\Scripts\\activate
+# 啟動虛擬環境
+.venv\Scripts\activate
 
-# 執行所有實驗
-python scripts\\run_all_experiments.py
+# 執行所有實驗（依 phase 順序）
+python scripts\run_all_experiments.py
 
-# 查看結果
-python scripts\\compare_all_results.py
+# 執行單一腳本
+python experiments/phase1_baseline/retrain.py
 
-# 多 seed 重現性實驗
-python scripts\\run_multi_seed.py
+# 查看彙總結果
+python scripts\compare_all_results.py
 ```
+
+## project_root 深度規範
+
+| 腳本位置 | `project_root` 寫法 |
+|----------|--------------------|
+| `_shared/`, `phase?_*/` | `Path(__file__).parent.parent.parent` |
+| `phase3_dynamic/des/`, `phase3_dynamic/dcs/` | `Path(__file__).parent.parent.parent.parent` |

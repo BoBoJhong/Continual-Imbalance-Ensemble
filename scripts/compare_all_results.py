@@ -35,6 +35,7 @@ def main():
 
     # Stock
     for name, tag in [
+        ("ensemble/stock_ensemble_results.csv", "stock"),       # 統一路徑（優先）
         ("stock/stock_baseline_ensemble_results.csv", "stock"),
         ("des/stock_des_results.csv", "stock"),
     ]:
@@ -45,6 +46,7 @@ def main():
 
     # Medical
     for name, tag in [
+        ("ensemble/medical_ensemble_results.csv", "medical"),   # 統一路徑（優先）
         ("medical/medical_baseline_ensemble_results.csv", "medical"),
         ("des/medical_des_results.csv", "medical"),
     ]:
@@ -93,11 +95,25 @@ def main():
         out_csv = results_dir / "summary_all_datasets_detailed_new.csv"
         summary.to_csv(out_csv, index=False)
         print(f"警告：原檔案被鎖定，已儲存至新檔: {out_csv}")
+
+    # 同時輸出 summary_all_datasets.csv（含所有指標，方便視覺化腳本使用）
+    out_simple = results_dir / "summary_all_datasets.csv"
+    simple_cols = ["dataset", "method", "AUC", "F1", "Precision", "Recall",
+                   "Type1_Error(FPR)", "Type2_Error(FNR)"]
+    simple_cols_exist = [c for c in simple_cols if c in summary.columns]
+    try:
+        summary[simple_cols_exist].to_csv(out_simple, index=False)
+        print(f"已保存: {out_simple}")
+    except PermissionError:
+        print(f"警告：{out_simple} 被鎖定，跳過")
+
     print("\n各資料集最佳 AUC：")
     for ds in summary["dataset"].dropna().unique():
         sub = summary[summary["dataset"] == ds]
         best = sub.loc[sub["AUC"].idxmax()]
-        print(f"  {ds}: {best['method']} AUC={best['AUC']:.4f}, F1={best['F1']:.4f}, Type1_Error={best['Type1_Error(FPR)']:.4f}")
+        t1 = best.get("Type1_Error(FPR)", float("nan"))
+        t1_str = f"{t1:.4f}" if pd.notna(t1) else "N/A"
+        print(f"  {ds}: {best['method']} AUC={best['AUC']:.4f}, F1={best['F1']:.4f}, Type1_Error={t1_str}")
 
 
 if __name__ == "__main__":
