@@ -178,3 +178,100 @@ def get_splits(dataset_name, logger, split_mode="block_cv"):
     X_new_scaled, _ = preprocessor.scale_features(X_new_clean, fit=False)
 
     return X_hist_scaled, y_hist, X_new_scaled, y_new, X_test_scaled, y_test
+
+
+# ---------------------------------------------------------------------------
+# 醫療年份切割：固定 test=2007-2008，彈性 old_end_year
+# ---------------------------------------------------------------------------
+
+MEDICAL_YEAR_SPLITS = [
+    ("split_1+7", 1999),   # 1999      Old (1yr) / 2000-2006 New (7yr)
+    ("split_2+6", 2000),   # 1999-2000 Old (2yr) / 2001-2006 New (6yr)
+    ("split_3+5", 2001),   # 1999-2001 Old (3yr) / 2002-2006 New (5yr)
+    ("split_4+4", 2002),   # 1999-2002 Old (4yr) / 2003-2006 New (4yr)
+    ("split_5+3", 2003),   # 1999-2003 Old (5yr) / 2004-2006 New (3yr)
+    ("split_6+2", 2004),   # 1999-2004 Old (6yr) / 2005-2006 New (2yr)
+    ("split_7+1", 2005),   # 1999-2005 Old (7yr) / 2006      New (1yr)
+]
+
+
+def get_medical_year_split(logger, old_end_year: int):
+    """
+    固定 test = 2007-2008，依 old_end_year 切割：
+      Old  = year <= old_end_year
+      New  = old_end_year+1 <= year <= 2006
+      Test = 2007 <= year <= 2008
+
+    回傳 (X_old, y_old, X_new, y_new, X_test, y_test)（未縮放，由實驗腳本決定縮放方式）
+    """
+    X, y = _load_medical(logger, keep_year=True)
+    year = X["_year"].astype(int)
+
+    mask_old  = year <= old_end_year
+    mask_new  = (year > old_end_year) & (year <= 2006)
+    mask_test = (year >= 2007) & (year <= 2008)
+
+    X_old,  y_old  = X[mask_old].drop(columns=["_year"]),  y[mask_old]
+    X_new,  y_new  = X[mask_new].drop(columns=["_year"]),  y[mask_new]
+    X_test, y_test = X[mask_test].drop(columns=["_year"]), y[mask_test]
+
+    logger.info(
+        f"  Old={len(X_old)}({y_old.mean()*100:.1f}%+)  "
+        f"New={len(X_new)}({y_new.mean()*100:.1f}%+)  "
+        f"Test={len(X_test)}({y_test.mean()*100:.1f}%+)"
+    )
+    return (
+        X_old.reset_index(drop=True),  y_old.reset_index(drop=True),
+        X_new.reset_index(drop=True),  y_new.reset_index(drop=True),
+        X_test.reset_index(drop=True), y_test.reset_index(drop=True),
+    )
+
+
+# ---------------------------------------------------------------------------
+# 股市年份切割：固定 test=2017-2020，彈性 old_end_year（SPX，S&P 500）
+# ---------------------------------------------------------------------------
+
+STOCK_YEAR_SPLITS = [
+    ("split_2+14",  2002),  # 2001-2002 Old ( 2yr) / 2003-2016 New (14yr)
+    ("split_4+12",  2004),  # 2001-2004 Old ( 4yr) / 2005-2016 New (12yr)
+    ("split_6+10",  2006),  # 2001-2006 Old ( 6yr) / 2007-2016 New (10yr)
+    ("split_8+8",   2008),  # 2001-2008 Old ( 8yr) / 2009-2016 New ( 8yr)  ← 對稱中心
+    ("split_10+6",  2010),  # 2001-2010 Old (10yr) / 2011-2016 New ( 6yr)
+    ("split_12+4",  2012),  # 2001-2012 Old (12yr) / 2013-2016 New ( 4yr)
+    ("split_14+2",  2014),  # 2001-2014 Old (14yr) / 2015-2016 New ( 2yr)
+]
+
+STOCK_BASE_YEAR = 2001   # 訓練窗口 2001-2016（16 年，與破產結構相同）
+
+
+def get_stock_year_split(logger, old_end_year: int, ticker: str = "spx"):
+    """
+    固定 test = 2017-2020，訓練窗口 2001-2016（16 年），依 old_end_year 切割
+    （預設使用 S&P 500 / SPX）：
+      Old  = 2001 <= year <= old_end_year
+      New  = old_end_year+1 <= year <= 2016
+      Test = 2017 <= year <= 2020
+
+    回傳 (X_old, y_old, X_new, y_new, X_test, y_test)（未縮放）
+    """
+    X, y = _load_stock(logger, ticker=ticker, keep_year=True)
+    year = X["_year"].astype(int)
+
+    mask_old  = (year >= 2001) & (year <= old_end_year)
+    mask_new  = (year > old_end_year) & (year <= 2016)
+    mask_test = (year >= 2017) & (year <= 2020)
+
+    X_old,  y_old  = X[mask_old].drop(columns=["_year"]),  y[mask_old]
+    X_new,  y_new  = X[mask_new].drop(columns=["_year"]),  y[mask_new]
+    X_test, y_test = X[mask_test].drop(columns=["_year"]), y[mask_test]
+
+    logger.info(
+        f"  Old={len(X_old)}({y_old.mean()*100:.2f}%Crash)  "
+        f"New={len(X_new)}({y_new.mean()*100:.2f}%Crash)  "
+        f"Test={len(X_test)}({y_test.mean()*100:.2f}%Crash)"
+    )
+    return (
+        X_old.reset_index(drop=True),  y_old.reset_index(drop=True),
+        X_new.reset_index(drop=True),  y_new.reset_index(drop=True),
+        X_test.reset_index(drop=True), y_test.reset_index(drop=True),
+    )

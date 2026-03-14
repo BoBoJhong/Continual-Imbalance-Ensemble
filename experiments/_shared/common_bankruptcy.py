@@ -145,3 +145,64 @@ def get_bankruptcy_splits(logger, split_mode="block_cv", dataset="auto"):
     X_new_scaled, _ = preprocessor.scale_features(X_new_clean, fit=False)
 
     return X_hist_scaled, y_hist, X_new_scaled, y_new, X_test_scaled, y_test
+
+
+# ---------------------------------------------------------------------------
+# 年份切割：固定 test=2015-2018，彈性 old_end_year
+# ---------------------------------------------------------------------------
+
+YEAR_SPLITS = [
+    ("split_2+14",  2000),   # 1999-2000 Old (2yr)  / 2001-2014 New (14yr)
+    ("split_4+12",  2002),   # 1999-2002 Old (4yr)  / 2003-2014 New (12yr)
+    ("split_6+10",  2004),   # 1999-2004 Old (6yr)  / 2005-2014 New (10yr)
+    ("split_8+8",   2006),   # 1999-2006 Old (8yr)  / 2007-2014 New (8yr)
+    ("split_10+6",  2008),   # 1999-2008 Old (10yr) / 2009-2014 New (6yr)
+    ("split_12+4",  2010),   # 1999-2010 Old (12yr) / 2011-2014 New (4yr)
+    ("split_14+2",  2012),   # 1999-2012 Old (14yr) / 2013-2014 New (2yr)
+]
+
+
+def get_bankruptcy_year_split(logger, old_end_year: int):
+    """
+    固定 test = 2015-2018，依 old_end_year 切割：
+      Old  = fyear <= old_end_year
+      New  = old_end_year+1 <= fyear <= 2014
+      Test = 2015 <= fyear <= 2018
+
+    回傳 (X_old_scaled, y_old, X_new_scaled, y_new, X_test_scaled, y_test)
+    """
+    import sys
+    sys.path.insert(0, str(project_root))
+    from src.data import DataPreprocessor
+
+    if not US_CSV.exists():
+        raise FileNotFoundError(
+            f"US 破產資料不存在: {US_CSV}\n"
+            "請下載 american_bankruptcy_dataset.csv 放到 data/raw/bankruptcy/"
+        )
+
+    logger.info(f"  載入 US 1999-2018 破產資料 (old_end={old_end_year})")
+    X, y = _load_us_1999_2018(logger)
+
+    mask_old  = X["fyear"] <= old_end_year
+    mask_new  = (X["fyear"] > old_end_year) & (X["fyear"] <= 2014)
+    mask_test = (X["fyear"] >= 2015) & (X["fyear"] <= 2018)
+
+    X_old,  y_old  = X[mask_old].drop(columns=["fyear"]),  y[mask_old]
+    X_new,  y_new  = X[mask_new].drop(columns=["fyear"]),  y[mask_new]
+    X_test, y_test = X[mask_test].drop(columns=["fyear"]), y[mask_test]
+
+    logger.info(
+        f"  Old={len(X_old)}({y_old.mean()*100:.1f}%B)  "
+        f"New={len(X_new)}({y_new.mean()*100:.1f}%B)  "
+        f"Test={len(X_test)}({y_test.mean()*100:.1f}%B)"
+    )
+
+    preprocessor = DataPreprocessor()
+    X_old_c  = preprocessor.handle_missing_values(X_old)
+    X_new_c  = preprocessor.handle_missing_values(X_new)
+    X_test_c = preprocessor.handle_missing_values(X_test)
+
+    # 回傳未縮放的原始資料，讓呼叫端依各自訓練策略 fit scaler
+    # （Old-only / New-only / OldNew 的 scaler fit 對象不同，不應在此統一處理）
+    return X_old_c, y_old, X_new_c, y_new, X_test_c, y_test
