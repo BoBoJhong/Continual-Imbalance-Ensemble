@@ -5,6 +5,7 @@ from .random_forest_wrapper import RandomForestWrapper
 from .mlp_wrapper import MLPWrapper
 from .tabnet_wrapper import TabNetWrapper
 from .fttransformer_wrapper import FTTransformerWrapper
+from .lstm_wrapper import LSTMWrapper
 from .model_pool import ModelPool
 
 __all__ = [
@@ -14,5 +15,6 @@ __all__ = [
     'MLPWrapper',
     'TabNetWrapper',
     'FTTransformerWrapper',
+    'LSTMWrapper',
     'ModelPool'
 ]

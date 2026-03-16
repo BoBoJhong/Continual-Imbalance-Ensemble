@@ -20,6 +20,8 @@ import sys
 from pathlib import Path
 import pandas as pd
 import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score
 
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
@@ -42,14 +44,47 @@ BASE_YEAR = 1999
 # 訓練函式（統一回傳 dict of metrics）
 # ---------------------------------------------------------------------------
 
-def _train_eval(X_train, y_train, X_test, y_test, sampler, strategy, tag, logger):
-    """套用採樣 → 訓練 XGBoost → 評估，回傳指標 dict。"""
-    X_r, y_r = sampler.apply_sampling(X_train, np.asarray(y_train), strategy=strategy)
+def _select_threshold_from_validation(y_val, y_proba_val):
+    """用 validation set 搜尋最佳 F1 閾值，避免固定規則。"""
+    best_t, best_f1 = 0.5, -1.0
+    for t in np.arange(0.05, 0.96, 0.01):
+        y_pred = (y_proba_val >= t).astype(int)
+        f1 = f1_score(y_val, y_pred, zero_division=0)
+        if f1 > best_f1:
+            best_f1 = f1
+            best_t = float(t)
+    return best_t, float(best_f1)
+
+def _train_eval(X_train_raw, y_train, X_test_raw, y_test, sampler, strategy, tag, logger):
+    """先切 train/val，再只用 train fold fit scaler，避免 validation leakage。"""
+    y_train_arr = np.asarray(y_train)
+
+    try:
+        X_fit_raw, X_val_raw, y_fit, y_val = train_test_split(
+            X_train_raw, y_train_arr, test_size=0.2, random_state=42, stratify=y_train_arr
+        )
+    except ValueError:
+        X_fit_raw, X_val_raw, y_fit, y_val = train_test_split(
+            X_train_raw, y_train_arr, test_size=0.2, random_state=42
+        )
+
+    pre = DataPreprocessor()
+    X_fit, X_val = pre.scale_features(X_fit_raw, X_val_raw, fit=True)
+    _, X_test = pre.scale_features(X_fit_raw, X_test_raw, fit=False)
+
+    X_r, y_r = sampler.apply_sampling(X_fit, np.asarray(y_fit), strategy=strategy)
     model = XGBoostWrapper(name=f"{tag}_{strategy}")
     model.fit(X_r, y_r)
+
+    y_proba_val = model.predict_proba(X_val)
+    threshold, val_f1 = _select_threshold_from_validation(np.asarray(y_val), y_proba_val)
+
     y_t = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
-    metrics = compute_metrics(y_t, model.predict_proba(X_test))
-    logger.info(f"    {tag:12s} {strategy:12s}: AUC={metrics['AUC']:.4f}  F1={metrics['F1']:.4f}  Recall={metrics['Recall']:.4f}")
+    metrics = compute_metrics(y_t, model.predict_proba(X_test), threshold=threshold)
+    logger.info(
+        f"    {tag:12s} {strategy:12s} [thr={threshold:.3f}, valF1={val_f1:.4f}]: "
+        f"AUC={metrics['AUC']:.4f}  F1={metrics['F1']:.4f}  Recall={metrics['Recall']:.4f}"
+    )
     return metrics
 
 
@@ -58,32 +93,46 @@ def run_split(label, X_old, y_old, X_new, y_new, X_test, y_test, logger):
     sampler = ImbalanceSampler()
     rows = []
 
-    # 各策略各自 fit scaler，確保縮放參數只來自當次訓練集
-    def _scale(X_train, X_test_raw):
-        pre = DataPreprocessor()
-        X_tr_s, X_te_s = pre.scale_features(X_train, X_test_raw, fit=True)
-        return X_tr_s, X_te_s
+    def _balanced_oldnew(Xo, yo, Xn, yn, split_label):
+        """建立 split-aware 的 Old+New 訓練集：Old/New 各取相同筆數。"""
+        n = min(len(Xo), len(Xn))
+        if n == 0:
+            return (
+                pd.concat([Xo, Xn], ignore_index=True),
+                pd.concat([yo.reset_index(drop=True), yn.reset_index(drop=True)], ignore_index=True),
+            )
+
+        # 以 split label 產生穩定且可重現的隨機種子
+        split_seed = 42 + sum(ord(c) for c in str(split_label))
+        rng = np.random.default_rng(split_seed)
+        idx_old = rng.choice(len(Xo), size=n, replace=False)
+        idx_new = rng.choice(len(Xn), size=n, replace=False)
+
+        X_bal = pd.concat(
+            [Xo.iloc[idx_old].reset_index(drop=True), Xn.iloc[idx_new].reset_index(drop=True)],
+            ignore_index=True,
+        )
+        y_bal = pd.concat(
+            [yo.iloc[idx_old].reset_index(drop=True), yn.iloc[idx_new].reset_index(drop=True)],
+            ignore_index=True,
+        )
+        return X_bal, y_bal
 
     # Old
-    X_old_s, X_test_s_old = _scale(X_old, X_test)
     for strat in SAMPLING_STRATEGIES:
-        m = _train_eval(X_old_s, y_old, X_test_s_old, y_test, sampler, strat, "Old", logger)
+        m = _train_eval(X_old, y_old, X_test, y_test, sampler, strat, "Old", logger)
         rows.append({"split": label, "method": "Old", "sampling": strat, **m})
 
-    # Old+New  (合併，以合併資料 fit scaler)
-    X_combined = pd.concat([X_old, X_new], ignore_index=True)
-    y_combined = pd.concat(
-        [y_old.reset_index(drop=True), y_new.reset_index(drop=True)], ignore_index=True
-    )
-    X_combined_s, X_test_s_comb = _scale(X_combined, X_test)
+    # Old+New  (split-aware 平衡混合，Old/New 各取相同筆數)
+    X_combined, y_combined = _balanced_oldnew(X_old, y_old, X_new, y_new, label)
+    logger.info(f"  Old+New balanced mix: Old={len(X_old)} New={len(X_new)} -> each={len(X_combined)//2}")
     for strat in SAMPLING_STRATEGIES:
-        m = _train_eval(X_combined_s, y_combined, X_test_s_comb, y_test, sampler, strat, "Old+New", logger)
+        m = _train_eval(X_combined, y_combined, X_test, y_test, sampler, strat, "Old+New", logger)
         rows.append({"split": label, "method": "Old+New", "sampling": strat, **m})
 
-    # New（scaler fit 在 New 資料上）
-    X_new_s, X_test_s_new = _scale(X_new, X_test)
+    # New
     for strat in SAMPLING_STRATEGIES:
-        m = _train_eval(X_new_s, y_new, X_test_s_new, y_test, sampler, strat, "New", logger)
+        m = _train_eval(X_new, y_new, X_test, y_test, sampler, strat, "New", logger)
         rows.append({"split": label, "method": "New", "sampling": strat, **m})
 
     return rows
@@ -119,6 +168,7 @@ def format_tables(df_raw, logger):
             .reindex(index=split_labels, columns=sampling_cols)
         )
         pivot_old.index = [f"{split_yr[s][0]}yr" for s in pivot_old.index]
+        pivot_old["avg"] = pivot_old.mean(axis=1)
         pivot_old.loc["avg"] = pivot_old.mean()
         pivot_old.index.name = "old_years"
         out = OUTPUT_DIR / f"med_xgb_table_{metric}_old.csv"
@@ -132,6 +182,7 @@ def format_tables(df_raw, logger):
             .reindex(index=split_labels, columns=sampling_cols)
         )
         pivot_on.index = [f"{split_yr[s][0]}+{split_yr[s][1]}" for s in pivot_on.index]
+        pivot_on["avg"] = pivot_on.mean(axis=1)
         pivot_on.loc["avg"] = pivot_on.mean()
         pivot_on.index.name = "old+new_years"
         out = OUTPUT_DIR / f"med_xgb_table_{metric}_oldnew.csv"
@@ -145,6 +196,7 @@ def format_tables(df_raw, logger):
             .reindex(index=split_labels, columns=sampling_cols)
         )
         pivot_new.index = [f"{split_yr[s][1]}yr" for s in pivot_new.index]
+        pivot_new["avg"] = pivot_new.mean(axis=1)
         pivot_new.loc["avg"] = pivot_new.mean()
         pivot_new.index.name = "new_years"
         out = OUTPUT_DIR / f"med_xgb_table_{metric}_new.csv"
