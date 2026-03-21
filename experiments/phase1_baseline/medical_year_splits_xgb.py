@@ -1,4 +1,4 @@
-﻿"""
+"""
 Phase 1 - Medical 年份切割基準線實驗（XGBoost）
 =======================================================
 資料集：UCI Diabetes 130-US Hospitals (1999-2008，偽時序)
@@ -230,7 +230,7 @@ def main():
             import traceback; logger.error(traceback.format_exc())
 
     if not all_rows:
-        logger.error("無任何結果，請確認資料檔存在（執行 python scripts/download_real_medical_data.py）。")
+        logger.error("無任何結果，請確認資料檔存在（執行 python scripts/data/download_real_medical_data.py）。")
         return
 
     df_raw = pd.DataFrame(all_rows)

@@ -1,0 +1,44 @@
+rectangle "Preprocess" as PRE #FFFACD
+
+OLD --> PRE
+NEW --> PRE
+
+package "Sampling" as PKG_S #FFFACD {
+  rectangle "none" as S0
+  rectangle "under" as S1
+  rectangle "over" as S2
+  rectangle "hybrid" as S3
+}
+
+S0 -[hidden]right- S1
+S1 -[hidden]right- S2
+S2 -[hidden]right- S3
+
+PRE --> PKG_S
+
+package "Training setup" as PKG_T #E8E8E8 {
+  rectangle "Old\nonly" as T1
+  rectangle "New\nonly" as T2
+  rectangle "Re-training\n(merge Old+New)" as T3
+  rectangle "Fine-tuning\n(Old→New)" as T4
+}
+
+T1 -[hidden]right- T2
+T2 -[hidden]right- T3
+T3 -[hidden]right- T4
+
+PKG_S --> PKG_T
+
+package "Classifier" as PKG_CLF #E0E0E0 {
+  rectangle "XGB" as CLF
+}
+
+PKG_T --> PKG_CLF
+
+database "Val" as VAL
+PRE .. VAL
+
+rectangle "Threshold\nVal F1" as THR #FFFACD
+
+VAL --> THR
+CLF --> THR

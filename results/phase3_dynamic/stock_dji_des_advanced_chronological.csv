@@ -1,5 +1,0 @@
-,AUC,F1,G_Mean,Recall,Precision,Type1_Error,Type2_Error
-DES_baseline,0.43928539711672243,0.0,0.0,0.0,0.0,0.0,1.0
-DES_time_weighted,0.43258044462863743,0.0,,0.0,0.0,,
-DES_minority_weighted,0.4327284568248424,0.0,,0.0,0.0,,
-DES_combined,0.4327284568248424,0.0,,0.0,0.0,,

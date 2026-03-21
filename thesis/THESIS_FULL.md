@@ -283,7 +283,7 @@ Ko 等人（2008）在手寫辨識實驗中顯示，KNORA-E 之辨識率可達 9
 ### 4.1.2 評估指標與可重複性
 
 - **評估指標**：AUC-ROC、F1、Precision、Recall；評估集一律為 **testing**，未在訓練集上報績效。  
-- **可重複性**：各實驗固定隨機種子（如 42）；若需 mean±std 或統計檢定，可執行專案提供之多 seed 腳本（如 `scripts/run_multi_seed.py`），並於論文中加一小節說明。
+- **可重複性**：各實驗固定隨機種子（如 42）；若需 mean±std 或統計檢定，可執行專案提供之多 seed 腳本（如 `scripts/run/run_multi_seed.py`），並於論文中加一小節說明。
 
 ---
 
@@ -415,7 +415,7 @@ Ko 等人（2008）在手寫辨識實驗中顯示，KNORA-E 之辨識率可達 9
 明確說明**前處理與切割之正當性**（無測試集洩漏、Baseline 定義與老師要求一致），可供碩論方法與實驗章節撰寫與口試對照使用；並與專案文件（如 EXPERIMENT_VALIDATION.md、TEACHER_REQUIREMENTS_CHECKLIST.md）對應，利於口試時逐條說明。
 
 **(3) 可重複性與延伸**  
-提供**可重複實驗之程式與結果檔**（如 `results/` 下之 CSV、`scripts/run_all_experiments.py`），利於後續延伸或複現；進階 DES 與比例實驗之設計亦可作為後續論文或實務應用之起點。
+提供**可重複實驗之程式與結果檔**（如 `results/` 下之 CSV、`scripts/run/run_all_experiments.py`），利於後續延伸或複現；進階 DES 與比例實驗之設計亦可作為後續論文或實務應用之起點。
 
 ---
 

@@ -73,7 +73,7 @@ def _load_medical(logger, keep_year=False):
     else:
         raise FileNotFoundError(
             "Medical 資料不存在，請執行:\n"
-            "  python scripts/download_real_medical_data.py"
+            "  python scripts/data/download_real_medical_data.py"
         )
 
     df = pd.read_csv(path)

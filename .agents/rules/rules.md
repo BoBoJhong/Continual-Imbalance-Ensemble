@@ -33,7 +33,7 @@ trigger: always_on
 
 `experiments/` 子目錄慣例：
 - `_shared/`：資料載入 & 流程封裝，**不可直接執行**
-- `phase1_baseline/`、`phase2_ensemble/`、`phase3_dynamic/{des,dcs}/`、`phase4_feature/`、`phase5_analysis/`：各階段執行腳本
+- `phase1_baseline/`、`phase2_ensemble/static/`、`phase2_ensemble/dynamic/des/`、`phase2_ensemble/dynamic/dcs/`、`phase3_feature/`、`phase4_analysis/`：各階段執行腳本
 - 每支腳本跨全部資料集（Bankruptcy / Stock / Medical）一次執行完畢
 
 ---
@@ -202,18 +202,20 @@ data/raw/
 .venv\Scripts\activate
 
 # 執行所有實驗（依 phase 順序）
-python scripts\run_all_experiments.py
+python scripts\run\run_all_experiments.py
 
 # 執行單一腳本
 python experiments/phase1_baseline/retrain.py
 
 # 查看彙總結果
-python scripts\compare_all_results.py
+python scripts\analysis\compare_all_results.py
 ```
 
 ## project_root 深度規範
 
 | 腳本位置 | `project_root` 寫法 |
 |----------|--------------------|
-| `_shared/`, `phase?_*/` | `Path(__file__).parent.parent.parent` |
-| `phase3_dynamic/des/`, `phase3_dynamic/dcs/` | `Path(__file__).parent.parent.parent.parent` |
+| `_shared/`, `phase1_baseline/`, `phase3_feature/` 等（深度 3） | `Path(__file__).parent.parent.parent` |
+| `phase2_ensemble/static/` | `Path(__file__).resolve().parent.parent.parent.parent` |
+| `phase2_ensemble/dynamic/des/`, `phase2_ensemble/dynamic/dcs/` | `Path(__file__).resolve().parent.parent.parent.parent.parent` |
+| `scripts/data/`, `scripts/run/`, `scripts/analysis/`, `scripts/plots/`, `scripts/reports/` | `Path(__file__).resolve().parent.parent.parent` |

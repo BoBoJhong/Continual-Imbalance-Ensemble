@@ -1,13 +1,13 @@
-﻿import sys, subprocess
+import sys, subprocess
 from pathlib import Path
 project_root = Path(__file__).parent
 
 REMAINING = [
-    ("phase4_feature",   "fs_sweep",                2700),
-    ("phase5_analysis",  "split_comparison",          300),
-    ("phase5_analysis",  "proportion_study",          900),
-    ("phase5_analysis",  "base_learner_comparison",   600),
-    ("phase5_analysis",  "stock_threshold_cost",      300),
+    ("phase3_feature",   "fs_sweep",                2700),
+    ("phase4_analysis",  "split_comparison",          300),
+    ("phase4_analysis",  "proportion_study",          900),
+    ("phase4_analysis",  "base_learner_comparison",   600),
+    ("phase4_analysis",  "stock_threshold_cost",      300),
 ]
 
 ok, fail, skip = 0, 0, 0

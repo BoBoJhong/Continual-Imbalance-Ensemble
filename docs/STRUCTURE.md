@@ -64,43 +64,49 @@ Continual-Imbalance-Ensemble/
 │   ├── phase1_baseline/            ← Baseline 實驗
 │   │   ├── retrain.py              ← Re-train（歷史 + 新資料合訓）
 │   │   └── finetune.py             ← Fine-tune（歷史預訓 + 新資料微調）
-│   ├── phase2_ensemble/            ← 靜態集成實驗
-│   │   ├── undersampling.py        ← 欠採樣集成
-│   │   ├── oversampling.py         ← 過採樣集成
-│   │   ├── hybrid.py               ← 混合採樣集成
-│   │   └── all_combinations.py     ← 2~6 模型全組合枚舉
-│   ├── phase3_dynamic/             ← 動態選擇實驗
-│   │   ├── des/
-│   │   │   ├── standard.py         ← DES（KNORA-E）標準實驗
-│   │   │   └── advanced.py         ← 進階 DES（時間/少數類加權）
-│   │   └── dcs/
-│   │       └── comparison.py       ← DCS 跨資料集比較
-│   ├── phase4_feature/             ← 特徵選擇研究
+│   ├── phase2_ensemble/            ← Phase2 集成（主線 XGB：`static/` + `dynamic/des/`，檔名 xgb_*）
+│   │   ├── xgb_oldnew_ensemble_common.py  ← XGB Old/New 共用
+│   │   ├── static/                 ← 靜態集成
+│   │   │   ├── undersampling.py / oversampling.py / hybrid.py
+│   │   │   ├── all_combinations.py
+│   │   │   └── …
+│   │   ├── dynamic/
+│   │   │   ├── des/                ← DES（standard / advanced / xgb year-split）
+│   │   │   └── dcs/                ← DCS（comparison）
+│   │   └── …
+│   ├── phase3_feature/             ← 特徵選擇研究（Phase 3 FS）
 │   │   ├── fs_study.py             ← 特徵選擇方法比較
 │   │   └── fs_sweep.py             ← 特徵數量 sweep
-│   └── phase5_analysis/            ← 深度分析
+│   └── phase4_analysis/            ← 深度／補充分析
 │       ├── base_learner_comparison.py  ← 基學習器比較（LGB/XGB/RF）
 │       ├── proportion_study.py         ← New data 比例研究
 │       ├── split_comparison.py         ← chronological vs. block_cv 比較
 │       └── stock_threshold_cost.py     ← 股票門檻/成本分析
 │
-├── scripts/                        ← 工具腳本（非實驗）
+├── scripts/                        ← 工具腳本（非實驗），詳見 scripts/README.md
 │   ├── README.md
-│   ├── run_all_experiments.py      ← 依序執行所有 phase
-│   ├── run_multi_seed.py           ← 多 Seed 重現性（mean±std）
-│   ├── compare_baseline_ensemble.py← Bankruptcy 結果彙總
-│   ├── compare_all_results.py      ← 三資料集彙總（summary CSV）
-│   ├── statistical_test.py         ← 統計顯著性檢定
-│   ├── visualize_results.py        ← 結果視覺化（PNG 輸出）
-│   ├── generate_advisor_excel.py   ← 產生指導教授報告 Excel
-│   ├── generate_synthetic_data.py  ← 合成資料產生
-│   ├── download_medical_data.py    ← UCI 醫療資料下載（合成版）
-│   ├── download_real_medical_data.py   ← 真實醫療資料下載
-│   ├── download_stock_data.py      ← Stock 資料下載（合成版）
-│   ├── download_real_stock_data.py ← 真實 Stock 資料下載
-│   ├── download_us_bankruptcy.py   ← US Bankruptcy 資料下載
-│   ├── _gen_exps.py                ← 實驗腳本自動產生工具
-│   └── _write_common_dcs.py        ← common_dcs.py 產生工具
+│   ├── data/                       ← 資料下載、合成資料
+│   │   ├── download_us_bankruptcy.py
+│   │   ├── download_medical_data.py / download_real_medical_data.py
+│   │   ├── download_stock_data.py / download_real_stock_data.py
+│   │   └── generate_synthetic_data.py
+│   ├── run/                        ← 一鍵執行、多 seed、批次切割
+│   │   ├── run_all_experiments.py
+│   │   ├── run_multi_seed.py
+│   │   ├── _run_both_splits.py
+│   │   ├── _gen_exps.py
+│   │   └── _write_common_dcs.py
+│   ├── analysis/                   ← 彙總、統計檢定
+│   │   ├── compare_all_results.py
+│   │   ├── compare_baseline_ensemble.py
+│   │   └── statistical_test.py
+│   ├── plots/                      ← 視覺化與 Phase1 繪圖
+│   │   ├── visualize_results.py
+│   │   ├── phase1_baseline_plotting.py
+│   │   ├── visualize_phase1_xgb_baseline.py
+│   │   └── visualize_phase1_torch_mlp_baseline.py
+│   └── reports/                    ← 報表匯出
+│       └── generate_advisor_excel.py
 │
 ├── data/                           ← 資料（raw/ 已 .gitignore）
 │   ├── raw/
@@ -123,16 +129,16 @@ Continual-Imbalance-Ensemble/
 │   ├── summary_all_datasets.csv    ← 三資料集總覽
 │   ├── summary_all_datasets_detailed.csv
 │   ├── phase1_baseline/            ← retrain / finetune 輸出
-│   ├── phase2_ensemble/            ← 靜態集成輸出
-│   ├── phase3_dynamic/             ← DES / DCS 輸出
-│   ├── phase4_feature/             ← 特徵選擇研究輸出
-│   ├── phase5_analysis/            ← 深度分析輸出
+│   ├── phase2_ensemble/            ← static/、dynamic/des/（XGB 主線）；dynamic/dcs/ 僅舊版腳本可寫入
+│   ├── phase3_feature/             ← 特徵選擇研究輸出
+│   ├── phase4_analysis/            ← 深度／補充分析輸出
 │   ├── multi_seed/                 ← 多 Seed 重現性結果
 │   │   ├── bankruptcy_multi_seed.csv
 │   │   ├── medical_multi_seed.csv
 │   │   └── stock_multi_seed.csv
 │   └── visualizations/             ← 產出圖表（PNG）
 │
+├── UML/                            ← PlantUML 方法／流程圖（見 UML/README_圖表建議.md）
 ├── docs/                           ← 核心文件
 │   ├── STRUCTURE.md                ← 本文件（目錄說明）
 │   ├── RESEARCH_SPEC.md            ← 指導教授研究方向規格

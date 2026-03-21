@@ -1,70 +1,63 @@
-﻿# 實驗腳本目錄 (Experiments)
+# 實驗腳本目錄 (Experiments)
 
-本目錄存放所有可直接執行的實驗腳本，依**研究階段與方法類型**分資料夾。  
-每個腳本均跨全部資料集（Bankruptcy / Stock / Medical），一次執行出結果。
+本目錄為可直接執行的實驗腳本，依**研究階段**與**方法類型**分資料夾。
 
-## 目錄結構
+## Phase 1 — Baseline
 
-```
-experiments/
-├── _shared/                      # 共用資料載入 / 模型流程（不可直接執行）
-│   ├── common_bankruptcy.py      # Bankruptcy 資料集切割
-│   ├── common_dataset.py         # Stock / Medical 資料集切割
-│   ├── common_des.py             # DES KNORA-E 核心流程
-│   ├── common_des_advanced.py    # 進階 DES（時間加權 / 少數類加權）
-│   └── common_dcs.py             # DCS OLA/LCA/TW 流程
-│
-├── phase1_baseline/              # Phase 1：基準方法
-│   ├── retrain.py                # Re-training（全資料集 × 4種取樣策略）
-│   └── finetune.py               # Fine-tuning（全資料集 × 4種取樣策略）
-│
-├── phase2_ensemble/              # Phase 2：靜態集成
-│   ├── undersampling.py          # Undersampling 模型池（old/new/pair）
-│   ├── oversampling.py           # Oversampling 模型池（old/new/pair）
-│   ├── hybrid.py                 # Hybrid 模型池（old/new/pair）
-│   └── all_combinations.py       # 全組合系統性測試（2~6 模型）
-│
-├── phase3_dynamic/               # Phase 3：動態集成選擇（核心貢獻）
-│   ├── des/
-│   │   ├── standard.py           # KNORA-E DES（全資料集）
-│   │   └── advanced.py           # 時間加權 / 少數類加權 DES（全資料集）
-│   └── dcs/
-│       └── comparison.py         # OLA / LCA / OLA_TW / LCA_TW 比較（全資料集）
-│
-├── phase4_feature/               # Phase 4：Study II—特徵選擇的影響
-│   ├── fs_study.py               # 基本特徵選擇研究（KBest_F, ratio=0.5）
-│   └── fs_sweep.py               # 方法 × 比例全掃描（KBest_F/Chi2/LASSO × 0.2/0.5/0.8）
-│
-└── phase5_analysis/              # Phase 5：補充分析
-    ├── split_comparison.py       # Chronological vs Block-CV 比較（全資料集）
-    ├── proportion_study.py       # 新資料比例研究 [0.1–1.0]（全資料集）
-    ├── base_learner_comparison.py# Base Learner 比較（LightGBM / XGBoost / RF）
-    └── stock_threshold_cost.py   # Stock：決策閾值 & 成本分析
-```
+`phase1_baseline/`：再訓練、微調、依資料集／年份切割之 XGB、Torch MLP、TabNet 等（見該目錄內檔案）。
 
-## 共用輔助函式速查
+## Phase 2 — 集成（主線：XGB，僅分靜態／動態）
 
-| 函式 | 所在模組 | 功能 |
-|------|----------|------|
-| `get_bankruptcy_splits(logger, split_mode)` | `common_bankruptcy` | 取得 bankruptcy 三段切割資料 |
-| `get_splits(dataset, logger, split_mode)` | `common_dataset` | 取得 stock/medical 三段切割資料 |
-| `run_des(X_h,y_h,X_n,y_n,X_t,y_t,logger,k=7)` | `common_des` | KNORA-E DES 流程，回傳 metrics dict |
-| `run_des_advanced(...,time_weight,minority_weight)` | `common_des_advanced` | 進階 DES，回傳 metrics dict |
-| `run_dcs_all_variants(X_h,y_h,X_n,y_n,X_t,y_t,logger,k=7)` | `common_dcs` | DCS 全變體，回傳 variants dict |
+**論文主線**為 **XGBoost Old／New 六槽位 + 年份切割**：不再另開方法資料夾，以**檔名**區分（例如 `xgb_oldnew_ensemble_*`）。
 
-## 執行方式
+| 子路徑 | 說明 |
+|--------|------|
+| **`phase2_ensemble/static/`** | **靜態**：`xgb_oldnew_<資料集>_year_splits_static.py` → `xgb_oldnew_ensemble_static_*`（raw／長表／寬表） |
+| **`phase2_ensemble/dynamic/des/`** | **動態 DES（XGB）**：`xgb_oldnew_<資料集>_year_splits_des.py` → `xgb_oldnew_ensemble_des_*` |
+| **`phase2_ensemble/dynamic/dcs/`** | **動態 DCS（XGB 池）**：`xgb_oldnew_<資料集>_year_splits_dcs.py` → `xgb_oldnew_ensemble_dcs_by_sampling_raw_*.csv` |
+
+**共用模組**：`phase2_ensemble/xgb_oldnew_ensemble_common.py`。
+
+**輸出（預設）**：`results/phase2_ensemble/static/`、`…/dynamic/des/`、`…/dynamic/dcs/` 三處分開；檔名前綴分別為 `xgb_oldnew_ensemble_static_`、`xgb_oldnew_ensemble_des_`、`*_dcs_*`。
+
+**舊版（LightGBM `ModelPool`）**：`undersampling` / `oversampling` / `hybrid` / `all_combinations`、`dynamic/des/standard|advanced`、`dynamic/dcs/comparison` 仍留在庫內供對照，**一鍵腳本預設不執行**。
+
+## Phase 3 — 特徵選取（Study II）
+
+`phase3_feature/`：`fs_study.py`、`fs_sweep.py`。
+
+## Phase 4 — 補充分析
+
+`phase4_analysis/`：split 比較、比例、基學習器、股票閾值成本等。
+
+---
+
+## 共用函式（`_shared/`）
+
+| 模組 | 用途 |
+|------|------|
+| `common_bankruptcy` | Bankruptcy 切割 |
+| `common_dataset` | Stock / Medical 切割 |
+| `common_des` / `common_des_advanced` | DES 流程 |
+| `common_dcs` | DCS 流程 |
+
+Import 慣例：`from experiments._shared.common_* import ...`
+
+## `project_root` 深度
+
+| 腳本位置 | `project_root` |
+|----------|----------------|
+| `phase1_baseline/*.py`（多數） | `Path(__file__).parent.parent.parent` |
+| `phase2_ensemble/static/*.py` | `Path(__file__).resolve().parent.parent.parent.parent` |
+| `phase2_ensemble/dynamic/des/*.py`、`dynamic/dcs/*.py` | `Path(__file__).resolve().parent.parent.parent.parent.parent` |
+| `phase2_ensemble/xgb_oldnew_ensemble_common.py`（根） | `Path(__file__).resolve().parent.parent.parent` |
+| `phase3_feature/*.py` | `Path(__file__).parent.parent.parent` |
+
+## 執行範例
 
 ```powershell
-# 執行單一腳本
-python experiments/phase1_baseline/retrain.py
-
-# 一鍵執行全部（依階段順序）
-python scripts/run_all_experiments.py
+python experiments/phase2_ensemble/static/xgb_oldnew_bankruptcy_year_splits_static.py
+python experiments/phase2_ensemble/dynamic/des/xgb_oldnew_bankruptcy_year_splits_des.py
+python experiments/phase2_ensemble/dynamic/dcs/xgb_oldnew_bankruptcy_year_splits_dcs.py
+python scripts/run/run_all_experiments.py
 ```
-
-## 重要慣例
-
-- `project_root`：位於 `_shared/` 及 phase1~5 的腳本 → `Path(__file__).parent.parent.parent`  
-  位於 `des/` 或 `dcs/` 子目錄的腳本 → `Path(__file__).parent.parent.parent.parent`
-- 所有結果輸出至 `results/phase?_??*/`，命名格式：`{dataset}_{description}.csv`
-- 所有 import 使用 `from experiments._shared.common_*`

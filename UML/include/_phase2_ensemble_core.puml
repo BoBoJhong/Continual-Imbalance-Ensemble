@@ -1,0 +1,51 @@
+rectangle "Ensemble\nLearning" as E
+rectangle "Static" as ST #E0E0E0
+rectangle "Dynamic\nDCS / DES" as DY #EEEEEE
+E --> ST
+E .. DY
+
+ST --> OLD
+ST --> NEW
+
+package "Old pool" as PKG_O #FFFACD {
+  rectangle "1\nunder" as O1
+  rectangle "2\nover" as O2
+  rectangle "3\nhybrid" as O3
+}
+
+package "New pool" as PKG_N #FFFACD {
+  rectangle "4\nunder" as N4
+  rectangle "5\nover" as N5
+  rectangle "6\nhybrid" as N6
+}
+
+OLD --> O1
+OLD --> O2
+OLD --> O3
+NEW --> N4
+NEW --> N5
+NEW --> N6
+
+package "Ensemble design" as PKG_C #E8E8E8 {
+  rectangle "1 old +\n1 new" as CA #E8F5E9
+  rectangle "3 models\n2O+1N or\n1O+2N" as CB #E3F2FD
+  rectangle "4 models" as CC #FCE4EC
+  rectangle "5 models" as CD #FFF3E0
+  rectangle "6 models\nall" as CE #ECEFF1
+}
+
+CA -[hidden]right- CB
+CB -[hidden]right- CC
+CC -[hidden]right- CD
+CD -[hidden]right- CE
+
+PKG_O --> PKG_C
+PKG_N --> PKG_C
+
+rectangle "Fusion\navg proba in subset\nthreshold on Val" as FUS #D8D8D8
+
+CA --> FUS
+CB --> FUS
+CC --> FUS
+CD --> FUS
+CE --> FUS

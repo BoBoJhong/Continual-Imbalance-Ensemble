@@ -1,0 +1,128 @@
+@startuml
+!pragma layout smetana
+
+title Study 1 — Baselines & Static Ensemble
+
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam linetype ortho
+skinparam nodesep 18
+skinparam ranksep 48
+skinparam packageStyle rectangle
+skinparam rectangle {
+  roundCorner 12
+}
+skinparam database {
+  BackgroundColor #E8F4FF
+  BorderColor #2E5A88
+}
+
+skinparam ArrowColor #333333
+
+' ----- Shared splits (read left → right) -----
+together {
+  database "Dataset" as DS
+  rectangle "Chronological\nsplit" as CUT
+  database "Old" as OLD
+  database "New" as NEW
+}
+DS -[hidden]right- CUT
+CUT -[hidden]right- OLD
+OLD -[hidden]right- NEW
+DS --> CUT
+CUT --> OLD
+CUT --> NEW
+
+package "Step 1 — Baseline\none classifier per (sampling × train setup)" as P1 #F5F5F5 {
+  together {
+    rectangle "Preprocess" as PRE #FFFACD
+    rectangle "Sampling\nnone · under ·\nover · hybrid" as SMP #FFFACD
+    rectangle "Training\nOld-only · New-only ·\nRe-training (merge) ·\nFine-tuning (Old→New)" as TRN #E8E8E8
+    package "Classifier" as PC #E0E0E0 {
+      rectangle "XGB" as XGB
+    }
+    rectangle "Threshold\n(max F1 on Val)" as THR #FFFACD
+  }
+  PRE -[hidden]right- SMP
+  SMP -[hidden]right- TRN
+  TRN -[hidden]right- PC
+  PC -[hidden]right- THR
+  PRE --> SMP
+  SMP --> TRN
+  TRN --> XGB
+  XGB --> THR
+}
+
+package "Step 2 — Static ensemble\nModels 1–6 = Step 1 template:\nOld{1–3} New{4–6}, each XGB×(u/o/h);\nsubsets ∈ {1..6} then fusion" as P2 #F5F5F5 {
+  together {
+    package "Old pool" as PKG_O #FFFACD {
+      rectangle "1\nunder" as O1
+      rectangle "2\nover" as O2
+      rectangle "3\nhybrid" as O3
+    }
+    package "New pool" as PKG_N #FFFACD {
+      rectangle "4\nunder" as N4
+      rectangle "5\nover" as N5
+      rectangle "6\nhybrid" as N6
+    }
+    package "Subset design\n≥1 old & ≥1 new" as PKG_C #E8E8E8 {
+      rectangle "1 old +\n1 new" as CA
+      rectangle "3 models\n2O+1N or\n1O+2N" as CB
+      rectangle "4 models" as CC
+      rectangle "5 models" as CD
+      rectangle "6 models\nall" as CE
+    }
+    rectangle "Fusion\navg proba +\nVal threshold" as FUS #D8D8D8
+  }
+  O1 -[hidden]right- O2
+  O2 -[hidden]right- O3
+  N4 -[hidden]right- N5
+  N5 -[hidden]right- N6
+  PKG_O -[hidden]right- PKG_N
+  PKG_N -[hidden]right- PKG_C
+  PKG_C -[hidden]right- FUS
+  CA -[hidden]right- CB
+  CB -[hidden]right- CC
+  CC -[hidden]right- CD
+  CD -[hidden]right- CE
+  PKG_O --> PKG_C
+  PKG_N --> PKG_C
+  CA --> FUS
+  CB --> FUS
+  CC --> FUS
+  CD --> FUS
+  CE --> FUS
+}
+
+database "Test" as TE
+rectangle "Test metrics\nAUC / F1 / Recall" as OUT #FFFFFF
+
+NEW -[hidden]right- P1
+P1 -[hidden]right- P2
+P2 -[hidden]right- TE
+TE -[hidden]right- OUT
+
+P1 --> P2 : Indices 1–6 =\nStep 1 model template\n(Old/New × u/o/h);\nnew fits (no weight reuse)
+
+OLD --> PRE
+NEW --> PRE
+OLD --> O1
+OLD --> O2
+OLD --> O3
+NEW --> N4
+NEW --> N5
+NEW --> N6
+
+CUT --> TE
+TE --> OUT
+THR --> OUT
+FUS --> OUT
+
+database "Val" as VAL
+PRE .. VAL
+NEW .. VAL
+VAL --> THR
+VAL --> FUS
+
+@enduml

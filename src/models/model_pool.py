@@ -68,7 +68,8 @@ class ModelPool:
         self,
         X_train: pd.DataFrame,
         y_train: np.ndarray,
-        prefix: str = "model"
+        prefix: str = "model",
+        model_class=LightGBMWrapper,
     ):
         """
         Create a complete model pool (3 models with different sampling).
@@ -88,7 +89,7 @@ class ModelPool:
         
         for model_name, strategy in strategies.items():
             self.create_model_with_sampling(
-                X_train, y_train, strategy, model_name
+                X_train, y_train, strategy, model_name, model_class=model_class
             )
         
         self.logger.info(

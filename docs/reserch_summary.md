@@ -573,7 +573,7 @@ Study II: 特徵選擇 ── no_fs / kbest_f / kbest_chi2 / lasso (r20/r50/r80)
 > - **Medical** 兩切割幾乎相同（差距 0.001），結構最穩健  
 > - **DJI** 次大差距（−0.075）；BCV fold 可能涵蓋更多代表性時期  
 > - **NDX** 中等差距（−0.030）：兩切割均有正 Recall，行為一致性最佳  
-> - `results/phase5_analysis/medical_split_comparison.csv` / `stock_spx_split_comparison.csv` 已生成
+> - `results/phase4_analysis/medical_split_comparison.csv` / `stock_spx_split_comparison.csv` 已生成
 
 ---
 
@@ -640,16 +640,16 @@ Study II: 特徵選擇 ── no_fs / kbest_f / kbest_chi2 / lasso (r20/r50/r80)
   → results/phase2_ensemble/all_combinations_systematic.csv  （49種 × 2切割）
 
 第五步：P3 DCS / DES（注意切割差異！）
-  → results/phase3_dynamic/bankruptcy_dcs_comparison_chronological.csv  （AUC ≈ 0.84）
-  → results/phase3_dynamic/bankruptcy_dcs_comparison_block_cv.csv        （AUC ≈ 0.68）
-  → results/phase3_dynamic/bankruptcy_des_advanced_chronological.csv
+  → results/phase2_ensemble/dynamic/dcs/bankruptcy_dcs_comparison_chronological.csv  （AUC ≈ 0.84）
+  → results/phase2_ensemble/dynamic/dcs/bankruptcy_dcs_comparison_block_cv.csv        （AUC ≈ 0.68）
+  → results/phase2_ensemble/dynamic/des/bankruptcy_des_advanced_chronological.csv
 
 第六步：特徵選擇
-  → results/phase4_feature/bankruptcy_fs_sweep.csv
+  → results/phase3_feature/bankruptcy_fs_sweep.csv
 
 第七步：補充分析
-  → results/phase5_analysis/bankruptcy_proportion_study.csv
-  → results/phase5_analysis/stock_spx_split_comparison.csv
+  → results/phase4_analysis/bankruptcy_proportion_study.csv
+  → results/phase4_analysis/stock_spx_split_comparison.csv
 
 第八步：綜合比較
   → results/summary_all_datasets.csv

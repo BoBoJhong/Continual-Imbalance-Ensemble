@@ -109,7 +109,7 @@ FT-Transformer 將 Transformer 架構應用於表格資料，核心思想是：*
 ### 與本研究的關聯
 - 適合探索財務特徵之間的非線性交互（例如：負債比率與現金流的聯合效果）
 - 論文提供的 benchmark 包含金融類型資料集，有直接可比較的 baseline
-- 建議在 phase4_feature 中作為 feature interaction 分析的方法之一
+- 建議在 phase3_feature 中作為 feature interaction 分析的方法之一
 
 ### 實作資源
 - 官方實作（論文作者）：https://github.com/yandex-research/rtdl

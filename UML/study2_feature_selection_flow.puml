@@ -1,0 +1,48 @@
+@startuml
+!pragma layout smetana
+
+title Study 2 — Feature Selection
+
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam linetype ortho
+skinparam nodesep 22
+skinparam ranksep 40
+skinparam packageStyle rectangle
+skinparam rectangle {
+  roundCorner 14
+}
+skinparam database {
+  BackgroundColor #E8F4FF
+  BorderColor #2E5A88
+}
+
+rectangle "Study 2" as ST2
+
+database "Train data\nOld / New / merged" as TR
+
+ST2 --> TR
+
+package "Feature selection" as PKG_FS #FFFACD {
+  rectangle "Method\n(filter / wrapper /\nembedded / …)" as FS
+}
+
+TR --> PKG_FS
+
+database "Feature subset" as FEAT
+
+PKG_FS --> FEAT
+
+rectangle "Downstream\nrerun Study 1\nBaseline & Ensemble\non selected features" as DOWN #E0E0E0
+
+FEAT --> DOWN
+
+database "Test" as TE
+rectangle "Metrics\nvs full-feature Study 1" as CMP #FFFFFF
+
+TE .. DOWN
+DOWN --> CMP
+TE --> CMP
+
+@enduml

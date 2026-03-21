@@ -1,3 +1,6 @@
+# Deep learning (Phase 1 bankruptcy Torch MLP baseline)
+torch>=2.0.0
+
 # Core ML Libraries
 numpy>=1.24.0
 pandas>=2.0.0

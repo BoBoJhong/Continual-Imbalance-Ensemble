@@ -12,7 +12,7 @@ echo  Phase 4: Feature (Study II)(feature selection sweep)
 echo  Phase 5: Analysis          (proportion / split / cost)
 echo ============================================================
 echo.
-python scripts\run_all_experiments.py
+python scripts\run\run_all_experiments.py
 echo.
-echo 完成。可再執行: python scripts\compare_all_results.py
+echo 完成。可再執行: python scripts\analysis\compare_all_results.py
 pause

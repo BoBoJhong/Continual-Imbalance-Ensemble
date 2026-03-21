@@ -1,0 +1,100 @@
+@startuml
+title Continual Imbalance Experiments - Current Architecture
+
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultFontName Microsoft JhengHei
+
+package "Data Split (per dataset)" {
+  rectangle "Year Split\n(例: 2+14, 4+12, ...)" as YearSplit
+  rectangle "Old Data" as OldData
+  rectangle "New Data" as NewData
+  rectangle "Test Data" as TestData
+  rectangle "Validation\n(from New subset)" as ValData
+
+  YearSplit --> OldData
+  YearSplit --> NewData
+  YearSplit --> TestData
+  NewData --> ValData
+}
+
+package "Phase 1 Baseline (XGB)" {
+  rectangle "Old model\n(train on Old)" as BOld
+  rectangle "New model\n(train on New)" as BNew
+  rectangle "Old+New retrain\n(train on merged data)" as BOldNewRetrain
+  rectangle "Metrics\nAUC/F1/Recall/..." as BMetrics
+
+  OldData --> BOld
+  NewData --> BNew
+  OldData --> BOldNewRetrain
+  NewData --> BOldNewRetrain
+  BOld --> BMetrics
+  BNew --> BMetrics
+  BOldNewRetrain --> BMetrics
+}
+
+package "Phase 2 Ensemble (XGB, teacher-defined)" {
+  package "6 Base Models per split" {
+    rectangle "Old_under" as OUnder
+    rectangle "Old_over" as OOver
+    rectangle "Old_hybrid" as OHybrid
+    rectangle "New_under" as NUnder
+    rectangle "New_over" as NOver
+    rectangle "New_hybrid" as NHybrid
+  }
+
+  package "Combination layer" {
+    rectangle "Pair by sampling\nOld_s + New_s\n=> OldNew(under/over/hybrid)" as PairCombo
+    rectangle "k-model combinations\nk=2..6\nconstraint: >=1 Old and >=1 New" as KCombo
+  }
+
+  rectangle "Threshold search on validation\n(max F1, t=0.05..0.95)" as ThresholdSearch
+  rectangle "Test metrics\nAUC / F1 / Recall" as EMetrics
+
+  OldData --> OUnder
+  OldData --> OOver
+  OldData --> OHybrid
+  NewData --> NUnder
+  NewData --> NOver
+  NewData --> NHybrid
+
+  OUnder --> PairCombo
+  OOver --> PairCombo
+  OHybrid --> PairCombo
+  NUnder --> PairCombo
+  NOver --> PairCombo
+  NHybrid --> PairCombo
+
+  OUnder --> KCombo
+  OOver --> KCombo
+  OHybrid --> KCombo
+  NUnder --> KCombo
+  NOver --> KCombo
+  NHybrid --> KCombo
+
+  ValData --> ThresholdSearch
+  PairCombo --> ThresholdSearch
+  KCombo --> ThresholdSearch
+  ThresholdSearch --> EMetrics
+  TestData --> EMetrics
+}
+
+package "Outputs (per dataset: bankruptcy / medical / stock_spx)" {
+  rectangle "AUC table\ncolumns: dataset, ensemble,\nunder, over, hybrid" as OutAUC
+  rectangle "F1 table\nsame layout" as OutF1
+  rectangle "Recall table\nsame layout" as OutRecall
+  rectangle "Raw by-sampling rows\n(for debugging/trace)" as OutRaw
+
+  EMetrics --> OutAUC
+  EMetrics --> OutF1
+  EMetrics --> OutRecall
+  EMetrics --> OutRaw
+}
+
+note right of KCombo
+ensemble rows include:
+- Old / New / OldNew
+- 2models / 3models / 4models / 5models / 6models
+end note
+
+@enduml

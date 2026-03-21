@@ -10,8 +10,12 @@
 ```text
 results/
 ├── *.csv                ← 各種橫跨資料集的「綜合比較報表」
-│                          (由 scripts/compare_all_results.py 自動生成)
-├── baseline/            ← (Bankruptcy) 實驗 01 的 Baseline 數據
+│                          (由 scripts/analysis/compare_all_results.py 自動生成)
+├── phase2_ensemble/     ← Phase 2 集成：`static/`（靜態）、`dynamic/des/`（DES）、`dynamic/dcs/`（DCS）；檔名前綴 `xgb_oldnew_ensemble_static_*`／`*_des_*`／`*_dcs_*`
+├── phase3_feature/      ← Phase 3 特徵選擇（Study II）輸出
+├── phase4_analysis/     ← Phase 4 補充分析（比例、split、閾值等）輸出
+├── phase1_baseline/     ← Phase 1 baseline（含 xgb/、torch_mlp/ 等子目錄）
+├── baseline/            ← (Bankruptcy) 實驗 01 的 Baseline 數據（歷史路徑）
 ├── ensemble/            ← (Bankruptcy) 實驗 02 的靜態集成數據
 ├── des/                 ← (Bankruptcy) 實驗 03 的動態集成數據
 ├── feature_study/       ← (Bankruptcy) 實驗 04 的特徵選取研究數據
@@ -38,5 +42,5 @@ results/
 若要重新產生彙總表、P-Value 矩陣與全套視覺化圖表，請執行：
 
 ```powershell
-python scripts\compare_all_results.py
+python scripts\analysis\compare_all_results.py
 ```

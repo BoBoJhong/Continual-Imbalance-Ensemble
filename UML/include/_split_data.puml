@@ -1,0 +1,12 @@
+database "Data" as DS
+rectangle "Split" as CUT
+
+DS --> CUT
+
+database "Old" as OLD
+database "New" as NEW
+database "Test" as TE
+
+CUT --> OLD
+CUT --> NEW
+CUT --> TE

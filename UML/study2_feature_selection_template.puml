@@ -1,0 +1,26 @@
+@startuml
+title Study II - 特徵選取（模板）
+
+left to right direction
+skinparam defaultFontName Microsoft JhengHei
+skinparam rectangle {
+  roundCorner 18
+}
+skinparam database {
+  BackgroundColor #E8F4FF
+  BorderColor #2E5A88
+}
+
+database "訓練資料\nOld, New 或合併" as TR
+
+rectangle "特徵選取方法\nFilter, Wrapper, Embedded\n或 CART, MI, GA 等\n實驗定案後替換" as FS #FFFACD
+
+database "特徵子集" as FEAT
+
+rectangle "下游\nBaseline 或 Ensemble\n於子集上重跑" as DOWN #E0E0E0
+
+TR --> FS
+FS --> FEAT
+FEAT --> DOWN
+
+@enduml

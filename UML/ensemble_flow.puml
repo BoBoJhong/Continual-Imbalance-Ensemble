@@ -1,0 +1,116 @@
+@startuml
+!pragma layout smetana
+
+title Ensemble Learning — Static + Dynamic (DCS / DES)
+
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam linetype ortho
+skinparam nodesep 22
+skinparam ranksep 40
+skinparam packageStyle rectangle
+skinparam rectangle {
+  roundCorner 14
+}
+skinparam database {
+  BackgroundColor #E8F4FF
+  BorderColor #2E5A88
+}
+
+rectangle "Ensemble\nLearning" as E
+rectangle "Static" as ST #E0E0E0
+rectangle "Dynamic\nDCS / DES" as DY #D7E8F0
+E --> ST
+E --> DY
+
+database "Old" as OLD
+database "New" as NEW
+ST --> OLD
+ST --> NEW
+DY --> OLD
+DY --> NEW
+
+package "Old pool" as PKG_O #FFFACD {
+  rectangle "1\nunder" as O1
+  rectangle "2\nover" as O2
+  rectangle "3\nhybrid" as O3
+}
+
+package "New pool" as PKG_N #FFFACD {
+  rectangle "4\nunder" as N4
+  rectangle "5\nover" as N5
+  rectangle "6\nhybrid" as N6
+}
+
+OLD --> O1
+OLD --> O2
+OLD --> O3
+NEW --> N4
+NEW --> N5
+NEW --> N6
+
+package "Ensemble design" as PKG_C #E8E8E8 {
+  rectangle "1 old +\n1 new" as CA #E8F5E9
+  rectangle "3 models\n2O+1N or\n1O+2N" as CB #E3F2FD
+  rectangle "4 models" as CC #FCE4EC
+  rectangle "5 models" as CD #FFF3E0
+  rectangle "6 models\nall" as CE #ECEFF1
+}
+
+CA -[hidden]right- CB
+CB -[hidden]right- CC
+CC -[hidden]right- CD
+CD -[hidden]right- CE
+
+PKG_O --> PKG_C
+PKG_N --> PKG_C
+
+rectangle "Fusion\navg proba in subset\nthreshold on Val" as FUS #D8D8D8
+
+CA --> FUS
+CB --> FUS
+CC --> FUS
+CD --> FUS
+CE --> FUS
+
+database "Val" as VAL
+database "Test" as TE
+rectangle "AUC / F1 / Recall" as OUT #FFFFFF
+
+NEW .. VAL
+VAL --> FUS
+TE --> FUS
+FUS --> OUT
+
+' --- Dynamic branch（與靜態共用 6 槽模型池；每筆測試樣本在 DSEL 上做鄰域選擇）---
+package "Dynamic pipeline" as PKG_DY #E3F2FD {
+  rectangle "DSEL\nOld+New 合併\n(New scaler 空間)" as DSEL #FFFFFF
+  rectangle "k-NN\nk = 7" as KNN #FFFFFF
+  package "DES" as PKG_DES #E8F5E9 {
+    rectangle "KNORA-E" as DE1
+    rectangle "KNORA-U" as DE2
+    rectangle "DES-KNN" as DE3
+  }
+  package "DCS" as PKG_DCS #FFF8E1 {
+    rectangle "OLA / LCA" as DC1
+    rectangle "OLA_TW /\nLCA_TW" as DC2
+  }
+  rectangle "Per-test\nfusion\n(鄰域內選模\n或加權)\n+ Val 閾值" as DYNFUS #D8E8F0
+}
+
+PKG_O ..> DSEL : 6 models
+PKG_N ..> DSEL
+DSEL --> KNN
+KNN --> PKG_DES
+KNN --> PKG_DCS
+DE1 --> DYNFUS
+DE2 --> DYNFUS
+DE3 --> DYNFUS
+DC1 --> DYNFUS
+DC2 --> DYNFUS
+VAL .. DYNFUS
+TE .. DYNFUS
+DYNFUS --> OUT
+
+@enduml

@@ -1,0 +1,97 @@
+dataset,ensemble,type,subset,subset_indices,Recall
+O2 + N14,Dynamic_KNORA_E,under,,,0.4355
+O2 + N14,Dynamic_KNORA_E,over,,,0.4321
+O2 + N14,Dynamic_KNORA_E,hybrid,,,0.4913
+O2 + N14,Dynamic_KNORA_E,all6,,,0.3937
+O2 + N14,Dynamic_KNORA_U,under,,,0.4704
+O2 + N14,Dynamic_KNORA_U,over,,,0.4599
+O2 + N14,Dynamic_KNORA_U,hybrid,,,0.4146
+O2 + N14,Dynamic_KNORA_U,all6,,,0.4530
+O2 + N14,Dynamic_DES_KNN,under,,,0.4146
+O2 + N14,Dynamic_DES_KNN,over,,,0.4634
+O2 + N14,Dynamic_DES_KNN,hybrid,,,0.4390
+O2 + N14,Dynamic_DES_KNN,all6,,,0.4321
+O4 + N12,Dynamic_KNORA_E,under,,,0.3449
+O4 + N12,Dynamic_KNORA_E,over,,,0.5052
+O4 + N12,Dynamic_KNORA_E,hybrid,,,0.5087
+O4 + N12,Dynamic_KNORA_E,all6,,,0.4669
+O4 + N12,Dynamic_KNORA_U,under,,,0.4983
+O4 + N12,Dynamic_KNORA_U,over,,,0.5157
+O4 + N12,Dynamic_KNORA_U,hybrid,,,0.5401
+O4 + N12,Dynamic_KNORA_U,all6,,,0.5401
+O4 + N12,Dynamic_DES_KNN,under,,,0.4878
+O4 + N12,Dynamic_DES_KNN,over,,,0.4739
+O4 + N12,Dynamic_DES_KNN,hybrid,,,0.5226
+O4 + N12,Dynamic_DES_KNN,all6,,,0.4774
+O6 + N10,Dynamic_KNORA_E,under,,,0.4425
+O6 + N10,Dynamic_KNORA_E,over,,,0.4808
+O6 + N10,Dynamic_KNORA_E,hybrid,,,0.5017
+O6 + N10,Dynamic_KNORA_E,all6,,,0.3763
+O6 + N10,Dynamic_KNORA_U,under,,,0.4808
+O6 + N10,Dynamic_KNORA_U,over,,,0.4948
+O6 + N10,Dynamic_KNORA_U,hybrid,,,0.5436
+O6 + N10,Dynamic_KNORA_U,all6,,,0.4948
+O6 + N10,Dynamic_DES_KNN,under,,,0.5575
+O6 + N10,Dynamic_DES_KNN,over,,,0.4530
+O6 + N10,Dynamic_DES_KNN,hybrid,,,0.4634
+O6 + N10,Dynamic_DES_KNN,all6,,,0.5331
+O8 + N8,Dynamic_KNORA_E,under,,,0.4111
+O8 + N8,Dynamic_KNORA_E,over,,,0.3484
+O8 + N8,Dynamic_KNORA_E,hybrid,,,0.4390
+O8 + N8,Dynamic_KNORA_E,all6,,,0.3728
+O8 + N8,Dynamic_KNORA_U,under,,,0.4425
+O8 + N8,Dynamic_KNORA_U,over,,,0.3310
+O8 + N8,Dynamic_KNORA_U,hybrid,,,0.4495
+O8 + N8,Dynamic_KNORA_U,all6,,,0.4704
+O8 + N8,Dynamic_DES_KNN,under,,,0.4181
+O8 + N8,Dynamic_DES_KNN,over,,,0.4808
+O8 + N8,Dynamic_DES_KNN,hybrid,,,0.4564
+O8 + N8,Dynamic_DES_KNN,all6,,,0.3240
+O10 + N6,Dynamic_KNORA_E,under,,,0.4286
+O10 + N6,Dynamic_KNORA_E,over,,,0.3659
+O10 + N6,Dynamic_KNORA_E,hybrid,,,0.4181
+O10 + N6,Dynamic_KNORA_E,all6,,,0.3693
+O10 + N6,Dynamic_KNORA_U,under,,,0.3728
+O10 + N6,Dynamic_KNORA_U,over,,,0.4042
+O10 + N6,Dynamic_KNORA_U,hybrid,,,0.4042
+O10 + N6,Dynamic_KNORA_U,all6,,,0.3101
+O10 + N6,Dynamic_DES_KNN,under,,,0.3868
+O10 + N6,Dynamic_DES_KNN,over,,,0.3972
+O10 + N6,Dynamic_DES_KNN,hybrid,,,0.3380
+O10 + N6,Dynamic_DES_KNN,all6,,,0.4355
+O12 + N4,Dynamic_KNORA_E,under,,,0.3484
+O12 + N4,Dynamic_KNORA_E,over,,,0.4495
+O12 + N4,Dynamic_KNORA_E,hybrid,,,0.3833
+O12 + N4,Dynamic_KNORA_E,all6,,,0.2787
+O12 + N4,Dynamic_KNORA_U,under,,,0.3693
+O12 + N4,Dynamic_KNORA_U,over,,,0.4425
+O12 + N4,Dynamic_KNORA_U,hybrid,,,0.4321
+O12 + N4,Dynamic_KNORA_U,all6,,,0.2997
+O12 + N4,Dynamic_DES_KNN,under,,,0.3519
+O12 + N4,Dynamic_DES_KNN,over,,,0.3798
+O12 + N4,Dynamic_DES_KNN,hybrid,,,0.3798
+O12 + N4,Dynamic_DES_KNN,all6,,,0.3066
+O14 + N2,Dynamic_KNORA_E,under,,,0.4321
+O14 + N2,Dynamic_KNORA_E,over,,,0.2300
+O14 + N2,Dynamic_KNORA_E,hybrid,,,0.2544
+O14 + N2,Dynamic_KNORA_E,all6,,,0.3066
+O14 + N2,Dynamic_KNORA_U,under,,,0.3171
+O14 + N2,Dynamic_KNORA_U,over,,,0.2857
+O14 + N2,Dynamic_KNORA_U,hybrid,,,0.3171
+O14 + N2,Dynamic_KNORA_U,all6,,,0.3275
+O14 + N2,Dynamic_DES_KNN,under,,,0.3554
+O14 + N2,Dynamic_DES_KNN,over,,,0.2857
+O14 + N2,Dynamic_DES_KNN,hybrid,,,0.2857
+O14 + N2,Dynamic_DES_KNN,all6,,,0.3171
+avg,Dynamic_KNORA_E,under,,,0.4062
+avg,Dynamic_KNORA_E,over,,,0.4017
+avg,Dynamic_KNORA_E,hybrid,,,0.4281
+avg,Dynamic_KNORA_E,all6,,,0.3664
+avg,Dynamic_KNORA_U,under,,,0.4216
+avg,Dynamic_KNORA_U,over,,,0.4191
+avg,Dynamic_KNORA_U,hybrid,,,0.4430
+avg,Dynamic_KNORA_U,all6,,,0.4136
+avg,Dynamic_DES_KNN,under,,,0.4246
+avg,Dynamic_DES_KNN,over,,,0.4191
+avg,Dynamic_DES_KNN,hybrid,,,0.4121
+avg,Dynamic_DES_KNN,all6,,,0.4037

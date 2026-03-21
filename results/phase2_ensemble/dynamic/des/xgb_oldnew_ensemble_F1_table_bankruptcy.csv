@@ -1,0 +1,505 @@
+dataset,ensemble,type,subset,subset_indices,F1
+O2 + N14,2models,k_subset,Old_under+New_under,"0,3",0.1689
+O2 + N14,2models,k_subset,Old_under+New_over,"0,4",0.1192
+O2 + N14,2models,k_subset,Old_under+New_hybrid,"0,5",0.1451
+O2 + N14,2models,k_subset,Old_over+New_under,"1,3",0.1366
+O2 + N14,2models,k_subset,Old_over+New_over,"1,4",0.1018
+O2 + N14,2models,k_subset,Old_over+New_hybrid,"1,5",0.1216
+O2 + N14,2models,k_subset,Old_hybrid+New_under,"2,3",0.1209
+O2 + N14,2models,k_subset,Old_hybrid+New_over,"2,4",0.0918
+O2 + N14,2models,k_subset,Old_hybrid+New_hybrid,"2,5",0.1215
+O2 + N14,2models,k_subsets_mean,,,0.1252
+O2 + N14,3models,k_subset,Old_under+Old_over+New_under,"0,1,3",0.1168
+O2 + N14,3models,k_subset,Old_under+Old_over+New_over,"0,1,4",0.0934
+O2 + N14,3models,k_subset,Old_under+Old_over+New_hybrid,"0,1,5",0.1102
+O2 + N14,3models,k_subset,Old_under+Old_hybrid+New_under,"0,2,3",0.1074
+O2 + N14,3models,k_subset,Old_under+Old_hybrid+New_over,"0,2,4",0.0918
+O2 + N14,3models,k_subset,Old_under+Old_hybrid+New_hybrid,"0,2,5",0.1054
+O2 + N14,3models,k_subset,Old_under+New_under+New_over,"0,3,4",0.1589
+O2 + N14,3models,k_subset,Old_under+New_under+New_hybrid,"0,3,5",0.1829
+O2 + N14,3models,k_subset,Old_under+New_over+New_hybrid,"0,4,5",0.1475
+O2 + N14,3models,k_subset,Old_over+Old_hybrid+New_under,"1,2,3",0.0976
+O2 + N14,3models,k_subset,Old_over+Old_hybrid+New_over,"1,2,4",0.0846
+O2 + N14,3models,k_subset,Old_over+Old_hybrid+New_hybrid,"1,2,5",0.0967
+O2 + N14,3models,k_subset,Old_over+New_under+New_over,"1,3,4",0.1455
+O2 + N14,3models,k_subset,Old_over+New_under+New_hybrid,"1,3,5",0.1615
+O2 + N14,3models,k_subset,Old_over+New_over+New_hybrid,"1,4,5",0.1359
+O2 + N14,3models,k_subset,Old_hybrid+New_under+New_over,"2,3,4",0.1434
+O2 + N14,3models,k_subset,Old_hybrid+New_under+New_hybrid,"2,3,5",0.1544
+O2 + N14,3models,k_subset,Old_hybrid+New_over+New_hybrid,"2,4,5",0.1282
+O2 + N14,3models,k_subsets_mean,,,0.1257
+O2 + N14,4models,k_subset,Old_under+Old_over+Old_hybrid+New_under,"0,1,2,3",0.0903
+O2 + N14,4models,k_subset,Old_under+Old_over+Old_hybrid+New_over,"0,1,2,4",0.0810
+O2 + N14,4models,k_subset,Old_under+Old_over+Old_hybrid+New_hybrid,"0,1,2,5",0.0933
+O2 + N14,4models,k_subset,Old_under+Old_over+New_under+New_over,"0,1,3,4",0.1322
+O2 + N14,4models,k_subset,Old_under+Old_over+New_under+New_hybrid,"0,1,3,5",0.1469
+O2 + N14,4models,k_subset,Old_under+Old_over+New_over+New_hybrid,"0,1,4,5",0.1229
+O2 + N14,4models,k_subset,Old_under+Old_hybrid+New_under+New_over,"0,2,3,4",0.1183
+O2 + N14,4models,k_subset,Old_under+Old_hybrid+New_under+New_hybrid,"0,2,3,5",0.1415
+O2 + N14,4models,k_subset,Old_under+Old_hybrid+New_over+New_hybrid,"0,2,4,5",0.1170
+O2 + N14,4models,k_subset,Old_under+New_under+New_over+New_hybrid,"0,3,4,5",0.1789
+O2 + N14,4models,k_subset,Old_over+Old_hybrid+New_under+New_over,"1,2,3,4",0.1127
+O2 + N14,4models,k_subset,Old_over+Old_hybrid+New_under+New_hybrid,"1,2,3,5",0.1201
+O2 + N14,4models,k_subset,Old_over+Old_hybrid+New_over+New_hybrid,"1,2,4,5",0.1093
+O2 + N14,4models,k_subset,Old_over+New_under+New_over+New_hybrid,"1,3,4,5",0.1515
+O2 + N14,4models,k_subset,Old_hybrid+New_under+New_over+New_hybrid,"2,3,4,5",0.1545
+O2 + N14,4models,k_subsets_mean,,,0.1247
+O2 + N14,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over,"0,1,2,3,4",0.1063
+O2 + N14,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_hybrid,"0,1,2,3,5",0.1173
+O2 + N14,5models,k_subset,Old_under+Old_over+Old_hybrid+New_over+New_hybrid,"0,1,2,4,5",0.1023
+O2 + N14,5models,k_subset,Old_under+Old_over+New_under+New_over+New_hybrid,"0,1,3,4,5",0.1465
+O2 + N14,5models,k_subset,Old_under+Old_hybrid+New_under+New_over+New_hybrid,"0,2,3,4,5",0.1404
+O2 + N14,5models,k_subset,Old_over+Old_hybrid+New_under+New_over+New_hybrid,"1,2,3,4,5",0.1261
+O2 + N14,5models,k_subsets_mean,,,0.1231
+O2 + N14,6models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over+New_hybrid,"0,1,2,3,4,5",0.1262
+O2 + N14,6models,k_subsets_mean,,,0.1262
+O2 + N14,New,under,,,0.1966
+O2 + N14,New,over,,,0.1287
+O2 + N14,New,hybrid,,,0.1536
+O2 + N14,Old,under,,,0.0567
+O2 + N14,Old,over,,,0.0510
+O2 + N14,Old,hybrid,,,0.0497
+O2 + N14,OldNew,under,,,0.1689
+O2 + N14,OldNew,over,,,0.1018
+O2 + N14,OldNew,hybrid,,,0.1215
+O4 + N12,2models,k_subset,Old_under+New_under,"0,3",0.1629
+O4 + N12,2models,k_subset,Old_under+New_over,"0,4",0.1279
+O4 + N12,2models,k_subset,Old_under+New_hybrid,"0,5",0.1775
+O4 + N12,2models,k_subset,Old_over+New_under,"1,3",0.1537
+O4 + N12,2models,k_subset,Old_over+New_over,"1,4",0.1082
+O4 + N12,2models,k_subset,Old_over+New_hybrid,"1,5",0.1593
+O4 + N12,2models,k_subset,Old_hybrid+New_under,"2,3",0.1379
+O4 + N12,2models,k_subset,Old_hybrid+New_over,"2,4",0.1154
+O4 + N12,2models,k_subset,Old_hybrid+New_hybrid,"2,5",0.1448
+O4 + N12,2models,k_subsets_mean,,,0.1431
+O4 + N12,3models,k_subset,Old_under+Old_over+New_under,"0,1,3",0.1147
+O4 + N12,3models,k_subset,Old_under+Old_over+New_over,"0,1,4",0.0977
+O4 + N12,3models,k_subset,Old_under+Old_over+New_hybrid,"0,1,5",0.1255
+O4 + N12,3models,k_subset,Old_under+Old_hybrid+New_under,"0,2,3",0.1109
+O4 + N12,3models,k_subset,Old_under+Old_hybrid+New_over,"0,2,4",0.1005
+O4 + N12,3models,k_subset,Old_under+Old_hybrid+New_hybrid,"0,2,5",0.1144
+O4 + N12,3models,k_subset,Old_under+New_under+New_over,"0,3,4",0.1842
+O4 + N12,3models,k_subset,Old_under+New_under+New_hybrid,"0,3,5",0.2014
+O4 + N12,3models,k_subset,Old_under+New_over+New_hybrid,"0,4,5",0.1708
+O4 + N12,3models,k_subset,Old_over+Old_hybrid+New_under,"1,2,3",0.0967
+O4 + N12,3models,k_subset,Old_over+Old_hybrid+New_over,"1,2,4",0.1006
+O4 + N12,3models,k_subset,Old_over+Old_hybrid+New_hybrid,"1,2,5",0.1144
+O4 + N12,3models,k_subset,Old_over+New_under+New_over,"1,3,4",0.1679
+O4 + N12,3models,k_subset,Old_over+New_under+New_hybrid,"1,3,5",0.1946
+O4 + N12,3models,k_subset,Old_over+New_over+New_hybrid,"1,4,5",0.1578
+O4 + N12,3models,k_subset,Old_hybrid+New_under+New_over,"2,3,4",0.1660
+O4 + N12,3models,k_subset,Old_hybrid+New_under+New_hybrid,"2,3,5",0.1866
+O4 + N12,3models,k_subset,Old_hybrid+New_over+New_hybrid,"2,4,5",0.1455
+O4 + N12,3models,k_subsets_mean,,,0.1417
+O4 + N12,4models,k_subset,Old_under+Old_over+Old_hybrid+New_under,"0,1,2,3",0.0918
+O4 + N12,4models,k_subset,Old_under+Old_over+Old_hybrid+New_over,"0,1,2,4",0.0825
+O4 + N12,4models,k_subset,Old_under+Old_over+Old_hybrid+New_hybrid,"0,1,2,5",0.0920
+O4 + N12,4models,k_subset,Old_under+Old_over+New_under+New_over,"0,1,3,4",0.1406
+O4 + N12,4models,k_subset,Old_under+Old_over+New_under+New_hybrid,"0,1,3,5",0.1656
+O4 + N12,4models,k_subset,Old_under+Old_over+New_over+New_hybrid,"0,1,4,5",0.1415
+O4 + N12,4models,k_subset,Old_under+Old_hybrid+New_under+New_over,"0,2,3,4",0.1429
+O4 + N12,4models,k_subset,Old_under+Old_hybrid+New_under+New_hybrid,"0,2,3,5",0.1623
+O4 + N12,4models,k_subset,Old_under+Old_hybrid+New_over+New_hybrid,"0,2,4,5",0.1363
+O4 + N12,4models,k_subset,Old_under+New_under+New_over+New_hybrid,"0,3,4,5",0.1810
+O4 + N12,4models,k_subset,Old_over+Old_hybrid+New_under+New_over,"1,2,3,4",0.1339
+O4 + N12,4models,k_subset,Old_over+Old_hybrid+New_under+New_hybrid,"1,2,3,5",0.1519
+O4 + N12,4models,k_subset,Old_over+Old_hybrid+New_over+New_hybrid,"1,2,4,5",0.1292
+O4 + N12,4models,k_subset,Old_over+New_under+New_over+New_hybrid,"1,3,4,5",0.1838
+O4 + N12,4models,k_subset,Old_hybrid+New_under+New_over+New_hybrid,"2,3,4,5",0.1784
+O4 + N12,4models,k_subsets_mean,,,0.1409
+O4 + N12,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over,"0,1,2,3,4",0.1221
+O4 + N12,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_hybrid,"0,1,2,3,5",0.1383
+O4 + N12,5models,k_subset,Old_under+Old_over+Old_hybrid+New_over+New_hybrid,"0,1,2,4,5",0.1163
+O4 + N12,5models,k_subset,Old_under+Old_over+New_under+New_over+New_hybrid,"0,1,3,4,5",0.1580
+O4 + N12,5models,k_subset,Old_under+Old_hybrid+New_under+New_over+New_hybrid,"0,2,3,4,5",0.1792
+O4 + N12,5models,k_subset,Old_over+Old_hybrid+New_under+New_over+New_hybrid,"1,2,3,4,5",0.1642
+O4 + N12,5models,k_subsets_mean,,,0.1464
+O4 + N12,6models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over+New_hybrid,"0,1,2,3,4,5",0.1397
+O4 + N12,6models,k_subsets_mean,,,0.1397
+O4 + N12,New,under,,,0.2240
+O4 + N12,New,over,,,0.1518
+O4 + N12,New,hybrid,,,0.1963
+O4 + N12,Old,under,,,0.0520
+O4 + N12,Old,over,,,0.0598
+O4 + N12,Old,hybrid,,,0.0640
+O4 + N12,OldNew,under,,,0.1629
+O4 + N12,OldNew,over,,,0.1082
+O4 + N12,OldNew,hybrid,,,0.1448
+O6 + N10,2models,k_subset,Old_under+New_under,"0,3",0.1827
+O6 + N10,2models,k_subset,Old_under+New_over,"0,4",0.1501
+O6 + N10,2models,k_subset,Old_under+New_hybrid,"0,5",0.1722
+O6 + N10,2models,k_subset,Old_over+New_under,"1,3",0.1757
+O6 + N10,2models,k_subset,Old_over+New_over,"1,4",0.1337
+O6 + N10,2models,k_subset,Old_over+New_hybrid,"1,5",0.1546
+O6 + N10,2models,k_subset,Old_hybrid+New_under,"2,3",0.1630
+O6 + N10,2models,k_subset,Old_hybrid+New_over,"2,4",0.1299
+O6 + N10,2models,k_subset,Old_hybrid+New_hybrid,"2,5",0.1573
+O6 + N10,2models,k_subsets_mean,,,0.1577
+O6 + N10,3models,k_subset,Old_under+Old_over+New_under,"0,1,3",0.1280
+O6 + N10,3models,k_subset,Old_under+Old_over+New_over,"0,1,4",0.1121
+O6 + N10,3models,k_subset,Old_under+Old_over+New_hybrid,"0,1,5",0.1160
+O6 + N10,3models,k_subset,Old_under+Old_hybrid+New_under,"0,2,3",0.1350
+O6 + N10,3models,k_subset,Old_under+Old_hybrid+New_over,"0,2,4",0.1160
+O6 + N10,3models,k_subset,Old_under+Old_hybrid+New_hybrid,"0,2,5",0.1145
+O6 + N10,3models,k_subset,Old_under+New_under+New_over,"0,3,4",0.1848
+O6 + N10,3models,k_subset,Old_under+New_under+New_hybrid,"0,3,5",0.2163
+O6 + N10,3models,k_subset,Old_under+New_over+New_hybrid,"0,4,5",0.1939
+O6 + N10,3models,k_subset,Old_over+Old_hybrid+New_under,"1,2,3",0.1197
+O6 + N10,3models,k_subset,Old_over+Old_hybrid+New_over,"1,2,4",0.1030
+O6 + N10,3models,k_subset,Old_over+Old_hybrid+New_hybrid,"1,2,5",0.1154
+O6 + N10,3models,k_subset,Old_over+New_under+New_over,"1,3,4",0.1888
+O6 + N10,3models,k_subset,Old_over+New_under+New_hybrid,"1,3,5",0.1941
+O6 + N10,3models,k_subset,Old_over+New_over+New_hybrid,"1,4,5",0.1683
+O6 + N10,3models,k_subset,Old_hybrid+New_under+New_over,"2,3,4",0.1937
+O6 + N10,3models,k_subset,Old_hybrid+New_under+New_hybrid,"2,3,5",0.1954
+O6 + N10,3models,k_subset,Old_hybrid+New_over+New_hybrid,"2,4,5",0.1575
+O6 + N10,3models,k_subsets_mean,,,0.1529
+O6 + N10,4models,k_subset,Old_under+Old_over+Old_hybrid+New_under,"0,1,2,3",0.1081
+O6 + N10,4models,k_subset,Old_under+Old_over+Old_hybrid+New_over,"0,1,2,4",0.0940
+O6 + N10,4models,k_subset,Old_under+Old_over+Old_hybrid+New_hybrid,"0,1,2,5",0.1001
+O6 + N10,4models,k_subset,Old_under+Old_over+New_under+New_over,"0,1,3,4",0.1599
+O6 + N10,4models,k_subset,Old_under+Old_over+New_under+New_hybrid,"0,1,3,5",0.1615
+O6 + N10,4models,k_subset,Old_under+Old_over+New_over+New_hybrid,"0,1,4,5",0.1512
+O6 + N10,4models,k_subset,Old_under+Old_hybrid+New_under+New_over,"0,2,3,4",0.1601
+O6 + N10,4models,k_subset,Old_under+Old_hybrid+New_under+New_hybrid,"0,2,3,5",0.1775
+O6 + N10,4models,k_subset,Old_under+Old_hybrid+New_over+New_hybrid,"0,2,4,5",0.1460
+O6 + N10,4models,k_subset,Old_under+New_under+New_over+New_hybrid,"0,3,4,5",0.2217
+O6 + N10,4models,k_subset,Old_over+Old_hybrid+New_under+New_over,"1,2,3,4",0.1458
+O6 + N10,4models,k_subset,Old_over+Old_hybrid+New_under+New_hybrid,"1,2,3,5",0.1593
+O6 + N10,4models,k_subset,Old_over+Old_hybrid+New_over+New_hybrid,"1,2,4,5",0.1428
+O6 + N10,4models,k_subset,Old_over+New_under+New_over+New_hybrid,"1,3,4,5",0.2032
+O6 + N10,4models,k_subset,Old_hybrid+New_under+New_over+New_hybrid,"2,3,4,5",0.2066
+O6 + N10,4models,k_subsets_mean,,,0.1559
+O6 + N10,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over,"0,1,2,3,4",0.1389
+O6 + N10,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_hybrid,"0,1,2,3,5",0.1364
+O6 + N10,5models,k_subset,Old_under+Old_over+Old_hybrid+New_over+New_hybrid,"0,1,2,4,5",0.1291
+O6 + N10,5models,k_subset,Old_under+Old_over+New_under+New_over+New_hybrid,"0,1,3,4,5",0.1869
+O6 + N10,5models,k_subset,Old_under+Old_hybrid+New_under+New_over+New_hybrid,"0,2,3,4,5",0.1908
+O6 + N10,5models,k_subset,Old_over+Old_hybrid+New_under+New_over+New_hybrid,"1,2,3,4,5",0.1739
+O6 + N10,5models,k_subsets_mean,,,0.1593
+O6 + N10,6models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over+New_hybrid,"0,1,2,3,4,5",0.1596
+O6 + N10,6models,k_subsets_mean,,,0.1596
+O6 + N10,New,under,,,0.2166
+O6 + N10,New,over,,,0.1553
+O6 + N10,New,hybrid,,,0.2298
+O6 + N10,Old,under,,,0.0802
+O6 + N10,Old,over,,,0.0769
+O6 + N10,Old,hybrid,,,0.0761
+O6 + N10,OldNew,under,,,0.1827
+O6 + N10,OldNew,over,,,0.1337
+O6 + N10,OldNew,hybrid,,,0.1573
+O8 + N8,2models,k_subset,Old_under+New_under,"0,3",0.2214
+O8 + N8,2models,k_subset,Old_under+New_over,"0,4",0.1764
+O8 + N8,2models,k_subset,Old_under+New_hybrid,"0,5",0.1997
+O8 + N8,2models,k_subset,Old_over+New_under,"1,3",0.2131
+O8 + N8,2models,k_subset,Old_over+New_over,"1,4",0.1458
+O8 + N8,2models,k_subset,Old_over+New_hybrid,"1,5",0.1698
+O8 + N8,2models,k_subset,Old_hybrid+New_under,"2,3",0.1971
+O8 + N8,2models,k_subset,Old_hybrid+New_over,"2,4",0.1505
+O8 + N8,2models,k_subset,Old_hybrid+New_hybrid,"2,5",0.1721
+O8 + N8,2models,k_subsets_mean,,,0.1829
+O8 + N8,3models,k_subset,Old_under+Old_over+New_under,"0,1,3",0.1682
+O8 + N8,3models,k_subset,Old_under+Old_over+New_over,"0,1,4",0.1266
+O8 + N8,3models,k_subset,Old_under+Old_over+New_hybrid,"0,1,5",0.1534
+O8 + N8,3models,k_subset,Old_under+Old_hybrid+New_under,"0,2,3",0.1610
+O8 + N8,3models,k_subset,Old_under+Old_hybrid+New_over,"0,2,4",0.1384
+O8 + N8,3models,k_subset,Old_under+Old_hybrid+New_hybrid,"0,2,5",0.1644
+O8 + N8,3models,k_subset,Old_under+New_under+New_over,"0,3,4",0.2206
+O8 + N8,3models,k_subset,Old_under+New_under+New_hybrid,"0,3,5",0.2779
+O8 + N8,3models,k_subset,Old_under+New_over+New_hybrid,"0,4,5",0.2189
+O8 + N8,3models,k_subset,Old_over+Old_hybrid+New_under,"1,2,3",0.1440
+O8 + N8,3models,k_subset,Old_over+Old_hybrid+New_over,"1,2,4",0.1219
+O8 + N8,3models,k_subset,Old_over+Old_hybrid+New_hybrid,"1,2,5",0.1345
+O8 + N8,3models,k_subset,Old_over+New_under+New_over,"1,3,4",0.2263
+O8 + N8,3models,k_subset,Old_over+New_under+New_hybrid,"1,3,5",0.2602
+O8 + N8,3models,k_subset,Old_over+New_over+New_hybrid,"1,4,5",0.1978
+O8 + N8,3models,k_subset,Old_hybrid+New_under+New_over,"2,3,4",0.2086
+O8 + N8,3models,k_subset,Old_hybrid+New_under+New_hybrid,"2,3,5",0.2379
+O8 + N8,3models,k_subset,Old_hybrid+New_over+New_hybrid,"2,4,5",0.2000
+O8 + N8,3models,k_subsets_mean,,,0.1867
+O8 + N8,4models,k_subset,Old_under+Old_over+Old_hybrid+New_under,"0,1,2,3",0.1421
+O8 + N8,4models,k_subset,Old_under+Old_over+Old_hybrid+New_over,"0,1,2,4",0.1225
+O8 + N8,4models,k_subset,Old_under+Old_over+Old_hybrid+New_hybrid,"0,1,2,5",0.1308
+O8 + N8,4models,k_subset,Old_under+Old_over+New_under+New_over,"0,1,3,4",0.2033
+O8 + N8,4models,k_subset,Old_under+Old_over+New_under+New_hybrid,"0,1,3,5",0.2148
+O8 + N8,4models,k_subset,Old_under+Old_over+New_over+New_hybrid,"0,1,4,5",0.1776
+O8 + N8,4models,k_subset,Old_under+Old_hybrid+New_under+New_over,"0,2,3,4",0.1951
+O8 + N8,4models,k_subset,Old_under+Old_hybrid+New_under+New_hybrid,"0,2,3,5",0.1924
+O8 + N8,4models,k_subset,Old_under+Old_hybrid+New_over+New_hybrid,"0,2,4,5",0.1779
+O8 + N8,4models,k_subset,Old_under+New_under+New_over+New_hybrid,"0,3,4,5",0.2562
+O8 + N8,4models,k_subset,Old_over+Old_hybrid+New_under+New_over,"1,2,3,4",0.1682
+O8 + N8,4models,k_subset,Old_over+Old_hybrid+New_under+New_hybrid,"1,2,3,5",0.1841
+O8 + N8,4models,k_subset,Old_over+Old_hybrid+New_over+New_hybrid,"1,2,4,5",0.1625
+O8 + N8,4models,k_subset,Old_over+New_under+New_over+New_hybrid,"1,3,4,5",0.2283
+O8 + N8,4models,k_subset,Old_hybrid+New_under+New_over+New_hybrid,"2,3,4,5",0.2330
+O8 + N8,4models,k_subsets_mean,,,0.1859
+O8 + N8,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over,"0,1,2,3,4",0.1516
+O8 + N8,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_hybrid,"0,1,2,3,5",0.1711
+O8 + N8,5models,k_subset,Old_under+Old_over+Old_hybrid+New_over+New_hybrid,"0,1,2,4,5",0.1531
+O8 + N8,5models,k_subset,Old_under+Old_over+New_under+New_over+New_hybrid,"0,1,3,4,5",0.1988
+O8 + N8,5models,k_subset,Old_under+Old_hybrid+New_under+New_over+New_hybrid,"0,2,3,4,5",0.2096
+O8 + N8,5models,k_subset,Old_over+Old_hybrid+New_under+New_over+New_hybrid,"1,2,3,4,5",0.2052
+O8 + N8,5models,k_subsets_mean,,,0.1816
+O8 + N8,6models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over+New_hybrid,"0,1,2,3,4,5",0.1880
+O8 + N8,6models,k_subsets_mean,,,0.1880
+O8 + N8,New,under,,,0.2632
+O8 + N8,New,over,,,0.1875
+O8 + N8,New,hybrid,,,0.2261
+O8 + N8,Old,under,,,0.0988
+O8 + N8,Old,over,,,0.0715
+O8 + N8,Old,hybrid,,,0.0905
+O8 + N8,OldNew,under,,,0.2214
+O8 + N8,OldNew,over,,,0.1458
+O8 + N8,OldNew,hybrid,,,0.1721
+O10 + N6,2models,k_subset,Old_under+New_under,"0,3",0.2761
+O10 + N6,2models,k_subset,Old_under+New_over,"0,4",0.2058
+O10 + N6,2models,k_subset,Old_under+New_hybrid,"0,5",0.1991
+O10 + N6,2models,k_subset,Old_over+New_under,"1,3",0.2687
+O10 + N6,2models,k_subset,Old_over+New_over,"1,4",0.1643
+O10 + N6,2models,k_subset,Old_over+New_hybrid,"1,5",0.1779
+O10 + N6,2models,k_subset,Old_hybrid+New_under,"2,3",0.2745
+O10 + N6,2models,k_subset,Old_hybrid+New_over,"2,4",0.1787
+O10 + N6,2models,k_subset,Old_hybrid+New_hybrid,"2,5",0.2107
+O10 + N6,2models,k_subsets_mean,,,0.2173
+O10 + N6,3models,k_subset,Old_under+Old_over+New_under,"0,1,3",0.1992
+O10 + N6,3models,k_subset,Old_under+Old_over+New_over,"0,1,4",0.1674
+O10 + N6,3models,k_subset,Old_under+Old_over+New_hybrid,"0,1,5",0.1715
+O10 + N6,3models,k_subset,Old_under+Old_hybrid+New_under,"0,2,3",0.1927
+O10 + N6,3models,k_subset,Old_under+Old_hybrid+New_over,"0,2,4",0.1941
+O10 + N6,3models,k_subset,Old_under+Old_hybrid+New_hybrid,"0,2,5",0.2089
+O10 + N6,3models,k_subset,Old_under+New_under+New_over,"0,3,4",0.2570
+O10 + N6,3models,k_subset,Old_under+New_under+New_hybrid,"0,3,5",0.2809
+O10 + N6,3models,k_subset,Old_under+New_over+New_hybrid,"0,4,5",0.2277
+O10 + N6,3models,k_subset,Old_over+Old_hybrid+New_under,"1,2,3",0.2238
+O10 + N6,3models,k_subset,Old_over+Old_hybrid+New_over,"1,2,4",0.1657
+O10 + N6,3models,k_subset,Old_over+Old_hybrid+New_hybrid,"1,2,5",0.1836
+O10 + N6,3models,k_subset,Old_over+New_under+New_over,"1,3,4",0.2530
+O10 + N6,3models,k_subset,Old_over+New_under+New_hybrid,"1,3,5",0.2751
+O10 + N6,3models,k_subset,Old_over+New_over+New_hybrid,"1,4,5",0.2051
+O10 + N6,3models,k_subset,Old_hybrid+New_under+New_over,"2,3,4",0.2810
+O10 + N6,3models,k_subset,Old_hybrid+New_under+New_hybrid,"2,3,5",0.2754
+O10 + N6,3models,k_subset,Old_hybrid+New_over+New_hybrid,"2,4,5",0.2162
+O10 + N6,3models,k_subsets_mean,,,0.2210
+O10 + N6,4models,k_subset,Old_under+Old_over+Old_hybrid+New_under,"0,1,2,3",0.1777
+O10 + N6,4models,k_subset,Old_under+Old_over+Old_hybrid+New_over,"0,1,2,4",0.1670
+O10 + N6,4models,k_subset,Old_under+Old_over+Old_hybrid+New_hybrid,"0,1,2,5",0.1663
+O10 + N6,4models,k_subset,Old_under+Old_over+New_under+New_over,"0,1,3,4",0.2567
+O10 + N6,4models,k_subset,Old_under+Old_over+New_under+New_hybrid,"0,1,3,5",0.2646
+O10 + N6,4models,k_subset,Old_under+Old_over+New_over+New_hybrid,"0,1,4,5",0.1952
+O10 + N6,4models,k_subset,Old_under+Old_hybrid+New_under+New_over,"0,2,3,4",0.2551
+O10 + N6,4models,k_subset,Old_under+Old_hybrid+New_under+New_hybrid,"0,2,3,5",0.2576
+O10 + N6,4models,k_subset,Old_under+Old_hybrid+New_over+New_hybrid,"0,2,4,5",0.1959
+O10 + N6,4models,k_subset,Old_under+New_under+New_over+New_hybrid,"0,3,4,5",0.2596
+O10 + N6,4models,k_subset,Old_over+Old_hybrid+New_under+New_over,"1,2,3,4",0.2361
+O10 + N6,4models,k_subset,Old_over+Old_hybrid+New_under+New_hybrid,"1,2,3,5",0.2441
+O10 + N6,4models,k_subset,Old_over+Old_hybrid+New_over+New_hybrid,"1,2,4,5",0.1885
+O10 + N6,4models,k_subset,Old_over+New_under+New_over+New_hybrid,"1,3,4,5",0.2414
+O10 + N6,4models,k_subset,Old_hybrid+New_under+New_over+New_hybrid,"2,3,4,5",0.2778
+O10 + N6,4models,k_subsets_mean,,,0.2256
+O10 + N6,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over,"0,1,2,3,4",0.2292
+O10 + N6,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_hybrid,"0,1,2,3,5",0.2281
+O10 + N6,5models,k_subset,Old_under+Old_over+Old_hybrid+New_over+New_hybrid,"0,1,2,4,5",0.2036
+O10 + N6,5models,k_subset,Old_under+Old_over+New_under+New_over+New_hybrid,"0,1,3,4,5",0.2510
+O10 + N6,5models,k_subset,Old_under+Old_hybrid+New_under+New_over+New_hybrid,"0,2,3,4,5",0.2573
+O10 + N6,5models,k_subset,Old_over+Old_hybrid+New_under+New_over+New_hybrid,"1,2,3,4,5",0.2441
+O10 + N6,5models,k_subsets_mean,,,0.2355
+O10 + N6,6models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over+New_hybrid,"0,1,2,3,4,5",0.2432
+O10 + N6,6models,k_subsets_mean,,,0.2432
+O10 + N6,New,under,,,0.2934
+O10 + N6,New,over,,,0.2230
+O10 + N6,New,hybrid,,,0.2531
+O10 + N6,Old,under,,,0.1434
+O10 + N6,Old,over,,,0.0977
+O10 + N6,Old,hybrid,,,0.1416
+O10 + N6,OldNew,under,,,0.2761
+O10 + N6,OldNew,over,,,0.1643
+O10 + N6,OldNew,hybrid,,,0.2107
+O12 + N4,2models,k_subset,Old_under+New_under,"0,3",0.2708
+O12 + N4,2models,k_subset,Old_under+New_over,"0,4",0.2420
+O12 + N4,2models,k_subset,Old_under+New_hybrid,"0,5",0.2506
+O12 + N4,2models,k_subset,Old_over+New_under,"1,3",0.2493
+O12 + N4,2models,k_subset,Old_over+New_over,"1,4",0.1957
+O12 + N4,2models,k_subset,Old_over+New_hybrid,"1,5",0.1993
+O12 + N4,2models,k_subset,Old_hybrid+New_under,"2,3",0.2509
+O12 + N4,2models,k_subset,Old_hybrid+New_over,"2,4",0.2282
+O12 + N4,2models,k_subset,Old_hybrid+New_hybrid,"2,5",0.2218
+O12 + N4,2models,k_subsets_mean,,,0.2343
+O12 + N4,3models,k_subset,Old_under+Old_over+New_under,"0,1,3",0.2126
+O12 + N4,3models,k_subset,Old_under+Old_over+New_over,"0,1,4",0.2030
+O12 + N4,3models,k_subset,Old_under+Old_over+New_hybrid,"0,1,5",0.2376
+O12 + N4,3models,k_subset,Old_under+Old_hybrid+New_under,"0,2,3",0.2542
+O12 + N4,3models,k_subset,Old_under+Old_hybrid+New_over,"0,2,4",0.2364
+O12 + N4,3models,k_subset,Old_under+Old_hybrid+New_hybrid,"0,2,5",0.2327
+O12 + N4,3models,k_subset,Old_under+New_under+New_over,"0,3,4",0.2822
+O12 + N4,3models,k_subset,Old_under+New_under+New_hybrid,"0,3,5",0.2833
+O12 + N4,3models,k_subset,Old_under+New_over+New_hybrid,"0,4,5",0.2784
+O12 + N4,3models,k_subset,Old_over+Old_hybrid+New_under,"1,2,3",0.2225
+O12 + N4,3models,k_subset,Old_over+Old_hybrid+New_over,"1,2,4",0.2002
+O12 + N4,3models,k_subset,Old_over+Old_hybrid+New_hybrid,"1,2,5",0.2161
+O12 + N4,3models,k_subset,Old_over+New_under+New_over,"1,3,4",0.2641
+O12 + N4,3models,k_subset,Old_over+New_under+New_hybrid,"1,3,5",0.2672
+O12 + N4,3models,k_subset,Old_over+New_over+New_hybrid,"1,4,5",0.2408
+O12 + N4,3models,k_subset,Old_hybrid+New_under+New_over,"2,3,4",0.2711
+O12 + N4,3models,k_subset,Old_hybrid+New_under+New_hybrid,"2,3,5",0.2663
+O12 + N4,3models,k_subset,Old_hybrid+New_over+New_hybrid,"2,4,5",0.2420
+O12 + N4,3models,k_subsets_mean,,,0.2450
+O12 + N4,4models,k_subset,Old_under+Old_over+Old_hybrid+New_under,"0,1,2,3",0.2371
+O12 + N4,4models,k_subset,Old_under+Old_over+Old_hybrid+New_over,"0,1,2,4",0.1894
+O12 + N4,4models,k_subset,Old_under+Old_over+Old_hybrid+New_hybrid,"0,1,2,5",0.2289
+O12 + N4,4models,k_subset,Old_under+Old_over+New_under+New_over,"0,1,3,4",0.2696
+O12 + N4,4models,k_subset,Old_under+Old_over+New_under+New_hybrid,"0,1,3,5",0.2634
+O12 + N4,4models,k_subset,Old_under+Old_over+New_over+New_hybrid,"0,1,4,5",0.2375
+O12 + N4,4models,k_subset,Old_under+Old_hybrid+New_under+New_over,"0,2,3,4",0.2665
+O12 + N4,4models,k_subset,Old_under+Old_hybrid+New_under+New_hybrid,"0,2,3,5",0.2667
+O12 + N4,4models,k_subset,Old_under+Old_hybrid+New_over+New_hybrid,"0,2,4,5",0.2599
+O12 + N4,4models,k_subset,Old_under+New_under+New_over+New_hybrid,"0,3,4,5",0.2973
+O12 + N4,4models,k_subset,Old_over+Old_hybrid+New_under+New_over,"1,2,3,4",0.2484
+O12 + N4,4models,k_subset,Old_over+Old_hybrid+New_under+New_hybrid,"1,2,3,5",0.2510
+O12 + N4,4models,k_subset,Old_over+Old_hybrid+New_over+New_hybrid,"1,2,4,5",0.2280
+O12 + N4,4models,k_subset,Old_over+New_under+New_over+New_hybrid,"1,3,4,5",0.2651
+O12 + N4,4models,k_subset,Old_hybrid+New_under+New_over+New_hybrid,"2,3,4,5",0.2757
+O12 + N4,4models,k_subsets_mean,,,0.2523
+O12 + N4,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over,"0,1,2,3,4",0.2577
+O12 + N4,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_hybrid,"0,1,2,3,5",0.2537
+O12 + N4,5models,k_subset,Old_under+Old_over+Old_hybrid+New_over+New_hybrid,"0,1,2,4,5",0.2358
+O12 + N4,5models,k_subset,Old_under+Old_over+New_under+New_over+New_hybrid,"0,1,3,4,5",0.2765
+O12 + N4,5models,k_subset,Old_under+Old_hybrid+New_under+New_over+New_hybrid,"0,2,3,4,5",0.2660
+O12 + N4,5models,k_subset,Old_over+Old_hybrid+New_under+New_over+New_hybrid,"1,2,3,4,5",0.2489
+O12 + N4,5models,k_subsets_mean,,,0.2564
+O12 + N4,6models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over+New_hybrid,"0,1,2,3,4,5",0.2583
+O12 + N4,6models,k_subsets_mean,,,0.2583
+O12 + N4,New,under,,,0.2885
+O12 + N4,New,over,,,0.2628
+O12 + N4,New,hybrid,,,0.2451
+O12 + N4,Old,under,,,0.1577
+O12 + N4,Old,over,,,0.1312
+O12 + N4,Old,hybrid,,,0.1700
+O12 + N4,OldNew,under,,,0.2708
+O12 + N4,OldNew,over,,,0.1957
+O12 + N4,OldNew,hybrid,,,0.2218
+O14 + N2,2models,k_subset,Old_under+New_under,"0,3",0.2926
+O14 + N2,2models,k_subset,Old_under+New_over,"0,4",0.2709
+O14 + N2,2models,k_subset,Old_under+New_hybrid,"0,5",0.2775
+O14 + N2,2models,k_subset,Old_over+New_under,"1,3",0.2812
+O14 + N2,2models,k_subset,Old_over+New_over,"1,4",0.2022
+O14 + N2,2models,k_subset,Old_over+New_hybrid,"1,5",0.2186
+O14 + N2,2models,k_subset,Old_hybrid+New_under,"2,3",0.2836
+O14 + N2,2models,k_subset,Old_hybrid+New_over,"2,4",0.2193
+O14 + N2,2models,k_subset,Old_hybrid+New_hybrid,"2,5",0.2398
+O14 + N2,2models,k_subsets_mean,,,0.2540
+O14 + N2,3models,k_subset,Old_under+Old_over+New_under,"0,1,3",0.2688
+O14 + N2,3models,k_subset,Old_under+Old_over+New_over,"0,1,4",0.2521
+O14 + N2,3models,k_subset,Old_under+Old_over+New_hybrid,"0,1,5",0.2384
+O14 + N2,3models,k_subset,Old_under+Old_hybrid+New_under,"0,2,3",0.2780
+O14 + N2,3models,k_subset,Old_under+Old_hybrid+New_over,"0,2,4",0.2532
+O14 + N2,3models,k_subset,Old_under+Old_hybrid+New_hybrid,"0,2,5",0.2639
+O14 + N2,3models,k_subset,Old_under+New_under+New_over,"0,3,4",0.2819
+O14 + N2,3models,k_subset,Old_under+New_under+New_hybrid,"0,3,5",0.3041
+O14 + N2,3models,k_subset,Old_under+New_over+New_hybrid,"0,4,5",0.2706
+O14 + N2,3models,k_subset,Old_over+Old_hybrid+New_under,"1,2,3",0.2577
+O14 + N2,3models,k_subset,Old_over+Old_hybrid+New_over,"1,2,4",0.2085
+O14 + N2,3models,k_subset,Old_over+Old_hybrid+New_hybrid,"1,2,5",0.2164
+O14 + N2,3models,k_subset,Old_over+New_under+New_over,"1,3,4",0.2559
+O14 + N2,3models,k_subset,Old_over+New_under+New_hybrid,"1,3,5",0.2762
+O14 + N2,3models,k_subset,Old_over+New_over+New_hybrid,"1,4,5",0.2358
+O14 + N2,3models,k_subset,Old_hybrid+New_under+New_over,"2,3,4",0.2574
+O14 + N2,3models,k_subset,Old_hybrid+New_under+New_hybrid,"2,3,5",0.2733
+O14 + N2,3models,k_subset,Old_hybrid+New_over+New_hybrid,"2,4,5",0.2468
+O14 + N2,3models,k_subsets_mean,,,0.2577
+O14 + N2,4models,k_subset,Old_under+Old_over+Old_hybrid+New_under,"0,1,2,3",0.2359
+O14 + N2,4models,k_subset,Old_under+Old_over+Old_hybrid+New_over,"0,1,2,4",0.2260
+O14 + N2,4models,k_subset,Old_under+Old_over+Old_hybrid+New_hybrid,"0,1,2,5",0.2157
+O14 + N2,4models,k_subset,Old_under+Old_over+New_under+New_over,"0,1,3,4",0.2671
+O14 + N2,4models,k_subset,Old_under+Old_over+New_under+New_hybrid,"0,1,3,5",0.2729
+O14 + N2,4models,k_subset,Old_under+Old_over+New_over+New_hybrid,"0,1,4,5",0.2678
+O14 + N2,4models,k_subset,Old_under+Old_hybrid+New_under+New_over,"0,2,3,4",0.2735
+O14 + N2,4models,k_subset,Old_under+Old_hybrid+New_under+New_hybrid,"0,2,3,5",0.2747
+O14 + N2,4models,k_subset,Old_under+Old_hybrid+New_over+New_hybrid,"0,2,4,5",0.2655
+O14 + N2,4models,k_subset,Old_under+New_under+New_over+New_hybrid,"0,3,4,5",0.2852
+O14 + N2,4models,k_subset,Old_over+Old_hybrid+New_under+New_over,"1,2,3,4",0.2482
+O14 + N2,4models,k_subset,Old_over+Old_hybrid+New_under+New_hybrid,"1,2,3,5",0.2457
+O14 + N2,4models,k_subset,Old_over+Old_hybrid+New_over+New_hybrid,"1,2,4,5",0.2246
+O14 + N2,4models,k_subset,Old_over+New_under+New_over+New_hybrid,"1,3,4,5",0.2495
+O14 + N2,4models,k_subset,Old_hybrid+New_under+New_over+New_hybrid,"2,3,4,5",0.2727
+O14 + N2,4models,k_subsets_mean,,,0.2550
+O14 + N2,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over,"0,1,2,3,4",0.2478
+O14 + N2,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_hybrid,"0,1,2,3,5",0.2566
+O14 + N2,5models,k_subset,Old_under+Old_over+Old_hybrid+New_over+New_hybrid,"0,1,2,4,5",0.2459
+O14 + N2,5models,k_subset,Old_under+Old_over+New_under+New_over+New_hybrid,"0,1,3,4,5",0.2631
+O14 + N2,5models,k_subset,Old_under+Old_hybrid+New_under+New_over+New_hybrid,"0,2,3,4,5",0.2740
+O14 + N2,5models,k_subset,Old_over+Old_hybrid+New_under+New_over+New_hybrid,"1,2,3,4,5",0.2581
+O14 + N2,5models,k_subsets_mean,,,0.2576
+O14 + N2,6models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over+New_hybrid,"0,1,2,3,4,5",0.2626
+O14 + N2,6models,k_subsets_mean,,,0.2626
+O14 + N2,New,under,,,0.2524
+O14 + N2,New,over,,,0.1956
+O14 + N2,New,hybrid,,,0.2450
+O14 + N2,Old,under,,,0.2442
+O14 + N2,Old,over,,,0.1345
+O14 + N2,Old,hybrid,,,0.1808
+O14 + N2,OldNew,under,,,0.2926
+O14 + N2,OldNew,over,,,0.2022
+O14 + N2,OldNew,hybrid,,,0.2398
+avg,2models,k_subset,Old_under+New_under,"0,3",0.2250
+avg,2models,k_subset,Old_under+New_over,"0,4",0.1846
+avg,2models,k_subset,Old_under+New_hybrid,"0,5",0.2031
+avg,2models,k_subset,Old_over+New_under,"1,3",0.2112
+avg,2models,k_subset,Old_over+New_over,"1,4",0.1502
+avg,2models,k_subset,Old_over+New_hybrid,"1,5",0.1716
+avg,2models,k_subset,Old_hybrid+New_under,"2,3",0.2040
+avg,2models,k_subset,Old_hybrid+New_over,"2,4",0.1591
+avg,2models,k_subset,Old_hybrid+New_hybrid,"2,5",0.1811
+avg,2models,k_subsets_mean,,,0.1878
+avg,3models,k_subset,Old_under+Old_over+New_under,"0,1,3",0.1726
+avg,3models,k_subset,Old_under+Old_over+New_over,"0,1,4",0.1503
+avg,3models,k_subset,Old_under+Old_over+New_hybrid,"0,1,5",0.1647
+avg,3models,k_subset,Old_under+Old_hybrid+New_under,"0,2,3",0.1770
+avg,3models,k_subset,Old_under+Old_hybrid+New_over,"0,2,4",0.1615
+avg,3models,k_subset,Old_under+Old_hybrid+New_hybrid,"0,2,5",0.1720
+avg,3models,k_subset,Old_under+New_under+New_over,"0,3,4",0.2242
+avg,3models,k_subset,Old_under+New_under+New_hybrid,"0,3,5",0.2495
+avg,3models,k_subset,Old_under+New_over+New_hybrid,"0,4,5",0.2154
+avg,3models,k_subset,Old_over+Old_hybrid+New_under,"1,2,3",0.1660
+avg,3models,k_subset,Old_over+Old_hybrid+New_over,"1,2,4",0.1406
+avg,3models,k_subset,Old_over+Old_hybrid+New_hybrid,"1,2,5",0.1539
+avg,3models,k_subset,Old_over+New_under+New_over,"1,3,4",0.2145
+avg,3models,k_subset,Old_over+New_under+New_hybrid,"1,3,5",0.2327
+avg,3models,k_subset,Old_over+New_over+New_hybrid,"1,4,5",0.1916
+avg,3models,k_subset,Old_hybrid+New_under+New_over,"2,3,4",0.2173
+avg,3models,k_subset,Old_hybrid+New_under+New_hybrid,"2,3,5",0.2271
+avg,3models,k_subset,Old_hybrid+New_over+New_hybrid,"2,4,5",0.1909
+avg,3models,k_subsets_mean,,,0.1901
+avg,4models,k_subset,Old_under+Old_over+Old_hybrid+New_under,"0,1,2,3",0.1547
+avg,4models,k_subset,Old_under+Old_over+Old_hybrid+New_over,"0,1,2,4",0.1375
+avg,4models,k_subset,Old_under+Old_over+Old_hybrid+New_hybrid,"0,1,2,5",0.1467
+avg,4models,k_subset,Old_under+Old_over+New_under+New_over,"0,1,3,4",0.2042
+avg,4models,k_subset,Old_under+Old_over+New_under+New_hybrid,"0,1,3,5",0.2128
+avg,4models,k_subset,Old_under+Old_over+New_over+New_hybrid,"0,1,4,5",0.1848
+avg,4models,k_subset,Old_under+Old_hybrid+New_under+New_over,"0,2,3,4",0.2016
+avg,4models,k_subset,Old_under+Old_hybrid+New_under+New_hybrid,"0,2,3,5",0.2104
+avg,4models,k_subset,Old_under+Old_hybrid+New_over+New_hybrid,"0,2,4,5",0.1855
+avg,4models,k_subset,Old_under+New_under+New_over+New_hybrid,"0,3,4,5",0.2400
+avg,4models,k_subset,Old_over+Old_hybrid+New_under+New_over,"1,2,3,4",0.1848
+avg,4models,k_subset,Old_over+Old_hybrid+New_under+New_hybrid,"1,2,3,5",0.1937
+avg,4models,k_subset,Old_over+Old_hybrid+New_over+New_hybrid,"1,2,4,5",0.1693
+avg,4models,k_subset,Old_over+New_under+New_over+New_hybrid,"1,3,4,5",0.2175
+avg,4models,k_subset,Old_hybrid+New_under+New_over+New_hybrid,"2,3,4,5",0.2284
+avg,4models,k_subsets_mean,,,0.1915
+avg,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over,"0,1,2,3,4",0.1791
+avg,5models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_hybrid,"0,1,2,3,5",0.1859
+avg,5models,k_subset,Old_under+Old_over+Old_hybrid+New_over+New_hybrid,"0,1,2,4,5",0.1694
+avg,5models,k_subset,Old_under+Old_over+New_under+New_over+New_hybrid,"0,1,3,4,5",0.2115
+avg,5models,k_subset,Old_under+Old_hybrid+New_under+New_over+New_hybrid,"0,2,3,4,5",0.2167
+avg,5models,k_subset,Old_over+Old_hybrid+New_under+New_over+New_hybrid,"1,2,3,4,5",0.2029
+avg,5models,k_subsets_mean,,,0.1943
+avg,6models,k_subset,Old_under+Old_over+Old_hybrid+New_under+New_over+New_hybrid,"0,1,2,3,4,5",0.1968
+avg,6models,k_subsets_mean,,,0.1968
+avg,New,under,,,0.2478
+avg,New,over,,,0.1864
+avg,New,hybrid,,,0.2213
+avg,Old,under,,,0.1190
+avg,Old,over,,,0.0889
+avg,Old,hybrid,,,0.1104
+avg,OldNew,under,,,0.2250
+avg,OldNew,over,,,0.1502
+avg,OldNew,hybrid,,,0.1811
