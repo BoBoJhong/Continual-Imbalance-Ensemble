@@ -1,0 +1,29 @@
+﻿dataset_name,split_id,old_window,new_window,test_window,method,train_scope,best_sampling,AUC,F1,Recall
+Bankruptcy_US,split_10+6,1999-2008,2009-2014,2015-2018,Finetune,Old->New sequential (finetune),undersampling,0.8435,0.272,0.3449
+Bankruptcy_US,split_10+6,1999-2008,2009-2014,2015-2018,New,New only,undersampling,0.8397,0.2934,0.3624
+Bankruptcy_US,split_10+6,1999-2008,2009-2014,2015-2018,Old,Old only,none,0.7442,0.1331,0.4286
+Bankruptcy_US,split_10+6,1999-2008,2009-2014,2015-2018,Retrain,Old+New concat (retrain),undersampling,0.8152,0.2077,0.4425
+Bankruptcy_US,split_12+4,1999-2010,2011-2014,2015-2018,Finetune,Old->New sequential (finetune),none,0.8328,0.2621,0.3693
+Bankruptcy_US,split_12+4,1999-2010,2011-2014,2015-2018,New,New only,undersampling,0.8429,0.2885,0.3554
+Bankruptcy_US,split_12+4,1999-2010,2011-2014,2015-2018,Old,Old only,undersampling,0.7398,0.1476,0.4112
+Bankruptcy_US,split_12+4,1999-2010,2011-2014,2015-2018,Retrain,Old+New concat (retrain),undersampling,0.7904,0.1872,0.4495
+Bankruptcy_US,split_14+2,1999-2012,2013-2014,2015-2018,Finetune,Old->New sequential (finetune),none,0.853,0.2762,0.2892
+Bankruptcy_US,split_14+2,1999-2012,2013-2014,2015-2018,New,New only,none,0.8507,0.2636,0.2787
+Bankruptcy_US,split_14+2,1999-2012,2013-2014,2015-2018,Old,Old only,none,0.7825,0.1584,0.4808
+Bankruptcy_US,split_14+2,1999-2012,2013-2014,2015-2018,Retrain,Old+New concat (retrain),undersampling,0.8174,0.1981,0.5052
+Bankruptcy_US,split_2+14,1999-2000,2001-2014,2015-2018,Finetune,Old->New sequential (finetune),hybrid,0.7837,0.1517,0.4808
+Bankruptcy_US,split_2+14,1999-2000,2001-2014,2015-2018,New,New only,none,0.8321,0.1973,0.4634
+Bankruptcy_US,split_2+14,1999-2000,2001-2014,2015-2018,Old,Old only,hybrid,0.6061,0.0669,0.4251
+Bankruptcy_US,split_2+14,1999-2000,2001-2014,2015-2018,Retrain,Old+New concat (retrain),undersampling,0.8213,0.2172,0.439
+Bankruptcy_US,split_4+12,1999-2002,2003-2014,2015-2018,Finetune,Old->New sequential (finetune),hybrid,0.8216,0.1647,0.5192
+Bankruptcy_US,split_4+12,1999-2002,2003-2014,2015-2018,New,New only,undersampling,0.8416,0.224,0.5261
+Bankruptcy_US,split_4+12,1999-2002,2003-2014,2015-2018,Old,Old only,hybrid,0.6146,0.0689,0.3101
+Bankruptcy_US,split_4+12,1999-2002,2003-2014,2015-2018,Retrain,Old+New concat (retrain),none,0.8249,0.2242,0.439
+Bankruptcy_US,split_6+10,1999-2004,2005-2014,2015-2018,Finetune,Old->New sequential (finetune),undersampling,0.7887,0.189,0.3833
+Bankruptcy_US,split_6+10,1999-2004,2005-2014,2015-2018,New,New only,none,0.8447,0.2506,0.3902
+Bankruptcy_US,split_6+10,1999-2004,2005-2014,2015-2018,Old,Old only,hybrid,0.651,0.082,0.338
+Bankruptcy_US,split_6+10,1999-2004,2005-2014,2015-2018,Retrain,Old+New concat (retrain),undersampling,0.8233,0.2009,0.446
+Bankruptcy_US,split_8+8,1999-2006,2007-2014,2015-2018,Finetune,Old->New sequential (finetune),undersampling,0.8321,0.2224,0.4704
+Bankruptcy_US,split_8+8,1999-2006,2007-2014,2015-2018,New,New only,undersampling,0.8554,0.2632,0.4425
+Bankruptcy_US,split_8+8,1999-2006,2007-2014,2015-2018,Old,Old only,undersampling,0.661,0.1134,0.2404
+Bankruptcy_US,split_8+8,1999-2006,2007-2014,2015-2018,Retrain,Old+New concat (retrain),undersampling,0.8286,0.1871,0.5122

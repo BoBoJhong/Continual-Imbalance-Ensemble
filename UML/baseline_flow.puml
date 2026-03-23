@@ -1,7 +1,7 @@
 @startuml
 !pragma layout smetana
 
-title Phase 1 - Baseline
+title Phase 1 — Baseline
 
 left to right direction
 skinparam shadowing false
@@ -20,7 +20,7 @@ skinparam database {
   BorderColor #2E5A88
 }
 
-database "DATASET" as DS
+database "Dataset" as DS
 rectangle "Time\nsplit" as CUT
 DS --> CUT
 
@@ -32,11 +32,11 @@ CUT --> OLD
 CUT --> NEW
 CUT --> TE
 
-package "Train setup" as PKG_B #FFFACD {
-  rectangle "Old\nonly" as B1
-  rectangle "New\nonly" as B2
-  rectangle "Old+New\nretrain" as B3
-  rectangle "Old→New\nfinetune" as B4
+package "Training setup" as PKG_B #FFFACD {
+  rectangle "Train on\nOld" as B1
+  rectangle "Train on\nNew" as B2
+  rectangle "Retrain on\nOld + New" as B3
+  rectangle "Fine-tune\nOld → New" as B4
 }
 
 B1 -[hidden]right- B2
@@ -50,11 +50,11 @@ NEW --> B3
 OLD --> B4
 NEW --> B4
 
-package "Sampling" as PKG_S #FFFACD {
-  rectangle "none" as S0
-  rectangle "under" as S1
-  rectangle "over" as S2
-  rectangle "hybrid" as S3
+package "Sampling strategy" as PKG_S #FFFACD {
+  rectangle "None" as S0
+  rectangle "Under" as S1
+  rectangle "Over" as S2
+  rectangle "Hybrid" as S3
 }
 
 S0 -[hidden]right- S1
@@ -62,27 +62,33 @@ S1 -[hidden]right- S2
 S2 -[hidden]right- S3
 
 package "Classifier" as PKG_C #E0E0E0 {
-  rectangle "XGB" as XGB
-  rectangle "…" as MORE
+  rectangle "XGBoost" as XGB
+  rectangle "MLP" as MLP
 }
 
-XGB -[hidden]right- MORE
+XGB -[hidden]right- MLP
 
-rectangle "Thr\nVal F1" as THR #FFFACD
+rectangle "Threshold tuning\n(max Val F1)" as THR #FFFACD
+rectangle "Test inference\n(apply threshold)" as INF #F5F5F5
+rectangle "Evaluation\nAUC / F1 / Recall" as OUT #FFFFFF
+
+database "Validation\n(from New)" as VAL
 
 B1 --> PKG_S
 B2 --> PKG_S
 B3 --> PKG_S
 B4 --> PKG_S
-PKG_S --> XGB
-XGB --> THR
 
-database "Val" as VAL
-NEW .. VAL
+PKG_S --> XGB
+PKG_S --> MLP
+
+XGB --> THR
+MLP --> THR
+
+NEW ..> VAL
 VAL --> THR
 
-rectangle "AUC / F1 / Recall" as OUT #FFFFFF
-TE --> OUT
-THR --> OUT
-
+THR --> INF
+TE --> INF
+INF --> OUT
 @enduml
