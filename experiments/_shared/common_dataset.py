@@ -195,7 +195,7 @@ MEDICAL_YEAR_SPLITS = [
 ]
 
 
-def get_medical_year_split(logger, old_end_year: int):
+def get_medical_year_split(logger, old_end_year: int, return_years: bool = False):
     """
     固定 test = 2007-2008，依 old_end_year 切割：
       Old  = year <= old_end_year
@@ -203,6 +203,7 @@ def get_medical_year_split(logger, old_end_year: int):
       Test = 2007 <= year <= 2008
 
     回傳 (X_old, y_old, X_new, y_new, X_test, y_test)（未縮放，由實驗腳本決定縮放方式）
+    若 return_years=True，額外回傳 (year_old, year_new, year_test)。
     """
     X, y = _load_medical(logger, keep_year=True)
     year = X["_year"].astype(int)
@@ -214,37 +215,52 @@ def get_medical_year_split(logger, old_end_year: int):
     X_old,  y_old  = X[mask_old].drop(columns=["_year"]),  y[mask_old]
     X_new,  y_new  = X[mask_new].drop(columns=["_year"]),  y[mask_new]
     X_test, y_test = X[mask_test].drop(columns=["_year"]), y[mask_test]
+    year_old = year[mask_old].reset_index(drop=True)
+    year_new = year[mask_new].reset_index(drop=True)
+    year_test = year[mask_test].reset_index(drop=True)
 
     logger.info(
         f"  Old={len(X_old)}({y_old.mean()*100:.1f}%+)  "
         f"New={len(X_new)}({y_new.mean()*100:.1f}%+)  "
         f"Test={len(X_test)}({y_test.mean()*100:.1f}%+)"
     )
-    return (
+    base_ret = (
         X_old.reset_index(drop=True),  y_old.reset_index(drop=True),
         X_new.reset_index(drop=True),  y_new.reset_index(drop=True),
         X_test.reset_index(drop=True), y_test.reset_index(drop=True),
     )
+    if return_years:
+        return base_ret + (
+            year_old,
+            year_new,
+            year_test,
+        )
+    return base_ret
 
 
 # ---------------------------------------------------------------------------
 # 股市年份切割：固定 test=2017-2020，彈性 old_end_year（SPX，S&P 500）
 # ---------------------------------------------------------------------------
 
-STOCK_YEAR_SPLITS = [
-    ("split_2+14",  2002),  # 2001-2002 Old ( 2yr) / 2003-2016 New (14yr)
-    ("split_4+12",  2004),  # 2001-2004 Old ( 4yr) / 2005-2016 New (12yr)
-    ("split_6+10",  2006),  # 2001-2006 Old ( 6yr) / 2007-2016 New (10yr)
-    ("split_8+8",   2008),  # 2001-2008 Old ( 8yr) / 2009-2016 New ( 8yr)  ← 對稱中心
-    ("split_10+6",  2010),  # 2001-2010 Old (10yr) / 2011-2016 New ( 6yr)
-    ("split_12+4",  2012),  # 2001-2012 Old (12yr) / 2013-2016 New ( 4yr)
-    ("split_14+2",  2014),  # 2001-2014 Old (14yr) / 2015-2016 New ( 2yr)
-]
-
-STOCK_BASE_YEAR = 2001   # 訓練窗口 2001-2016（16 年，與破產結構相同）
+STOCK_BASE_YEAR = 2001   # 訓練窗口 2001-2016（16 年）
+STOCK_TRAIN_END_YEAR = 2016
 
 
-def get_stock_year_split(logger, old_end_year: int, ticker: str = "spx"):
+def _build_stock_year_splits(base_year: int, train_end: int):
+    total_years = train_end - base_year + 1
+    return [
+        (
+            f"split_{old_years}+{total_years - old_years}",
+            base_year + old_years - 1,
+        )
+        for old_years in range(1, total_years - 1)
+    ]
+
+
+STOCK_YEAR_SPLITS = _build_stock_year_splits(STOCK_BASE_YEAR, STOCK_TRAIN_END_YEAR)
+
+
+def get_stock_year_split(logger, old_end_year: int, ticker: str = "spx", return_years: bool = False):
     """
     固定 test = 2017-2020，訓練窗口 2001-2016（16 年），依 old_end_year 切割
     （預設使用 S&P 500 / SPX）：
@@ -253,6 +269,7 @@ def get_stock_year_split(logger, old_end_year: int, ticker: str = "spx"):
       Test = 2017 <= year <= 2020
 
     回傳 (X_old, y_old, X_new, y_new, X_test, y_test)（未縮放）
+    若 return_years=True，額外回傳 (year_old, year_new, year_test)。
     """
     X, y = _load_stock(logger, ticker=ticker, keep_year=True)
     year = X["_year"].astype(int)
@@ -264,14 +281,24 @@ def get_stock_year_split(logger, old_end_year: int, ticker: str = "spx"):
     X_old,  y_old  = X[mask_old].drop(columns=["_year"]),  y[mask_old]
     X_new,  y_new  = X[mask_new].drop(columns=["_year"]),  y[mask_new]
     X_test, y_test = X[mask_test].drop(columns=["_year"]), y[mask_test]
+    year_old = year[mask_old].reset_index(drop=True)
+    year_new = year[mask_new].reset_index(drop=True)
+    year_test = year[mask_test].reset_index(drop=True)
 
     logger.info(
         f"  Old={len(X_old)}({y_old.mean()*100:.2f}%Crash)  "
         f"New={len(X_new)}({y_new.mean()*100:.2f}%Crash)  "
         f"Test={len(X_test)}({y_test.mean()*100:.2f}%Crash)"
     )
-    return (
+    base_ret = (
         X_old.reset_index(drop=True),  y_old.reset_index(drop=True),
         X_new.reset_index(drop=True),  y_new.reset_index(drop=True),
         X_test.reset_index(drop=True), y_test.reset_index(drop=True),
     )
+    if return_years:
+        return base_ret + (
+            year_old,
+            year_new,
+            year_test,
+        )
+    return base_ret

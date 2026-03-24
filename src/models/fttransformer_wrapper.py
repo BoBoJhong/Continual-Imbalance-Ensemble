@@ -115,8 +115,14 @@ class FTTransformerWrapper:
             except ValueError:
                 X, Xv, y, yv = train_test_split(X, y, test_size=0.1, random_state=self.seed)
 
-        self._n_features = X.shape[1]
-        model = self._build_model(self._n_features)
+        continue_training = bool(kwargs.get("continue_training", False))
+        n_features = X.shape[1]
+
+        if continue_training and self._model is not None and self._n_features == n_features:
+            model = self._model
+        else:
+            self._n_features = n_features
+            model = self._build_model(self._n_features)
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model = model.to(device)

@@ -151,25 +151,34 @@ def get_bankruptcy_splits(logger, split_mode="block_cv", dataset="auto"):
 # 年份切割：固定 test=2015-2018，彈性 old_end_year
 # ---------------------------------------------------------------------------
 
-YEAR_SPLITS = [
-    ("split_2+14",  2000),   # 1999-2000 Old (2yr)  / 2001-2014 New (14yr)
-    ("split_4+12",  2002),   # 1999-2002 Old (4yr)  / 2003-2014 New (12yr)
-    ("split_6+10",  2004),   # 1999-2004 Old (6yr)  / 2005-2014 New (10yr)
-    ("split_8+8",   2006),   # 1999-2006 Old (8yr)  / 2007-2014 New (8yr)
-    ("split_10+6",  2008),   # 1999-2008 Old (10yr) / 2009-2014 New (6yr)
-    ("split_12+4",  2010),   # 1999-2010 Old (12yr) / 2011-2014 New (4yr)
-    ("split_14+2",  2012),   # 1999-2012 Old (14yr) / 2013-2014 New (2yr)
-]
+TRAIN_START_YEAR = 1999
+TRAIN_END_YEAR = 2014
 
 
-def get_bankruptcy_year_split(logger, old_end_year: int):
+def _build_year_splits(train_start: int, train_end: int):
+    total_years = train_end - train_start + 1
+    # 逐年移動分界，至少保留 2 年 New（共 14 折，適用 16 年訓練窗）
+    return [
+        (
+            f"split_{old_years}+{total_years - old_years}",
+            train_start + old_years - 1,
+        )
+        for old_years in range(1, total_years - 1)
+    ]
+
+
+YEAR_SPLITS = _build_year_splits(TRAIN_START_YEAR, TRAIN_END_YEAR)
+
+
+def get_bankruptcy_year_split(logger, old_end_year: int, return_years: bool = False):
     """
     固定 test = 2015-2018，依 old_end_year 切割：
       Old  = fyear <= old_end_year
       New  = old_end_year+1 <= fyear <= 2014
       Test = 2015 <= fyear <= 2018
 
-    回傳 (X_old_scaled, y_old, X_new_scaled, y_new, X_test_scaled, y_test)
+    回傳 (X_old, y_old, X_new, y_new, X_test, y_test)
+    若 return_years=True，額外回傳 (year_old, year_new, year_test)。
     """
     import sys
     sys.path.insert(0, str(project_root))
@@ -188,6 +197,10 @@ def get_bankruptcy_year_split(logger, old_end_year: int):
     mask_new  = (X["fyear"] > old_end_year) & (X["fyear"] <= 2014)
     mask_test = (X["fyear"] >= 2015) & (X["fyear"] <= 2018)
 
+    year_old = X.loc[mask_old, "fyear"].reset_index(drop=True)
+    year_new = X.loc[mask_new, "fyear"].reset_index(drop=True)
+    year_test = X.loc[mask_test, "fyear"].reset_index(drop=True)
+
     X_old,  y_old  = X[mask_old].drop(columns=["fyear"]),  y[mask_old]
     X_new,  y_new  = X[mask_new].drop(columns=["fyear"]),  y[mask_new]
     X_test, y_test = X[mask_test].drop(columns=["fyear"]), y[mask_test]
@@ -205,4 +218,6 @@ def get_bankruptcy_year_split(logger, old_end_year: int):
 
     # 回傳未縮放的原始資料，讓呼叫端依各自訓練策略 fit scaler
     # （Old-only / New-only / OldNew 的 scaler fit 對象不同，不應在此統一處理）
+    if return_years:
+        return X_old_c, y_old, X_new_c, y_new, X_test_c, y_test, year_old, year_new, year_test
     return X_old_c, y_old, X_new_c, y_new, X_test_c, y_test

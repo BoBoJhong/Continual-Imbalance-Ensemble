@@ -23,10 +23,23 @@ class RandomForestWrapper:
         )
         params.update(kwargs)
         self.params = params
+        self.base_n_estimators = int(n_estimators)
         self.model = RandomForestClassifier(**params)
         self.logger.info(f"Initialized RandomForest with params: {params}")
 
     def fit(self, X_train: pd.DataFrame, y_train: np.ndarray, **fit_params):
+        continue_training = bool(fit_params.pop("continue_training", False))
+        additional_estimators = int(fit_params.pop("additional_estimators", self.base_n_estimators))
+
+        if continue_training:
+            new_estimators = int(self.model.n_estimators) + max(1, additional_estimators)
+            self.model.set_params(warm_start=True, n_estimators=new_estimators)
+        else:
+            # 重訓時重置模型，避免前一次 fit 狀態殘留
+            reset_params = dict(self.params)
+            reset_params["warm_start"] = False
+            self.model = RandomForestClassifier(**reset_params)
+
         self.logger.info(f"Training RandomForest on {len(X_train)} samples")
         self.model.fit(X_train, y_train)
         self.logger.info("Training completed")

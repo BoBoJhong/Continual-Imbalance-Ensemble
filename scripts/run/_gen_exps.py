@@ -207,7 +207,7 @@ if __name__ == "__main__":
 
 # ─────────────────────────────── EXP 25 ────────────────────────────────
 EXP25 = '''\
-"""Experiment 25: Base learner comparison – LightGBM vs XGBoost vs RandomForest."""
+"""Experiment 25: Base learner comparison – LightGBM vs XGBoost vs RandomForest vs LogisticRegression."""
 import sys
 import pandas as pd
 import numpy as np
@@ -218,7 +218,7 @@ sys.path.insert(0, str(project_root))
 
 from src.utils import set_seed, get_logger
 from src.data import ImbalanceSampler
-from src.models import LightGBMWrapper, XGBoostWrapper, RandomForestWrapper, ModelPool
+from src.models import LightGBMWrapper, XGBoostWrapper, RandomForestWrapper, LogisticRegressionWrapper, ModelPool
 from src.evaluation import compute_metrics
 from experiments.common_bankruptcy import get_bankruptcy_splits
 from experiments.common_dataset import get_stock_splits, get_medical_splits
@@ -228,6 +228,7 @@ LEARNERS = {
     "LightGBM": LightGBMWrapper,
     "XGBoost": XGBoostWrapper,
     "RandomForest": RandomForestWrapper,
+    "LogisticRegression": LogisticRegressionWrapper,
 }
 
 
