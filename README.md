@@ -220,7 +220,7 @@ results/
 
 | 資料集 | 訓練窗（Train）與測試窗（Test） | Old／New 規則（摘要） |
 |--------|----------------------------------|------------------------|
-| **破產（US）** | Train：`fyear` ∈ 1999–2014；**Test：2015–2018 固定** | `Old`：`fyear ≤ old_end`；`New`：`old_end < fyear ≤ 2014`。`split_a+b` 表示約 **a 年 Old + b 年 New**（在 16 年訓練窗內滑動 `old_end`，共 7 組）。 |
+| **破產（US）** | Train：`fyear` ∈ 1999–2014；**Test：2015–2018 固定** | `Old`：`fyear ≤ old_end`；`New`：`old_end < fyear ≤ 2014`。`split_a+b` 表示約 **a 年 Old + b 年 New**（在 16 年訓練窗內滑動 `old_end`，共 **14 組**，見 `YEAR_SPLITS`）。 |
 | **股票（SPX）** | Train：2001–2016；**Test：2017–2020 固定** | `Old`：2001–`old_end`；`New`：`old_end`+1–2016。同樣 7 組對稱切割（見 `STOCK_YEAR_SPLITS`）。 |
 | **醫療** | Train：1999–2006；**Test：2007–2008 固定** | `Old`：`year ≤ old_end`；`New`：`old_end`+1–2006。7 組（見 `MEDICAL_YEAR_SPLITS`）。 |
 
@@ -228,7 +228,7 @@ results/
 在**同一個 Test** 下，改變 **Old 與 New 的相對長度**（歷史長、新營運短 → 反之），看 **baseline／集成／動態方法** 是否依賴「哪一段訓練資料較多」而表現不穩，屬於**實證設計上的敏感度分析**，而非單一隨機切分。
 
 **與 [docs/研究方向.md](docs/研究方向.md) 裡例句的關係**  
-文件中的「1999–2011／2012–2014／2015–2018」是**概念範例**（a 類切割）；本 repo 主實驗為 **US 破產**上 **連續滑動 `old_end`** 的 **7 組**年份窗，規則與上表一致。
+文件中的「1999–2011／2012–2014／2015–2018」是**概念範例**（a 類切割）；本 repo 主實驗為 **US 破產**上 **連續滑動 `old_end`** 的 **14 組**年份窗（`split_1+15` … `split_14+2`），規則與上表一致。
 
 **Phase 1 四種 baseline**（Old／New／Retrain／Finetune）的訓練定義見 [Phase 1 Baseline](#method-phase1-baseline)。
 

@@ -5,7 +5,7 @@ Phase 1 Torch MLP Baseline 視覺化
 產出折線圖與（若存在）bk_torch_mlp_compact_summary 熱力圖。
 
 與 XGB 相同四策略：Old / New / Retrain / Finetune（見 bankruptcy_year_splits_torch_mlp.py）。
-若 raw 仍出現 Old+New，代表為舊版三策略輸出，請重新跑實驗腳本產生 112 rows。
+若 raw 仍出現 Old+New，代表為舊版三策略輸出，請重新跑實驗腳本（14 折、Retrain 僅一次時 raw 為 172 rows）。
 
 使用：
     python scripts/plots/visualize_phase1_torch_mlp_baseline.py
@@ -24,22 +24,8 @@ sys.path.insert(0, str(_scripts_dir))
 from phase1_baseline_plotting import (
     METHOD_COLORS_MLP,
     METHOD_ORDER_MLP,
-    dataset_label_from_raw_stem,
-    plot_compact_heatmaps,
-    plot_year_split_lines,
+    run_phase1_baseline_visualization,
 )
-import pandas as pd
-
-TORCH_DIR = project_root / "results" / "phase1_baseline" / "torch_mlp"
-PLOTS_DIR = TORCH_DIR / "plots"
-RAW_SUFFIX = "_year_splits_torch_mlp_raw"
-RAW_GLOB = f"*{RAW_SUFFIX}.csv"
-
-
-def discover_raw_files() -> list[Path]:
-    if not TORCH_DIR.is_dir():
-        return []
-    return sorted(TORCH_DIR.glob(RAW_GLOB))
 
 
 def main() -> None:
@@ -52,44 +38,19 @@ def main() -> None:
     )
     args = ap.parse_args()
 
-    raw_files = discover_raw_files()
-    if not raw_files:
-        print(f"找不到 raw CSV：{TORCH_DIR}")
+    ok = run_phase1_baseline_visualization(
+        project_root,
+        list(args.metrics),
+        result_subdir="torch_mlp",
+        raw_glob="*_year_splits_torch_mlp_raw.csv",
+        raw_suffix="_year_splits_torch_mlp_raw",
+        model_title="Torch MLP Baseline",
+        method_order=METHOD_ORDER_MLP,
+        method_colors=METHOD_COLORS_MLP,
+        compact_summary_name="bk_torch_mlp_compact_summary.csv",
+    )
+    if not ok:
         sys.exit(1)
-
-    print("Phase 1 Torch MLP baseline 圖表輸出…")
-    for path in raw_files:
-        df = pd.read_csv(path)
-        need = {"split", "method", "sampling", *args.metrics}
-        missing = need - set(df.columns)
-        if missing:
-            print(f"  [SKIP] {path.name} 缺少欄位: {missing}")
-            continue
-        label = dataset_label_from_raw_stem(path.stem, RAW_SUFFIX)
-        out = PLOTS_DIR / f"{path.stem.replace(RAW_SUFFIX, '')}_year_splits_{'_'.join(args.metrics)}.png"
-        plot_year_split_lines(
-            df,
-            label,
-            list(args.metrics),
-            out,
-            model_title="Torch MLP Baseline",
-            method_order=METHOD_ORDER_MLP,
-            method_colors=METHOD_COLORS_MLP,
-        )
-        print(f"  [SAVED] {out.relative_to(project_root)}")
-
-    summary = TORCH_DIR / "bk_torch_mlp_compact_summary.csv"
-    if summary.exists():
-        print("\nCompact summary 熱力圖…")
-        plot_compact_heatmaps(
-            summary,
-            PLOTS_DIR / "bk_torch_mlp",
-            model_title="Torch MLP Baseline",
-            method_order=METHOD_ORDER_MLP,
-            project_root=project_root,
-        )
-
-    print(f"\n完成。圖表目錄: {PLOTS_DIR.relative_to(project_root)}")
 
 
 if __name__ == "__main__":

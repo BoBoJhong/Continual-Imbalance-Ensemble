@@ -1,15 +1,21 @@
 """
 Phase 1 - Bankruptcy 年份切割基準線實驗（XGBoost）
 =======================================================
-固定 Test = 2015-2018，對 1999-2014 定義 7 組 Old/New 切割（每組步距 2 年），
-跑 4 種訓練策略 × 4 種採樣 = 16 種組合／每組切割（7 組 → 112 rows 原始結果）。
+固定 Test = 2015-2018；訓練窗 1999–2014（16 年）。依 `common_bankruptcy.YEAR_SPLITS` 逐年滑動
+`old_end`（至少 2 年 New），共 **14 組** Old/New 切割（`split_1+15` … `split_14+2`）。
+
+Validation：訓練段內 **依 fyear 逐年**各抽約 20% 作 validation，合併為校準集（見
+`_split_fit_val_by_year`）；Retrain 則對 Old、New 各自逐年切分後再合併 fit/val。
+
+每個切割：Old×4 採樣 + New×4 + Finetune×4；**Retrain 僅在全部切割中的第一次迭代跑一次**
+（全資料 1999–2014 合併訓練，避免重複 14 次），故 raw 列數 = 16 + 13×12 = **172**。
 
 訓練策略（對齊 docs/研究方向.md Baselines + 集成對照）：
   - Old      : 只用歷史 (Old) 資料訓練（集成之 base learner，非 retrain）
   - New      : 只用新營運 (New) 資料訓練（集成之 base learner）
-  - Retrain  : 歷史 + 新營運「全量」合併後訓練（Re-training baseline）
+  - Retrain  : 歷史 + 新營運「全量」合併後訓練（Re-training baseline；實驗中只產生一組）
   - Finetune : 先以 Old 訓練，再以 New 接續訓練同一 booster（xgb_model=）；
-               微調階段僅 New 樣本；閾值於 New 的 validation 上選取
+               微調階段僅 New 樣本；閾值於 **合併之 Old+New validation** 上選取
 
 採樣策略：none / undersampling / oversampling / hybrid
 
@@ -220,7 +226,7 @@ def _scale_pos_weight(y: np.ndarray) -> float:
 def _finetune_eval(X_old, y_old, year_old, X_new, y_new, year_new, X_test_raw, y_test, sampler, strategy, tag, logger):
     """
     Fine-tuning：Scaler 僅在 Old 的 train fold 上 fit；先訓練 Old，再以 xgb_model 接續訓練 New。
-    分類閾值在 New 的 validation 上選（與研究方向「微調階段僅新資料」一致）。
+    分類閾值在 **合併之 Old+New validation** 上選（與 torch_mlp / LR / RF 一致）。
     """
     X_old_fit_raw, y_old_fit, X_old_val_raw, y_old_val = _split_fit_val_by_year(X_old, y_old, year_old)
     X_new_fit_raw, y_new_fit, X_new_val_raw, y_new_val = _split_fit_val_by_year(X_new, y_new, year_new)
@@ -260,7 +266,7 @@ def _finetune_eval(X_old, y_old, year_old, X_new, y_new, year_new, X_test_raw, y
 
 
 def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_test, logger, include_retrain=True):
-    """對一組切割跑全部 16 種組合，回傳 list of row dict。"""
+    """對一組切割跑 Old/New/Finetune（與可選 Retrain）；含 Retrain 時 16 列，否則 12 列。"""
     sampler = ImbalanceSampler()
     rows = []
 
@@ -320,9 +326,9 @@ def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_t
 
 def format_tables(df_raw, logger):
     """
-    依訓練策略分別產出四張表，每個指標共 4 張 × 7 metrics = 28 個 CSV：
+    依訓練策略分別產出四張表，每個指標共 4 張 × len(METRICS) 個 CSV。
 
-    Old / Retrain / Finetune / New 表：列 = 各 split 之年數標籤，欄 = 採樣策略
+    Old / Finetune / New 表：列 = 各 split；Retrain 表為單列（跨唯一 Retrain 列聚合平均）。
     """
     # split label → (old_yr, new_yr)
     split_yr = {label: (old_end - 1998, 2014 - old_end)

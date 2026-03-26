@@ -1,7 +1,7 @@
 @startuml
 !pragma layout smetana
 
-title Phase 1 — Baseline
+title Phase 1 — Baseline（破產 US：年份切割 + 四策略）
 
 left to right direction
 skinparam shadowing false
@@ -20,22 +20,24 @@ skinparam database {
   BorderColor #2E5A88
 }
 
-database "Dataset" as DS
-rectangle "Time\nsplit" as CUT
+database "Dataset\n(US fyear)" as DS
+rectangle "Rolling\nyear split\n× 14 folds" as CUT
 DS --> CUT
 
 database "Old" as OLD
 database "New" as NEW
-database "Test" as TE
+database "Test\n(2015–2018\nfixed)" as TE
 
 CUT --> OLD
 CUT --> NEW
 CUT --> TE
 
+
+
 package "Training setup" as PKG_B #FFFACD {
   rectangle "Train on\nOld" as B1
   rectangle "Train on\nNew" as B2
-  rectangle "Retrain on\nOld + New" as B3
+  rectangle "Retrain on\nOld + New\n(全訓練窗)" as B3
   rectangle "Fine-tune\nOld → New" as B4
 }
 
@@ -50,6 +52,7 @@ NEW --> B3
 OLD --> B4
 NEW --> B4
 
+
 package "Sampling strategy" as PKG_S #FFFACD {
   rectangle "None" as S0
   rectangle "Under" as S1
@@ -61,18 +64,18 @@ S0 -[hidden]right- S1
 S1 -[hidden]right- S2
 S2 -[hidden]right- S3
 
-package "Classifier" as PKG_C #E0E0E0 {
+package "Classifier\n(同流程可替換)" as PKG_C #E0E0E0 {
   rectangle "XGBoost" as XGB
-  rectangle "MLP" as MLP
+  rectangle "LR / RF /\nTorch MLP /\nFT-Transformer" as OTH
 }
 
-XGB -[hidden]right- MLP
+XGB -[hidden]right- OTH
 
 rectangle "Threshold tuning\n(max Val F1)" as THR #FFFACD
 rectangle "Test inference\n(apply threshold)" as INF #F5F5F5
 rectangle "Evaluation\nAUC / F1 / Recall" as OUT #FFFFFF
 
-database "Validation\n(from New)" as VAL
+rectangle "Validation pool\n(per fyear ~20%\nwithin train)" as VAL #E8F4FF
 
 B1 --> PKG_S
 B2 --> PKG_S
@@ -80,13 +83,15 @@ B3 --> PKG_S
 B4 --> PKG_S
 
 PKG_S --> XGB
-PKG_S --> MLP
+PKG_S --> OTH
 
 XGB --> THR
-MLP --> THR
+OTH --> THR
 
-NEW ..> VAL
+OLD ..> VAL : Old-only /\nFinetune
+NEW ..> VAL : New-only /\nFinetune
 VAL --> THR
+
 
 THR --> INF
 TE --> INF

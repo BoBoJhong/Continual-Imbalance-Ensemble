@@ -1,12 +1,10 @@
 """
-Phase 1 XGB Baseline 視覺化
-==========================
-讀取 results/phase1_baseline/xgb/ 內 *year_splits_xgb_raw.csv，
-產出折線圖與（若存在）bk_xgb_compact_summary 熱力圖。
+Phase 1 Random Forest Baseline 視覺化
+====================================
+讀取 results/phase1_baseline/random_forest/*_year_splits_rf_raw.csv。
 
 使用：
-    python scripts/plots/visualize_phase1_xgb_baseline.py
-    python scripts/plots/visualize_phase1_xgb_baseline.py --metrics AUC F1
+    python scripts/plots/visualize_phase1_random_forest_baseline.py
 """
 from __future__ import annotations
 
@@ -38,13 +36,13 @@ def main() -> None:
     ok = run_phase1_baseline_visualization(
         project_root,
         list(args.metrics),
-        result_subdir="xgb",
-        raw_glob="*_year_splits_xgb_raw.csv",
-        raw_suffix="_year_splits_xgb_raw",
-        model_title="XGB Baseline",
+        result_subdir="random_forest",
+        raw_glob="*_year_splits_rf_raw.csv",
+        raw_suffix="_year_splits_rf_raw",
+        model_title="Random Forest Baseline",
         method_order=METHOD_ORDER_XGB,
         method_colors=METHOD_COLORS_XGB,
-        compact_summary_name="bk_xgb_compact_summary.csv",
+        compact_summary_name="bk_rf_compact_summary.csv",
     )
     if not ok:
         sys.exit(1)

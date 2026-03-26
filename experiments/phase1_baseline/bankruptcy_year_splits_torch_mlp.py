@@ -2,21 +2,22 @@
 Phase 1 - Bankruptcy 年份切割基準線實驗（PyTorch MLP 深度學習）
 ================================================================
 與 bankruptcy_year_splits_xgb.py **相同協定**（請與該檔同步維護）：
-  固定 Test = 2015-2018，7 組 Old/New 切割，
-  4 種訓練策略 × 4 種採樣 = 16 組合／切割（7 組 → 112 rows）。
+  固定 Test = 2015-2018；訓練窗 1999–2014；**14 組** Old/New 切割（`YEAR_SPLITS`）。
+  Validation：訓練段內依 **fyear 逐年**各抽約 20% 合併為校準集（與 XGB/LR/RF 一致）。
+  **Retrain 僅在全部迭代中第一次執行**（避免 14 次重複），故跑滿 14 折時 raw = **172** 列。
 
 勿與下列檔案混淆：
   - bankruptcy_year_splits_mlp.py：sklearn MLPClassifier，**三策略** Old / Old+New / New，
     輸出 bankruptcy_year_splits_mlp_raw.csv（84 rows），**不**與 XGB 四策略對齊。
-  - 本檔：PyTorch MLP，**四策略**與 XGB 相同，raw 應為 112 rows，method **不應** 出現「Old+New」。
+  - 本檔：PyTorch MLP，**四策略**與 XGB 相同，method **不應** 出現「Old+New」。
 
 訓練策略（對齊 docs/研究方向.md Baselines + 集成對照）：
   - Old      : 只用歷史 (Old) 資料訓練
   - New      : 只用新營運 (New) 資料訓練
-  - Retrain  : 歷史 + 新營運「全量」合併後訓練
+  - Retrain  : 歷史 + 新營運「全量」合併後訓練（實驗中只產生一組）
   - Finetune : 先以 Old 訓練，再以 continue_fit 於 New 接續訓練同一 MLP；
                微調階段之 BCE pos_weight 與 XGB 第二段相同，以採樣後整段 y_r2 計算；
-               閾值於 New 的 validation 上選取
+               閾值於 **合併之 Old+New validation** 上選取
 
 採樣策略：none / undersampling / oversampling / hybrid
 
@@ -75,18 +76,132 @@ def _select_threshold_from_validation(y_val, y_proba_val):
     return best_t, float(best_f1)
 
 
-def _train_eval(X_train_raw, y_train, X_test_raw, y_test, sampler, strategy, tag, logger):
-    """先切 train/val，再只用 train fold fit scaler，避免 validation leakage。"""
-    y_train_arr = np.asarray(y_train)
-
+def _split_fit_val(X_raw, y_raw, test_size=0.2, random_state=42):
+    y_arr = np.asarray(y_raw)
     try:
         X_fit_raw, X_val_raw, y_fit, y_val = train_test_split(
-            X_train_raw, y_train_arr, test_size=0.2, random_state=42, stratify=y_train_arr
+            X_raw,
+            y_arr,
+            test_size=test_size,
+            random_state=random_state,
+            stratify=y_arr,
         )
     except ValueError:
         X_fit_raw, X_val_raw, y_fit, y_val = train_test_split(
-            X_train_raw, y_train_arr, test_size=0.2, random_state=42
+            X_raw,
+            y_arr,
+            test_size=test_size,
+            random_state=random_state,
         )
+    return X_fit_raw, np.asarray(y_fit), X_val_raw, np.asarray(y_val)
+
+
+def _split_fit_val_by_year(X_raw, y_raw, year_arr, val_ratio=0.2, random_state=42):
+    years = np.asarray(year_arr)
+    if years.size == 0 or len(np.unique(years)) <= 1:
+        return _split_fit_val(X_raw, y_raw, test_size=val_ratio, random_state=random_state)
+
+    fit_idx_all = []
+    val_idx_all = []
+    y_arr = np.asarray(y_raw)
+
+    for yr in sorted(np.unique(years)):
+        idx = np.where(years == yr)[0]
+        n = len(idx)
+        if n <= 1:
+            fit_idx_all.extend(idx.tolist())
+            continue
+
+        n_val = max(1, int(round(n * val_ratio)))
+        n_val = min(n_val, n - 1)
+
+        stratify = None
+        y_sub = y_arr[idx]
+        if len(np.unique(y_sub)) >= 2 and n_val >= len(np.unique(y_sub)):
+            stratify = y_sub
+
+        try:
+            idx_fit, idx_val = train_test_split(
+                idx,
+                test_size=n_val,
+                random_state=random_state + int(yr),
+                stratify=stratify,
+            )
+        except ValueError:
+            idx_fit, idx_val = train_test_split(
+                idx,
+                test_size=n_val,
+                random_state=random_state + int(yr),
+            )
+
+        fit_idx_all.extend(idx_fit.tolist())
+        val_idx_all.extend(idx_val.tolist())
+
+    if len(val_idx_all) == 0:
+        return _split_fit_val(X_raw, y_raw, test_size=val_ratio, random_state=random_state)
+
+    fit_idx = np.array(sorted(fit_idx_all))
+    val_idx = np.array(sorted(val_idx_all))
+    X_fit_raw = X_raw.iloc[fit_idx].reset_index(drop=True)
+    y_fit = y_arr[fit_idx]
+    X_val_raw = X_raw.iloc[val_idx].reset_index(drop=True)
+    y_val = y_arr[val_idx]
+    return X_fit_raw, np.asarray(y_fit), X_val_raw, np.asarray(y_val)
+
+
+def _build_retrain_fit_val(X_old, y_old, year_old, X_new, y_new, year_new):
+    X_old_fit, y_old_fit, X_old_val, y_old_val = _split_fit_val_by_year(X_old, y_old, year_old)
+    X_new_fit, y_new_fit, X_new_val, y_new_val = _split_fit_val_by_year(X_new, y_new, year_new)
+
+    X_fit = pd.concat([X_old_fit, X_new_fit], ignore_index=True)
+    y_fit = np.concatenate([y_old_fit, y_new_fit])
+    X_val = pd.concat([X_old_val, X_new_val], ignore_index=True)
+    y_val = np.concatenate([y_old_val, y_new_val])
+    return X_fit, y_fit, X_val, y_val
+
+
+def _train_eval(
+    X_train_raw,
+    y_train,
+    X_test_raw,
+    y_test,
+    sampler,
+    strategy,
+    tag,
+    logger,
+    X_val_raw=None,
+    y_val=None,
+    year_train=None,
+):
+    """先切 train/val（或沿用外傳 val），再只用 train fold fit scaler，避免 validation leakage。"""
+    y_train_arr = np.asarray(y_train)
+
+    if X_val_raw is None or y_val is None:
+        if year_train is not None:
+            X_fit_raw, y_fit, X_val_raw, y_val = _split_fit_val_by_year(
+                X_train_raw,
+                y_train_arr,
+                year_train,
+            )
+        else:
+            try:
+                X_fit_raw, X_val_raw, y_fit, y_val = train_test_split(
+                    X_train_raw,
+                    y_train_arr,
+                    test_size=0.2,
+                    random_state=42,
+                    stratify=y_train_arr,
+                )
+            except ValueError:
+                X_fit_raw, X_val_raw, y_fit, y_val = train_test_split(
+                    X_train_raw,
+                    y_train_arr,
+                    test_size=0.2,
+                    random_state=42,
+                )
+    else:
+        X_fit_raw = X_train_raw
+        y_fit = y_train_arr
 
     pre = DataPreprocessor()
     X_fit, X_val = pre.scale_features(X_fit_raw, X_val_raw, fit=True)
@@ -119,32 +234,14 @@ def _scale_pos_weight(y: np.ndarray) -> float:
     return float(neg_count / max(pos_count, 1))
 
 
-def _finetune_eval(X_old, y_old, X_new, y_new, X_test_raw, y_test, sampler, strategy, tag, logger):
+def _finetune_eval(X_old, y_old, year_old, X_new, y_new, year_new, X_test_raw, y_test, sampler, strategy, tag, logger):
     """
     Fine-tuning：Scaler 僅在 Old 的 train fold 上 fit；先訓練 Old，再以 continue_fit 接續訓練 New。
     第二段 pos_weight 以採樣後整段 y_r2 計算（對齊 XGB 之 scale_pos_weight(y_r2)）。
-    閾值在 New 的 validation 上選。
+    閾值在合併之 Old+New validation 上選（與 bankruptcy_year_splits_xgb 一致）。
     """
-    y_old_arr = np.asarray(y_old)
-    y_new_arr = np.asarray(y_new)
-
-    try:
-        X_old_fit_raw, X_old_val_raw, y_old_fit, y_old_val = train_test_split(
-            X_old, y_old_arr, test_size=0.2, random_state=42, stratify=y_old_arr
-        )
-    except ValueError:
-        X_old_fit_raw, X_old_val_raw, y_old_fit, y_old_val = train_test_split(
-            X_old, y_old_arr, test_size=0.2, random_state=42
-        )
-
-    try:
-        X_new_fit_raw, X_new_val_raw, y_new_fit, y_new_val = train_test_split(
-            X_new, y_new_arr, test_size=0.2, random_state=42, stratify=y_new_arr
-        )
-    except ValueError:
-        X_new_fit_raw, X_new_val_raw, y_new_fit, y_new_val = train_test_split(
-            X_new, y_new_arr, test_size=0.2, random_state=42
-        )
+    X_old_fit_raw, y_old_fit, X_old_val_raw, y_old_val = _split_fit_val_by_year(X_old, y_old, year_old)
+    X_new_fit_raw, y_new_fit, X_new_val_raw, y_new_val = _split_fit_val_by_year(X_new, y_new, year_new)
 
     pre = DataPreprocessor()
     X_old_fit, X_old_val = pre.scale_features(X_old_fit_raw, X_old_val_raw, fit=True)
@@ -164,8 +261,10 @@ def _finetune_eval(X_old, y_old, X_new, y_new, X_test_raw, y_test, sampler, stra
         pos_weight_override=_scale_pos_weight(y_r2),
     )
 
-    y_proba_val = model.predict_proba(X_new_val)
-    threshold, val_f1 = _select_threshold_from_validation(np.asarray(y_new_val), y_proba_val)
+    X_val_all = np.concatenate([np.asarray(X_old_val), np.asarray(X_new_val)], axis=0)
+    y_val_all = np.concatenate([np.asarray(y_old_val), np.asarray(y_new_val)], axis=0)
+    y_proba_val = model.predict_proba(X_val_all)
+    threshold, val_f1 = _select_threshold_from_validation(y_val_all, y_proba_val)
 
     y_t = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
     metrics = compute_metrics(y_t, model.predict_proba(X_test), threshold=threshold)
@@ -176,34 +275,52 @@ def _finetune_eval(X_old, y_old, X_new, y_new, X_test_raw, y_test, sampler, stra
     return metrics
 
 
-def run_split(label, X_old, y_old, X_new, y_new, X_test, y_test, logger):
-    """對一組切割跑全部 16 種組合，回傳 list of row dict。"""
+def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_test, logger, include_retrain=True):
+    """對一組切割跑 Old/New/Finetune（與可選的 Retrain），回傳 list of row dict。"""
     sampler = ImbalanceSampler()
     rows = []
 
-    # Old
     for strat in SAMPLING_STRATEGIES:
-        m = _train_eval(X_old, y_old, X_test, y_test, sampler, strat, "Old", logger)
+        m = _train_eval(X_old, y_old, X_test, y_test, sampler, strat, "Old", logger, year_train=year_old)
         rows.append({"split": label, "method": "Old", "sampling": strat, **m})
 
-    # New
     for strat in SAMPLING_STRATEGIES:
-        m = _train_eval(X_new, y_new, X_test, y_test, sampler, strat, "New", logger)
+        m = _train_eval(X_new, y_new, X_test, y_test, sampler, strat, "New", logger, year_train=year_new)
         rows.append({"split": label, "method": "New", "sampling": strat, **m})
 
-    # Retrain：歷史 + 新營運全量合併（研究方向之 Re-training）
-    X_re = pd.concat([X_old, X_new], ignore_index=True)
-    y_re = pd.concat(
-        [y_old.reset_index(drop=True), y_new.reset_index(drop=True)], ignore_index=True
-    )
-    logger.info(f"  Retrain: concat Old+New full n={len(X_re)}")
-    for strat in SAMPLING_STRATEGIES:
-        m = _train_eval(X_re, y_re, X_test, y_test, sampler, strat, "Retrain", logger)
-        rows.append({"split": label, "method": "Retrain", "sampling": strat, **m})
+    if include_retrain:
+        X_fit_re, y_fit_re, X_val_re, y_val_re = _build_retrain_fit_val(X_old, y_old, year_old, X_new, y_new, year_new)
+        logger.info(f"  Retrain: fit={len(X_fit_re)} val={len(X_val_re)}")
+        for strat in SAMPLING_STRATEGIES:
+            m = _train_eval(
+                X_fit_re,
+                y_fit_re,
+                X_test,
+                y_test,
+                sampler,
+                strat,
+                "Retrain",
+                logger,
+                X_val_raw=X_val_re,
+                y_val=y_val_re,
+            )
+            rows.append({"split": label, "method": "Retrain", "sampling": strat, **m})
 
-    # Finetune
     for strat in SAMPLING_STRATEGIES:
-        m = _finetune_eval(X_old, y_old, X_new, y_new, X_test, y_test, sampler, strat, "Finetune", logger)
+        m = _finetune_eval(
+            X_old,
+            y_old,
+            year_old,
+            X_new,
+            y_new,
+            year_new,
+            X_test,
+            y_test,
+            sampler,
+            strat,
+            "Finetune",
+            logger,
+        )
         rows.append({"split": label, "method": "Finetune", "sampling": strat, **m})
 
     return rows
@@ -211,8 +328,8 @@ def run_split(label, X_old, y_old, X_new, y_new, X_test, y_test, logger):
 
 def format_tables(df_raw, logger, split_labels_filter=None):
     """
-    依訓練策略分別產出四張表，每個指標共 4 張 × 7 metrics = 28 個 CSV：
-    Old / Retrain / Finetune / New 表：列 = 各 split 之年數標籤，欄 = 採樣策略。
+    依訓練策略分別產出四張表，每個指標共 4 張 × len(METRICS) 個 CSV。
+    Old / Finetune / New：列 = 各 split；Retrain 為單列（與 XGB 之 bk_xgb_table_*_retrain 一致）。
     split_labels_filter：若指定（例如 --splits 子集），僅輸出該些列；預設全部 YEAR_SPLITS。
     """
     split_yr = {label: (old_end - 1998, 2014 - old_end) for label, old_end in YEAR_SPLITS}
@@ -241,13 +358,12 @@ def format_tables(df_raw, logger, split_labels_filter=None):
 
         df_rt = df_raw[df_raw["method"] == "Retrain"]
         pivot_rt = (
-            df_rt.pivot(index="split", columns="col", values=metric)
-            .reindex(index=split_labels, columns=sampling_cols)
+            df_rt.pivot_table(index="method", columns="col", values=metric, aggfunc="mean")
+            .reindex(columns=sampling_cols)
         )
-        pivot_rt.index = [f"{split_yr[s][0]}+{split_yr[s][1]}" for s in pivot_rt.index]
+        pivot_rt.index = ["full_16yr"]
         pivot_rt["avg"] = pivot_rt.mean(axis=1)
-        pivot_rt.loc["avg"] = pivot_rt.mean()
-        pivot_rt.index.name = "old+new_years_retrain_full"
+        pivot_rt.index.name = "retrain_scope"
         out = OUTPUT_DIR / f"bk_torch_mlp_table_{metric}_retrain.csv"
         pivot_rt.to_csv(out, float_format="%.4f")
         logger.info(f"  Saved -> {out.name}")
@@ -346,6 +462,7 @@ def main():
             return
 
     all_rows = []
+    retrain_done = False
 
     for label, old_end_year in split_iter:
         logger.info(f"\n{'='*60}")
@@ -354,11 +471,26 @@ def main():
         )
         logger.info("=" * 60)
         try:
-            X_old, y_old, X_new, y_new, X_test, y_test = get_bankruptcy_year_split(
-                logger, old_end_year=old_end_year
+            X_old, y_old, X_new, y_new, X_test, y_test, year_old, year_new, _year_test = (
+                get_bankruptcy_year_split(
+                    logger, old_end_year=old_end_year, return_years=True
+                )
             )
-            rows = run_split(label, X_old, y_old, X_new, y_new, X_test, y_test, logger)
+            rows = run_split(
+                label,
+                X_old,
+                y_old,
+                year_old,
+                X_new,
+                y_new,
+                year_new,
+                X_test,
+                y_test,
+                logger,
+                include_retrain=(not retrain_done),
+            )
             all_rows.extend(rows)
+            retrain_done = True
         except Exception as e:
             logger.error(f"[ERROR] {label}: {e}")
             logger.error(traceback.format_exc())
@@ -375,12 +507,14 @@ def main():
     expected_methods = {"Old", "New", "Retrain", "Finetune"}
     got_methods = set(df_raw["method"].unique())
     n_splits_ran = len({r["split"] for r in all_rows})
-    expect_rows = n_splits_ran * 16
+    # 第一次迭代含 Retrain（+4 列），其餘各 12 列（Old/New/Finetune ×4）
+    expect_rows = 16 + 12 * (n_splits_ran - 1) if n_splits_ran > 0 else 0
     if len(df_raw) != expect_rows or got_methods != expected_methods:
         logger.warning(
-            "輸出與 XGB 四策略協定不一致：rows=%s（預期每個已跑分割 ×16=%s）、method=%s（預期 %s）。"
-            "若曾見 Old+New 或 84 rows，代表舊版或誤跑 bankruptcy_year_splits_mlp.py；請全部分割重跑本腳本。",
+            "輸出與 XGB 四策略協定不一致：rows=%s（預期 n_splits=%s → %s 列）、method=%s（預期 %s）。"
+            "若曾見 Old+New 或 84/112 rows，代表舊版或誤跑 bankruptcy_year_splits_mlp.py；請重跑本腳本。",
             len(df_raw),
+            n_splits_ran,
             expect_rows,
             sorted(got_methods),
             sorted(expected_methods),

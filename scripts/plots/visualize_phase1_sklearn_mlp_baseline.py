@@ -1,12 +1,11 @@
 """
-Phase 1 XGB Baseline 視覺化
-==========================
-讀取 results/phase1_baseline/xgb/ 內 *year_splits_xgb_raw.csv，
-產出折線圖與（若存在）bk_xgb_compact_summary 熱力圖。
+Phase 1 sklearn MLP Baseline 視覺化（非 Torch 版）
+================================================
+讀取 results/phase1_baseline/mlp/*_year_splits_mlp_raw.csv
+（含 bankruptcy / medical / stock；三策略：Old / Old+New / New）。
 
 使用：
-    python scripts/plots/visualize_phase1_xgb_baseline.py
-    python scripts/plots/visualize_phase1_xgb_baseline.py --metrics AUC F1
+    python scripts/plots/visualize_phase1_sklearn_mlp_baseline.py
 """
 from __future__ import annotations
 
@@ -19,8 +18,8 @@ project_root = _scripts_dir.parent.parent
 sys.path.insert(0, str(_scripts_dir))
 
 from phase1_baseline_plotting import (
-    METHOD_COLORS_XGB,
-    METHOD_ORDER_XGB,
+    METHOD_COLORS_LEGACY_THREE,
+    METHOD_ORDER_LEGACY_THREE,
     run_phase1_baseline_visualization,
 )
 
@@ -38,13 +37,13 @@ def main() -> None:
     ok = run_phase1_baseline_visualization(
         project_root,
         list(args.metrics),
-        result_subdir="xgb",
-        raw_glob="*_year_splits_xgb_raw.csv",
-        raw_suffix="_year_splits_xgb_raw",
-        model_title="XGB Baseline",
-        method_order=METHOD_ORDER_XGB,
-        method_colors=METHOD_COLORS_XGB,
-        compact_summary_name="bk_xgb_compact_summary.csv",
+        result_subdir="mlp",
+        raw_glob="*_year_splits_mlp_raw.csv",
+        raw_suffix="_year_splits_mlp_raw",
+        model_title="sklearn MLP Baseline",
+        method_order=METHOD_ORDER_LEGACY_THREE,
+        method_colors=METHOD_COLORS_LEGACY_THREE,
+        compact_summary_name=None,
     )
     if not ok:
         sys.exit(1)

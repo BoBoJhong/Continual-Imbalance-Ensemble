@@ -10,6 +10,9 @@ Phase 1 - Bankruptcy 年份切割基準線實驗（FT-Transformer）
 採樣策略：none / undersampling / oversampling / hybrid
 
 安裝依賴：pip install rtdl torch
+（Python 3.14 + numpy 2.x 若與 rtdl 的 numpy<2 衝突，可：python -m pip install "rtdl==0.0.13" --no-deps --user）
+
+執行時日誌固定寫入 logs/BK_FTTransformer_run.log（每次覆寫），handler 會即時 flush，勿再將 stdout 重導向同一檔以免重複。
 
 最終輸出：
     - results/phase1_baseline/fttransformer/bankruptcy_year_splits_fttransformer_raw.csv
@@ -356,7 +359,13 @@ def export_compact_report(df_raw: pd.DataFrame, logger) -> None:
 
 
 def main():
-    logger = get_logger("BK_YearSplits_FTTransformer", console=True, file=True)
+    logger = get_logger(
+        "BK_YearSplits_FTTransformer",
+        console=True,
+        file=True,
+        log_filename="BK_FTTransformer_run.log",
+        log_file_mode="w",
+    )
     set_seed(42)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     all_rows = []
@@ -405,4 +414,11 @@ def main():
 
 
 if __name__ == "__main__":
+    # 重導向 stdout 到檔案時，避免 block buffering 導致 log 長時間不更新
+    for _stream in (sys.stdout, sys.stderr):
+        if _stream is not None and hasattr(_stream, "reconfigure"):
+            try:
+                _stream.reconfigure(line_buffering=True)
+            except Exception:
+                pass
     main()

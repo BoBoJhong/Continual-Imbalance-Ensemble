@@ -17,6 +17,9 @@ import seaborn as sns
 SPLIT_RE = re.compile(r"^split_(\d+)\+(\d+)$")
 SAMPLING_ORDER = ["none", "undersampling", "oversampling", "hybrid"]
 
+# 僅在某一個 split 有數值時（例如 Retrain 全資料只訓練一次），改畫橫跨橫軸的參考線，避免單點折線。
+DEFAULT_GLOBAL_REFERENCE_METHODS = frozenset({"Retrain"})
+
 METHOD_ORDER_XGB = ["Old", "New", "Retrain", "Finetune"]
 METHOD_COLORS_XGB = {
     "Old": "#5B8DB8",
@@ -34,6 +37,14 @@ METHOD_COLORS_MLP = {
     "Finetune": "#9B6DBF",
     # 舊版 sklearn MLP 腳本或過期 raw 若仍含「Old+New」：
     "Old+New": "#3D9970",
+}
+
+# TabNet / sklearn MLP（medical、stock、舊版 bankruptcy MLP）三策略
+METHOD_ORDER_LEGACY_THREE = ["Old", "Old+New", "New"]
+METHOD_COLORS_LEGACY_THREE = {
+    "Old": "#5B8DB8",
+    "Old+New": "#3D9970",
+    "New": "#E07B54",
 }
 
 
@@ -60,6 +71,14 @@ def parse_new_years(split_id: str) -> int | None:
     return int(m.group(2))
 
 
+def split_tick_label(split_id: str) -> str:
+    """橫軸刻度：舊視窗年數 + 新視窗年數（與 split_2+14 對齊）。"""
+    m = SPLIT_RE.match(str(split_id).strip())
+    if m:
+        return f"{m.group(1)}+{m.group(2)}"
+    return str(split_id)
+
+
 def dataset_label_from_raw_stem(stem: str, raw_suffix: str) -> str:
     if stem.startswith("bankruptcy"):
         return "Bankruptcy"
@@ -79,7 +98,11 @@ def plot_year_split_lines(
     model_title: str,
     method_order: list[str],
     method_colors: dict[str, str],
+    global_reference_methods: frozenset[str] | None = None,
 ) -> None:
+    if global_reference_methods is None:
+        global_reference_methods = DEFAULT_GLOBAL_REFERENCE_METHODS
+
     df = df.copy()
     df["_ny"] = df["split"].map(parse_new_years)
     df = df.dropna(subset=["_ny"])
@@ -90,17 +113,17 @@ def plot_year_split_lines(
     split_to_x = {}
     for i, s in enumerate(splits_sorted):
         split_to_x[s] = i
-        ny = parse_new_years(s)
-        x_labels.append(f"{ny}" if ny is not None else str(s))
+        x_labels.append(split_tick_label(s))
 
     n_met = len(metrics)
     n_samp = len(SAMPLING_ORDER)
+    # sharex=True 會讓整張圖共用單一 x 軸，多欄時通常只顯示一欄的刻度 → 橫軸年份看不到。
     fig, axes = plt.subplots(
         n_samp,
         n_met,
         figsize=(3.6 * n_met + 1, 2.8 * n_samp + 0.5),
         squeeze=False,
-        sharex=True,
+        sharex="col",
     )
 
     for si, sampling in enumerate(SAMPLING_ORDER):
@@ -110,6 +133,8 @@ def plot_year_split_lines(
             if metric not in sub_s.columns:
                 ax.set_visible(False)
                 continue
+            # 全寬參考線須最後繪製，否則會被後續 Finetune 等折線蓋住（RF/XGB 常發生）。
+            deferred_global_ref: list[tuple[str, np.ndarray, np.ndarray, str]] = []
             for method in method_order:
                 msub = sub_s[sub_s["method"] == method].drop_duplicates(subset=["split"])
                 if msub.empty:
@@ -125,19 +150,51 @@ def plot_year_split_lines(
                 order = np.argsort(xs)
                 xs = np.array(xs)[order]
                 ys = np.array(ys)[order]
+                color = method_colors.get(method, "#333333")
+                # Retrain 等「全量只 fit 一次」：raw 常只帶一個 split，單點連線語意不清 → 畫全寬水平參考線
+                if (
+                    method in global_reference_methods
+                    and len(xs) == 1
+                    and len(x_pos) > 1
+                ):
+                    deferred_global_ref.append((method, xs, ys, color))
+                    continue
                 ax.plot(
                     xs,
                     ys,
                     "o-",
-                    color=method_colors.get(method, "#333333"),
+                    color=color,
                     linewidth=1.6,
                     markersize=4,
                     label=method,
+                    zorder=2,
+                )
+            for method, xs, ys, color in deferred_global_ref:
+                y0 = float(ys[0])
+                ax.plot(
+                    [x_pos[0], x_pos[-1]],
+                    [y0, y0],
+                    linestyle="--",
+                    color=color,
+                    linewidth=2.0,
+                    label=method,
+                    zorder=5,
+                )
+                ax.plot(
+                    float(xs[0]),
+                    y0,
+                    "o",
+                    color=color,
+                    markersize=5,
+                    markeredgecolor="white",
+                    markeredgewidth=0.6,
+                    zorder=6,
+                    label="_nolegend_",
                 )
             ax.set_xticks(x_pos)
             if si == n_samp - 1:
                 ax.set_xticklabels(x_labels, rotation=0)
-                ax.set_xlabel("New-window span (years)")
+                ax.set_xlabel("Window split (old years + new years)")
             else:
                 ax.set_xticklabels([])
             ax.set_ylabel(metric)
@@ -200,3 +257,71 @@ def plot_compact_heatmaps(
     fig.savefig(out, bbox_inches="tight")
     plt.close(fig)
     print(f"  [SAVED] {out.relative_to(project_root)}")
+
+
+def run_phase1_baseline_visualization(
+    project_root: Path,
+    metrics: list[str],
+    *,
+    result_subdir: str,
+    raw_glob: str,
+    raw_suffix: str,
+    model_title: str,
+    method_order: list[str],
+    method_colors: dict[str, str],
+    compact_summary_name: str | None = None,
+) -> bool:
+    """
+    讀取 results/phase1_baseline/<result_subdir>/ 下 raw CSV，輸出折線圖至 plots/；
+    若存在 compact_summary_name 則另產熱力圖。
+    成功處理至少一個 raw 檔時回傳 True；找不到 raw 時回傳 False。
+    """
+    base_dir = project_root / "results" / "phase1_baseline" / result_subdir
+    plots_dir = base_dir / "plots"
+    raw_files = sorted(base_dir.glob(raw_glob)) if base_dir.is_dir() else []
+
+    if not raw_files:
+        print(f"找不到 raw CSV：{base_dir}（glob: {raw_glob}）")
+        return False
+
+    print(f"Phase 1 {model_title} 圖表輸出…")
+    for path in raw_files:
+        df = pd.read_csv(path)
+        need = {"split", "method", "sampling", *metrics}
+        missing = need - set(df.columns)
+        if missing:
+            print(f"  [SKIP] {path.name} 缺少欄位: {missing}")
+            continue
+        label = dataset_label_from_raw_stem(path.stem, raw_suffix)
+        out = plots_dir / f"{path.stem.replace(raw_suffix, '')}_year_splits_{'_'.join(metrics)}.png"
+        plot_year_split_lines(
+            df,
+            label,
+            metrics,
+            out,
+            model_title=model_title,
+            method_order=method_order,
+            method_colors=method_colors,
+        )
+        print(f"  [SAVED] {out.relative_to(project_root)}")
+
+    if compact_summary_name:
+        summary = base_dir / compact_summary_name
+        if summary.exists():
+            print("\nCompact summary 熱力圖…")
+            stem = summary.stem
+            hprefix = (
+                stem[: -len("_compact_summary")]
+                if stem.endswith("_compact_summary")
+                else stem
+            )
+            plot_compact_heatmaps(
+                summary,
+                plots_dir / hprefix,
+                model_title=model_title,
+                method_order=method_order,
+                project_root=project_root,
+            )
+
+    print(f"\n完成。圖表目錄: {plots_dir.relative_to(project_root)}")
+    return True
