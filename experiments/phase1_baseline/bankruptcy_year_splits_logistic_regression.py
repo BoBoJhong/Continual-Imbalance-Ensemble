@@ -1,8 +1,8 @@
 """
 Phase 1 - Bankruptcy 年份切割基準線實驗（LogisticRegression）
 ===============================================================
-固定 Test = 2015-2018；訓練窗 1999–2014。依 `YEAR_SPLITS` 共 **14 組** Old/New 切割；validation 為
-**逐年**各抽約 20% 後合併。Retrain 僅第一次迭代跑一次，跑滿全部分割時 raw **172** 列（與 XGB 一致）。
+固定 Test = 2015-2018；訓練窗 1999–2014。依 `YEAR_SPLITS` 共 **15 組** Old/New 切割；validation 為
+**逐年**各抽約 20% 後合併。Retrain 僅第一次迭代跑一次，跑滿全部分割時 raw **184** 列（與 XGB 一致）。
 
 訓練策略（對齊 XGB 規格）：
   - Old

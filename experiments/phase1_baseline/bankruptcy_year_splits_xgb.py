@@ -2,13 +2,13 @@
 Phase 1 - Bankruptcy 年份切割基準線實驗（XGBoost）
 =======================================================
 固定 Test = 2015-2018；訓練窗 1999–2014（16 年）。依 `common_bankruptcy.YEAR_SPLITS` 逐年滑動
-`old_end`（至少 2 年 New），共 **14 組** Old/New 切割（`split_1+15` … `split_14+2`）。
+`old_end`，共 **15 組** Old/New 切割（`split_1+15` … `split_15+1`，最末折 New 為 1 年）。
 
 Validation：訓練段內 **依 fyear 逐年**各抽約 20% 作 validation，合併為校準集（見
 `_split_fit_val_by_year`）；Retrain 則對 Old、New 各自逐年切分後再合併 fit/val。
 
 每個切割：Old×4 採樣 + New×4 + Finetune×4；**Retrain 僅在全部切割中的第一次迭代跑一次**
-（全資料 1999–2014 合併訓練，避免重複 14 次），故 raw 列數 = 16 + 13×12 = **172**。
+（全資料 1999–2014 合併訓練），故跑滿 15 折時 raw 列數 = 16 + 14×12 = **184**。
 
 訓練策略（對齊 docs/研究方向.md Baselines + 集成對照）：
   - Old      : 只用歷史 (Old) 資料訓練（集成之 base learner，非 retrain）

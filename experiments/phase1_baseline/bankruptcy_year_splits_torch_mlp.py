@@ -2,9 +2,9 @@
 Phase 1 - Bankruptcy 年份切割基準線實驗（PyTorch MLP 深度學習）
 ================================================================
 與 bankruptcy_year_splits_xgb.py **相同協定**（請與該檔同步維護）：
-  固定 Test = 2015-2018；訓練窗 1999–2014；**14 組** Old/New 切割（`YEAR_SPLITS`）。
+  固定 Test = 2015-2018；訓練窗 1999–2014；**15 組** Old/New 切割（`YEAR_SPLITS`）。
   Validation：訓練段內依 **fyear 逐年**各抽約 20% 合併為校準集（與 XGB/LR/RF 一致）。
-  **Retrain 僅在全部迭代中第一次執行**（避免 14 次重複），故跑滿 14 折時 raw = **172** 列。
+  **Retrain 僅在全部迭代中第一次執行**，故跑滿 15 折時 raw = **184** 列。
 
 勿與下列檔案混淆：
   - bankruptcy_year_splits_mlp.py：sklearn MLPClassifier，**三策略** Old / Old+New / New，

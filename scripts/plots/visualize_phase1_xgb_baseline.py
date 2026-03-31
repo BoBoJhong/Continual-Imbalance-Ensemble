@@ -3,10 +3,12 @@ Phase 1 XGB Baseline 視覺化
 ==========================
 讀取 results/phase1_baseline/xgb/ 內 *year_splits_xgb_raw.csv，
 產出折線圖與（若存在）bk_xgb_compact_summary 熱力圖。
+預設 **不** 繪製 Finetune；若要一併畫出请加 --include-finetune。
 
 使用：
     python scripts/plots/visualize_phase1_xgb_baseline.py
     python scripts/plots/visualize_phase1_xgb_baseline.py --metrics AUC F1
+    python scripts/plots/visualize_phase1_xgb_baseline.py --include-finetune
 """
 from __future__ import annotations
 
@@ -20,6 +22,7 @@ sys.path.insert(0, str(_scripts_dir))
 
 from phase1_baseline_plotting import (
     METHOD_COLORS_XGB,
+    METHOD_ORDER_NO_FINETUNE,
     METHOD_ORDER_XGB,
     run_phase1_baseline_visualization,
 )
@@ -33,7 +36,14 @@ def main() -> None:
         default=["AUC", "F1"],
         help="要畫折線圖的指標（須為 raw CSV 欄位）",
     )
+    ap.add_argument(
+        "--include-finetune",
+        action="store_true",
+        help="折線圖與 compact 熱力圖一併包含 Finetune（預設排除）",
+    )
     args = ap.parse_args()
+
+    method_order = METHOD_ORDER_XGB if args.include_finetune else METHOD_ORDER_NO_FINETUNE
 
     ok = run_phase1_baseline_visualization(
         project_root,
@@ -42,7 +52,7 @@ def main() -> None:
         raw_glob="*_year_splits_xgb_raw.csv",
         raw_suffix="_year_splits_xgb_raw",
         model_title="XGB Baseline",
-        method_order=METHOD_ORDER_XGB,
+        method_order=method_order,
         method_colors=METHOD_COLORS_XGB,
         compact_summary_name="bk_xgb_compact_summary.csv",
     )

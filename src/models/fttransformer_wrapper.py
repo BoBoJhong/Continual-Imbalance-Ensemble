@@ -50,6 +50,7 @@ class FTTransformerWrapper:
         lr: float = 1e-4,
         weight_decay: float = 1e-5,
         seed: int = 42,
+        device: str = "auto",
     ):
         try:
             import torch  # noqa: F401
@@ -73,6 +74,7 @@ class FTTransformerWrapper:
         self.lr = lr
         self.weight_decay = weight_decay
         self.seed = seed
+        self.device = device
         self._model = None
         self._n_features = None
 
@@ -124,7 +126,21 @@ class FTTransformerWrapper:
             self._n_features = n_features
             model = self._build_model(self._n_features)
 
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device_name = str(self.device).lower()
+        if device_name == "auto":
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        elif device_name == "cuda":
+            if not torch.cuda.is_available():
+                raise RuntimeError(
+                    "FTTransformerWrapper 設定 device='cuda'，但目前偵測不到 CUDA。"
+                    "請確認已安裝 CUDA 版 PyTorch，且 NVIDIA 驅動可正常使用。"
+                )
+            device = torch.device("cuda")
+        elif device_name == "cpu":
+            device = torch.device("cpu")
+        else:
+            raise ValueError(f"Unsupported device: {self.device}. Use 'auto', 'cuda', or 'cpu'.")
+
         model = model.to(device)
         optimizer = torch.optim.AdamW(model.parameters(), lr=self.lr, weight_decay=self.weight_decay)
         criterion = nn.BCEWithLogitsLoss()

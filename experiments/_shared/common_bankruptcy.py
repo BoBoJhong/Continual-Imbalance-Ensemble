@@ -157,13 +157,13 @@ TRAIN_END_YEAR = 2014
 
 def _build_year_splits(train_start: int, train_end: int):
     total_years = train_end - train_start + 1
-    # 逐年移動分界，至少保留 2 年 New（共 14 折，適用 16 年訓練窗）
+    # 逐年移動 Old/New 分界：Old 至少 1 年、New 至少 1 年 → old_years ∈ [1, total_years-1]（16 年窗 → 15 折，含 split_15+1）
     return [
         (
             f"split_{old_years}+{total_years - old_years}",
             train_start + old_years - 1,
         )
-        for old_years in range(1, total_years - 1)
+        for old_years in range(1, total_years)
     ]
 
 

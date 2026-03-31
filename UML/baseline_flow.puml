@@ -1,7 +1,7 @@
 @startuml
 !pragma layout smetana
 
-title Phase 1 — Baseline（破產 US：年份切割 + 四策略）
+title Phase 1 — Baseline
 
 left to right direction
 skinparam shadowing false
@@ -21,7 +21,7 @@ skinparam database {
 }
 
 database "Dataset\n(US fyear)" as DS
-rectangle "Rolling\nyear split\n× 14 folds" as CUT
+rectangle "Rolling\nyear split\n× 14 folds\n(New>=2yr；no 1yr)" as CUT
 DS --> CUT
 
 database "Old" as OLD
@@ -37,20 +37,16 @@ CUT --> TE
 package "Training setup" as PKG_B #FFFACD {
   rectangle "Train on\nOld" as B1
   rectangle "Train on\nNew" as B2
-  rectangle "Retrain on\nOld + New\n(全訓練窗)" as B3
-  rectangle "Fine-tune\nOld → New" as B4
+  rectangle "Retrain on\nAll" as B3
 }
 
 B1 -[hidden]right- B2
 B2 -[hidden]right- B3
-B3 -[hidden]right- B4
 
 OLD --> B1
 NEW --> B2
 OLD --> B3
 NEW --> B3
-OLD --> B4
-NEW --> B4
 
 
 package "Sampling strategy" as PKG_S #FFFACD {
@@ -64,32 +60,36 @@ S0 -[hidden]right- S1
 S1 -[hidden]right- S2
 S2 -[hidden]right- S3
 
-package "Classifier\n(同流程可替換)" as PKG_C #E0E0E0 {
-  rectangle "XGBoost" as XGB
-  rectangle "LR / RF /\nTorch MLP /\nFT-Transformer" as OTH
+package "Classifier" as PKG_C #E0E0E0 {
+  rectangle "XGBoost" as CLF_XGB
+  rectangle "Logistic Regression" as CLF_LR
+  rectangle "Random Forest" as CLF_RF
+  rectangle "Torch MLP" as CLF_TMLP
+  rectangle "FT-Transformer" as CLF_FT
 }
 
-XGB -[hidden]right- OTH
+CLF_XGB -[hidden]right- CLF_LR
+CLF_LR -[hidden]right- CLF_RF
+CLF_RF -[hidden]right- CLF_TMLP
+CLF_TMLP -[hidden]right- CLF_FT
 
-rectangle "Threshold tuning\n(max Val F1)" as THR #FFFACD
+rectangle "Threshold tuning\n(Val F1)" as THR #FFFACD
 rectangle "Test inference\n(apply threshold)" as INF #F5F5F5
 rectangle "Evaluation\nAUC / F1 / Recall" as OUT #FFFFFF
 
-rectangle "Validation pool\n(per fyear ~20%\nwithin train)" as VAL #E8F4FF
+database "Val pool" as VAL
 
 B1 --> PKG_S
 B2 --> PKG_S
 B3 --> PKG_S
-B4 --> PKG_S
 
-PKG_S --> XGB
-PKG_S --> OTH
+PKG_S --> PKG_C
 
-XGB --> THR
-OTH --> THR
+PKG_C --> THR
 
-OLD ..> VAL : Old-only /\nFinetune
-NEW ..> VAL : New-only /\nFinetune
+B1 ..> VAL : Old
+B2 ..> VAL : New
+B3 ..> VAL : All
 VAL --> THR
 
 

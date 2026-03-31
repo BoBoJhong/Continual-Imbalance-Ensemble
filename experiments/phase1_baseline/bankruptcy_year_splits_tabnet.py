@@ -5,7 +5,7 @@ Phase 1 - Bankruptcy 年份切割基準線實驗（TabNet）
       Sequential Attention，n_d=n_a=32，n_steps=5
 不平衡處理：同 MLP/XGB 版，由 ImbalanceSampler 採樣後餵入模型
 
-固定 Test = 2015-2018，7 組切割 × 3 策略 × 4 採樣 = 84 rows
+固定 Test = 2015-2018；**15 組** YEAR_SPLITS × 3 策略 × 4 採樣 = 180 rows
 
 安裝依賴：pip install pytorch-tabnet
 

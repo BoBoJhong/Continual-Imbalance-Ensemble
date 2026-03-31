@@ -1,26 +1,46 @@
 """
-Phase 1 baseline（XGB / Torch MLP）共用繪圖：年份切割折線圖 + compact 熱力圖。
+Phase 1 baseline 共用繪圖：年份切割折線圖 + compact 熱力圖。
+各 visualize_phase1_* 腳本可傳入 METHOD_ORDER_NO_FINETUNE 以排除 Finetune。
+
+折線圖橫軸預設為 Split index（1…n）；若要顯示 old+new 年數刻度，請設定環境變數
+PHASE1_PLOT_SPLIT_AXIS=window 後再執行 visualize 腳本。
 """
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 
-import matplotlib
+try:
+    import matplotlib
 
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+except ImportError as e:
+    raise ImportError(
+        "Phase 1 baseline plots need matplotlib and seaborn. "
+        "Run: pip install matplotlib seaborn "
+        "(full requirements.txt includes them; requirements-core.txt does not.)"
+    ) from e
+
 import numpy as np
 import pandas as pd
-import seaborn as sns
 
 SPLIT_RE = re.compile(r"^split_(\d+)\+(\d+)$")
 SAMPLING_ORDER = ["none", "undersampling", "oversampling", "hybrid"]
+
+# 年份折線圖橫軸：預設 "index"（僅 1…n，較不擁擠）；「window」顯示 old+new 訓練年數（如 2+14）。
+# 覆寫：環境變數 PHASE1_PLOT_SPLIT_AXIS=window
+_SPLIT_AXIS_ENV = os.environ.get("PHASE1_PLOT_SPLIT_AXIS", "index").strip().lower()
+SPLIT_X_AXIS_STYLE = _SPLIT_AXIS_ENV if _SPLIT_AXIS_ENV in ("index", "window") else "index"
 
 # 僅在某一個 split 有數值時（例如 Retrain 全資料只訓練一次），改畫橫跨橫軸的參考線，避免單點折線。
 DEFAULT_GLOBAL_REFERENCE_METHODS = frozenset({"Retrain"})
 
 METHOD_ORDER_XGB = ["Old", "New", "Retrain", "Finetune"]
+# 與 XGB 同色；用於僅畫 Old / New / Retrain（不含 Finetune）時。
+METHOD_ORDER_NO_FINETUNE = ["Old", "New", "Retrain"]
 METHOD_COLORS_XGB = {
     "Old": "#5B8DB8",
     "New": "#E07B54",
@@ -108,20 +128,35 @@ def plot_year_split_lines(
     df = df.dropna(subset=["_ny"])
     splits_sorted = df.sort_values("_ny", ascending=False)["split"].unique()
 
-    x_labels = []
     x_pos = np.arange(len(splits_sorted))
-    split_to_x = {}
-    for i, s in enumerate(splits_sorted):
-        split_to_x[s] = i
-        x_labels.append(split_tick_label(s))
+    split_to_x = {s: i for i, s in enumerate(splits_sorted)}
 
+    if SPLIT_X_AXIS_STYLE == "window":
+        x_labels = [split_tick_label(s) for s in splits_sorted]
+        x_axis_label = "Window split (old + new train years)"
+    else:
+        x_labels = [str(i + 1) for i in range(len(splits_sorted))]
+        x_axis_label = "Split index"
+
+    n_splits = len(x_pos)
     n_met = len(metrics)
     n_samp = len(SAMPLING_ORDER)
+    # 多個 window split 時橫軸易重疊：依點數加寬圖、斜向刻度並預留下緣。
+    base_w = 3.6 * n_met + 1.0
+    min_w_per_split = 0.34 if SPLIT_X_AXIS_STYLE == "index" else 0.36
+    fig_w = max(base_w, min_w_per_split * max(n_splits, 1) + 2.0)
+    fig_h = 2.95 * n_samp + 0.65 + min(0.35 * n_samp, 0.008 * n_splits * n_samp)
+    tick_fs = max(7, min(9, 11 - n_splits // 4))
+    if SPLIT_X_AXIS_STYLE == "window":
+        x_rot = 52 if n_splits > 6 else (35 if n_splits > 4 else 0)
+    else:
+        x_rot = 45 if n_splits > 14 else 0
+
     # sharex=True 會讓整張圖共用單一 x 軸，多欄時通常只顯示一欄的刻度 → 橫軸年份看不到。
     fig, axes = plt.subplots(
         n_samp,
         n_met,
-        figsize=(3.6 * n_met + 1, 2.8 * n_samp + 0.5),
+        figsize=(fig_w, fig_h),
         squeeze=False,
         sharex="col",
     )
@@ -193,8 +228,14 @@ def plot_year_split_lines(
                 )
             ax.set_xticks(x_pos)
             if si == n_samp - 1:
-                ax.set_xticklabels(x_labels, rotation=0)
-                ax.set_xlabel("Window split (old years + new years)")
+                ax.set_xticklabels(
+                    x_labels,
+                    rotation=x_rot,
+                    ha="right" if x_rot else "center",
+                    fontsize=tick_fs,
+                )
+                ax.tick_params(axis="x", pad=2)
+                ax.set_xlabel(x_axis_label)
             else:
                 ax.set_xticklabels([])
             ax.set_ylabel(metric)
@@ -207,7 +248,10 @@ def plot_year_split_lines(
         fontsize=12,
         y=1.02,
     )
-    plt.tight_layout()
+    bottom_reserve = 0.11 + min(0.22, 0.012 * n_splits)
+    if x_rot:
+        bottom_reserve = max(bottom_reserve, 0.14 + min(0.2, 0.015 * n_splits))
+    fig.tight_layout(rect=(0.02, bottom_reserve, 0.98, 0.96))
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, bbox_inches="tight")
     plt.close(fig)

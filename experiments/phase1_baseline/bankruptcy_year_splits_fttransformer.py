@@ -5,8 +5,8 @@ Phase 1 - Bankruptcy 年份切割基準線實驗（FT-Transformer）
             d_token=64，n_blocks=3，attention_n_heads=8
 不平衡處理：同 MLP/XGB 版，由 ImbalanceSampler 採樣後餵入模型
 
-固定 Test = 2015-2018，年份切割依 common_bankruptcy.YEAR_SPLITS
-訓練策略（與 XGB 對齊）：Old / New / Retrain / Finetune
+固定 Test = 2015-2018，年份切割依 common_bankruptcy.YEAR_SPLITS（15 組，含 New 僅 1 年之 split_15+1）。
+訓練策略（與 XGB 對齊）：Old / New / Retrain / Finetune；跑滿時 raw **184** 列（Retrain 僅首次迭代）。
 採樣策略：none / undersampling / oversampling / hybrid
 
 安裝依賴：pip install rtdl torch
@@ -19,6 +19,9 @@ Phase 1 - Bankruptcy 年份切割基準線實驗（FT-Transformer）
     - results/phase1_baseline/fttransformer/bk_fttransformer_table_{metric}_{old|retrain|finetune|new}.csv
 """
 import sys
+import os
+import json
+from datetime import datetime
 from pathlib import Path
 import pandas as pd
 import numpy as np
@@ -40,6 +43,68 @@ METRICS             = ["AUC", "F1", "G_Mean", "Recall", "Precision", "Type1_Erro
 COMPACT_SUMMARY_METRICS = ["AUC", "F1", "G_Mean", "Recall", "Precision"]
 COMPACT_ONLY_METRICS = ["AUC", "F1", "Recall"]
 OUTPUT_DIR          = project_root / "results" / "phase1_baseline" / "fttransformer"
+CHECKPOINT_PATH     = OUTPUT_DIR / "bankruptcy_year_splits_fttransformer_checkpoint.json"
+PARTIAL_RAW_PATH    = OUTPUT_DIR / "bankruptcy_year_splits_fttransformer_raw.partial.csv"
+MODEL_DEVICE        = os.getenv("FTTRANSFORMER_DEVICE", "cuda")
+
+
+def _stage_key(split: str, method: str, sampling: str) -> str:
+    return f"{split}|{method}|{sampling}"
+
+
+def _deduplicate_rows(rows):
+    merged = {}
+    for row in rows:
+        key = _stage_key(str(row["split"]), str(row["method"]), str(row["sampling"]))
+        merged[key] = row
+    return list(merged.values())
+
+
+def _load_progress(logger):
+    rows = []
+    completed_stage_keys = set()
+
+    if PARTIAL_RAW_PATH.exists():
+        try:
+            rows = pd.read_csv(PARTIAL_RAW_PATH).to_dict("records")
+            rows = _deduplicate_rows(rows)
+            completed_stage_keys.update(
+                _stage_key(str(r["split"]), str(r["method"]), str(r["sampling"])) for r in rows
+            )
+            logger.info(f"載入 partial raw：{PARTIAL_RAW_PATH.name} ({len(rows)} rows)")
+        except Exception as e:
+            logger.warning(f"讀取 partial raw 失敗，將忽略：{e}")
+
+    if CHECKPOINT_PATH.exists():
+        try:
+            data = json.loads(CHECKPOINT_PATH.read_text(encoding="utf-8"))
+            completed_stage_keys.update(data.get("completed_stage_keys", []))
+            logger.info(f"載入 checkpoint：{CHECKPOINT_PATH.name} ({len(completed_stage_keys)} stages)")
+        except Exception as e:
+            logger.warning(f"讀取 checkpoint 失敗，將忽略：{e}")
+
+    return rows, completed_stage_keys
+
+
+def _save_progress(rows, completed_stage_keys):
+    if rows:
+        pd.DataFrame(rows).to_csv(PARTIAL_RAW_PATH, index=False, float_format="%.6f")
+
+    payload = {
+        "updated_at": datetime.now().isoformat(timespec="seconds"),
+        "rows_count": len(rows),
+        "completed_stage_keys": sorted(completed_stage_keys),
+    }
+    tmp_path = CHECKPOINT_PATH.with_suffix(".json.tmp")
+    tmp_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    tmp_path.replace(CHECKPOINT_PATH)
+
+
+def _clear_progress_files(logger):
+    for p in (CHECKPOINT_PATH, PARTIAL_RAW_PATH):
+        if p.exists():
+            p.unlink()
+            logger.info(f"已清除進度檔：{p.name}")
 
 
 def _select_threshold_from_validation(y_val, y_proba_val):
@@ -95,7 +160,7 @@ def _train_eval(
     _, X_test = pre.scale_features(X_fit_raw, X_test_raw, fit=False)
 
     X_r, y_r = sampler.apply_sampling(X_fit, np.asarray(y_fit), strategy=strategy)
-    model = FTTransformerWrapper(name=f"{tag}_{strategy}")
+    model = FTTransformerWrapper(name=f"{tag}_{strategy}", device=MODEL_DEVICE)
     model.fit(X_r, y_r)
 
     y_proba_val = model.predict_proba(X_val)
@@ -206,7 +271,7 @@ def _finetune_eval(X_old, y_old, year_old, X_new, y_new, year_new, X_test_raw, y
     _, X_test = pre.scale_features(X_old_fit_raw, X_test_raw, fit=False)
 
     X_r1, y_r1 = sampler.apply_sampling(X_old_fit, np.asarray(y_old_fit), strategy=strategy)
-    model = FTTransformerWrapper(name=f"{tag}_{strategy}")
+    model = FTTransformerWrapper(name=f"{tag}_{strategy}", device=MODEL_DEVICE)
     model.fit(X_r1, y_r1)
 
     X_r2, y_r2 = sampler.apply_sampling(X_new_fit, np.asarray(y_new_fit), strategy=strategy)
@@ -226,20 +291,48 @@ def _finetune_eval(X_old, y_old, year_old, X_new, y_new, year_new, X_test_raw, y
     return metrics
 
 
-def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_test, logger, include_retrain=True):
+def run_split(
+    label,
+    X_old,
+    y_old,
+    year_old,
+    X_new,
+    y_new,
+    year_new,
+    X_test,
+    y_test,
+    logger,
+    all_rows,
+    completed_stage_keys,
+    include_retrain=True,
+):
     sampler = ImbalanceSampler()
-    rows = []
+
+    def save_stage(method, strat, metrics):
+        key = _stage_key(label, method, strat)
+        all_rows.append({"split": label, "method": method, "sampling": strat, **metrics})
+        completed_stage_keys.add(key)
+        _save_progress(all_rows, completed_stage_keys)
+
+    def is_done(method, strat):
+        return _stage_key(label, method, strat) in completed_stage_keys
 
     # Old
     for strat in SAMPLING_STRATEGIES:
+        if is_done("Old", strat):
+            logger.info(f"    Old          {strat:12s} [checkpoint skip]")
+            continue
         m = _train_eval(X_old, y_old, X_test, y_test, sampler, strat, "Old", logger, year_train=year_old)
-        rows.append({"split": label, "method": "Old", "sampling": strat, **m})
+        save_stage("Old", strat, m)
 
     if include_retrain:
         # Retrain：Old + New 全量訓練，validation 由 old/new 各自切分後合併
         X_fit_re, y_fit_re, X_val_re, y_val_re = _build_retrain_fit_val(X_old, y_old, year_old, X_new, y_new, year_new)
         logger.info(f"  Retrain full concat: fit={len(X_fit_re)} val={len(X_val_re)}")
         for strat in SAMPLING_STRATEGIES:
+            if is_done("Retrain", strat):
+                logger.info(f"    Retrain      {strat:12s} [checkpoint skip]")
+                continue
             m = _train_eval(
                 X_fit_re,
                 y_fit_re,
@@ -252,10 +345,13 @@ def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_t
                 X_val_raw=X_val_re,
                 y_val=y_val_re,
             )
-            rows.append({"split": label, "method": "Retrain", "sampling": strat, **m})
+            save_stage("Retrain", strat, m)
 
     # Finetune
     for strat in SAMPLING_STRATEGIES:
+        if is_done("Finetune", strat):
+            logger.info(f"    Finetune     {strat:12s} [checkpoint skip]")
+            continue
         m = _finetune_eval(
             X_old,
             y_old,
@@ -270,14 +366,15 @@ def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_t
             "Finetune",
             logger,
         )
-        rows.append({"split": label, "method": "Finetune", "sampling": strat, **m})
+        save_stage("Finetune", strat, m)
 
     # New
     for strat in SAMPLING_STRATEGIES:
+        if is_done("New", strat):
+            logger.info(f"    New          {strat:12s} [checkpoint skip]")
+            continue
         m = _train_eval(X_new, y_new, X_test, y_test, sampler, strat, "New", logger, year_train=year_new)
-        rows.append({"split": label, "method": "New", "sampling": strat, **m})
-
-    return rows
+        save_stage("New", strat, m)
 
 
 def format_tables(df_raw, logger):
@@ -368,7 +465,24 @@ def main():
     )
     set_seed(42)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    all_rows = []
+
+    use_resume = os.getenv("FTTRANSFORMER_RESUME", "1") != "0"
+    if use_resume:
+        all_rows, completed_stage_keys = _load_progress(logger)
+    else:
+        _clear_progress_files(logger)
+        all_rows, completed_stage_keys = [], set()
+
+    try:
+        import torch
+        cuda_ok = torch.cuda.is_available()
+        device_info = torch.cuda.get_device_name(0) if cuda_ok else "CPU"
+        logger.info(f"Model device mode -> FTTRANSFORMER_DEVICE={MODEL_DEVICE}")
+        logger.info(
+            f"Runtime device check -> torch={torch.__version__}, cuda_available={cuda_ok}, device={device_info}"
+        )
+    except Exception as e:
+        logger.warning(f"無法取得 torch/cuda 狀態：{e}")
 
     retrain_done = False
     for label, old_end_year in YEAR_SPLITS:
@@ -379,20 +493,20 @@ def main():
                 old_end_year=old_end_year,
                 return_years=True,
             )
-            all_rows.extend(
-                run_split(
-                    label,
-                    X_old,
-                    y_old,
-                    year_old,
-                    X_new,
-                    y_new,
-                    year_new,
-                    X_test,
-                    y_test,
-                    logger,
-                    include_retrain=(not retrain_done),
-                )
+            run_split(
+                label,
+                X_old,
+                y_old,
+                year_old,
+                X_new,
+                y_new,
+                year_new,
+                X_test,
+                y_test,
+                logger,
+                all_rows,
+                completed_stage_keys,
+                include_retrain=(not retrain_done),
             )
             retrain_done = True
         except Exception as e:
@@ -410,6 +524,7 @@ def main():
     format_tables(df_raw, logger)
     logger.info("\n產出 compact 報表...")
     export_compact_report(df_raw, logger)
+    _clear_progress_files(logger)
     logger.info("\n=== 完成 ===")
 
 
