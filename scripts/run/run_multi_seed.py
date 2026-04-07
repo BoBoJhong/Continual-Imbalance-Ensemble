@@ -24,7 +24,7 @@ OUT_DIR = project_root / "results" / "multi_seed"
 # ─────────────────────────── per-seed runners ────────────────────────────
 
 def _run_bankruptcy_once(seed: int) -> pd.DataFrame:
-    """跑一次 Bankruptcy：Baseline(retrain/finetune) + Ensemble(old3/new3/all6) + DES。"""
+    """跑一次 Bankruptcy：Baseline(retrain) + Ensemble(old3/new3/all6) + DES。"""
     from src.utils import set_seed, get_logger
     from src.models import ModelPool, LightGBMWrapper
     from src.data import ImbalanceSampler
@@ -46,14 +46,6 @@ def _run_bankruptcy_once(seed: int) -> pd.DataFrame:
     m = LightGBMWrapper(name="retrain", **lgbm_params); m.fit(Xr, yr)
     p = m.predict_proba(X_test)
     results["retrain"] = compute_metrics(y_test_arr, p)
-
-    # Baseline: Fine-tuning
-    Xhr, yhr = sampler.apply_sampling(X_hist, y_hist.values, strategy="hybrid")
-    m = LightGBMWrapper(name="finetune", **lgbm_params); m.fit(Xhr, yhr)
-    Xnr, ynr = sampler.apply_sampling(X_new, y_new.values, strategy="hybrid")
-    m.fit(Xnr, ynr)
-    p = m.predict_proba(X_test)
-    results["finetune"] = compute_metrics(y_test_arr, p)
 
     # Ensemble: Old 3 / New 3 / All 6
     old_pool = ModelPool(pool_name="old", random_state=seed); old_pool.create_pool(X_hist, y_hist.values, prefix="old")

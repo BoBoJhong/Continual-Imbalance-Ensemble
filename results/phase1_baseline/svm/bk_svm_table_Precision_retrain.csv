@@ -1,0 +1,2 @@
+retrain_scope,none,undersampling,oversampling,hybrid,avg
+full_16yr,0.0618,0.0606,0.0586,0.0580,0.0598

@@ -1,0 +1,44 @@
+# -----------------------------------------------------------------------------
+# GPU 版 PyTorch + FT-Transformer / TabM 依賴（Windows / NVIDIA）
+# -----------------------------------------------------------------------------
+# 前置：
+#   1. C: 盤預留至少約 6–8 GB（下載 whl + 解壓；pip 快取也佔空間）。
+#   2. 已安裝 NVIDIA 驅動（nvidia-smi 可執行）。
+#   3. 若 import torch 出現 DLL load failed，請安裝「Microsoft Visual C++ Redistributable」
+#      x64：https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
+#
+# 本 repo 可能有兩個 venv，請擇一使用（勿混用）：
+#
+#   A) .venv        — Python 3.14（見 .venv\pyvenv.cfg）。stable 的 CUDA wheel 常尚未提供，
+#                    需用 PyTorch **nightly** CUDA 版；執行 FT 時可設：
+#                    $env:FTTRANSFORMER_DEVICE='cuda'
+#   B) .venv311     — Python 3.11。可用 stable：`pip install torch --index-url .../cu124`
+#
+# 勿只用系統 `py -3`（預設可能指到 3.14 的全域 site-packages 且為 CPU 版 torch）。
+#
+# 安裝 CUDA 版 PyTorch（3.11 / .venv311 範例；cu124 輪子內建 CUDA runtime）：
+#   .\.venv311\Scripts\activate
+#   pip install torch --index-url https://download.pytorch.org/whl/cu124
+#
+# 若磁碟較緊或 cu124 有問題，可改 cu121：
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121
+#
+# 3.14 / .venv 請依 PyTorch 官網選 **Preview (Nightly)** + CUDA 的 pip 指令安裝。
+#
+# FT-Transformer 實作（與 torch 2.x 並用時 PyPI 依賴衝突，請加 --no-deps）：
+#   pip install rtdl --no-deps
+# TabM：
+#   pip install tabm rtdl_num_embeddings
+#
+# 驗證（請用「實際跑實驗」的那個 python.exe）：
+#   python -c "import torch; print(torch.__version__); print(torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'N/A')"
+#
+# PowerShell 跑破產 FT 實驗（與你本機紀錄一致）：
+#   $env:FTTRANSFORMER_DEVICE='cuda'; $env:FTTRANSFORMER_RESUME='1'; `
+#     & "c:/0_git workspace/Continual-Imbalance-Ensemble/.venv/Scripts/python.exe" `
+#     "experiments/phase1_baseline/bankruptcy_year_splits_fttransformer.py"
+# -----------------------------------------------------------------------------
+
+rtdl>=0.0.9
+tabm>=0.0.3
+rtdl_num_embeddings>=0.0.12

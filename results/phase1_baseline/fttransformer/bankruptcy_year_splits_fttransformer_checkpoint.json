@@ -1,0 +1,9 @@
+{
+  "updated_at": "2026-04-04T04:17:52",
+  "rows_count": 3,
+  "completed_stage_keys": [
+    "split_1+15|Old|none",
+    "split_1+15|Old|oversampling",
+    "split_1+15|Old|undersampling"
+  ]
+}

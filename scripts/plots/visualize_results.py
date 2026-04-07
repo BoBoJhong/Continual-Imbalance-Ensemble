@@ -129,13 +129,13 @@ def fig2_all_datasets():
         df = df.reset_index()
 
     datasets     = ["bankruptcy", "stock", "medical"]
-    method_types = ["retrain", "finetune", "ensemble_all_6", "DES_KNORAE"]
-    labels       = ["Re-train", "Fine-tune", "Ensemble (All-6)", "DES KNORA-E"]
-    colors       = [PALETTE["baseline"], PALETTE["baseline"], PALETTE["ensemble"], PALETTE["des"]]
-    alphas       = [1.0, 0.7, 1.0, 1.0]
+    method_types = ["retrain", "ensemble_all_6", "DES_KNORAE"]
+    labels       = ["Re-train", "Ensemble (All-6)", "DES KNORA-E"]
+    colors       = [PALETTE["baseline"], PALETTE["ensemble"], PALETTE["des"]]
+    alphas       = [1.0, 1.0, 1.0]
 
     x = np.arange(len(datasets))
-    width = 0.18
+    width = 0.22
     fig, ax = plt.subplots(figsize=(10, 5))
 
     for i, (method, label, color, alpha) in enumerate(zip(method_types, labels, colors, alphas)):

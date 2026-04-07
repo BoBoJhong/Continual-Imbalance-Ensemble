@@ -1,5 +1,10 @@
-# Deep learning (Phase 1 bankruptcy Torch MLP baseline)
+# Deep learning (Phase 1 bankruptcy Torch MLP / FT-Transformer baseline)
+# 預設為 PyPI 的 torch（多為 CPU 版）。若要用 NVIDIA GPU，請見 requirements-gpu.txt：
+#   常用 .venv（Python 3.14 + nightly CUDA）或 .venv311（3.11 + stable cu124）；
+#   跑實驗時請用該 venv 的 Scripts\python.exe，勿依賴預設 py -3。
 torch>=2.0.0
+tabm>=0.0.3
+rtdl_num_embeddings>=0.0.12
 
 # Core ML Libraries
 numpy>=1.24.0

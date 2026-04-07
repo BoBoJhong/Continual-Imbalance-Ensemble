@@ -4,6 +4,7 @@ Phase 2 — XGB Bankruptcy：動態 DES（KNORA / DES-KNN），年份切割。
 """
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -22,10 +23,22 @@ from experiments.phase2_ensemble.xgb_oldnew_ensemble_common import (
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Phase2 XGB bankruptcy dynamic DES year splits")
+    parser.add_argument(
+        "--output-tag",
+        type=str,
+        default="",
+        help="額外輸出子資料夾名稱（例如 tuned_rerun），結果會寫到 dynamic/des/<tag>/",
+    )
+    args = parser.parse_args()
+
     logger = get_logger("XGB_Bankruptcy_DES_YearSplits", console=True, file=True)
     set_seed(42)
 
     out = project_root / "results" / "phase2_ensemble" / "dynamic" / "des"
+    tag = args.output_tag.strip()
+    if tag:
+        out = out / tag
     out.mkdir(parents=True, exist_ok=True)
 
     _, des_rows = iter_bankruptcy_year_splits(logger)

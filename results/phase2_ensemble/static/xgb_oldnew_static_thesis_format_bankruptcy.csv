@@ -1,8 +1,16 @@
-﻿dataset_name,split_id,old_window,new_window,test_window,method,train_scope,best_ensemble_size,best_subset,AUC,F1,Recall
-Bankruptcy_US,split_10+6,1999-2008,2009-2014,2015-2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_hybrid+New_under+New_over,0.8354,0.281,0.4146
-Bankruptcy_US,split_12+4,1999-2010,2011-2014,2015-2018,StaticEnsemble,Old/New pools + static soft voting,4models,Old_under+New_under+New_over+New_hybrid,0.8558,0.2973,0.3693
-Bankruptcy_US,split_14+2,1999-2012,2013-2014,2015-2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_under+New_under+New_hybrid,0.8718,0.3041,0.2962
-Bankruptcy_US,split_2+14,1999-2000,2001-2014,2015-2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_under+New_under+New_hybrid,0.831,0.1829,0.4948
-Bankruptcy_US,split_4+12,1999-2002,2003-2014,2015-2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_under+New_under+New_hybrid,0.8465,0.2014,0.554
-Bankruptcy_US,split_6+10,1999-2004,2005-2014,2015-2018,StaticEnsemble,Old/New pools + static soft voting,4models,Old_under+New_under+New_over+New_hybrid,0.8395,0.2217,0.4843
-Bankruptcy_US,split_8+8,1999-2006,2007-2014,2015-2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_under+New_under+New_hybrid,0.8535,0.2779,0.4077
+dataset_name,split_id,old_window,new_window,test_window,method,train_scope,best_ensemble_size,best_subset,AUC,F1,Recall
+Bankruptcy_US,split_1+15,1999~1999,2000~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_under+New_under+New_hybrid,0.8304,0.2523,0.4739
+Bankruptcy_US,split_2+14,1999~2000,2001~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_under+New_under+New_over,0.8174,0.2424,0.3449
+Bankruptcy_US,split_3+13,1999~2001,2002~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_under+New_under+New_over,0.8345,0.2599,0.3763
+Bankruptcy_US,split_4+12,1999~2002,2003~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_under+New_under+New_hybrid,0.8614,0.2573,0.5226
+Bankruptcy_US,split_5+11,1999~2003,2004~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_under+New_under+New_hybrid,0.8673,0.2815,0.5261
+Bankruptcy_US,split_6+10,1999~2004,2005~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,4models,Old_under+New_under+New_over+New_hybrid,0.8653,0.2393,0.5645
+Bankruptcy_US,split_7+9,1999~2005,2006~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,4models,Old_under+Old_over+New_under+New_hybrid,0.849,0.2412,0.5122
+Bankruptcy_US,split_8+8,1999~2006,2007~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,2models,Old_under+New_under,0.8357,0.2159,0.4599
+Bankruptcy_US,split_9+7,1999~2007,2008~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,2models,Old_under+New_under,0.8497,0.24,0.5122
+Bankruptcy_US,split_10+6,1999~2008,2009~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,2models,Old_under+New_under,0.8583,0.2314,0.4774
+Bankruptcy_US,split_11+5,1999~2009,2010~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_under+Old_hybrid+New_under,0.8329,0.2342,0.4321
+Bankruptcy_US,split_12+4,1999~2010,2011~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,4models,Old_under+Old_over+New_under+New_over,0.8413,0.2367,0.4425
+Bankruptcy_US,split_13+3,1999~2011,2012~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,4models,Old_under+Old_over+New_under+New_hybrid,0.8612,0.2595,0.5017
+Bankruptcy_US,split_14+2,1999~2012,2013~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,2models,Old_hybrid+New_under,0.8578,0.2391,0.4983
+Bankruptcy_US,split_15+1,1999~2013,2014~2014,2015~2018,StaticEnsemble,Old/New pools + static soft voting,3models,Old_under+Old_over+New_under,0.87,0.2455,0.4495

@@ -6,6 +6,7 @@ from .logistic_regression_wrapper import LogisticRegressionWrapper
 from .svm_wrapper import SVMWrapper
 from .mlp_wrapper import MLPWrapper
 from .tabnet_wrapper import TabNetWrapper
+from .tabm_wrapper import TabMWrapper
 from .fttransformer_wrapper import FTTransformerWrapper
 from .lstm_wrapper import LSTMWrapper
 from .model_pool import ModelPool
@@ -18,6 +19,7 @@ __all__ = [
     'SVMWrapper',
     'MLPWrapper',
     'TabNetWrapper',
+    'TabMWrapper',
     'FTTransformerWrapper',
     'LSTMWrapper',
     'ModelPool'

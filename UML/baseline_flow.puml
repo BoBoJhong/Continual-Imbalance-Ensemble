@@ -21,7 +21,7 @@ skinparam database {
 }
 
 database "Dataset\n(US fyear)" as DS
-rectangle "Rolling\nyear split\n× 14 folds\n(New>=2yr；no 1yr)" as CUT
+rectangle "Rolling\nyear split\n× 15 folds\n(New>=1yr)" as CUT
 DS --> CUT
 
 database "Old" as OLD

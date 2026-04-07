@@ -33,12 +33,6 @@ def run_once(get_data_fn, split_mode, logger):
         m = LightGBMWrapper(name="retrain"); m.fit(X_r, y_r)
         res[f"retrain_{strat}"] = compute_metrics(yt, m.predict_proba(X_t))
 
-        X_hr, y_hr = sm.apply_sampling(X_h, y_h.values, strategy=strat)
-        mf = LightGBMWrapper(name="finetune"); mf.fit(X_hr, y_hr)
-        X_nr, y_nr = sm.apply_sampling(X_n, y_n.values, strategy=strat)
-        mf.fit(X_nr, y_nr)
-        res[f"finetune_{strat}"] = compute_metrics(yt, mf.predict_proba(X_t))
-
     res["DES_KNORAE"] = run_des(X_h, y_h, X_n, y_n, X_t, y_t, logger, k=7)
     return pd.DataFrame(res).T
 

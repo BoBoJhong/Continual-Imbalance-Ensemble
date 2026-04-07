@@ -6,20 +6,29 @@ Phase 1 - Bankruptcy 年份切割基準線實驗（FT-Transformer）
 不平衡處理：同 MLP/XGB 版，由 ImbalanceSampler 採樣後餵入模型
 
 固定 Test = 2015-2018，年份切割依 common_bankruptcy.YEAR_SPLITS（15 組，含 New 僅 1 年之 split_15+1）。
-訓練策略（與 XGB 對齊）：Old / New / Retrain / Finetune；跑滿時 raw **184** 列（Retrain 僅首次迭代）。
+訓練策略：**Old / New / Retrain**（不跑 Finetune，與本專案其他 baseline 的「滑動窗」對照方式一致）。
+跑滿時 raw **124** 列：首個 split 為 4+4+4，其餘 14 個 split 各 4+4（Retrain 僅第一次迭代）。
 採樣策略：none / undersampling / oversampling / hybrid
+
+列名對照（與 XGB pivot 相同）：`split_k+(16-k)` → Old 段 **k** 年、New 段 **16−k** 年（訓練窗 1999–2014）。
+故 **bk_*_table_*_old** 列為 **1yr→15yr**；**bk_*_table_*_new** 列為 **15yr→1yr**。
 
 安裝依賴：pip install rtdl torch
 （Python 3.14 + numpy 2.x 若與 rtdl 的 numpy<2 衝突，可：python -m pip install "rtdl==0.0.13" --no-deps --user）
 
-執行時日誌固定寫入 logs/BK_FTTransformer_run.log（每次覆寫），handler 會即時 flush，勿再將 stdout 重導向同一檔以免重複。
+裝置：預設 --device auto（有 CUDA 則用 GPU，否則 MPS/CPU）。可設環境變數 FTTRANSFORMER_DEVICE。
+訓練在 CUDA 上預設開啟 AMP；不平衡二元分類使用 BCE pos_weight=auto（n_neg/n_pos）。
 
-最終輸出：
-    - results/phase1_baseline/fttransformer/bankruptcy_year_splits_fttransformer_raw.csv
-    - results/phase1_baseline/fttransformer/bk_fttransformer_table_{metric}_{old|retrain|finetune|new}.csv
+執行時日誌固定寫入 logs/BK_FTTransformer_run.log（每次覆寫），handler 會即時 flush，勿再將 stdout 重導向同一檔以免重複。
+若先前 partial 含 Finetune 列，建議 `--no-resume` 重跑以得到僅 Old/New/Retrain 的 raw。
+
+最終輸出（預設根目錄；可用 --results-subdir <名稱> 寫入 fttransformer/<名稱>/）：
+    - bankruptcy_year_splits_fttransformer_raw.csv
+    - bk_fttransformer_table_{metric}_{old|retrain|new}.csv
 """
 import sys
 import os
+import argparse
 import json
 from datetime import datetime
 from pathlib import Path
@@ -42,10 +51,11 @@ SAMPLING_REPORT_ORDER = ["hybrid", "none", "oversampling", "undersampling"]
 METRICS             = ["AUC", "F1", "G_Mean", "Recall", "Precision", "Type1_Error", "Type2_Error"]
 COMPACT_SUMMARY_METRICS = ["AUC", "F1", "G_Mean", "Recall", "Precision"]
 COMPACT_ONLY_METRICS = ["AUC", "F1", "Recall"]
-OUTPUT_DIR          = project_root / "results" / "phase1_baseline" / "fttransformer"
-CHECKPOINT_PATH     = OUTPUT_DIR / "bankruptcy_year_splits_fttransformer_checkpoint.json"
-PARTIAL_RAW_PATH    = OUTPUT_DIR / "bankruptcy_year_splits_fttransformer_raw.partial.csv"
-MODEL_DEVICE        = os.getenv("FTTRANSFORMER_DEVICE", "cuda")
+FT_BASE_DIR = project_root / "results" / "phase1_baseline" / "fttransformer"
+# main() 可依 --results-subdir 覆寫以下三個路徑
+OUTPUT_DIR = FT_BASE_DIR
+CHECKPOINT_PATH = OUTPUT_DIR / "bankruptcy_year_splits_fttransformer_checkpoint.json"
+PARTIAL_RAW_PATH = OUTPUT_DIR / "bankruptcy_year_splits_fttransformer_raw.partial.csv"
 
 
 def _stage_key(split: str, method: str, sampling: str) -> str:
@@ -131,6 +141,9 @@ def _train_eval(
     X_val_raw=None,
     y_val=None,
     year_train=None,
+    *,
+    device: str = "auto",
+    use_amp: bool = True,
 ):
     """先切 train/val，再只用 train fold fit scaler，避免 validation leakage。"""
     y_train_arr = np.asarray(y_train)
@@ -160,7 +173,12 @@ def _train_eval(
     _, X_test = pre.scale_features(X_fit_raw, X_test_raw, fit=False)
 
     X_r, y_r = sampler.apply_sampling(X_fit, np.asarray(y_fit), strategy=strategy)
-    model = FTTransformerWrapper(name=f"{tag}_{strategy}", device=MODEL_DEVICE)
+    model = FTTransformerWrapper(
+        name=f"{tag}_{strategy}",
+        device=device,
+        pos_weight="auto",
+        use_amp=use_amp,
+    )
     model.fit(X_r, y_r)
 
     y_proba_val = model.predict_proba(X_val)
@@ -259,38 +277,6 @@ def _build_retrain_fit_val(X_old, y_old, year_old, X_new, y_new, year_new):
     return X_fit, y_fit, X_val, y_val
 
 
-def _finetune_eval(X_old, y_old, year_old, X_new, y_new, year_new, X_test_raw, y_test, sampler, strategy, tag, logger):
-    """FT 微調：先 Old 後 New 接續訓練，閾值在 old_val+new_val 上選擇。"""
-    X_old_fit_raw, y_old_fit, X_old_val_raw, y_old_val = _split_fit_val_by_year(X_old, y_old, year_old)
-    X_new_fit_raw, y_new_fit, X_new_val_raw, y_new_val = _split_fit_val_by_year(X_new, y_new, year_new)
-
-    pre = DataPreprocessor()
-    X_old_fit, X_old_val = pre.scale_features(X_old_fit_raw, X_old_val_raw, fit=True)
-    _, X_new_fit = pre.scale_features(X_old_fit_raw, X_new_fit_raw, fit=False)
-    _, X_new_val = pre.scale_features(X_old_fit_raw, X_new_val_raw, fit=False)
-    _, X_test = pre.scale_features(X_old_fit_raw, X_test_raw, fit=False)
-
-    X_r1, y_r1 = sampler.apply_sampling(X_old_fit, np.asarray(y_old_fit), strategy=strategy)
-    model = FTTransformerWrapper(name=f"{tag}_{strategy}", device=MODEL_DEVICE)
-    model.fit(X_r1, y_r1)
-
-    X_r2, y_r2 = sampler.apply_sampling(X_new_fit, np.asarray(y_new_fit), strategy=strategy)
-    model.fit(X_r2, y_r2, continue_training=True)
-
-    X_val_all = np.concatenate([np.asarray(X_old_val), np.asarray(X_new_val)], axis=0)
-    y_val_all = np.concatenate([np.asarray(y_old_val), np.asarray(y_new_val)], axis=0)
-    y_proba_val = model.predict_proba(X_val_all)
-    threshold, val_f1 = _select_threshold_from_validation(y_val_all, y_proba_val)
-
-    y_t = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
-    metrics = compute_metrics(y_t, model.predict_proba(X_test), threshold=threshold)
-    logger.info(
-        f"    {tag:12s} {strategy:12s} [thr={threshold:.3f}, valF1={val_f1:.4f}]: "
-        f"AUC={metrics['AUC']:.4f}  F1={metrics['F1']:.4f}  Recall={metrics['Recall']:.4f}"
-    )
-    return metrics
-
-
 def run_split(
     label,
     X_old,
@@ -305,6 +291,9 @@ def run_split(
     all_rows,
     completed_stage_keys,
     include_retrain=True,
+    *,
+    device: str = "auto",
+    use_amp: bool = True,
 ):
     sampler = ImbalanceSampler()
 
@@ -322,13 +311,44 @@ def run_split(
         if is_done("Old", strat):
             logger.info(f"    Old          {strat:12s} [checkpoint skip]")
             continue
-        m = _train_eval(X_old, y_old, X_test, y_test, sampler, strat, "Old", logger, year_train=year_old)
+        m = _train_eval(
+            X_old,
+            y_old,
+            X_test,
+            y_test,
+            sampler,
+            strat,
+            "Old",
+            logger,
+            year_train=year_old,
+            device=device,
+            use_amp=use_amp,
+        )
         save_stage("Old", strat, m)
 
+    # New（與 XGB 等相同順序：Old → New → Retrain；本腳本不跑 Finetune）
+    for strat in SAMPLING_STRATEGIES:
+        if is_done("New", strat):
+            logger.info(f"    New          {strat:12s} [checkpoint skip]")
+            continue
+        m = _train_eval(
+            X_new,
+            y_new,
+            X_test,
+            y_test,
+            sampler,
+            strat,
+            "New",
+            logger,
+            year_train=year_new,
+            device=device,
+            use_amp=use_amp,
+        )
+        save_stage("New", strat, m)
+
     if include_retrain:
-        # Retrain：Old + New 全量訓練，validation 由 old/new 各自切分後合併
         X_fit_re, y_fit_re, X_val_re, y_val_re = _build_retrain_fit_val(X_old, y_old, year_old, X_new, y_new, year_new)
-        logger.info(f"  Retrain full concat: fit={len(X_fit_re)} val={len(X_val_re)}")
+        logger.info(f"  Retrain: fit={len(X_fit_re)} val={len(X_val_re)}")
         for strat in SAMPLING_STRATEGIES:
             if is_done("Retrain", strat):
                 logger.info(f"    Retrain      {strat:12s} [checkpoint skip]")
@@ -344,37 +364,10 @@ def run_split(
                 logger,
                 X_val_raw=X_val_re,
                 y_val=y_val_re,
+                device=device,
+                use_amp=use_amp,
             )
             save_stage("Retrain", strat, m)
-
-    # Finetune
-    for strat in SAMPLING_STRATEGIES:
-        if is_done("Finetune", strat):
-            logger.info(f"    Finetune     {strat:12s} [checkpoint skip]")
-            continue
-        m = _finetune_eval(
-            X_old,
-            y_old,
-            year_old,
-            X_new,
-            y_new,
-            year_new,
-            X_test,
-            y_test,
-            sampler,
-            strat,
-            "Finetune",
-            logger,
-        )
-        save_stage("Finetune", strat, m)
-
-    # New
-    for strat in SAMPLING_STRATEGIES:
-        if is_done("New", strat):
-            logger.info(f"    New          {strat:12s} [checkpoint skip]")
-            continue
-        m = _train_eval(X_new, y_new, X_test, y_test, sampler, strat, "New", logger, year_train=year_new)
-        save_stage("New", strat, m)
 
 
 def format_tables(df_raw, logger):
@@ -388,7 +381,6 @@ def format_tables(df_raw, logger):
         for method, suffix, idx_fn in [
             ("Old", "old", lambda s: f"{split_yr[s][0]}yr"),
             ("Retrain", "retrain", lambda s: f"{split_yr[s][0]}+{split_yr[s][1]}"),
-            ("Finetune", "finetune", lambda s: f"{split_yr[s][0]}+{split_yr[s][1]}"),
             ("New", "new", lambda s: f"{split_yr[s][1]}yr"),
         ]:
             if method == "Retrain":
@@ -411,8 +403,6 @@ def format_tables(df_raw, logger):
                 pivot.loc["avg"] = pivot.mean()
                 if method == "Old":
                     pivot.index.name = "old_years"
-                elif method == "Finetune":
-                    pivot.index.name = "old+new_years_finetune"
                 else:
                     pivot.index.name = "new_years"
             out = OUTPUT_DIR / f"bk_fttransformer_table_{metric}_{suffix}.csv"
@@ -425,7 +415,7 @@ def _mean_pivot_by_method_sampling(df_raw: pd.DataFrame, metric: str) -> pd.Data
         df_raw.groupby(["method", "sampling"])[metric]
         .mean()
         .unstack("sampling")
-        .reindex(index=["Old", "New", "Retrain", "Finetune"], columns=SAMPLING_REPORT_ORDER)
+        .reindex(index=["Old", "New", "Retrain"], columns=SAMPLING_REPORT_ORDER)
     )
     return t.round(4)
 
@@ -456,6 +446,40 @@ def export_compact_report(df_raw: pd.DataFrame, logger) -> None:
 
 
 def main():
+    global OUTPUT_DIR, CHECKPOINT_PATH, PARTIAL_RAW_PATH
+
+    parser = argparse.ArgumentParser(description="Phase1 bankruptcy year splits — FT-Transformer baseline")
+    parser.add_argument(
+        "--results-subdir",
+        default="",
+        metavar="NAME",
+        help="結果寫入 fttransformer/<NAME>/（含 checkpoint、partial、raw、表格）；空=寫在 fttransformer 根目錄",
+    )
+    parser.add_argument(
+        "--device",
+        default=os.getenv("FTTRANSFORMER_DEVICE", "auto"),
+        choices=["auto", "cuda", "cpu", "mps"],
+        help="訓練裝置：auto=優先 CUDA，其次 MPS，否則 CPU",
+    )
+    parser.add_argument(
+        "--no-amp",
+        action="store_true",
+        help="停用 CUDA mixed precision（僅在 CUDA 上有影響）",
+    )
+    parser.add_argument(
+        "--no-resume",
+        action="store_true",
+        help="忽略 checkpoint / partial raw，從頭跑",
+    )
+    args = parser.parse_args()
+
+    sub = (args.results_subdir or "").strip().replace("\\", "/").strip("/")
+    if sub and (Path(sub).name != sub or ".." in Path(sub).parts):
+        raise SystemExit("--results-subdir 請使用單一資料夾名稱，勿含路徑跳脫")
+    OUTPUT_DIR = (FT_BASE_DIR / sub) if sub else FT_BASE_DIR
+    CHECKPOINT_PATH = OUTPUT_DIR / "bankruptcy_year_splits_fttransformer_checkpoint.json"
+    PARTIAL_RAW_PATH = OUTPUT_DIR / "bankruptcy_year_splits_fttransformer_raw.partial.csv"
+
     logger = get_logger(
         "BK_YearSplits_FTTransformer",
         console=True,
@@ -465,8 +489,10 @@ def main():
     )
     set_seed(42)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    logger.info(f"結果與進度檔目錄: {OUTPUT_DIR}")
 
-    use_resume = os.getenv("FTTRANSFORMER_RESUME", "1") != "0"
+    use_amp = not args.no_amp
+    use_resume = (not args.no_resume) and os.getenv("FTTRANSFORMER_RESUME", "1") != "0"
     if use_resume:
         all_rows, completed_stage_keys = _load_progress(logger)
     else:
@@ -477,9 +503,10 @@ def main():
         import torch
         cuda_ok = torch.cuda.is_available()
         device_info = torch.cuda.get_device_name(0) if cuda_ok else "CPU"
-        logger.info(f"Model device mode -> FTTRANSFORMER_DEVICE={MODEL_DEVICE}")
+        logger.info(f"Model device -> --device={args.device} (env FTTRANSFORMER_DEVICE 可覆寫預設 auto)")
         logger.info(
-            f"Runtime device check -> torch={torch.__version__}, cuda_available={cuda_ok}, device={device_info}"
+            f"Runtime torch={torch.__version__}, cuda_available={cuda_ok}, "
+            f"reported_name={device_info}, use_amp={use_amp}"
         )
     except Exception as e:
         logger.warning(f"無法取得 torch/cuda 狀態：{e}")
@@ -507,6 +534,8 @@ def main():
                 all_rows,
                 completed_stage_keys,
                 include_retrain=(not retrain_done),
+                device=args.device,
+                use_amp=use_amp,
             )
             retrain_done = True
         except Exception as e:
@@ -524,6 +553,8 @@ def main():
     format_tables(df_raw, logger)
     logger.info("\n產出 compact 報表...")
     export_compact_report(df_raw, logger)
+    summary = _mean_pivot_by_method_sampling(df_raw, "AUC")
+    logger.info("\nAUC 摘要（method × sampling 平均，跨各年份切割）:\n" + summary.to_string())
     _clear_progress_files(logger)
     logger.info("\n=== 完成 ===")
 

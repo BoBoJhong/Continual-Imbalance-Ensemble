@@ -1,7 +1,9 @@
 """
 Phase 1 TabNet Baseline 視覺化
 ============================
-讀取 results/phase1_baseline/tabnet/*_year_splits_tabnet_raw.csv（三策略：Old / Old+New / New）。
+讀取 results/phase1_baseline/tabnet/bankruptcy_year_splits_tabnet_raw.csv，
+與 XGB 相同三策略：Old / New / Retrain（見 bankruptcy_year_splits_tabnet.py）。
+若 raw 仍出現 Old+New，代表舊版三策略輸出；Retrain 僅一次時 raw 應為 124 rows。
 
 使用：
     python scripts/plots/visualize_phase1_tabnet_baseline.py
@@ -17,8 +19,8 @@ project_root = _scripts_dir.parent.parent
 sys.path.insert(0, str(_scripts_dir))
 
 from phase1_baseline_plotting import (
-    METHOD_COLORS_LEGACY_THREE,
-    METHOD_ORDER_LEGACY_THREE,
+    METHOD_COLORS_MLP,
+    METHOD_ORDER_MLP,
     run_phase1_baseline_visualization,
 )
 
@@ -40,9 +42,9 @@ def main() -> None:
         raw_glob="*_year_splits_tabnet_raw.csv",
         raw_suffix="_year_splits_tabnet_raw",
         model_title="TabNet Baseline",
-        method_order=METHOD_ORDER_LEGACY_THREE,
-        method_colors=METHOD_COLORS_LEGACY_THREE,
-        compact_summary_name=None,
+        method_order=METHOD_ORDER_MLP,
+        method_colors=METHOD_COLORS_MLP,
+        compact_summary_name="bk_tabnet_compact_summary.csv",
     )
     if not ok:
         sys.exit(1)

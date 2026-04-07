@@ -12,6 +12,7 @@ Common utilities for XGB Old/New ensemble (year splits).
 from __future__ import annotations
 
 import itertools
+import json
 import re
 from pathlib import Path
 from typing import Any, List, Dict, Tuple
@@ -25,6 +26,8 @@ from sklearn.neighbors import NearestNeighbors
 from src.data import ImbalanceSampler, DataPreprocessor
 from src.models import XGBoostWrapper
 from src.evaluation import compute_metrics
+
+_TUNED_XGB_PARAM_CACHE: Dict[Tuple[str, str, str], Dict[str, Any]] | None = None
 
 
 # 與研究方向一致：Old/New 各 3 個模型 = under / over / hybrid（無 none）
@@ -93,7 +96,7 @@ def _ensemble_sort_key(e: str) -> Tuple[int, int]:
     dyn = {m[1]: i for i, m in enumerate(DYNAMIC_DES_METHODS)}
     if str(e) in dyn:
         return (2, dyn[str(e)])
-    order = {"New": 1, "Old": 2, "OldNew": 3}
+    order = {"New": 1, "Old": 2, "Retrain": 3}
     return (1, order.get(str(e), 99))
 
 
@@ -194,17 +197,15 @@ def _normalize_sampling_col_column(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def expected_summary_wide_columns() -> List[str]:
-    """論文用寬表欄位順序：Old/New/OldNew × 採樣 + 動態 DES × (採樣|all6) + 2～6 models 之子集宏平均。"""
+    """論文用寬表欄位順序：Old/New/Retrain × 採樣。"""
     return expected_summary_wide_columns_static_only() + expected_summary_wide_columns_des_only()
 
 
 def expected_summary_wide_columns_static_only() -> List[str]:
     cols: List[str] = []
-    for ens in ("Old", "New", "OldNew"):
+    for ens in ("Old", "New", "Retrain"):
         for st in ("under", "over", "hybrid"):
             cols.append(f"{ens}_{st}")
-    for k in range(2, 7):
-        cols.append(f"{k}models_subsets_mean")
     return cols
 
 
@@ -487,6 +488,49 @@ def dynamic_ensemble_metrics_with_threshold(
     return metrics
 
 
+def _load_tuned_xgb_params_map() -> Dict[Tuple[str, str, str], Dict[str, Any]]:
+    """
+    Read Phase1 tuned XGB params and build lookup:
+    key = (split_label, method, sampling).
+    """
+    global _TUNED_XGB_PARAM_CACHE
+    if _TUNED_XGB_PARAM_CACHE is not None:
+        return _TUNED_XGB_PARAM_CACHE
+
+    path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "results"
+        / "phase1_baseline"
+        / "xgb"
+        / "tuned"
+        / "bk_xgb_tuning_log.csv"
+    )
+    out: Dict[Tuple[str, str, str], Dict[str, Any]] = {}
+    if not path.exists():
+        _TUNED_XGB_PARAM_CACHE = out
+        return out
+
+    df = pd.read_csv(path)
+    for _, row in df.iterrows():
+        split = str(row.get("split", "")).strip()
+        method = str(row.get("method", "")).strip()
+        sampling = str(row.get("sampling", "")).strip()
+        raw = row.get("tune_best_params", "")
+        if not split or not method or not sampling or pd.isna(raw):
+            continue
+        s = str(raw).strip()
+        if not s:
+            continue
+        try:
+            params = json.loads(s)
+        except json.JSONDecodeError:
+            continue
+        out[(split, method, sampling)] = params
+
+    _TUNED_XGB_PARAM_CACHE = out
+    return out
+
+
 def train_one_sampling_xgb(
     X_train_scaled: pd.DataFrame,
     y_train: np.ndarray,
@@ -495,10 +539,19 @@ def train_one_sampling_xgb(
     sampler: ImbalanceSampler,
     sampling_strategy: str,
     model_name: str,
+    *,
+    split_label: str = "",
+    method_label: str = "",
+    use_tuned_params: bool = True,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """Train one XGB model under sampling strategy and return (val_proba, test_proba)."""
     X_r, y_r = sampler.apply_sampling(X_train_scaled, y_train, strategy=sampling_strategy)
-    model = XGBoostWrapper(name=model_name)
+    if use_tuned_params:
+        tune_map = _load_tuned_xgb_params_map()
+        best = tune_map.get((split_label, method_label, sampling_strategy), {})
+    else:
+        best = {}
+    model = XGBoostWrapper(name=model_name, **best) if best else XGBoostWrapper(name=model_name)
     model.fit(X_r, y_r)
     val_proba = model.predict_proba(X_val_scaled)
     test_proba = model.predict_proba(X_test_scaled)

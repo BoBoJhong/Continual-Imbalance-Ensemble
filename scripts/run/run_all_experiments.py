@@ -1,7 +1,7 @@
 """
 一鍵執行所有實驗（依研究階段順序）。
 
-Phase 1  Baseline      : 基準方法 (Re-training / Fine-tuning)，全資料集
+Phase 1  Baseline      : 基準方法 (Old / New / Re-training)，全資料集
 Phase 2  Ensemble      : XGB Old/New 年份切割（靜態／DES／DCS 分腳本；結果分 static、dynamic/des、dcs）
 Phase 3  Feature       : 特徵選擇研究 & 掃描（Study II）
 Phase 4  Analysis      : 比例研究、Split 比較、Base Learner、閾值分析
@@ -17,7 +17,6 @@ project_root = Path(__file__).resolve().parent.parent.parent
 EXPERIMENTS = [
     # ── Phase 1: Baseline ──────────────────────────────────────
     ("phase1_baseline",         "retrain",                  300),
-    ("phase1_baseline",         "finetune",                 300),
     # ── Phase 2: XGB ensemble（static／dynamic/des／dynamic/dcs 分開；檔名 xgb_oldnew_*）──
     ("phase2_ensemble/static", "xgb_oldnew_bankruptcy_year_splits_static", 1200),
     ("phase2_ensemble/static", "xgb_oldnew_stock_year_splits_static", 1200),

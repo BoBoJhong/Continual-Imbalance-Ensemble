@@ -4,8 +4,8 @@ Phase 1 Torch MLP Baseline 視覺化
 讀取 results/phase1_baseline/torch_mlp/ 內 *year_splits_torch_mlp_raw.csv，
 產出折線圖與（若存在）bk_torch_mlp_compact_summary 熱力圖。
 
-與 XGB 相同四策略：Old / New / Retrain / Finetune（見 bankruptcy_year_splits_torch_mlp.py）。
-若 raw 仍出現 Old+New，代表為舊版三策略輸出，請重新跑實驗腳本（15 折、Retrain 僅一次時 raw 為 184 rows）。
+與 XGB 相同三策略：Old / New / Retrain（見 bankruptcy_year_splits_torch_mlp.py）。
+若 raw 仍出現 Old+New，代表為舊版三策略輸出，請重新跑實驗腳本（15 折、Retrain 僅一次時 raw 為 124 rows）。
 
 使用：
     python scripts/plots/visualize_phase1_torch_mlp_baseline.py

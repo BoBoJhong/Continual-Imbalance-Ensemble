@@ -118,6 +118,20 @@ FT-Transformer 將 Transformer 架構應用於表格資料，核心思想是：*
   ```
 - 另有整合版：https://github.com/lucidrains/tab-transformer-pytorch
 
+### 本專案 GPU 優化實驗之參考文獻（`gpu_improved_v2`）
+
+破產年份切割腳本 `experiments/phase1_baseline/bankruptcy_year_splits_fttransformer.py` 與 `src/models/fttransformer_wrapper.py` 的改進版設定，建議寫作時引用下列文獻；**完整書目、連結與 BibTeX** 已集中於：
+
+`results/phase1_baseline/fttransformer/gpu_improved_v2/REFERENCES.md`
+
+| 主題 | 文獻／資源 |
+|------|------------|
+| FT-Transformer 模型 | Gorishniy et al. (NeurIPS 2021)；arXiv:2106.11959；官方 `rtdl` |
+| 混合精度（AMP） | Micikevicius et al. (ICLR 2018)；arXiv:1710.03740；PyTorch AMP 文件 |
+| AdamW | Loshchilov & Hutter (ICLR 2019)；arXiv:1711.05101 |
+| 不平衡二元分類損失 | PyTorch `BCEWithLogitsLoss.pos_weight`；選讀 King & Zeng (2001) 稀有事件 |
+| 工程實務 | PyTorch DataLoader／分批驗證與推論（見該 REFERENCES 第 5 節） |
+
 ### 個人補充筆記
 > （請在此處填入你的理解、實驗觀察或延伸閱讀）
 

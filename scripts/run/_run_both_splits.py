@@ -2,7 +2,7 @@
 scripts/run/_run_both_splits.py
 ================================
 完整跑所有資料集 × 兩種切割方式 (chronological / block_cv)：
-  - P1: Retrain + Finetune
+  - P1: Retrain
   - P2: Named Ensemble Combos（LightGBM ModelPool，舊版對照）
   - P3: DCS Comparison + DES Advanced（同上）
 
@@ -78,11 +78,11 @@ def get_data(ds_name: str, logger, split_mode: str):
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# P1: RETRAIN + FINETUNE
+# P1: RETRAIN
 # ─────────────────────────────────────────────────────────────────────────
 
 def run_p1(ds_name: str, split_mode: str, logger):
-    """執行 P1 Retrain + Finetune，各 3 種採樣策略，儲存帶 split_mode 的 CSV。"""
+    """執行 P1 Retrain，各 3 種採樣策略，儲存帶 split_mode 的 CSV。"""
     X_h, y_h, X_n, y_n, X_t, y_t = get_data(ds_name, logger, split_mode)
     yt = np.asarray(y_t.values if hasattr(y_t, "values") else y_t)
     yh = y_h.values if hasattr(y_h, "values") else y_h
@@ -93,7 +93,6 @@ def run_p1(ds_name: str, split_mode: str, logger):
     y_c = np.concatenate([yh, yn])
 
     retrain_res  = {}
-    finetune_res = {}
 
     for strat in ["none", "undersampling", "hybrid"]:
         # Retrain
@@ -103,20 +102,9 @@ def run_p1(ds_name: str, split_mode: str, logger):
         _auc = retrain_res[f"retrain_{strat}"]["AUC"]
         logger.info(f"  [P1 Retrain {strat}] AUC={_auc:.4f}")
 
-        # Finetune
-        Xhr, yhr = sm.apply_sampling(X_h, yh, strategy=strat)
-        m_ft = LightGBMWrapper(name=f"finetune_{strat}"); m_ft.fit(Xhr, yhr)
-        Xnr, ynr = sm.apply_sampling(X_n, yn, strategy=strat)
-        m_ft.fit(Xnr, ynr)
-        finetune_res[f"finetune_{strat}"] = compute_metrics(yt, m_ft.predict_proba(X_t))
-        _auc = finetune_res[f"finetune_{strat}"]["AUC"]
-        logger.info(f"  [P1 Finetune {strat}] AUC={_auc:.4f}")
-
     OUT_P1.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(retrain_res).T.to_csv(
         OUT_P1 / f"{ds_name}_retrain_{split_mode}.csv")
-    pd.DataFrame(finetune_res).T.to_csv(
-        OUT_P1 / f"{ds_name}_finetune_{split_mode}.csv")
     logger.info(f"  P1 saved: {ds_name} / {split_mode}")
 
 

@@ -62,8 +62,7 @@ Continual-Imbalance-Ensemble/
 │   │   ├── common_des_advanced.py  ← 進階 DES 共用邏輯
 │   │   └── common_dcs.py           ← DCS 實驗共用邏輯
 │   ├── phase1_baseline/            ← Baseline 實驗
-│   │   ├── retrain.py              ← Re-train（歷史 + 新資料合訓）
-│   │   └── finetune.py             ← Fine-tune（歷史預訓 + 新資料微調）
+│   │   └── retrain.py              ← Re-train（歷史 + 新資料合訓）
 │   ├── phase2_ensemble/            ← Phase2 集成（主線 XGB：`static/` + `dynamic/des/`，檔名 xgb_*）
 │   │   ├── xgb_oldnew_ensemble_common.py  ← XGB Old/New 共用
 │   │   ├── static/                 ← 靜態集成
@@ -128,7 +127,7 @@ Continual-Imbalance-Ensemble/
 │   ├── README.md
 │   ├── summary_all_datasets.csv    ← 三資料集總覽
 │   ├── summary_all_datasets_detailed.csv
-│   ├── phase1_baseline/            ← retrain / finetune 輸出
+│   ├── phase1_baseline/            ← baseline 輸出（Old / New / Retrain）
 │   ├── phase2_ensemble/            ← static/、dynamic/des/（XGB 主線）；dynamic/dcs/ 僅舊版腳本可寫入
 │   ├── phase3_feature/             ← 特徵選擇研究輸出
 │   ├── phase4_analysis/            ← 深度／補充分析輸出

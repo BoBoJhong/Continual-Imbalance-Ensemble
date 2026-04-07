@@ -4,20 +4,17 @@ Phase 1 - Bankruptcy 年份切割基準線實驗（PyTorch MLP 深度學習）
 與 bankruptcy_year_splits_xgb.py **相同協定**（請與該檔同步維護）：
   固定 Test = 2015-2018；訓練窗 1999–2014；**15 組** Old/New 切割（`YEAR_SPLITS`）。
   Validation：訓練段內依 **fyear 逐年**各抽約 20% 合併為校準集（與 XGB/LR/RF 一致）。
-  **Retrain 僅在全部迭代中第一次執行**，故跑滿 15 折時 raw = **184** 列。
+  **Retrain 僅在全部迭代中第一次執行**，故跑滿 15 折時 raw = **124** 列。
 
 勿與下列檔案混淆：
   - bankruptcy_year_splits_mlp.py：sklearn MLPClassifier，**三策略** Old / Old+New / New，
     輸出 bankruptcy_year_splits_mlp_raw.csv（84 rows），**不**與 XGB 四策略對齊。
-  - 本檔：PyTorch MLP，**四策略**與 XGB 相同，method **不應** 出現「Old+New」。
+  - 本檔：PyTorch MLP，**三策略**與目前 baseline 主線一致，method **不應** 出現「Old+New」。
 
 訓練策略（對齊 docs/研究方向.md Baselines + 集成對照）：
   - Old      : 只用歷史 (Old) 資料訓練
   - New      : 只用新營運 (New) 資料訓練
   - Retrain  : 歷史 + 新營運「全量」合併後訓練（實驗中只產生一組）
-  - Finetune : 先以 Old 訓練，再以 continue_fit 於 New 接續訓練同一 MLP；
-               微調階段之 BCE pos_weight 與 XGB 第二段相同，以採樣後整段 y_r2 計算；
-               閾值於 **合併之 Old+New validation** 上選取
 
 採樣策略：none / undersampling / oversampling / hybrid
 
@@ -31,7 +28,6 @@ Phase 1 - Bankruptcy 年份切割基準線實驗（PyTorch MLP 深度學習）
   - results/phase1_baseline/torch_mlp/bk_torch_mlp_compact_summary.csv
   - results/phase1_baseline/torch_mlp/bk_torch_mlp_table_{metric}_old.csv
   - results/phase1_baseline/torch_mlp/bk_torch_mlp_table_{metric}_retrain.csv
-  - results/phase1_baseline/torch_mlp/bk_torch_mlp_table_{metric}_finetune.csv
   - results/phase1_baseline/torch_mlp/bk_torch_mlp_table_{metric}_new.csv
 """
 from __future__ import annotations
@@ -62,7 +58,7 @@ COMPACT_SUMMARY_METRICS = ["AUC", "F1", "G_Mean", "Recall", "Precision"]
 COMPACT_ONLY_METRICS = ["AUC", "F1", "Recall"]
 OUTPUT_DIR = project_root / "results" / "phase1_baseline" / "torch_mlp"
 
-METHOD_PREFIX = {"Old": "Old", "Retrain": "Retrain", "Finetune": "Finetune", "New": "New"}
+METHOD_PREFIX = {"Old": "Old", "Retrain": "Retrain", "New": "New"}
 
 
 def _select_threshold_from_validation(y_val, y_proba_val):
@@ -224,7 +220,7 @@ def _train_eval(
 
 
 def _scale_pos_weight(y: np.ndarray) -> float:
-    """與 bankruptcy_year_splits_xgb._scale_pos_weight 相同（Finetune 第二段對齊）。"""
+    """與 bankruptcy_year_splits_xgb._scale_pos_weight 相同。"""
     yv = np.asarray(y).ravel()
     unique, counts = np.unique(yv, return_counts=True)
     if len(unique) != 2:
@@ -234,49 +230,8 @@ def _scale_pos_weight(y: np.ndarray) -> float:
     return float(neg_count / max(pos_count, 1))
 
 
-def _finetune_eval(X_old, y_old, year_old, X_new, y_new, year_new, X_test_raw, y_test, sampler, strategy, tag, logger):
-    """
-    Fine-tuning：Scaler 僅在 Old 的 train fold 上 fit；先訓練 Old，再以 continue_fit 接續訓練 New。
-    第二段 pos_weight 以採樣後整段 y_r2 計算（對齊 XGB 之 scale_pos_weight(y_r2)）。
-    閾值在合併之 Old+New validation 上選（與 bankruptcy_year_splits_xgb 一致）。
-    """
-    X_old_fit_raw, y_old_fit, X_old_val_raw, y_old_val = _split_fit_val_by_year(X_old, y_old, year_old)
-    X_new_fit_raw, y_new_fit, X_new_val_raw, y_new_val = _split_fit_val_by_year(X_new, y_new, year_new)
-
-    pre = DataPreprocessor()
-    X_old_fit, X_old_val = pre.scale_features(X_old_fit_raw, X_old_val_raw, fit=True)
-    _, X_new_fit = pre.scale_features(X_old_fit_raw, X_new_fit_raw, fit=False)
-    _, X_new_val = pre.scale_features(X_old_fit_raw, X_new_val_raw, fit=False)
-    _, X_test = pre.scale_features(X_old_fit_raw, X_test_raw, fit=False)
-
-    X_r1, y_r1 = sampler.apply_sampling(X_old_fit, np.asarray(y_old_fit), strategy=strategy)
-    model = TorchTabularMLPWrapper(name=f"{tag}_{strategy}", seed=42)
-    model.fit(X_r1, y_r1)
-
-    X_r2, y_r2 = sampler.apply_sampling(X_new_fit, np.asarray(y_new_fit), strategy=strategy)
-    model.continue_fit(
-        X_r2,
-        y_r2,
-        lr_factor=0.25,
-        pos_weight_override=_scale_pos_weight(y_r2),
-    )
-
-    X_val_all = np.concatenate([np.asarray(X_old_val), np.asarray(X_new_val)], axis=0)
-    y_val_all = np.concatenate([np.asarray(y_old_val), np.asarray(y_new_val)], axis=0)
-    y_proba_val = model.predict_proba(X_val_all)
-    threshold, val_f1 = _select_threshold_from_validation(y_val_all, y_proba_val)
-
-    y_t = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
-    metrics = compute_metrics(y_t, model.predict_proba(X_test), threshold=threshold)
-    logger.info(
-        f"    {tag:12s} {strategy:12s} [thr={threshold:.3f}, valF1={val_f1:.4f}]: "
-        f"AUC={metrics['AUC']:.4f}  F1={metrics['F1']:.4f}  Recall={metrics['Recall']:.4f}"
-    )
-    return metrics
-
-
 def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_test, logger, include_retrain=True):
-    """對一組切割跑 Old/New/Finetune（與可選的 Retrain），回傳 list of row dict。"""
+    """對一組切割跑 Old/New（與可選的 Retrain），回傳 list of row dict。"""
     sampler = ImbalanceSampler()
     rows = []
 
@@ -306,30 +261,13 @@ def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_t
             )
             rows.append({"split": label, "method": "Retrain", "sampling": strat, **m})
 
-    for strat in SAMPLING_STRATEGIES:
-        m = _finetune_eval(
-            X_old,
-            y_old,
-            year_old,
-            X_new,
-            y_new,
-            year_new,
-            X_test,
-            y_test,
-            sampler,
-            strat,
-            "Finetune",
-            logger,
-        )
-        rows.append({"split": label, "method": "Finetune", "sampling": strat, **m})
-
     return rows
 
 
 def format_tables(df_raw, logger, split_labels_filter=None):
     """
-    依訓練策略分別產出四張表，每個指標共 4 張 × len(METRICS) 個 CSV。
-    Old / Finetune / New：列 = 各 split；Retrain 為單列（與 XGB 之 bk_xgb_table_*_retrain 一致）。
+    依訓練策略分別產出三張表，每個指標共 3 張 × len(METRICS) 個 CSV。
+    Old / New：列 = 各 split；Retrain 為單列（與 XGB 之 bk_xgb_table_*_retrain 一致）。
     split_labels_filter：若指定（例如 --splits 子集），僅輸出該些列；預設全部 YEAR_SPLITS。
     """
     split_yr = {label: (old_end - 1998, 2014 - old_end) for label, old_end in YEAR_SPLITS}
@@ -368,19 +306,6 @@ def format_tables(df_raw, logger, split_labels_filter=None):
         pivot_rt.to_csv(out, float_format="%.4f")
         logger.info(f"  Saved -> {out.name}")
 
-        df_ft = df_raw[df_raw["method"] == "Finetune"]
-        pivot_ft = (
-            df_ft.pivot(index="split", columns="col", values=metric)
-            .reindex(index=split_labels, columns=sampling_cols)
-        )
-        pivot_ft.index = [f"{split_yr[s][0]}+{split_yr[s][1]}" for s in pivot_ft.index]
-        pivot_ft["avg"] = pivot_ft.mean(axis=1)
-        pivot_ft.loc["avg"] = pivot_ft.mean()
-        pivot_ft.index.name = "old+new_years_finetune"
-        out = OUTPUT_DIR / f"bk_torch_mlp_table_{metric}_finetune.csv"
-        pivot_ft.to_csv(out, float_format="%.4f")
-        logger.info(f"  Saved -> {out.name}")
-
         df_new = df_raw[df_raw["method"] == "New"]
         pivot_new = (
             df_new.pivot(index="split", columns="col", values=metric)
@@ -401,7 +326,7 @@ def _mean_pivot_by_method_sampling(df_raw: pd.DataFrame, metric: str) -> pd.Data
         df_raw.groupby(["method", "sampling"])[metric]
         .mean()
         .unstack("sampling")
-        .reindex(index=["Old", "New", "Retrain", "Finetune"], columns=SAMPLING_REPORT_ORDER)
+        .reindex(index=["Old", "New", "Retrain"], columns=SAMPLING_REPORT_ORDER)
     )
     return t.round(4)
 
@@ -504,14 +429,14 @@ def main():
     df_raw.to_csv(raw_path, index=False, float_format="%.6f")
     logger.info(f"\n原始結果已儲存 -> {raw_path.name}  ({len(df_raw)} rows)")
 
-    expected_methods = {"Old", "New", "Retrain", "Finetune"}
+    expected_methods = {"Old", "New", "Retrain"}
     got_methods = set(df_raw["method"].unique())
     n_splits_ran = len({r["split"] for r in all_rows})
-    # 第一次迭代含 Retrain（+4 列），其餘各 12 列（Old/New/Finetune ×4）
-    expect_rows = 16 + 12 * (n_splits_ran - 1) if n_splits_ran > 0 else 0
+    # 第一次迭代含 Retrain（+4 列），其餘各 8 列（Old/New ×4）
+    expect_rows = 12 + 8 * (n_splits_ran - 1) if n_splits_ran > 0 else 0
     if len(df_raw) != expect_rows or got_methods != expected_methods:
         logger.warning(
-            "輸出與 XGB 四策略協定不一致：rows=%s（預期 n_splits=%s → %s 列）、method=%s（預期 %s）。"
+            "輸出與目前三策略協定不一致：rows=%s（預期 n_splits=%s → %s 列）、method=%s（預期 %s）。"
             "若曾見 Old+New 或 84/112 rows，代表舊版或誤跑 bankruptcy_year_splits_mlp.py；請重跑本腳本。",
             len(df_raw),
             n_splits_ran,

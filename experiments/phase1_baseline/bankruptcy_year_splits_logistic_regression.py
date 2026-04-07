@@ -2,13 +2,12 @@
 Phase 1 - Bankruptcy 年份切割基準線實驗（LogisticRegression）
 ===============================================================
 固定 Test = 2015-2018；訓練窗 1999–2014。依 `YEAR_SPLITS` 共 **15 組** Old/New 切割；validation 為
-**逐年**各抽約 20% 後合併。Retrain 僅第一次迭代跑一次，跑滿全部分割時 raw **184** 列（與 XGB 一致）。
+**逐年**各抽約 20% 後合併。Retrain 僅第一次迭代跑一次，跑滿全部分割時 raw **124** 列。
 
 訓練策略（對齊 XGB 規格）：
   - Old
   - New
   - Retrain（Old+New 全量，僅跑一次）
-  - Finetune（Old 訓練後，以 New 續訓）
 
 採樣策略：none / undersampling / oversampling / hybrid
 輸出：raw + pivot tables + compact summaries（與 xgb 腳本同規格）
@@ -180,37 +179,6 @@ def _train_eval(
     return metrics
 
 
-def _finetune_eval(X_old, y_old, year_old, X_new, y_new, year_new, X_test_raw, y_test, sampler, strategy, tag, logger):
-    X_old_fit_raw, y_old_fit, X_old_val_raw, y_old_val = _split_fit_val_by_year(X_old, y_old, year_old)
-    X_new_fit_raw, y_new_fit, X_new_val_raw, y_new_val = _split_fit_val_by_year(X_new, y_new, year_new)
-
-    pre = DataPreprocessor()
-    X_old_fit, X_old_val = pre.scale_features(X_old_fit_raw, X_old_val_raw, fit=True)
-    _, X_new_fit = pre.scale_features(X_old_fit_raw, X_new_fit_raw, fit=False)
-    _, X_new_val = pre.scale_features(X_old_fit_raw, X_new_val_raw, fit=False)
-    _, X_test = pre.scale_features(X_old_fit_raw, X_test_raw, fit=False)
-
-    X_r1, y_r1 = sampler.apply_sampling(X_old_fit, np.asarray(y_old_fit), strategy=strategy)
-    model = LogisticRegressionWrapper(name=f"{tag}_{strategy}")
-    model.fit(X_r1, y_r1)
-
-    X_r2, y_r2 = sampler.apply_sampling(X_new_fit, np.asarray(y_new_fit), strategy=strategy)
-    model.fit(X_r2, y_r2, continue_training=True)
-
-    X_val_all = np.concatenate([np.asarray(X_old_val), np.asarray(X_new_val)], axis=0)
-    y_val_all = np.concatenate([np.asarray(y_old_val), np.asarray(y_new_val)], axis=0)
-    y_proba_val = model.predict_proba(X_val_all)
-    threshold, val_f1 = _select_threshold_from_validation(y_val_all, y_proba_val)
-
-    y_t = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
-    metrics = compute_metrics(y_t, model.predict_proba(X_test), threshold=threshold)
-    logger.info(
-        f"    {tag:12s} {strategy:12s} [thr={threshold:.3f}, valF1={val_f1:.4f}]: "
-        f"AUC={metrics['AUC']:.4f}  F1={metrics['F1']:.4f}  Recall={metrics['Recall']:.4f}"
-    )
-    return metrics
-
-
 def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_test, logger, include_retrain=True):
     sampler = ImbalanceSampler()
     rows = []
@@ -240,23 +208,6 @@ def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_t
                 y_val=y_val_re,
             )
             rows.append({"split": label, "method": "Retrain", "sampling": strat, **m})
-
-    for strat in SAMPLING_STRATEGIES:
-        m = _finetune_eval(
-            X_old,
-            y_old,
-            year_old,
-            X_new,
-            y_new,
-            year_new,
-            X_test,
-            y_test,
-            sampler,
-            strat,
-            "Finetune",
-            logger,
-        )
-        rows.append({"split": label, "method": "Finetune", "sampling": strat, **m})
 
     return rows
 
@@ -296,19 +247,6 @@ def format_tables(df_raw, logger):
         pivot_rt.to_csv(out, float_format="%.4f")
         logger.info(f"  Saved -> {out.name}")
 
-        df_ft = df_raw[df_raw["method"] == "Finetune"]
-        pivot_ft = (
-            df_ft.pivot(index="split", columns="col", values=metric)
-            .reindex(index=split_labels, columns=sampling_cols)
-        )
-        pivot_ft.index = [f"{split_yr[s][0]}+{split_yr[s][1]}" for s in pivot_ft.index]
-        pivot_ft["avg"] = pivot_ft.mean(axis=1)
-        pivot_ft.loc["avg"] = pivot_ft.mean()
-        pivot_ft.index.name = "old+new_years_finetune"
-        out = OUTPUT_DIR / f"bk_lr_table_{metric}_finetune.csv"
-        pivot_ft.to_csv(out, float_format="%.4f")
-        logger.info(f"  Saved -> {out.name}")
-
         df_new = df_raw[df_raw["method"] == "New"]
         pivot_new = (
             df_new.pivot(index="split", columns="col", values=metric)
@@ -328,7 +266,7 @@ def _mean_pivot_by_method_sampling(df_raw: pd.DataFrame, metric: str) -> pd.Data
         df_raw.groupby(["method", "sampling"])[metric]
         .mean()
         .unstack("sampling")
-        .reindex(index=["Old", "New", "Retrain", "Finetune"], columns=SAMPLING_REPORT_ORDER)
+        .reindex(index=["Old", "New", "Retrain"], columns=SAMPLING_REPORT_ORDER)
     )
     return t.round(4)
 

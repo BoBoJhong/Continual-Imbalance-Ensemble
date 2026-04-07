@@ -53,13 +53,6 @@ def evaluate_learner(learner_name, model_class, X_h, y_h, X_n, y_n, X_t, y_t, lo
     ]:
         results[nm] = compute_metrics(yt, np.mean([ap[k] for k in keys], axis=0))
 
-    Xhr, yhr = sm.apply_sampling(X_h, y_h.values, strategy="hybrid")
-    mf = model_class(name="finetune_hybrid")
-    mf.fit(Xhr, yhr)
-    Xnr, ynr = sm.apply_sampling(X_n, y_n.values, strategy="hybrid")
-    mf.fit(Xnr, ynr)
-    results["finetune_hybrid"] = compute_metrics(yt, mf.predict_proba(X_t))
-
     df = pd.DataFrame(results).T
     df["learner"] = learner_name
     for idx, r in df.iterrows():

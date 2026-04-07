@@ -32,13 +32,6 @@ def main():
     sampler = ImbalanceSampler()
     rows = []
 
-    # Fine-tune hybrid
-    Xhr, yhr = sampler.apply_sampling(X_h, y_h.values, strategy='hybrid')
-    m = LightGBMWrapper(name='ft_hybrid'); m.fit(Xhr, yhr)
-    Xnr, ynr = sampler.apply_sampling(X_n, y_n.values, strategy='hybrid')
-    m.fit(Xnr, ynr)
-    rows += eval_thresholds('finetune_hybrid', y_ta, m.predict_proba(X_t))
-
     # Ensemble Old-3
     op = ModelPool(pool_name='old'); op.create_pool(X_h, y_h.values, prefix='old')
     np_ = ModelPool(pool_name='new'); np_.create_pool(X_n, y_n.values, prefix='new')

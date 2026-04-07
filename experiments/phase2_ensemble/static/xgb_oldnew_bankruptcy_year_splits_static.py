@@ -1,5 +1,5 @@
 """
-Phase 2 — XGB Bankruptcy：靜態集成（Old/New/OldNew、k 子集），年份切割。
+Phase 2 — XGB Bankruptcy：靜態集成（僅 Old/New/Retrain），年份切割。
 輸出：results/phase2_ensemble/static/
 """
 from __future__ import annotations

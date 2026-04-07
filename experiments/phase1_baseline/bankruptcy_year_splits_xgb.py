@@ -7,15 +7,13 @@ Phase 1 - Bankruptcy 年份切割基準線實驗（XGBoost）
 Validation：訓練段內 **依 fyear 逐年**各抽約 20% 作 validation，合併為校準集（見
 `_split_fit_val_by_year`）；Retrain 則對 Old、New 各自逐年切分後再合併 fit/val。
 
-每個切割：Old×4 採樣 + New×4 + Finetune×4；**Retrain 僅在全部切割中的第一次迭代跑一次**
-（全資料 1999–2014 合併訓練），故跑滿 15 折時 raw 列數 = 16 + 14×12 = **184**。
+每個切割：Old×4 採樣 + New×4；**Retrain 僅在全部切割中的第一次迭代跑一次**
+（全資料 1999–2014 合併訓練），故跑滿 15 折時 raw 列數 = 12 + 14×8 = **124**。
 
 訓練策略（對齊 docs/研究方向.md Baselines + 集成對照）：
   - Old      : 只用歷史 (Old) 資料訓練（集成之 base learner，非 retrain）
   - New      : 只用新營運 (New) 資料訓練（集成之 base learner）
   - Retrain  : 歷史 + 新營運「全量」合併後訓練（Re-training baseline；實驗中只產生一組）
-  - Finetune : 先以 Old 訓練，再以 New 接續訓練同一 booster（xgb_model=）；
-               微調階段僅 New 樣本；閾值於 **合併之 Old+New validation** 上選取
 
 採樣策略：none / undersampling / oversampling / hybrid
 
@@ -25,10 +23,19 @@ Validation：訓練段內 **依 fyear 逐年**各抽約 20% 作 validation，合
   - results/phase1_baseline/xgb/bk_xgb_compact_summary.csv   （精簡：AUC/F1/G_Mean/Recall/Precision）
   - results/phase1_baseline/xgb/bk_xgb_table_{metric}_old.csv
   - results/phase1_baseline/xgb/bk_xgb_table_{metric}_retrain.csv
-  - results/phase1_baseline/xgb/bk_xgb_table_{metric}_finetune.csv
   - results/phase1_baseline/xgb/bk_xgb_table_{metric}_new.csv
+
+可選超參數調整（validation AUC，見 experiments/_shared/baseline_val_search.py）：
+  python bankruptcy_year_splits_xgb.py --tuning both --tune-n-iter 48
+  --tuning default | tuned | both
+  - default：僅未調參結果（寫入 results/phase1_baseline/xgb/）
+  - tuned ：僅調參結果（寫入 results/phase1_baseline/xgb/tuned/）
+  - both  ：兩者皆跑並分開存放
 """
+import argparse
 import sys
+import zlib
+from datetime import datetime
 from pathlib import Path
 import pandas as pd
 import numpy as np
@@ -38,11 +45,16 @@ from sklearn.metrics import f1_score
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.utils import set_seed, get_logger
+from src.utils import set_seed, get_logger, get_config_loader
 from src.data import ImbalanceSampler, DataPreprocessor
 from src.models import XGBoostWrapper
 from src.evaluation import compute_metrics
 from experiments._shared.common_bankruptcy import YEAR_SPLITS, get_bankruptcy_year_split
+from experiments._shared.baseline_val_search import (
+    export_tuning_log,
+    search_xgb_on_val,
+    tuning_meta,
+)
 
 SAMPLING_STRATEGIES = ["none", "undersampling", "oversampling", "hybrid"]
 # 精簡報告欄位順序（與常見論文表格一致：hybrid / none / over / under）
@@ -55,7 +67,7 @@ COMPACT_ONLY_METRICS = ["AUC", "F1", "Recall"]
 OUTPUT_DIR          = project_root / "results" / "phase1_baseline" / "xgb"
 
 # 欄標題對應：method 縮寫
-METHOD_PREFIX = {"Old": "Old", "Retrain": "Retrain", "Finetune": "Finetune", "New": "New"}
+METHOD_PREFIX = {"Old": "Old", "Retrain": "Retrain", "New": "New"}
 
 
 # ---------------------------------------------------------------------------
@@ -169,6 +181,10 @@ def _train_eval(
     X_val_raw=None,
     y_val=None,
     year_train=None,
+    *,
+    split_label: str = "",
+    use_tuning: bool = False,
+    n_tune_iter: int = 48,
 ):
     """先切 train/val，再只用 train fold fit scaler，避免 validation leakage。"""
     y_train_arr = np.asarray(y_train)
@@ -198,14 +214,44 @@ def _train_eval(
     _, X_test = pre.scale_features(X_fit_raw, X_test_raw, fit=False)
 
     X_r, y_r = sampler.apply_sampling(X_fit, np.asarray(y_fit), strategy=strategy)
-    model = XGBoostWrapper(name=f"{tag}_{strategy}")
-    model.fit(X_r, y_r)
+    tune_seed = 42 + (zlib.adler32(f"{split_label}|{tag}|{strategy}".encode()) % 100000)
+
+    if use_tuning:
+        cfg = get_config_loader()
+        base = dict(cfg.get("model_config", "xgboost.base_params", {}))
+        spw = _scale_pos_weight(y_r)
+        best, auc_s = search_xgb_on_val(
+            X_r,
+            y_r,
+            X_val,
+            np.asarray(y_val),
+            base,
+            spw,
+            n_iter=n_tune_iter,
+            seed=tune_seed,
+        )
+        if best:
+            model = XGBoostWrapper(
+                name=f"{tag}_{strategy}",
+                use_imbalance=False,
+                **{**base, **best, "scale_pos_weight": spw},
+            )
+        else:
+            model = XGBoostWrapper(name=f"{tag}_{strategy}")
+            best, auc_s = {}, float("nan")
+        model.fit(X_r, y_r)
+        tune_ex = tuning_meta(best, auc_s)
+    else:
+        model = XGBoostWrapper(name=f"{tag}_{strategy}")
+        model.fit(X_r, y_r)
+        tune_ex = {}
 
     y_proba_val = model.predict_proba(X_val)
     threshold, val_f1 = _select_threshold_from_validation(np.asarray(y_val), y_proba_val)
 
     y_t = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
     metrics = compute_metrics(y_t, model.predict_proba(X_test), threshold=threshold)
+    metrics.update(tune_ex)
     logger.info(
         f"    {tag:12s} {strategy:12s} [thr={threshold:.3f}, valF1={val_f1:.4f}]: "
         f"AUC={metrics['AUC']:.4f}  F1={metrics['F1']:.4f}  Recall={metrics['Recall']:.4f}"
@@ -223,61 +269,60 @@ def _scale_pos_weight(y: np.ndarray) -> float:
     return float(neg_count / max(pos_count, 1))
 
 
-def _finetune_eval(X_old, y_old, year_old, X_new, y_new, year_new, X_test_raw, y_test, sampler, strategy, tag, logger):
-    """
-    Fine-tuning：Scaler 僅在 Old 的 train fold 上 fit；先訓練 Old，再以 xgb_model 接續訓練 New。
-    分類閾值在 **合併之 Old+New validation** 上選（與 torch_mlp / LR / RF 一致）。
-    """
-    X_old_fit_raw, y_old_fit, X_old_val_raw, y_old_val = _split_fit_val_by_year(X_old, y_old, year_old)
-    X_new_fit_raw, y_new_fit, X_new_val_raw, y_new_val = _split_fit_val_by_year(X_new, y_new, year_new)
-
-    pre = DataPreprocessor()
-    X_old_fit, X_old_val = pre.scale_features(X_old_fit_raw, X_old_val_raw, fit=True)
-    _, X_new_fit = pre.scale_features(X_old_fit_raw, X_new_fit_raw, fit=False)
-    _, X_new_val = pre.scale_features(X_old_fit_raw, X_new_val_raw, fit=False)
-    _, X_test = pre.scale_features(X_old_fit_raw, X_test_raw, fit=False)
-
-    X_r1, y_r1 = sampler.apply_sampling(X_old_fit, np.asarray(y_old_fit), strategy=strategy)
-    model = XGBoostWrapper(name=f"{tag}_{strategy}")
-    model.fit(X_r1, y_r1)
-
-    X_r2, y_r2 = sampler.apply_sampling(X_new_fit, np.asarray(y_new_fit), strategy=strategy)
-    model.model.set_params(scale_pos_weight=_scale_pos_weight(y_r2))
-    model.model.fit(
-        X_r2,
-        y_r2,
-        eval_set=[(X_r2, y_r2)],
-        verbose=False,
-        xgb_model=model.model.get_booster(),
-    )
-
-    X_val_all = np.concatenate([np.asarray(X_old_val), np.asarray(X_new_val)], axis=0)
-    y_val_all = np.concatenate([np.asarray(y_old_val), np.asarray(y_new_val)], axis=0)
-    y_proba_val = model.predict_proba(X_val_all)
-    threshold, val_f1 = _select_threshold_from_validation(y_val_all, y_proba_val)
-
-    y_t = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
-    metrics = compute_metrics(y_t, model.predict_proba(X_test), threshold=threshold)
-    logger.info(
-        f"    {tag:12s} {strategy:12s} [thr={threshold:.3f}, valF1={val_f1:.4f}]: "
-        f"AUC={metrics['AUC']:.4f}  F1={metrics['F1']:.4f}  Recall={metrics['Recall']:.4f}"
-    )
-    return metrics
-
-
-def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_test, logger, include_retrain=True):
-    """對一組切割跑 Old/New/Finetune（與可選 Retrain）；含 Retrain 時 16 列，否則 12 列。"""
+def run_split(
+    label,
+    X_old,
+    y_old,
+    year_old,
+    X_new,
+    y_new,
+    year_new,
+    X_test,
+    y_test,
+    logger,
+    include_retrain=True,
+    *,
+    use_tuning: bool = False,
+    n_tune_iter: int = 48,
+):
+    """對一組切割跑 Old/New（與可選 Retrain）；含 Retrain 時 12 列，否則 8 列。"""
     sampler = ImbalanceSampler()
     rows = []
 
     # Old
     for strat in SAMPLING_STRATEGIES:
-        m = _train_eval(X_old, y_old, X_test, y_test, sampler, strat, "Old", logger, year_train=year_old)
+        m = _train_eval(
+            X_old,
+            y_old,
+            X_test,
+            y_test,
+            sampler,
+            strat,
+            "Old",
+            logger,
+            year_train=year_old,
+            split_label=label,
+            use_tuning=use_tuning,
+            n_tune_iter=n_tune_iter,
+        )
         rows.append({"split": label, "method": "Old", "sampling": strat, **m})
 
     # New
     for strat in SAMPLING_STRATEGIES:
-        m = _train_eval(X_new, y_new, X_test, y_test, sampler, strat, "New", logger, year_train=year_new)
+        m = _train_eval(
+            X_new,
+            y_new,
+            X_test,
+            y_test,
+            sampler,
+            strat,
+            "New",
+            logger,
+            year_train=year_new,
+            split_label=label,
+            use_tuning=use_tuning,
+            n_tune_iter=n_tune_iter,
+        )
         rows.append({"split": label, "method": "New", "sampling": strat, **m})
 
     if include_retrain:
@@ -296,26 +341,11 @@ def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_t
                 logger,
                 X_val_raw=X_val_re,
                 y_val=y_val_re,
+                split_label=label,
+                use_tuning=use_tuning,
+                n_tune_iter=n_tune_iter,
             )
             rows.append({"split": label, "method": "Retrain", "sampling": strat, **m})
-
-    # Finetune
-    for strat in SAMPLING_STRATEGIES:
-        m = _finetune_eval(
-            X_old,
-            y_old,
-            year_old,
-            X_new,
-            y_new,
-            year_new,
-            X_test,
-            y_test,
-            sampler,
-            strat,
-            "Finetune",
-            logger,
-        )
-        rows.append({"split": label, "method": "Finetune", "sampling": strat, **m})
 
     return rows
 
@@ -324,11 +354,11 @@ def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_t
 # 格式化 pivot 表格
 # ---------------------------------------------------------------------------
 
-def format_tables(df_raw, logger):
+def format_tables(df_raw, logger, output_dir: Path):
     """
-    依訓練策略分別產出四張表，每個指標共 4 張 × len(METRICS) 個 CSV。
+    依訓練策略分別產出三張表，每個指標共 3 張 × len(METRICS) 個 CSV。
 
-    Old / Finetune / New 表：列 = 各 split；Retrain 表為單列（跨唯一 Retrain 列聚合平均）。
+    Old / New 表：列 = 各 split；Retrain 表為單列（跨唯一 Retrain 列聚合平均）。
     """
     # split label → (old_yr, new_yr)
     split_yr = {label: (old_end - 1998, 2014 - old_end)
@@ -351,7 +381,7 @@ def format_tables(df_raw, logger):
         pivot_old["avg"] = pivot_old.mean(axis=1)
         pivot_old.loc["avg"] = pivot_old.mean()
         pivot_old.index.name = "old_years"
-        out = OUTPUT_DIR / f"bk_xgb_table_{metric}_old.csv"
+        out = output_dir / f"bk_xgb_table_{metric}_old.csv"
         pivot_old.to_csv(out, float_format="%.4f")
         logger.info(f"  Saved -> {out.name}")
 
@@ -364,22 +394,8 @@ def format_tables(df_raw, logger):
         pivot_rt.index = ["full_16yr"]
         pivot_rt["avg"] = pivot_rt.mean(axis=1)
         pivot_rt.index.name = "retrain_scope"
-        out = OUTPUT_DIR / f"bk_xgb_table_{metric}_retrain.csv"
+        out = output_dir / f"bk_xgb_table_{metric}_retrain.csv"
         pivot_rt.to_csv(out, float_format="%.4f")
-        logger.info(f"  Saved -> {out.name}")
-
-        # ---------- Finetune 表 ----------
-        df_ft = df_raw[df_raw["method"] == "Finetune"]
-        pivot_ft = (
-            df_ft.pivot(index="split", columns="col", values=metric)
-            .reindex(index=split_labels, columns=sampling_cols)
-        )
-        pivot_ft.index = [f"{split_yr[s][0]}+{split_yr[s][1]}" for s in pivot_ft.index]
-        pivot_ft["avg"] = pivot_ft.mean(axis=1)
-        pivot_ft.loc["avg"] = pivot_ft.mean()
-        pivot_ft.index.name = "old+new_years_finetune"
-        out = OUTPUT_DIR / f"bk_xgb_table_{metric}_finetune.csv"
-        pivot_ft.to_csv(out, float_format="%.4f")
         logger.info(f"  Saved -> {out.name}")
 
         # ---------- New 表 ----------
@@ -392,7 +408,7 @@ def format_tables(df_raw, logger):
         pivot_new["avg"] = pivot_new.mean(axis=1)
         pivot_new.loc["avg"] = pivot_new.mean()
         pivot_new.index.name = "new_years"
-        out = OUTPUT_DIR / f"bk_xgb_table_{metric}_new.csv"
+        out = output_dir / f"bk_xgb_table_{metric}_new.csv"
         pivot_new.to_csv(out, float_format="%.4f")
         logger.info(f"  Saved -> {out.name}")
 
@@ -403,12 +419,12 @@ def _mean_pivot_by_method_sampling(df_raw: pd.DataFrame, metric: str) -> pd.Data
         df_raw.groupby(["method", "sampling"])[metric]
         .mean()
         .unstack("sampling")
-        .reindex(index=["Old", "New", "Retrain", "Finetune"], columns=SAMPLING_REPORT_ORDER)
+        .reindex(index=["Old", "New", "Retrain"], columns=SAMPLING_REPORT_ORDER)
     )
     return t.round(4)
 
 
-def export_compact_report(df_raw: pd.DataFrame, logger) -> None:
+def export_compact_report(df_raw: pd.DataFrame, logger, output_dir: Path) -> None:
     """
     精簡報告：
       - bk_xgb_compact_summary.csv：長表，欄位 metric, method, hybrid, none, oversampling, undersampling
@@ -424,7 +440,7 @@ def export_compact_report(df_raw: pd.DataFrame, logger) -> None:
     if not rows:
         return
     long_df = pd.concat(rows, ignore_index=True)
-    path_all = OUTPUT_DIR / "bk_xgb_compact_summary.csv"
+    path_all = output_dir / "bk_xgb_compact_summary.csv"
     long_df.to_csv(path_all, index=False, float_format="%.4f")
     logger.info(f"  Saved -> {path_all.name}")
 
@@ -432,7 +448,7 @@ def export_compact_report(df_raw: pd.DataFrame, logger) -> None:
         if m not in df_raw.columns:
             continue
         pivot = _mean_pivot_by_method_sampling(df_raw, m)
-        path_m = OUTPUT_DIR / f"bk_xgb_compact_{m}_only.csv"
+        path_m = output_dir / f"bk_xgb_compact_{m}_only.csv"
         pivot.to_csv(path_m, float_format="%.4f")
         logger.info(f"  Saved -> {path_m.name}")
 
@@ -441,13 +457,16 @@ def export_compact_report(df_raw: pd.DataFrame, logger) -> None:
 # main
 # ---------------------------------------------------------------------------
 
-def main():
-    logger = get_logger("BK_YearSplits_XGB", console=True, file=True)
-    set_seed(42)
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+def _run_one_output_dir(
+    output_dir: Path,
+    *,
+    use_tuning: bool,
+    n_tune_iter: int,
+    logger,
+) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     all_rows = []
-
     retrain_done = False
     for label, old_end_year in YEAR_SPLITS:
         logger.info(f"\n{'='*60}")
@@ -471,31 +490,80 @@ def main():
                 y_test,
                 logger,
                 include_retrain=(not retrain_done),
+                use_tuning=use_tuning,
+                n_tune_iter=n_tune_iter,
             )
             all_rows.extend(rows)
             retrain_done = True
         except Exception as e:
             logger.error(f"[ERROR] {label}: {e}")
-            import traceback; logger.error(traceback.format_exc())
+            import traceback
+            logger.error(traceback.format_exc())
 
     if not all_rows:
         logger.error("無任何結果，請確認資料檔存在。")
         return
 
     df_raw = pd.DataFrame(all_rows)
-    raw_path = OUTPUT_DIR / "bankruptcy_year_splits_xgb_raw.csv"
+    raw_path = output_dir / "bankruptcy_year_splits_xgb_raw.csv"
     df_raw.to_csv(raw_path, index=False, float_format="%.6f")
     logger.info(f"\n原始結果已儲存 -> {raw_path.name}  ({len(df_raw)} rows)")
 
     logger.info("\n產出指標 pivot 表格...")
-    format_tables(df_raw, logger)
+    format_tables(df_raw, logger, output_dir)
 
     logger.info("\n產出精簡摘要（跨各 split 平均）...")
-    export_compact_report(df_raw, logger)
+    export_compact_report(df_raw, logger, output_dir)
+
+    if use_tuning:
+        export_tuning_log(df_raw, output_dir / "bk_xgb_tuning_log.csv", logger)
 
     logger.info("\n=== 完成 ===")
     summary = _mean_pivot_by_method_sampling(df_raw, "AUC")
     logger.info("\nAUC 摘要（method × sampling 平均，跨各年份切割）:\n" + summary.to_string())
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Phase1 bankruptcy year splits — XGBoost baseline")
+    parser.add_argument(
+        "--tuning",
+        choices=["default", "tuned", "both"],
+        default="default",
+        help="default=僅預設超參數；tuned=僅 validation AUC 調參（輸出至 xgb/tuned/）；both=兩者皆跑",
+    )
+    parser.add_argument(
+        "--tune-n-iter",
+        type=int,
+        default=48,
+        help="XGB 調參時隨機嘗試的超參數組數（僅 Random search 有效）",
+    )
+    parser.add_argument(
+        "--output-tag",
+        type=str,
+        default="",
+        help="結果輸出子資料夾標籤（例如 rerun_20260406）。會寫到 xgb/<tag>/ 或 xgb/<tag>/tuned/",
+    )
+    args = parser.parse_args()
+
+    logger = get_logger("BK_YearSplits_XGB", console=True, file=True)
+    set_seed(42)
+
+    tag = args.output_tag.strip()
+    if not tag:
+        tag = datetime.now().strftime("run_%Y%m%d_%H%M%S")
+    base_output_dir = OUTPUT_DIR / tag
+
+    if args.tuning == "default":
+        runs = [(False, base_output_dir)]
+    elif args.tuning == "tuned":
+        runs = [(True, base_output_dir / "tuned")]
+    else:
+        runs = [(False, base_output_dir), (True, base_output_dir / "tuned")]
+
+    for use_tune, out_dir in runs:
+        tag = "validation AUC 調參" if use_tune else "預設超參數"
+        logger.info(f"\n{'#'*60}\n模式: {tag}\n輸出: {out_dir}\n{'#'*60}")
+        _run_one_output_dir(out_dir, use_tuning=use_tune, n_tune_iter=args.tune_n_iter, logger=logger)
 
 
 if __name__ == "__main__":

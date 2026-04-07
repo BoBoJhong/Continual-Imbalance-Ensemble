@@ -70,10 +70,12 @@ class TabNetWrapper:
             scheduler_params={"step_size": 50, "gamma": 0.9},
         )
 
-    def fit(self, X_train, y_train, X_val=None, y_val=None, **kwargs):
+    def fit(self, X_train, y_train, X_val=None, y_val=None, *, warm_start=False, **kwargs):
         """
         訓練 TabNet。
         若未提供 X_val / y_val，自動從訓練集分割 10% 作為 early stopping 用。
+        warm_start=True 時接續既有 network（供 Finetune：Old 後再以 New 訓練），須先成功 fit 過一次。
+        其餘 kwargs 會轉傳給 pytorch_tabnet TabNetClassifier.fit（例如 max_epochs）。
         """
         X = X_train.values if hasattr(X_train, "values") else np.asarray(X_train, dtype=np.float32)
         y = y_train.values if hasattr(y_train, "values") else np.asarray(y_train)
@@ -90,14 +92,16 @@ class TabNetWrapper:
             X, Xv, y, yv = train_test_split(X, y, test_size=0.1, random_state=42, stratify=y if y.sum() > 1 else None)
             eval_set = [(Xv, yv)]
 
-        self.model.fit(
-            X, y,
-            eval_set=eval_set,
-            eval_metric=["auc"],
-            max_epochs=self.max_epochs,
-            patience=self.patience,
-            batch_size=self.batch_size,
-        )
+        fit_kwargs = {
+            "eval_set": eval_set,
+            "eval_metric": ["auc"],
+            "max_epochs": self.max_epochs,
+            "patience": self.patience,
+            "batch_size": self.batch_size,
+            "warm_start": warm_start,
+        }
+        fit_kwargs.update(kwargs)
+        self.model.fit(X, y, **fit_kwargs)
         return self
 
     def predict(self, X) -> np.ndarray:

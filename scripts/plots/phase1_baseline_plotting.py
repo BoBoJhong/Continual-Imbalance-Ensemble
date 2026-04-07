@@ -1,6 +1,6 @@
 """
 Phase 1 baseline 共用繪圖：年份切割折線圖 + compact 熱力圖。
-各 visualize_phase1_* 腳本可傳入 METHOD_ORDER_NO_FINETUNE 以排除 Finetune。
+各 visualize_phase1_* 腳本使用目前 baseline 主線方法順序（Old / New / Retrain）。
 
 折線圖橫軸預設為 Split index（1…n）；若要顯示 old+new 年數刻度，請設定環境變數
 PHASE1_PLOT_SPLIT_AXIS=window 後再執行 visualize 腳本。
@@ -38,28 +38,25 @@ SPLIT_X_AXIS_STYLE = _SPLIT_AXIS_ENV if _SPLIT_AXIS_ENV in ("index", "window") e
 # 僅在某一個 split 有數值時（例如 Retrain 全資料只訓練一次），改畫橫跨橫軸的參考線，避免單點折線。
 DEFAULT_GLOBAL_REFERENCE_METHODS = frozenset({"Retrain"})
 
-METHOD_ORDER_XGB = ["Old", "New", "Retrain", "Finetune"]
-# 與 XGB 同色；用於僅畫 Old / New / Retrain（不含 Finetune）時。
+METHOD_ORDER_XGB = ["Old", "New", "Retrain"]
 METHOD_ORDER_NO_FINETUNE = ["Old", "New", "Retrain"]
 METHOD_COLORS_XGB = {
     "Old": "#5B8DB8",
     "New": "#E07B54",
     "Retrain": "#6DBF8E",
-    "Finetune": "#9B6DBF",
 }
 
-# Torch MLP bankruptcy 實驗與 XGB 相同四策略（見 bankruptcy_year_splits_torch_mlp.py）
-METHOD_ORDER_MLP = ["Old", "New", "Retrain", "Finetune"]
+# Torch MLP / TabNet 破產實驗已與 XGB 對齊為三策略。
+METHOD_ORDER_MLP = ["Old", "New", "Retrain"]
 METHOD_COLORS_MLP = {
     "Old": "#5B8DB8",
     "New": "#E07B54",
     "Retrain": "#6DBF8E",
-    "Finetune": "#9B6DBF",
     # 舊版 sklearn MLP 腳本或過期 raw 若仍含「Old+New」：
     "Old+New": "#3D9970",
 }
 
-# TabNet / sklearn MLP（medical、stock、舊版 bankruptcy MLP）三策略
+# sklearn MLP（medical、stock、舊版 bankruptcy MLP）等三策略 raw。
 METHOD_ORDER_LEGACY_THREE = ["Old", "Old+New", "New"]
 METHOD_COLORS_LEGACY_THREE = {
     "Old": "#5B8DB8",
@@ -168,7 +165,7 @@ def plot_year_split_lines(
             if metric not in sub_s.columns:
                 ax.set_visible(False)
                 continue
-            # 全寬參考線須最後繪製，否則會被後續 Finetune 等折線蓋住（RF/XGB 常發生）。
+            # 全寬參考線須最後繪製，否則會被後續折線蓋住（RF/XGB 常發生）。
             deferred_global_ref: list[tuple[str, np.ndarray, np.ndarray, str]] = []
             for method in method_order:
                 msub = sub_s[sub_s["method"] == method].drop_duplicates(subset=["split"])

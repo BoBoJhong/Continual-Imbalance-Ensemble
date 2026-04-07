@@ -1,0 +1,4 @@
+split,method,sampling,AUC,F1,G_Mean,Recall,Precision,Type1_Error,Type2_Error
+split_1+15,Old,none,0.460822,0.045961,0.274193,0.926829,0.023565,0.918883,0.073171
+split_1+15,Old,undersampling,0.607819,0.056912,0.547714,0.466899,0.030303,0.357482,0.533101
+split_1+15,Old,oversampling,0.492270,0.038339,0.351603,0.146341,0.022059,0.155231,0.853659

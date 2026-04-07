@@ -17,14 +17,11 @@ from experiments._shared.common_dataset import MEDICAL_YEAR_SPLITS, STOCK_YEAR_S
 
 from experiments.phase2_ensemble.xgb_oldnew_ensemble_common import (
     SAMPLING_STRATEGIES,
-    TYPE_K_SUBSET_DETAIL,
-    TYPE_K_SUBSETS_MEAN,
     SAMPLING_DYNAMIC_ALL6,
     DYNAMIC_DES_METHODS,
     train_one_sampling_xgb,
     ensemble_metrics_with_threshold,
     dynamic_ensemble_metrics_with_threshold,
-    combination_metrics_6_models_details,
 )
 
 SplitFn = Callable[[logging.Logger, int], tuple]
@@ -160,6 +157,8 @@ def process_one_year_split(
             sampler=sampler,
             sampling_strategy=s,
             model_name=f"old_{label}{mi}_{s}",
+            split_label=label,
+            method_label="Old",
         )
         old_val_probas_all.append(val_p)
         old_test_probas_all.append(test_p)
@@ -173,6 +172,8 @@ def process_one_year_split(
             sampler=sampler,
             sampling_strategy=s,
             model_name=f"new_{label}{mi}_{s}",
+            split_label=label,
+            method_label="New",
         )
         new_val_probas_all.append(val_p)
         new_test_probas_all.append(test_p)
@@ -189,7 +190,7 @@ def process_one_year_split(
     ensemble_map = {
         "old_only": "Old",
         "new_only": "New",
-        "old_new_all": "OldNew",
+        "old_new_all": "Retrain",
     }
 
     for i, s in enumerate(SAMPLING_STRATEGIES):
@@ -274,7 +275,6 @@ def process_one_year_split(
 
     val_probas_6 = old_val_probas_all + new_val_probas_all
     test_probas_6 = old_test_probas_all + new_test_probas_all
-
     for method_key, ens_name in DYNAMIC_DES_METHODS:
         dyn6 = dynamic_ensemble_metrics_with_threshold(
             y_val_arr,
@@ -297,57 +297,6 @@ def process_one_year_split(
                 **{k: dyn6[k] for k in ["AUC", "F1", "Recall"]},
             }
         )
-
-    for k in [2, 3, 4, 5, 6]:
-        details = combination_metrics_6_models_details(
-            y_val=y_val_arr,
-            val_probas_6=val_probas_6,
-            y_test=y_test_arr,
-            test_probas_6=test_probas_6,
-            k=k,
-        )
-        for d in details:
-            static_rows.append(
-                {
-                    "dataset": year_combo,
-                    "split": label,
-                    "ensemble": f"{k}models",
-                    "sampling_col": TYPE_K_SUBSET_DETAIL,
-                    "subset": d["subset_label"],
-                    "subset_indices": d["subset_indices"],
-                    "AUC": d["AUC"],
-                    "F1": d["F1"],
-                    "Recall": d["Recall"],
-                }
-            )
-        if details:
-            static_rows.append(
-                {
-                    "dataset": year_combo,
-                    "split": label,
-                    "ensemble": f"{k}models",
-                    "sampling_col": TYPE_K_SUBSETS_MEAN,
-                    "subset": "",
-                    "subset_indices": "",
-                    "AUC": float(np.mean([d["AUC"] for d in details])),
-                    "F1": float(np.mean([d["F1"] for d in details])),
-                    "Recall": float(np.mean([d["Recall"] for d in details])),
-                }
-            )
-        else:
-            static_rows.append(
-                {
-                    "dataset": year_combo,
-                    "split": label,
-                    "ensemble": f"{k}models",
-                    "sampling_col": TYPE_K_SUBSETS_MEAN,
-                    "subset": "",
-                    "subset_indices": "",
-                    "AUC": np.nan,
-                    "F1": np.nan,
-                    "Recall": np.nan,
-                }
-            )
 
     return static_rows, des_rows
 
