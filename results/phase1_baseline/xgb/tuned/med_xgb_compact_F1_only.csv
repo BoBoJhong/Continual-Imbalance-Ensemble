@@ -1,0 +1,4 @@
+method,hybrid,none,oversampling,undersampling
+Old,0.2453,0.2513,0.2412,0.2492
+New,0.2556,0.2619,0.2558,0.2630
+Retrain,0.2618,0.2596,0.2571,0.2604

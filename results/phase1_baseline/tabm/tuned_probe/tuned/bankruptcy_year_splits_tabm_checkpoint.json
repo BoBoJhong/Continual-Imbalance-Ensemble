@@ -1,0 +1,14 @@
+{
+  "updated_at": "2026-04-10T05:13:00",
+  "rows_count": 8,
+  "completed_stage_keys": [
+    "split_8+8|New|hybrid",
+    "split_8+8|New|none",
+    "split_8+8|New|oversampling",
+    "split_8+8|New|undersampling",
+    "split_8+8|Old|hybrid",
+    "split_8+8|Old|none",
+    "split_8+8|Old|oversampling",
+    "split_8+8|Old|undersampling"
+  ]
+}

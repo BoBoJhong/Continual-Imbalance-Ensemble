@@ -7,6 +7,7 @@ from .svm_wrapper import SVMWrapper
 from .mlp_wrapper import MLPWrapper
 from .tabnet_wrapper import TabNetWrapper
 from .tabm_wrapper import TabMWrapper
+from .tabr_wrapper import TabRWrapper
 from .fttransformer_wrapper import FTTransformerWrapper
 from .lstm_wrapper import LSTMWrapper
 from .model_pool import ModelPool
@@ -20,6 +21,7 @@ __all__ = [
     'MLPWrapper',
     'TabNetWrapper',
     'TabMWrapper',
+    'TabRWrapper',
     'FTTransformerWrapper',
     'LSTMWrapper',
     'ModelPool'

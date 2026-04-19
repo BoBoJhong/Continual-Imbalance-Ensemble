@@ -1,0 +1,91 @@
+family,metric,split,value,ensemble,sampling,dataset
+DCS,AUC,split_1+15,0.751700,DCS_OLA,pool6_xgb,1+15
+DES,AUC,split_1+15,0.799500,Dynamic_KNORA_E,hybrid,O1 + N15
+Static,AUC,split_1+15,0.857800,New,under,O1 + N15
+DCS,AUC,split_10+6,0.835800,DCS_OLA,pool6_xgb,10+6
+DES,AUC,split_10+6,0.858200,Dynamic_KNORA_U,under,O10 + N6
+Static,AUC,split_10+6,0.871300,New,under,O10 + N6
+DCS,AUC,split_11+5,0.851100,DCS_LCA,pool6_xgb,11+5
+DES,AUC,split_11+5,0.852300,Dynamic_DES_KNN,all6,O11 + N5
+Static,AUC,split_11+5,0.871300,3models,k_subset,O11 + N5
+DCS,AUC,split_12+4,0.846500,DCS_OLA,pool6_xgb,12+4
+DES,AUC,split_12+4,0.852100,Dynamic_DES_KNN,all6,O12 + N4
+Static,AUC,split_12+4,0.866300,3models,k_subset,O12 + N4
+DCS,AUC,split_13+3,0.851700,DCS_OLA,pool6_xgb,13+3
+DES,AUC,split_13+3,0.861000,Dynamic_KNORA_U,under,O13 + N3
+Static,AUC,split_13+3,0.870000,4models,k_subset,O13 + N3
+DCS,AUC,split_14+2,0.861000,DCS_OLA,pool6_xgb,14+2
+DES,AUC,split_14+2,0.866300,Dynamic_KNORA_U,under,O14 + N2
+Static,AUC,split_14+2,0.872100,3models,k_subset,O14 + N2
+DCS,AUC,split_15+1,0.842900,DCS_OLA,pool6_xgb,15+1
+DES,AUC,split_15+1,0.869100,Dynamic_DES_KNN,under,O15 + N1
+Static,AUC,split_15+1,0.870800,4models,k_subset,O15 + N1
+DCS,AUC,split_2+14,0.770800,DCS_OLA,pool6_xgb,2+14
+DES,AUC,split_2+14,0.807000,Dynamic_DES_KNN,all6,O2 + N14
+Static,AUC,split_2+14,0.850800,New,under,O2 + N14
+DCS,AUC,split_3+13,0.793100,DCS_OLA,pool6_xgb,3+13
+DES,AUC,split_3+13,0.823800,Dynamic_KNORA_U,under,O3 + N13
+Static,AUC,split_3+13,0.851200,New,under,O3 + N13
+DCS,AUC,split_4+12,0.782500,DCS_OLA,pool6_xgb,4+12
+DES,AUC,split_4+12,0.843700,Dynamic_DES_KNN,under,O4 + N12
+Static,AUC,split_4+12,0.872400,New,under,O4 + N12
+DCS,AUC,split_5+11,0.807500,DCS_OLA,pool6_xgb,5+11
+DES,AUC,split_5+11,0.854400,Dynamic_DES_KNN,under,O5 + N11
+Static,AUC,split_5+11,0.880700,New,under,O5 + N11
+DCS,AUC,split_6+10,0.801300,DCS_OLA,pool6_xgb,6+10
+DES,AUC,split_6+10,0.844500,Dynamic_KNORA_U,under,O6 + N10
+Static,AUC,split_6+10,0.883500,New,under,O6 + N10
+DCS,AUC,split_7+9,0.813700,DCS_OLA,pool6_xgb,7+9
+DES,AUC,split_7+9,0.846200,Dynamic_DES_KNN,under,O7 + N9
+Static,AUC,split_7+9,0.870000,New,under,O7 + N9
+DCS,AUC,split_8+8,0.807100,DCS_OLA,pool6_xgb,8+8
+DES,AUC,split_8+8,0.839200,Dynamic_DES_KNN,all6,O8 + N8
+Static,AUC,split_8+8,0.865700,New,under,O8 + N8
+DCS,AUC,split_9+7,0.823800,DCS_OLA,pool6_xgb,9+7
+DES,AUC,split_9+7,0.849700,Dynamic_KNORA_U,under,O9 + N7
+Static,AUC,split_9+7,0.876900,New,under,O9 + N7
+DCS,F1,split_1+15,0.137100,DCS_OLA,pool6_xgb,1+15
+DES,F1,split_1+15,0.237500,Dynamic_KNORA_E,under,O1 + N15
+Static,F1,split_1+15,0.252300,3models,k_subset,O1 + N15
+DCS,F1,split_10+6,0.216800,DCS_LCA,pool6_xgb,10+6
+DES,F1,split_10+6,0.231600,Dynamic_KNORA_U,under,O10 + N6
+Static,F1,split_10+6,0.253500,New,under,O10 + N6
+DCS,F1,split_11+5,0.246900,DCS_LCA,pool6_xgb,11+5
+DES,F1,split_11+5,0.217200,Dynamic_DES_KNN,all6,O11 + N5
+Static,F1,split_11+5,0.244900,New,under,O11 + N5
+DCS,F1,split_12+4,0.245800,DCS_OLA,pool6_xgb,12+4
+DES,F1,split_12+4,0.223100,Dynamic_KNORA_E,under,O12 + N4
+Static,F1,split_12+4,0.236700,4models,k_subset,O12 + N4
+DCS,F1,split_13+3,0.243000,DCS_OLA,pool6_xgb,13+3
+DES,F1,split_13+3,0.244000,Dynamic_KNORA_U,all6,O13 + N3
+Static,F1,split_13+3,0.259500,4models,k_subset,O13 + N3
+DCS,F1,split_14+2,0.253400,DCS_OLA,pool6_xgb,14+2
+DES,F1,split_14+2,0.235900,Dynamic_KNORA_U,under,O14 + N2
+Static,F1,split_14+2,0.239100,2models,k_subset,O14 + N2
+DCS,F1,split_15+1,0.246100,DCS_LCA,pool6_xgb,15+1
+DES,F1,split_15+1,0.255800,Dynamic_DES_KNN,under,O15 + N1
+Static,F1,split_15+1,0.245500,3models,k_subset,O15 + N1
+DCS,F1,split_2+14,0.126300,DCS_OLA,pool6_xgb,2+14
+DES,F1,split_2+14,0.191700,Dynamic_DES_KNN,under,O2 + N14
+Static,F1,split_2+14,0.244300,New,under,O2 + N14
+DCS,F1,split_3+13,0.134800,DCS_LCA,pool6_xgb,3+13
+DES,F1,split_3+13,0.206600,Dynamic_KNORA_U,under,O3 + N13
+Static,F1,split_3+13,0.259900,3models,k_subset,O3 + N13
+DCS,F1,split_4+12,0.130900,DCS_OLA,pool6_xgb,4+12
+DES,F1,split_4+12,0.217900,Dynamic_KNORA_U,under,O4 + N12
+Static,F1,split_4+12,0.257300,3models,k_subset,O4 + N12
+DCS,F1,split_5+11,0.156500,DCS_OLA,pool6_xgb,5+11
+DES,F1,split_5+11,0.235700,Dynamic_DES_KNN,under,O5 + N11
+Static,F1,split_5+11,0.281500,3models,k_subset,O5 + N11
+DCS,F1,split_6+10,0.156700,DCS_LCA,pool6_xgb,6+10
+DES,F1,split_6+10,0.235600,Dynamic_KNORA_U,under,O6 + N10
+Static,F1,split_6+10,0.250200,New,under,O6 + N10
+DCS,F1,split_7+9,0.169900,DCS_OLA,pool6_xgb,7+9
+DES,F1,split_7+9,0.210400,Dynamic_DES_KNN,under,O7 + N9
+Static,F1,split_7+9,0.250600,New,under,O7 + N9
+DCS,F1,split_8+8,0.180700,DCS_LCA_TW,pool6_xgb,8+8
+DES,F1,split_8+8,0.219700,Dynamic_DES_KNN,under,O8 + N8
+Static,F1,split_8+8,0.258700,New,under,O8 + N8
+DCS,F1,split_9+7,0.201100,DCS_LCA,pool6_xgb,9+7
+DES,F1,split_9+7,0.240000,Dynamic_KNORA_U,under,O9 + N7
+Static,F1,split_9+7,0.253200,New,under,O9 + N7

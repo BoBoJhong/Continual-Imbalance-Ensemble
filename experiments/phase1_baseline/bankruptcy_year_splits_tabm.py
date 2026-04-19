@@ -60,6 +60,29 @@ OUTPUT_DIR = TABM_BASE_DIR
 CHECKPOINT_PATH = OUTPUT_DIR / "bankruptcy_year_splits_tabm_checkpoint.json"
 PARTIAL_RAW_PATH = OUTPUT_DIR / "bankruptcy_year_splits_tabm_raw.partial.csv"
 
+TABM_TUNE_PROFILE_DEFAULTS = {
+    "standard": {
+        "tune_n_iter": 24,
+        "tune_max_epochs": 200,
+        "tune_patience": 20,
+        "final_max_epochs": 200,
+        "final_patience": 20,
+        "batch_size": 256,
+        "predict_batch_size": 4096,
+        "val_batch_size": 8192,
+    },
+    "light": {
+        "tune_n_iter": 8,
+        "tune_max_epochs": 48,
+        "tune_patience": 6,
+        "final_max_epochs": 120,
+        "final_patience": 12,
+        "batch_size": 512,
+        "predict_batch_size": 8192,
+        "val_batch_size": 16384,
+    },
+}
+
 
 def _stage_key(split: str, method: str, sampling: str) -> str:
     return f"{split}|{method}|{sampling}"
@@ -215,6 +238,30 @@ def _build_retrain_fit_val(X_old, y_old, year_old, X_new, y_new, year_new):
     return X_fit, y_fit, X_val, y_val
 
 
+def _resolve_tabm_runtime(profile: str, args):
+    defaults = TABM_TUNE_PROFILE_DEFAULTS[profile]
+    return {
+        "tune_n_iter": int(args.tune_n_iter if args.tune_n_iter is not None else defaults["tune_n_iter"]),
+        "tune_max_epochs": int(
+            args.tune_max_epochs if args.tune_max_epochs is not None else defaults["tune_max_epochs"]
+        ),
+        "tune_patience": int(args.tune_patience if args.tune_patience is not None else defaults["tune_patience"]),
+        "final_max_epochs": int(
+            args.final_max_epochs if args.final_max_epochs is not None else defaults["final_max_epochs"]
+        ),
+        "final_patience": int(
+            args.final_patience if args.final_patience is not None else defaults["final_patience"]
+        ),
+        "batch_size": int(args.batch_size if args.batch_size is not None else defaults["batch_size"]),
+        "predict_batch_size": int(
+            args.predict_batch_size
+            if args.predict_batch_size is not None
+            else defaults["predict_batch_size"]
+        ),
+        "val_batch_size": int(args.val_batch_size if args.val_batch_size is not None else defaults["val_batch_size"]),
+    }
+
+
 def _train_eval(
     X_train_raw,
     y_train,
@@ -233,6 +280,13 @@ def _train_eval(
     n_tune_iter: int = 24,
     device: str = "auto",
     use_amp: bool = True,
+    tune_max_epochs: int = 200,
+    tune_patience: int = 20,
+    final_max_epochs: int = 200,
+    final_patience: int = 20,
+    batch_size: int = 256,
+    predict_batch_size: int = 4096,
+    val_batch_size: int = 8192,
 ):
     """先切 train/val，再只用 train fold fit scaler，避免 validation leakage。"""
     y_train_arr = np.asarray(y_train)
@@ -257,22 +311,32 @@ def _train_eval(
     X_r, y_r = sampler.apply_sampling(X_fit, np.asarray(y_fit), strategy=strategy)
     tune_seed = 42 + (zlib.adler32(f"{split_label}|{tag}|{strategy}".encode()) % 100000)
 
+    tune_base = {
+        "device": device,
+        "use_amp": use_amp,
+        "max_epochs": tune_max_epochs,
+        "patience": tune_patience,
+        "batch_size": batch_size,
+        "predict_batch_size": predict_batch_size,
+        "val_batch_size": val_batch_size,
+    }
+    final_base = {
+        "device": device,
+        "use_amp": use_amp,
+        "max_epochs": final_max_epochs,
+        "patience": final_patience,
+        "batch_size": batch_size,
+        "predict_batch_size": predict_batch_size,
+        "val_batch_size": val_batch_size,
+    }
+
     if use_tuning:
-        base = {
-            "device": device,
-            "use_amp": use_amp,
-            "max_epochs": 200,
-            "patience": 20,
-            "batch_size": 256,
-            "predict_batch_size": 4096,
-            "val_batch_size": 8192,
-        }
         best, auc_s = search_tabm_on_val(
             X_r,
             y_r,
             X_val,
             np.asarray(y_val),
-            base,
+            tune_base,
             n_iter=n_tune_iter,
             seed=tune_seed,
         )
@@ -280,14 +344,14 @@ def _train_eval(
             model = TabMWrapper(
                 name=f"{tag}_{strategy}",
                 seed=tune_seed,
-                **base,
+                **final_base,
                 **best,
             )
         else:
             model = TabMWrapper(
                 name=f"{tag}_{strategy}",
                 seed=tune_seed,
-                **base,
+                **final_base,
             )
             best, auc_s = {}, float("nan")
         model.fit(X_r, y_r)
@@ -296,8 +360,7 @@ def _train_eval(
         model = TabMWrapper(
             name=f"{tag}_{strategy}",
             seed=42,
-            device=device,
-            use_amp=use_amp,
+            **final_base,
         )
         model.fit(X_r, y_r)
         tune_ex = {}
@@ -334,6 +397,13 @@ def run_split(
     n_tune_iter: int = 24,
     device: str = "auto",
     use_amp: bool = True,
+    tune_max_epochs: int = 200,
+    tune_patience: int = 20,
+    final_max_epochs: int = 200,
+    final_patience: int = 20,
+    batch_size: int = 256,
+    predict_batch_size: int = 4096,
+    val_batch_size: int = 8192,
 ):
     sampler = ImbalanceSampler()
 
@@ -365,6 +435,13 @@ def run_split(
             n_tune_iter=n_tune_iter,
             device=device,
             use_amp=use_amp,
+            tune_max_epochs=tune_max_epochs,
+            tune_patience=tune_patience,
+            final_max_epochs=final_max_epochs,
+            final_patience=final_patience,
+            batch_size=batch_size,
+            predict_batch_size=predict_batch_size,
+            val_batch_size=val_batch_size,
         )
         save_stage("Old", strat, m)
 
@@ -387,6 +464,13 @@ def run_split(
             n_tune_iter=n_tune_iter,
             device=device,
             use_amp=use_amp,
+            tune_max_epochs=tune_max_epochs,
+            tune_patience=tune_patience,
+            final_max_epochs=final_max_epochs,
+            final_patience=final_patience,
+            batch_size=batch_size,
+            predict_batch_size=predict_batch_size,
+            val_batch_size=val_batch_size,
         )
         save_stage("New", strat, m)
 
@@ -415,6 +499,13 @@ def run_split(
                 n_tune_iter=n_tune_iter,
                 device=device,
                 use_amp=use_amp,
+                tune_max_epochs=tune_max_epochs,
+                tune_patience=tune_patience,
+                final_max_epochs=final_max_epochs,
+                final_patience=final_patience,
+                batch_size=batch_size,
+                predict_batch_size=predict_batch_size,
+                val_batch_size=val_batch_size,
             )
             save_stage("Retrain", strat, m)
 
@@ -514,6 +605,13 @@ def _run_one_output_dir(
     device: str,
     use_amp: bool,
     use_resume: bool,
+    tune_max_epochs: int,
+    tune_patience: int,
+    final_max_epochs: int,
+    final_patience: int,
+    batch_size: int,
+    predict_batch_size: int,
+    val_batch_size: int,
     logger,
 ) -> None:
     global OUTPUT_DIR, CHECKPOINT_PATH, PARTIAL_RAW_PATH
@@ -563,6 +661,13 @@ def _run_one_output_dir(
                 n_tune_iter=n_tune_iter,
                 device=device,
                 use_amp=use_amp,
+                tune_max_epochs=tune_max_epochs,
+                tune_patience=tune_patience,
+                final_max_epochs=final_max_epochs,
+                final_patience=final_patience,
+                batch_size=batch_size,
+                predict_batch_size=predict_batch_size,
+                val_batch_size=val_batch_size,
             )
             retrain_done = True
         except Exception as exc:
@@ -623,10 +728,58 @@ def main():
         help="default=僅預設超參數；tuned=僅 validation AUC 調參；both=兩者皆跑",
     )
     parser.add_argument(
+        "--tune-profile",
+        choices=sorted(TABM_TUNE_PROFILE_DEFAULTS),
+        default="standard",
+        help="standard=原始重型 tuned；light=較輕量 tuned（較少 trial、較短 epoch、較大 batch）",
+    )
+    parser.add_argument(
         "--tune-n-iter",
         type=int,
-        default=24,
-        help="TabM validation AUC 隨機搜尋候選數（預設 24；越大越慢）",
+        default=None,
+        help="TabM validation AUC 隨機搜尋候選數（未指定時依 --tune-profile 決定）",
+    )
+    parser.add_argument(
+        "--tune-max-epochs",
+        type=int,
+        default=None,
+        help="tuning 階段每個候選的最大 epoch（未指定時依 --tune-profile 決定）",
+    )
+    parser.add_argument(
+        "--tune-patience",
+        type=int,
+        default=None,
+        help="tuning 階段 early stopping patience（未指定時依 --tune-profile 決定）",
+    )
+    parser.add_argument(
+        "--final-max-epochs",
+        type=int,
+        default=None,
+        help="選定最佳參數後正式訓練的最大 epoch（未指定時依 --tune-profile 決定）",
+    )
+    parser.add_argument(
+        "--final-patience",
+        type=int,
+        default=None,
+        help="正式訓練 early stopping patience（未指定時依 --tune-profile 決定）",
+    )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=None,
+        help="訓練 batch size（未指定時依 --tune-profile 決定）",
+    )
+    parser.add_argument(
+        "--predict-batch-size",
+        type=int,
+        default=None,
+        help="predict_proba batch size（未指定時依 --tune-profile 決定）",
+    )
+    parser.add_argument(
+        "--val-batch-size",
+        type=int,
+        default=None,
+        help="validation loss batch size（未指定時依 --tune-profile 決定）",
     )
     parser.add_argument(
         "--splits",
@@ -655,6 +808,7 @@ def main():
 
     logger = get_logger("BK_YearSplits_TabM", console=True, file=True)
     set_seed(42)
+    runtime = _resolve_tabm_runtime(args.tune_profile, args)
     sub = (args.results_subdir or "").strip().replace("\\", "/").strip("/")
     if sub and (Path(sub).name != sub or ".." in Path(sub).parts):
         raise SystemExit("--results-subdir 請使用單一資料夾名稱，勿含路徑跳脫")
@@ -684,14 +838,31 @@ def main():
     for use_tune, out_dir in runs:
         tag = "validation AUC 調參" if use_tune else "預設超參數"
         logger.info(f"\n{'#'*60}\n模式: {tag}\n輸出: {out_dir}\n{'#'*60}")
+        logger.info(
+            "TabM runtime: "
+            f"profile={args.tune_profile}, "
+            f"tune_n_iter={runtime['tune_n_iter']}, "
+            f"tune_epochs={runtime['tune_max_epochs']}/{runtime['tune_patience']}, "
+            f"final_epochs={runtime['final_max_epochs']}/{runtime['final_patience']}, "
+            f"batch={runtime['batch_size']}, "
+            f"pred_batch={runtime['predict_batch_size']}, "
+            f"val_batch={runtime['val_batch_size']}"
+        )
         _run_one_output_dir(
             out_dir,
             split_iter=split_iter,
             use_tuning=use_tune,
-            n_tune_iter=args.tune_n_iter,
+            n_tune_iter=runtime["tune_n_iter"],
             device=args.device,
             use_amp=use_amp,
             use_resume=use_resume,
+            tune_max_epochs=runtime["tune_max_epochs"],
+            tune_patience=runtime["tune_patience"],
+            final_max_epochs=runtime["final_max_epochs"],
+            final_patience=runtime["final_patience"],
+            batch_size=runtime["batch_size"],
+            predict_batch_size=runtime["predict_batch_size"],
+            val_batch_size=runtime["val_batch_size"],
             logger=logger,
         )
 

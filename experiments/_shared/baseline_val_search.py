@@ -60,6 +60,19 @@ TABM_GRID: Mapping[str, Sequence[Any]] = {
     "d_embedding": [8, 16],
 }
 
+TABR_GRID: Mapping[str, Sequence[Any]] = {
+    "d_main": [64, 96, 128, 160],
+    "d_multiplier": [1.5, 2.0, 2.5],
+    "encoder_n_blocks": [1, 2, 3],
+    "predictor_n_blocks": [1, 2, 3],
+    "context_size": [32, 64, 96, 128],
+    "context_dropout": [0.0, 0.1, 0.2],
+    "dropout0": [0.0, 0.1, 0.2, 0.3],
+    "dropout1": [0.0, 0.1, 0.2, 0.3],
+    "lr": [1e-4, 2e-4, 5e-4, 1e-3],
+    "weight_decay": [0.0, 1e-5, 1e-4, 1e-3],
+}
+
 
 def _safe_roc_auc(y_true: np.ndarray, y_score: np.ndarray) -> float:
     y = np.asarray(y_true).astype(int).ravel()
@@ -350,14 +363,69 @@ def search_tabm_on_val(
     return best_cand, float(best_auc)
 
 
+def search_tabr_on_val(
+    X_fit: pd.DataFrame,
+    y_fit: np.ndarray,
+    X_val: pd.DataFrame,
+    y_val: np.ndarray,
+    base_params: MutableMapping[str, Any] | None = None,
+    *,
+    n_iter: int = 24,
+    seed: int = 42,
+) -> Tuple[Dict[str, Any], float]:
+    """TabR：在隨機候選上以 validation ROC-AUC 選最佳。"""
+    from src.models import TabRWrapper
+
+    y_fit = np.asarray(y_fit).ravel()
+    if len(np.unique(y_fit)) < 2:
+        return {}, float("nan")
+
+    base = dict(base_params or {})
+    rng = np.random.default_rng(int(seed))
+    ni = int(n_iter) if int(n_iter) > 0 else 24
+    candidates = _random_candidates_from_grid(TABR_GRID, ni, rng, guard_factor=120)
+
+    best_auc = -1.0
+    best_cand: Dict[str, Any] = {}
+    for idx, cand in enumerate(candidates):
+        params = {
+            **base,
+            **cand,
+            "seed": int(seed) + idx,
+        }
+        model = TabRWrapper(name="tabr_tune", **params)
+        try:
+            model.fit(X_fit, y_fit, X_val=X_val, y_val=y_val)
+            proba = model.predict_proba(X_val)
+        except Exception:
+            continue
+        auc = _safe_roc_auc(np.asarray(y_val), proba)
+        if np.isnan(auc):
+            continue
+        if auc > best_auc:
+            best_auc = auc
+            best_cand = dict(cand)
+    if not best_cand:
+        return {}, float("nan")
+    return best_cand, float(best_auc)
+
+
+def _json_safe_value(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return {k: _json_safe_value(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe_value(v) for v in value]
+    if isinstance(value, np.ndarray):
+        return [_json_safe_value(v) for v in value.tolist()]
+    if isinstance(value, np.bool_):
+        return bool(value)
+    if isinstance(value, (np.floating, np.integer)):
+        return value.item()
+    return value
+
+
 def _json_safe_params(d: Mapping[str, Any]) -> Dict[str, Any]:
-    out: Dict[str, Any] = {}
-    for k, v in d.items():
-        if isinstance(v, (np.floating, np.integer)):
-            out[k] = v.item()
-        else:
-            out[k] = v
-    return out
+    return {k: _json_safe_value(v) for k, v in d.items()}
 
 
 def tuning_meta(best: Mapping[str, Any], val_auc: float) -> Dict[str, Any]:

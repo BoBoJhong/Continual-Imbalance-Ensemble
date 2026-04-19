@@ -13,31 +13,53 @@ BANKRUPTCY_DIR = project_root / "data" / "raw" / "bankruptcy"
 US_CSV = BANKRUPTCY_DIR / "american_bankruptcy_dataset.csv"
 TAIWAN_CSV = BANKRUPTCY_DIR / "data.csv"
 
+_TAIWAN_CACHE = None
+_US_CACHE = None
+
 
 def _load_taiwan(logger):
     """Taiwan Economic Journal 破產資料（約 1999-2009），無年份欄。"""
-    df = pd.read_csv(TAIWAN_CSV)
-    if "Bankrupt?" in df.columns:
-        y = df["Bankrupt?"]
-        X = df.drop(columns=["Bankrupt?"])
+    global _TAIWAN_CACHE
+    if _TAIWAN_CACHE is None:
+        df = pd.read_csv(TAIWAN_CSV)
+        if "Bankrupt?" in df.columns:
+            y = df["Bankrupt?"]
+            X = df.drop(columns=["Bankrupt?"])
+        else:
+            X = df.iloc[:, :-1]
+            y = df.iloc[:, -1]
+        _TAIWAN_CACHE = (X, y)
+        if logger is not None:
+            logger.info("使用 Taiwan 資料快取")
     else:
-        X = df.iloc[:, :-1]
-        y = df.iloc[:, -1]
+        X, y = _TAIWAN_CACHE
+        if logger is not None:
+            logger.info("重用已載入的 Taiwan 資料")
+
     return X, y
 
 
 def _load_us_1999_2018(logger):
     """US 破產資料 1999-2018（sowide/Kaggle），含 fyear。"""
-    df = pd.read_csv(US_CSV)
-    if "status_label" not in df.columns:
-        raise ValueError("US 資料需有 status_label 欄（alive/failed）")
-    y = (df["status_label"] == "failed").astype(int)
-    drop_cols = ["company_name", "status_label"]
-    if "Division" in df.columns:
-        drop_cols.append("Division")
-    X = df.drop(columns=drop_cols)
-    if "fyear" not in X.columns:
-        raise ValueError("US 資料需有 fyear 欄（年份）")
+    global _US_CACHE
+    if _US_CACHE is None:
+        df = pd.read_csv(US_CSV)
+        if "status_label" not in df.columns:
+            raise ValueError("US 資料需有 status_label 欄（alive/failed）")
+        y = (df["status_label"] == "failed").astype(int)
+        drop_cols = ["company_name", "status_label"]
+        if "Division" in df.columns:
+            drop_cols.append("Division")
+        X = df.drop(columns=drop_cols)
+        if "fyear" not in X.columns:
+            raise ValueError("US 資料需有 fyear 欄（年份）")
+        _US_CACHE = (X, y)
+        if logger is not None:
+            logger.info("使用 US 1999-2018 資料快取")
+    else:
+        X, y = _US_CACHE
+        if logger is not None:
+            logger.info("重用已載入的 US 1999-2018 資料")
     return X, y
 
 
