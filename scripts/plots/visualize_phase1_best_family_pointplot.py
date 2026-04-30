@@ -1,15 +1,17 @@
 """
-Compare best-per-split performance for XGB / RF / TabM.
+Compare best-per-split performance for XGB / RF / TabM / LGBM / LR.
 
 Design goal:
-  - scientific-style point plot instead of an overloaded all-settings chart
-  - for each split and each metric, select the best row within each model family
-  - preserve the actual chosen method / sampling in a companion CSV
+    - scientific-style point plot instead of an overloaded all-settings chart
+    - for each split and each metric, select the best row within each model family
+    - preserve the actual chosen method / sampling in a companion CSV
 
 Default inputs use the strongest currently available bankruptcy runs:
-  - XGB tuned rerun
-  - RF tuned
-  - TabM tuned_light full run (complete raw)
+    - XGB tuned rerun
+    - RF tuned
+    - TabM tuned_light full run (complete raw)
+    - LGBM tuned run
+    - LR raw run
 
 Usage:
   python scripts/plots/visualize_phase1_best_family_pointplot.py
@@ -38,16 +40,20 @@ SPLIT_RE = re.compile(r"^split_(\d+)\+(\d+)$")
 METRICS = ["AUC", "F1"]
 TRAIN_START_YEAR = 1999
 TRAIN_END_YEAR = 2014
-MODEL_ORDER = ["XGB", "RF", "TabM"]
+MODEL_ORDER = ["XGB", "RF", "TabM", "LGBM", "LR"]
 MODEL_COLORS = {
     "XGB": "#2C6BAA",
     "RF": "#2E8B57",
     "TabM": "#C04A3A",
+    "LGBM": "#7A5C2E",
+    "LR": "#7A3E9D",
 }
 MODEL_OFFSETS = {
-    "XGB": -0.18,
-    "RF": 0.00,
-    "TabM": 0.18,
+    "XGB": -0.32,
+    "RF": -0.16,
+    "TabM": 0.00,
+    "LGBM": 0.16,
+    "LR": 0.32,
 }
 METHOD_STYLES = {
     "Old": {"marker": "o", "label": "OLD"},
@@ -172,22 +178,22 @@ def build_plot(best_df: pd.DataFrame, retrain_df: pd.DataFrame, out_path: Path, 
     x_pos = np.arange(len(splits))
     split_to_x = {s: i for i, s in enumerate(splits)}
 
-    fig, axes = plt.subplots(2, 1, figsize=(12.5, 7.2), sharex=True)
+    fig, axes = plt.subplots(2, 2, figsize=(15.5, 7.8), sharex=True)
 
-    for ax, metric in zip(axes, METRICS):
+    method_to_col = {"Old": 0, "New": 1}
+    for row_idx, metric in enumerate(METRICS):
         metric_df = best_df[best_df["metric"] == metric].copy()
         retrain_metric_df = retrain_df[retrain_df["metric"] == metric].copy()
-        for model in MODEL_ORDER:
-            sub = metric_df[metric_df["model"] == model].copy()
-            if sub.empty:
-                continue
-            for method in POINT_METHOD_ORDER:
-                method_sub = sub[sub["method"] == method].copy()
-                if method_sub.empty:
+        for method, col_idx in method_to_col.items():
+            ax = axes[row_idx, col_idx]
+            method_metric_df = metric_df[metric_df["method"] == method].copy()
+            for model in MODEL_ORDER:
+                sub = method_metric_df[method_metric_df["model"] == model].copy()
+                if sub.empty:
                     continue
-                method_sub = method_sub.sort_values("split", key=lambda s: s.map(parse_split_order))
-                xs = np.array([split_to_x[s] for s in method_sub["split"]], dtype=float) + MODEL_OFFSETS[model]
-                ys = method_sub["value"].to_numpy(dtype=float)
+                sub = sub.sort_values("split", key=lambda s: s.map(parse_split_order))
+                xs = np.array([split_to_x[s] for s in sub["split"]], dtype=float) + MODEL_OFFSETS[model]
+                ys = sub["value"].to_numpy(dtype=float)
 
                 if connect_lines and len(xs) > 1:
                     ax.plot(
@@ -195,61 +201,45 @@ def build_plot(best_df: pd.DataFrame, retrain_df: pd.DataFrame, out_path: Path, 
                         ys,
                         color=MODEL_COLORS[model],
                         linewidth=1.0,
-                        alpha=0.25 if method == "Old" else 0.40,
-                        linestyle=(0, (2, 2)) if method == "Old" else "-",
+                        alpha=0.60,
+                        linestyle="-" if method == "New" else (0, (2, 2)),
                         zorder=1,
                     )
 
                 ax.scatter(
                     xs,
                     ys,
-                    s=70,
+                    s=66,
                     color=MODEL_COLORS[model],
-                    marker=METHOD_STYLES.get(method, METHOD_STYLES["Old"])["marker"],
+                    marker=METHOD_STYLES[method]["marker"],
                     edgecolors="white",
                     linewidths=0.8,
                     zorder=3,
                 )
 
-            retrain_row = retrain_metric_df[retrain_metric_df["model"] == model]
-            if not retrain_row.empty:
-                retrain_y = float(retrain_row.iloc[0]["value"])
-                ax.hlines(
-                    retrain_y,
-                    xmin=x_pos.min() - 0.28,
-                    xmax=x_pos.max() + 0.28,
-                    colors=MODEL_COLORS[model],
-                    linestyles=(0, (4, 2)),
-                    linewidth=1.4,
-                    alpha=0.8,
-                    zorder=2,
-                )
+            for model in MODEL_ORDER:
+                retrain_row = retrain_metric_df[retrain_metric_df["model"] == model]
+                if not retrain_row.empty:
+                    retrain_y = float(retrain_row.iloc[0]["value"])
+                    ax.hlines(
+                        retrain_y,
+                        xmin=x_pos.min() - 0.28,
+                        xmax=x_pos.max() + 0.28,
+                        colors=MODEL_COLORS[model],
+                        linestyles=(0, (4, 2)),
+                        linewidth=1.2,
+                        alpha=0.75,
+                        zorder=2,
+                    )
 
-        ax.set_ylabel(metric)
-        ax.grid(axis="y", linestyle="--", alpha=0.28)
-        ax.set_title(f"Best-per-split {metric}: OLD vs NEW with Retrain(ALL) reference")
+            ax.set_title(f"{metric} - {method}")
+            ax.set_ylabel(metric)
+            ax.grid(axis="y", linestyle="--", alpha=0.28)
+            ax.set_xticks(x_pos)
+            ax.set_xticklabels([split_tick_label(s) for s in splits])
 
-    axes[-1].set_xticks(x_pos)
-    axes[-1].set_xticklabels([split_tick_label(s) for s in splits])
-    axes[-1].set_xlabel("Old/New split sizes (years)")
-    axes[-1].text(
-        -0.055,
-        -0.075,
-        "Old",
-        transform=axes[-1].transAxes,
-        ha="right",
-        va="center",
-        fontsize=10,
-    )
-    axes[-1].text(
-        -0.055,
-        -0.125,
-        "New",
-        transform=axes[-1].transAxes,
-        ha="right",
-        va="center",
-        fontsize=10,
-    )
+    for ax in axes[-1, :]:
+        ax.set_xlabel("Old/New split sizes (years)")
 
     model_handles = [
         plt.Line2D(
@@ -265,51 +255,45 @@ def build_plot(best_df: pd.DataFrame, retrain_df: pd.DataFrame, out_path: Path, 
         )
         for m in MODEL_ORDER
     ]
-    method_handles = [
-        plt.Line2D(
-            [0],
-            [0],
-            marker=METHOD_STYLES[method]["marker"],
-            color="#555555",
-            linestyle="none",
-            markersize=7,
-            label=METHOD_STYLES[method]["label"],
-        )
-        for method in POINT_METHOD_ORDER
-    ]
-    if not retrain_df.empty:
-        method_handles.append(
-            plt.Line2D(
-                [0],
-                [0],
-                color="#555555",
-                linestyle=(0, (4, 2)),
-                linewidth=1.4,
-                label=METHOD_STYLES["Retrain"]["label"],
-            )
-        )
 
-    leg1 = axes[0].legend(
+    retrain_handle = plt.Line2D(
+        [0],
+        [0],
+        color="#555555",
+        linestyle=(0, (4, 2)),
+        linewidth=1.2,
+        label=METHOD_STYLES["Retrain"]["label"],
+    )
+
+    leg1 = axes[0, 1].legend(
         handles=model_handles,
         title="Model family",
         loc="upper left",
         bbox_to_anchor=(1.01, 1.0),
+        fontsize=9,
+        title_fontsize=10,
+        labelspacing=0.45,
+        handletextpad=0.8,
     )
-    axes[0].add_artist(leg1)
-    axes[0].legend(
-        handles=method_handles,
-        title="Best row method",
+    axes[0, 1].add_artist(leg1)
+    axes[0, 1].legend(
+        handles=[retrain_handle],
+        title="Reference",
         loc="upper left",
-        bbox_to_anchor=(1.01, 0.48),
+        bbox_to_anchor=(1.01, 0.52),
+        fontsize=9,
+        title_fontsize=10,
+        labelspacing=0.35,
+        handletextpad=0.8,
     )
 
     fig.suptitle(
         "Phase 1 Bankruptcy Baselines: best-per-split comparison\n"
-        "Each split shows the best OLD row and best NEW row; dashed lines show RETRAIN(ALL) as a global reference",
+        "Left: OLD, right: NEW; dashed lines show RETRAIN(ALL) as a global reference",
         fontsize=13,
         y=0.98,
     )
-    fig.tight_layout(rect=(0.04, 0.06, 0.84, 0.95))
+    fig.tight_layout(rect=(0.04, 0.05, 0.84, 0.95), w_pad=2.4, h_pad=2.0)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, bbox_inches="tight")
     plt.close(fig)
@@ -355,25 +339,54 @@ def main() -> None:
         ),
     )
     ap.add_argument(
+        "--lgbm-raw",
+        default=str(
+            project_root
+            / "results"
+            / "phase1_baseline"
+            / "lgbm"
+            / "bk_lgb_tuned48_20260421"
+            / "tuned"
+            / "bankruptcy_year_splits_lgb_raw.csv"
+        ),
+    )
+    ap.add_argument(
+        "--lr-raw",
+        default=str(
+            project_root
+            / "results"
+            / "phase1_baseline"
+            / "logistic_regression"
+            / "bankruptcy_year_splits_lr_raw.csv"
+        ),
+    )
+    ap.add_argument(
         "--output-dir",
         default=str(project_root / "results" / "phase1_baseline" / "model_comparison" / "plots"),
     )
     ap.add_argument(
-        "--no-lines",
+        "--lines",
         action="store_true",
-        help="Only draw points; disable the faint helper lines connecting same-model splits.",
+        help="Draw faint helper lines connecting same-model splits.",
     )
     args = ap.parse_args()
 
     xgb_df = pd.read_csv(args.xgb_raw)
     rf_df = pd.read_csv(args.rf_raw)
     tabm_df = pd.read_csv(args.tabm_raw)
+    lgbm_df = pd.read_csv(args.lgbm_raw)
+    lr_df = pd.read_csv(args.lr_raw)
 
     xgb_splits = detect_completed_splits(xgb_df)
     rf_splits = detect_completed_splits(rf_df)
     tabm_splits = detect_completed_splits(tabm_df)
+    lgbm_splits = detect_completed_splits(lgbm_df)
+    lr_splits = detect_completed_splits(lr_df)
 
-    plotted_splits = sorted(set(xgb_splits) | set(rf_splits) | set(tabm_splits), key=parse_split_order)
+    plotted_splits = sorted(
+        set(xgb_splits) | set(rf_splits) | set(tabm_splits) | set(lgbm_splits) | set(lr_splits),
+        key=parse_split_order,
+    )
 
     if not plotted_splits:
         raise SystemExit("No completed splits found in the selected raw files.")
@@ -383,6 +396,8 @@ def main() -> None:
             pick_best_split_rows(xgb_df, "XGB", xgb_splits),
             pick_best_split_rows(rf_df, "RF", rf_splits),
             pick_best_split_rows(tabm_df, "TabM", tabm_splits),
+            pick_best_split_rows(lgbm_df, "LGBM", lgbm_splits),
+            pick_best_split_rows(lr_df, "LR", lr_splits),
         ],
         ignore_index=True,
     )
@@ -391,19 +406,21 @@ def main() -> None:
             pick_best_retrain_rows(xgb_df, "XGB"),
             pick_best_retrain_rows(rf_df, "RF"),
             pick_best_retrain_rows(tabm_df, "TabM"),
+            pick_best_retrain_rows(lgbm_df, "LGBM"),
+            pick_best_retrain_rows(lr_df, "LR"),
         ],
         ignore_index=True,
     )
 
     out_dir = Path(args.output_dir)
-    csv_path = out_dir / "bankruptcy_best_per_split_xgb_rf_tabm_points.csv"
-    fig_path = out_dir / "bankruptcy_best_per_split_xgb_rf_tabm_points.png"
+    csv_path = out_dir / "bankruptcy_best_per_split_xgb_rf_tabm_lgbm_lr_points.csv"
+    fig_path = out_dir / "bankruptcy_best_per_split_xgb_rf_tabm_lgbm_lr_points.png"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     export_df = pd.concat([best_df, retrain_df], ignore_index=True)
     export_df = export_df.sort_values(["plot_role", "metric", "split", "model"]).reset_index(drop=True)
     export_df.to_csv(csv_path, index=False, float_format="%.6f")
-    build_plot(best_df, retrain_df, fig_path, connect_lines=not args.no_lines)
+    build_plot(best_df, retrain_df, fig_path, connect_lines=args.lines)
 
     print(f"[SAVED] {csv_path.relative_to(project_root)}")
     print(f"[SAVED] {fig_path.relative_to(project_root)}")
@@ -411,6 +428,8 @@ def main() -> None:
     print("XGB splits:", ", ".join(xgb_splits))
     print("RF splits:", ", ".join(rf_splits))
     print("TabM splits:", ", ".join(tabm_splits))
+    print("LGBM splits:", ", ".join(lgbm_splits))
+    print("LR splits:", ", ".join(lr_splits))
 
 
 if __name__ == "__main__":

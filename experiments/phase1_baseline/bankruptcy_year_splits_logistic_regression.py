@@ -11,9 +11,22 @@ Phase 1 - Bankruptcy 年份切割基準線實驗（LogisticRegression）
 
 採樣策略：none / undersampling / oversampling / hybrid
 輸出：raw + pivot tables + compact summaries（與 xgb 腳本同規格）
+
+可選超參數調整（validation AUC）：
+    python experiments/phase1_baseline/bankruptcy_year_splits_logistic_regression.py --tuning tuned --tune-n-iter 48 --output-tag bk_lr_tuned_20260421
+    --tuning default | tuned | both
+    - default：僅預設超參數（輸出至 logistic_regression/<tag>/）
+    - tuned ：validation AUC 調參（輸出至 logistic_regression/<tag>/tuned/）
+    - both  ：兩者皆跑並分開存放
 """
+from __future__ import annotations
+
+import argparse
 import sys
+import zlib
+from datetime import datetime
 from pathlib import Path
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -22,7 +35,8 @@ from sklearn.metrics import f1_score
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from src.utils import set_seed, get_logger
+from experiments._shared.baseline_val_search import export_tuning_log, search_lr_on_val, tuning_meta
+from src.utils import set_seed, get_logger, get_config_loader
 from src.data import ImbalanceSampler, DataPreprocessor
 from src.models import LogisticRegressionWrapper
 from src.evaluation import compute_metrics
@@ -143,6 +157,10 @@ def _train_eval(
     X_val_raw=None,
     y_val=None,
     year_train=None,
+    *,
+    split_label: str = "",
+    use_tuning: bool = False,
+    n_tune_iter: int = 48,
 ):
     y_train_arr = np.asarray(y_train)
 
@@ -164,7 +182,32 @@ def _train_eval(
     _, X_test = pre.scale_features(X_fit_raw, X_test_raw, fit=False)
 
     X_r, y_r = sampler.apply_sampling(X_fit, np.asarray(y_fit), strategy=strategy)
-    model = LogisticRegressionWrapper(name=f"{tag}_{strategy}")
+
+    tune_seed = 42 + (zlib.adler32(f"{split_label}|{tag}|{strategy}".encode()) % 100000)
+    tune_ex = {}
+    if use_tuning:
+        cfg = get_config_loader()
+        base = dict(cfg.get("model_config", "logistic_regression.base_params", {}))
+        imb = dict(cfg.get("model_config", "logistic_regression.imbalance_params", {}))
+        base_params = {**base, **imb}
+
+        best, auc_s = search_lr_on_val(
+            X_r,
+            np.asarray(y_r),
+            X_val,
+            np.asarray(y_val),
+            base_params,
+            n_iter=n_tune_iter,
+            seed=tune_seed,
+        )
+        model = LogisticRegressionWrapper(
+            name=f"{tag}_{strategy}",
+            **{**base_params, **best},
+        )
+        tune_ex = tuning_meta(best, auc_s)
+    else:
+        model = LogisticRegressionWrapper(name=f"{tag}_{strategy}")
+
     model.fit(X_r, y_r)
 
     y_proba_val = model.predict_proba(X_val)
@@ -172,6 +215,7 @@ def _train_eval(
 
     y_t = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
     metrics = compute_metrics(y_t, model.predict_proba(X_test), threshold=threshold)
+    metrics.update(tune_ex)
     logger.info(
         f"    {tag:12s} {strategy:12s} [thr={threshold:.3f}, valF1={val_f1:.4f}]: "
         f"AUC={metrics['AUC']:.4f}  F1={metrics['F1']:.4f}  Recall={metrics['Recall']:.4f}"
@@ -179,16 +223,57 @@ def _train_eval(
     return metrics
 
 
-def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_test, logger, include_retrain=True):
+def run_split(
+    label,
+    X_old,
+    y_old,
+    year_old,
+    X_new,
+    y_new,
+    year_new,
+    X_test,
+    y_test,
+    logger,
+    include_retrain=True,
+    *,
+    use_tuning: bool = False,
+    n_tune_iter: int = 48,
+):
     sampler = ImbalanceSampler()
     rows = []
 
     for strat in SAMPLING_STRATEGIES:
-        m = _train_eval(X_old, y_old, X_test, y_test, sampler, strat, "Old", logger, year_train=year_old)
+        m = _train_eval(
+            X_old,
+            y_old,
+            X_test,
+            y_test,
+            sampler,
+            strat,
+            "Old",
+            logger,
+            year_train=year_old,
+            split_label=label,
+            use_tuning=use_tuning,
+            n_tune_iter=n_tune_iter,
+        )
         rows.append({"split": label, "method": "Old", "sampling": strat, **m})
 
     for strat in SAMPLING_STRATEGIES:
-        m = _train_eval(X_new, y_new, X_test, y_test, sampler, strat, "New", logger, year_train=year_new)
+        m = _train_eval(
+            X_new,
+            y_new,
+            X_test,
+            y_test,
+            sampler,
+            strat,
+            "New",
+            logger,
+            year_train=year_new,
+            split_label=label,
+            use_tuning=use_tuning,
+            n_tune_iter=n_tune_iter,
+        )
         rows.append({"split": label, "method": "New", "sampling": strat, **m})
 
     if include_retrain:
@@ -206,13 +291,16 @@ def run_split(label, X_old, y_old, year_old, X_new, y_new, year_new, X_test, y_t
                 logger,
                 X_val_raw=X_val_re,
                 y_val=y_val_re,
+                split_label=label,
+                use_tuning=use_tuning,
+                n_tune_iter=n_tune_iter,
             )
             rows.append({"split": label, "method": "Retrain", "sampling": strat, **m})
 
     return rows
 
 
-def format_tables(df_raw, logger):
+def format_tables(df_raw, logger, output_dir: Path):
     split_yr = {label: (old_end - 1998, 2014 - old_end) for label, old_end in YEAR_SPLITS}
 
     df_raw = df_raw.copy()
@@ -231,7 +319,7 @@ def format_tables(df_raw, logger):
         pivot_old["avg"] = pivot_old.mean(axis=1)
         pivot_old.loc["avg"] = pivot_old.mean()
         pivot_old.index.name = "old_years"
-        out = OUTPUT_DIR / f"bk_lr_table_{metric}_old.csv"
+        out = output_dir / f"bk_lr_table_{metric}_old.csv"
         pivot_old.to_csv(out, float_format="%.4f")
         logger.info(f"  Saved -> {out.name}")
 
@@ -243,7 +331,7 @@ def format_tables(df_raw, logger):
         pivot_rt.index = ["full_16yr"]
         pivot_rt["avg"] = pivot_rt.mean(axis=1)
         pivot_rt.index.name = "retrain_scope"
-        out = OUTPUT_DIR / f"bk_lr_table_{metric}_retrain.csv"
+        out = output_dir / f"bk_lr_table_{metric}_retrain.csv"
         pivot_rt.to_csv(out, float_format="%.4f")
         logger.info(f"  Saved -> {out.name}")
 
@@ -256,7 +344,7 @@ def format_tables(df_raw, logger):
         pivot_new["avg"] = pivot_new.mean(axis=1)
         pivot_new.loc["avg"] = pivot_new.mean()
         pivot_new.index.name = "new_years"
-        out = OUTPUT_DIR / f"bk_lr_table_{metric}_new.csv"
+        out = output_dir / f"bk_lr_table_{metric}_new.csv"
         pivot_new.to_csv(out, float_format="%.4f")
         logger.info(f"  Saved -> {out.name}")
 
@@ -271,7 +359,7 @@ def _mean_pivot_by_method_sampling(df_raw: pd.DataFrame, metric: str) -> pd.Data
     return t.round(4)
 
 
-def export_compact_report(df_raw: pd.DataFrame, logger) -> None:
+def export_compact_report(df_raw: pd.DataFrame, logger, output_dir: Path) -> None:
     rows = []
     for m in COMPACT_SUMMARY_METRICS:
         if m not in df_raw.columns:
@@ -283,7 +371,7 @@ def export_compact_report(df_raw: pd.DataFrame, logger) -> None:
         return
 
     long_df = pd.concat(rows, ignore_index=True)
-    path_all = OUTPUT_DIR / "bk_lr_compact_summary.csv"
+    path_all = output_dir / "bk_lr_compact_summary.csv"
     long_df.to_csv(path_all, index=False, float_format="%.4f")
     logger.info(f"  Saved -> {path_all.name}")
 
@@ -291,21 +379,27 @@ def export_compact_report(df_raw: pd.DataFrame, logger) -> None:
         if m not in df_raw.columns:
             continue
         pivot = _mean_pivot_by_method_sampling(df_raw, m)
-        path_m = OUTPUT_DIR / f"bk_lr_compact_{m}_only.csv"
+        path_m = output_dir / f"bk_lr_compact_{m}_only.csv"
         pivot.to_csv(path_m, float_format="%.4f")
         logger.info(f"  Saved -> {path_m.name}")
 
 
-def main():
-    logger = get_logger("BK_YearSplits_LR", console=True, file=True)
-    set_seed(42)
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+def _run_one_output_dir(
+    output_dir: Path,
+    *,
+    use_tuning: bool,
+    n_tune_iter: int,
+    logger,
+) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     all_rows = []
     retrain_done = False
     for label, old_end_year in YEAR_SPLITS:
         logger.info(f"\n{'='*60}")
-        logger.info(f"Split: {label}  (Old<={old_end_year}, New={old_end_year + 1}-2014, Test=2015-2018)")
+        logger.info(
+            f"Split: {label}  (Old<={old_end_year}, New={old_end_year + 1}-2014, Test=2015-2018)"
+        )
         logger.info("="*60)
         try:
             X_old, y_old, X_new, y_new, X_test, y_test, year_old, year_new, year_test = get_bankruptcy_year_split(
@@ -325,12 +419,15 @@ def main():
                 y_test,
                 logger,
                 include_retrain=(not retrain_done),
+                use_tuning=use_tuning,
+                n_tune_iter=n_tune_iter,
             )
             all_rows.extend(rows)
             retrain_done = True
         except Exception as e:
             logger.error(f"[ERROR] {label}: {e}")
             import traceback
+
             logger.error(traceback.format_exc())
 
     if not all_rows:
@@ -338,17 +435,61 @@ def main():
         return
 
     df_raw = pd.DataFrame(all_rows)
-    raw_path = OUTPUT_DIR / "bankruptcy_year_splits_lr_raw.csv"
+    raw_path = output_dir / "bankruptcy_year_splits_lr_raw.csv"
     df_raw.to_csv(raw_path, index=False, float_format="%.6f")
     logger.info(f"\n原始結果已儲存 -> {raw_path.name}  ({len(df_raw)} rows)")
 
     logger.info("\n產出指標 pivot 表格...")
-    format_tables(df_raw, logger)
+    format_tables(df_raw, logger, output_dir)
 
     logger.info("\n產出精簡摘要（跨各 split 平均）...")
-    export_compact_report(df_raw, logger)
+    export_compact_report(df_raw, logger, output_dir)
+
+    if use_tuning:
+        export_tuning_log(df_raw, output_dir / "bk_lr_tuning_log.csv", logger)
 
     logger.info("\n=== 完成 ===")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Phase1 bankruptcy year splits — Logistic Regression baseline")
+    parser.add_argument(
+        "--tuning",
+        choices=["default", "tuned", "both"],
+        default="default",
+        help="default=僅預設超參數；tuned=validation AUC 調參（輸出至 logistic_regression/<tag>/tuned/）；both=兩者皆跑",
+    )
+    parser.add_argument(
+        "--tune-n-iter",
+        type=int,
+        default=48,
+        help="LR 調參時嘗試的超參數組數（若 >= 全網格組合數，會掃全網格）",
+    )
+    parser.add_argument(
+        "--output-tag",
+        type=str,
+        default="",
+        help="結果輸出子資料夾標籤（例如 bk_lr_tuned_20260421）。會寫到 logistic_regression/<tag>/ 或 logistic_regression/<tag>/tuned/",
+    )
+    args = parser.parse_args()
+
+    logger = get_logger("BK_YearSplits_LR", console=True, file=True)
+    set_seed(42)
+
+    tag = args.output_tag.strip() or datetime.now().strftime("run_%Y%m%d_%H%M%S")
+    base_output_dir = OUTPUT_DIR / tag
+
+    if args.tuning == "default":
+        runs = [(False, base_output_dir)]
+    elif args.tuning == "tuned":
+        runs = [(True, base_output_dir / "tuned")]
+    else:
+        runs = [(False, base_output_dir), (True, base_output_dir / "tuned")]
+
+    for use_tune, out_dir in runs:
+        mode = "validation AUC 調參" if use_tune else "預設超參數"
+        logger.info(f"\n{'#'*60}\n模式: {mode}\n輸出: {out_dir}\n{'#'*60}")
+        _run_one_output_dir(out_dir, use_tuning=use_tune, n_tune_iter=args.tune_n_iter, logger=logger)
 
 
 if __name__ == "__main__":

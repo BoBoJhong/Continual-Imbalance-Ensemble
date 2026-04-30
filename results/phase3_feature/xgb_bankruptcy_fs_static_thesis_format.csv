@@ -1,0 +1,16 @@
+dataset_name,split_id,old_window,new_window,test_window,method,train_scope,best_fs,best_ensemble,AUC,F1,Recall
+Bankruptcy_US,split_1+15,1999~1999,2000~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,mutual_info_r80,New_3,0.8389,0.166,0.6237
+Bankruptcy_US,split_2+14,1999~2000,2001~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,shap_r80,New_3,0.8446,0.1798,0.5784
+Bankruptcy_US,split_3+13,1999~2001,2002~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,shap_r80,New_3,0.8424,0.1862,0.5505
+Bankruptcy_US,split_4+12,1999~2002,2003~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,mutual_info_r80,New_3,0.8571,0.2262,0.554
+Bankruptcy_US,split_5+11,1999~2003,2004~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,mutual_info_r80,New_3,0.8565,0.2059,0.5261
+Bankruptcy_US,split_6+10,1999~2004,2005~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,shap_r80,New_3,0.862,0.2163,0.5505
+Bankruptcy_US,split_7+9,1999~2005,2006~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,mutual_info_r80,New_3,0.859,0.1833,0.6446
+Bankruptcy_US,split_8+8,1999~2006,2007~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,shap_r50,New_3,0.8604,0.2338,0.5784
+Bankruptcy_US,split_9+7,1999~2007,2008~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,shap_r80,New_3,0.8695,0.2018,0.6411
+Bankruptcy_US,split_10+6,1999~2008,2009~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,shap_r50,New_3,0.871,0.2194,0.6063
+Bankruptcy_US,split_11+5,1999~2009,2010~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,mutual_info_r50,New_3,0.8719,0.2347,0.5261
+Bankruptcy_US,split_12+4,1999~2010,2011~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,shap_r50,New_3,0.8653,0.227,0.5505
+Bankruptcy_US,split_13+3,1999~2011,2012~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,shap_r80,New_3,0.8698,0.1817,0.6969
+Bankruptcy_US,split_14+2,1999~2012,2013~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,shap_r80,New_3,0.8641,0.1903,0.6307
+Bankruptcy_US,split_15+1,1999~2013,2014~2014,2015~2018,FS_Static,Old/New pools + FS + static soft voting,shap_r80,All_6,0.8507,0.1774,0.6341

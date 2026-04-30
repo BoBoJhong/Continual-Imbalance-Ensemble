@@ -16,8 +16,10 @@ from typing import Any, Dict, List, Mapping, MutableMapping, Sequence, Tuple
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 from sklearn.svm import SVC
+import lightgbm as lgb
 import xgboost as xgb
 
 # ---------------------------------------------------------------------------
@@ -35,6 +37,18 @@ XGB_GRID: Mapping[str, Sequence[Any]] = {
     "reg_lambda": [0.5, 1.0, 3.0, 10.0],
 }
 
+LGB_GRID: Mapping[str, Sequence[Any]] = {
+    "num_leaves": [31, 50, 100, 150],
+    "max_depth": [5, 7, 10, 15, -1],
+    "learning_rate": [0.01, 0.03, 0.05, 0.1, 0.2],
+    "n_estimators": [100, 200, 500, 800, 1000],
+    "min_child_samples": [20, 50, 100],
+    "subsample": [0.7, 0.85, 1.0],
+    "colsample_bytree": [0.7, 0.85, 1.0],
+    "reg_alpha": [0.0, 0.1, 1.0],
+    "reg_lambda": [0.0, 0.1, 1.0, 3.0],
+}
+
 # RF：與舊版僅掃 n_estimators∈{50..200} 不同，納入深度／葉子／分裂／max_features，隨機採樣 n_iter 組。
 RF_GRID: Mapping[str, Sequence[Any]] = {
     "n_estimators": [200, 400, 600, 800],
@@ -47,6 +61,12 @@ RF_GRID: Mapping[str, Sequence[Any]] = {
 SVM_GRID: Mapping[str, Sequence[Any]] = {
     "C": [0.01, 0.1, 1.0, 10.0, 100.0],
     "kernel": ["poly", "rbf"],
+}
+
+LR_GRID: Mapping[str, Sequence[Any]] = {
+    "C": [0.01, 0.1, 1.0, 10.0, 100.0],
+    "solver": ["lbfgs", "saga"],
+    "max_iter": [500, 1000, 2000],
 }
 
 TABM_GRID: Mapping[str, Sequence[Any]] = {
@@ -210,6 +230,131 @@ def search_xgb_on_val(
         except Exception:
             continue
         try:
+            proba = clf.predict_proba(X_val)[:, 1]
+        except Exception:
+            continue
+        auc = _safe_roc_auc(np.asarray(y_val), proba)
+        if np.isnan(auc):
+            continue
+        if auc > best_auc:
+            best_auc = auc
+            best_cand = dict(cand)
+
+    if not best_cand:
+        return {}, float("nan")
+    return best_cand, float(best_auc)
+
+
+def search_lgb_on_val(
+    X_fit: pd.DataFrame,
+    y_fit: np.ndarray,
+    X_val: pd.DataFrame,
+    y_val: np.ndarray,
+    base_params: MutableMapping[str, Any],
+    scale_pos_weight: float,
+    *,
+    n_iter: int,
+    seed: int,
+) -> Tuple[Dict[str, Any], float]:
+    """以 validation AUC 選擇 LightGBM 超參數（隨機採樣 n_iter 組）。
+
+    Notes:
+      - 使用 sklearn API `lgb.LGBMClassifier` 以支援 `n_estimators`。
+      - 一律套用 `scale_pos_weight`（由呼叫端計算）。
+
+    Returns:
+        (best_candidate_over_grid, best_val_auc)；若訓練標籤無兩類則 ({}, nan)。
+    """
+    y_fit = np.asarray(y_fit).astype(int).ravel()
+    if len(np.unique(y_fit)) < 2:
+        return {}, float("nan")
+
+    base = dict(base_params)
+    # 避免與 scale_pos_weight 衝突
+    base.pop("is_unbalance", None)
+    base.pop("scale_pos_weight", None)
+
+    rng = np.random.default_rng(int(seed))
+    candidates = _random_candidates_from_grid(LGB_GRID, int(n_iter), rng, guard_factor=120)
+
+    best_auc = -1.0
+    best_cand: Dict[str, Any] = {}
+
+    for idx, cand in enumerate(candidates):
+        params = {
+            **base,
+            **cand,
+            "scale_pos_weight": float(scale_pos_weight),
+            "n_jobs": -1,
+            "random_state": int(seed) + idx,
+            "verbosity": -1,
+        }
+        clf = lgb.LGBMClassifier(**params)
+        try:
+            clf.fit(X_fit, y_fit)
+            proba = clf.predict_proba(X_val)[:, 1]
+        except Exception:
+            continue
+        auc = _safe_roc_auc(np.asarray(y_val), proba)
+        if np.isnan(auc):
+            continue
+        if auc > best_auc:
+            best_auc = auc
+            best_cand = dict(cand)
+
+    if not best_cand:
+        return {}, float("nan")
+    return best_cand, float(best_auc)
+
+
+def search_lr_on_val(
+    X_fit: pd.DataFrame,
+    y_fit: np.ndarray,
+    X_val: pd.DataFrame,
+    y_val: np.ndarray,
+    base_params: MutableMapping[str, Any],
+    *,
+    n_iter: int,
+    seed: int,
+) -> Tuple[Dict[str, Any], float]:
+    """以 validation AUC 選擇 LogisticRegression 超參數。
+
+    Notes:
+      - 只在 validation 上選參，不做內層 CV（與 Phase1 baseline 其他模型一致）。
+      - LR 網格通常較小：若 n_iter >= 全組合數，會改為掃全網格以提高穩定性。
+
+    Returns:
+        (best_candidate_over_grid, best_val_auc)；若訓練標籤無兩類則 ({}, nan)。
+    """
+    y_fit = np.asarray(y_fit).astype(int).ravel()
+    if len(np.unique(y_fit)) < 2:
+        return {}, float("nan")
+
+    base = dict(base_params)
+
+    # 候選：小網格時掃全網格；否則隨機抽樣 n_iter 組
+    total = 1
+    for v in LR_GRID.values():
+        total *= max(len(list(v)), 1)
+
+    if n_iter is None or n_iter <= 0:
+        n_iter = 32
+    rng = np.random.default_rng(int(seed))
+    if n_iter >= total:
+        candidates = _dict_product(LR_GRID)
+    else:
+        candidates = _random_candidates_from_grid(LR_GRID, int(n_iter), rng, guard_factor=120)
+
+    best_auc = -1.0
+    best_cand: Dict[str, Any] = {}
+
+    for cand in candidates:
+        params = {**base, **cand}
+        # 與 wrapper 對齊：預設 class_weight=balanced
+        params.setdefault("class_weight", "balanced")
+        try:
+            clf = LogisticRegression(**params)
+            clf.fit(X_fit, y_fit)
             proba = clf.predict_proba(X_val)[:, 1]
         except Exception:
             continue

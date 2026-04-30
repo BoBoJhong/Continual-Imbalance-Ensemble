@@ -27,7 +27,6 @@ class LogisticRegressionWrapper:
             solver=solver,
             max_iter=max_iter,
             warm_start=False,
-            n_jobs=-1,
         )
         params.update(kwargs)
         self.params = params

@@ -41,6 +41,14 @@ class LightGBMWrapper:
         self.params = base_params
         self.model = None
         self.best_params = None
+        self._num_boost_round = None
+
+        # sklearn API 常用 n_estimators；對 lgb.train 對應 num_boost_round
+        if "n_estimators" in self.params and "num_boost_round" not in self.params:
+            try:
+                self._num_boost_round = int(self.params.pop("n_estimators"))
+            except Exception:
+                self._num_boost_round = None
         
         self.logger.info(f"Initialized LightGBM with params: {self.params}")
     
@@ -76,13 +84,21 @@ class LightGBMWrapper:
             valid_names.append('valid')
         
         # Train model
-        self.model = lgb.train(
-            self.params,
-            train_data,
+        num_boost_round = fit_params.pop("num_boost_round", None)
+        if num_boost_round is None:
+            num_boost_round = self._num_boost_round
+
+        train_kwargs = dict(
+            params=self.params,
+            train_set=train_data,
             valid_sets=valid_sets,
             valid_names=valid_names,
-            **fit_params
+            **fit_params,
         )
+        if num_boost_round is not None:
+            train_kwargs["num_boost_round"] = int(num_boost_round)
+
+        self.model = lgb.train(**train_kwargs)
         
         self.logger.info("Training completed")
         

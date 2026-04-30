@@ -1,0 +1,93 @@
+@startuml
+!pragma layout smetana
+
+title Phase 3 - Feature Selection on Ensemble Classifiers
+
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam linetype ortho
+skinparam nodesep 68
+skinparam ranksep 70
+skinparam ArrowThickness 1.6
+skinparam ArrowColor #444444
+skinparam packageStyle rectangle
+skinparam rectangle {
+  roundCorner 14
+}
+skinparam database {
+  BackgroundColor #E8F4FF
+  BorderColor #2E5A88
+}
+
+database "Bankruptcy dataset\n(year-based split)" as DS
+rectangle "Load split\nget_bankruptcy_year_split\n(old/new/test)" as SPLIT
+rectangle "Missing value handling\n(handle_missing_values)" as MISS
+rectangle "Chronological fit/val split\n(Old_fit/Old_val, New_fit/New_val)" as TVS
+rectangle "Feature scaling\n(scale_features)" as SCALE #FFFACD
+
+DS --> SPLIT
+SPLIT --> MISS
+MISS --> TVS
+TVS --> SCALE
+
+database "Old fit" as OLD_FIT
+database "Old val" as OLD_VAL
+database "New fit" as NEW_FIT
+database "New val" as NEW_VAL
+database "Test" as TEST
+
+SCALE --> OLD_FIT
+SCALE --> OLD_VAL
+SCALE --> NEW_FIT
+SCALE --> NEW_VAL
+SCALE --> TEST
+
+package "Feature Selection Config" as PKG_FS #FFF4CC {
+  rectangle "no_fs" as FS0
+  rectangle "mutual_info_r80" as FS1
+  rectangle "shap_r50" as FS2
+  rectangle "other FS configs" as FSX
+}
+
+FS0 -[hidden]right- FS1
+FS1 -[hidden]right- FS2
+FS2 -[hidden]right- FSX
+
+package "Selector fit/transform\n(using historical data for fit only)" as PKG_SEL #FFFDE7 {
+  rectangle "fit selector on old data" as SFIT
+  rectangle "transform old/new/test" as STRANS
+}
+
+SFIT -[hidden]down- STRANS
+
+OLD_FIT --> PKG_FS
+NEW_FIT --> PKG_FS
+PKG_FS --> SFIT
+SFIT --> STRANS
+
+database "FS-applied train/val/test" as FS_DATA
+STRANS --> FS_DATA
+
+package "Model Pool Training\n(xgb_oldnew_ensemble_common.py)" as PKG_TR #E6F6E6 {
+  rectangle "Sampling: under / over / hybrid" as SMP
+  rectangle "Train XGBoost pool\n(Old x3 + New x3)" as XGBP
+}
+
+SMP -[hidden]down- XGBP
+
+FS_DATA --> SMP
+SMP --> XGBP
+
+rectangle "Predict probabilities\n(val + test)" as PRED #F5F5F5
+rectangle "Ensemble + threshold search\n(soft voting, val F1)" as ENS #FFFACD
+rectangle "Final evaluation\nAUC / F1 / Recall" as EVAL #FFFFFF
+
+XGBP --> PRED
+OLD_VAL --> PRED
+NEW_VAL --> PRED
+TEST --> PRED
+PRED --> ENS
+ENS --> EVAL
+
+@enduml
