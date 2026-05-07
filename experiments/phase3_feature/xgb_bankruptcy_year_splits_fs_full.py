@@ -1,10 +1,17 @@
 """
-Phase 3 — Study II: 全集成方法 (Static + DES) 與特徵選擇的結合
+Phase 3 — Study II: 全集成 (Static + DES) + 破產 FS 三法對照
 =============================================================================
-測試所有 FS 配置（no_fs / mutual_info_r50 / mutual_info_r80 / shap_r50 / shap_r80）
-在所有集成策略（含動態選擇 DES）下的表現。
+研究流程順序（與 README／UML Study 2 一致）：
+  Phase 1 Baseline（單模、全特徵）→ Phase 2 集成（全特徵）→ Phase 3 本腳本
+  在 **同一套年份切割** 上，於 X_old 做 FS 後 **重訓** Old×3 + New×3，再跑靜態與 DES。
 
-FS 配置與靜態實驗 (xgb_bankruptcy_fs_advanced_raw.csv) 完全對齊，確保比較公平性。
+FS 配置（triad，比例 r80 與 `fs_dcs` 一致）：no_fs、mi_r80、shap_r80、rfe_r80。
+其中 RFE 為 `FeatureSelector(method="rfe")`（sklearn RFE + 平衡權重 DecisionTree）。
+
+輸出：`results/phase3_feature/xgb_bankruptcy_fs_full_static.csv`、
+      `results/phase3_feature/xgb_bankruptcy_fs_full_des.csv`
+
+DCS 另跑：`xgb_bankruptcy_year_splits_fs_dcs.py` → `xgb_bankruptcy_fs_full_dcs.csv`
 年份切割：15 組 (split_1+15 … split_15+1)
 """
 from __future__ import annotations
@@ -40,14 +47,13 @@ from experiments.phase2_ensemble.xgb_oldnew_ensemble_common import (
 # ---------------------------------------------------------------------------
 
 SAMPLING_STRATEGIES = ["undersampling", "oversampling", "hybrid"]
-# FS 配置與靜態集成實驗（xgb_bankruptcy_fs_advanced_raw.csv）完全對齊
-# 確保同一階段所有實驗使用相同的 FS 方法與比例，結果才具有可比較性
+# FS 三法 r80 與 `xgb_bankruptcy_year_splits_fs_dcs.py`、FeatureSelector 定義一致
 FS_CONFIGS = [
-    ("no_fs",           None,          None),
-    ("mutual_info_r50", "mutual_info", 0.5),
-    ("mutual_info_r80", "mutual_info", 0.8),
-    ("shap_r50",        "shap",        0.5),
-    ("shap_r80",        "shap",        0.8),
+    ("no_fs",   None,          None),
+    ("mi_r80",  "mutual_info", 0.8),
+    ("shap_r80","shap",        0.8),
+    ("rfe_r80", "rfe",         0.8),
+    ("cart_r80","cart",        0.8),
 ]
 METRICS = ["AUC", "F1", "Recall"]
 OUTPUT_DIR = project_root / "results" / "phase3_feature"

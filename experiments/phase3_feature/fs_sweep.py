@@ -20,7 +20,7 @@ from experiments._shared.common_dataset import get_splits
 
 SPLIT_MODE = "block_cv"
 FS_RATIOS  = [0.2, 0.5, 0.8]
-FS_METHODS = ["kbest_f", "kbest_chi2", "lasso"]
+FS_METHODS = ["mutual_info", "cart", "ga"]
 OUTPUT_DIR = project_root / "results" / "phase3_feature"
 
 

@@ -18,8 +18,12 @@ from sklearn.feature_selection import (
     chi2,
     SelectFromModel,
     mutual_info_classif,
+    RFE,
 )
 from sklearn.linear_model import LassoCV
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import StratifiedKFold, cross_val_score
+from sklearn.base import clone
 from sklearn.preprocessing import MinMaxScaler
 
 
@@ -34,12 +38,12 @@ class FeatureSelector:
         X_test_fs = selector.transform(X_test)
 
     Attributes:
-        method:         'kbest_f' | 'kbest_chi2' | 'lasso' | 'mutual_info' | 'shap'
+        method:         'kbest_f' | 'kbest_chi2' | 'lasso' | 'mutual_info' | 'shap' | 'rfe' | 'cart' | 'ga'
         k:              保留的特徵數（lasso 以重要性自動決定，shap/mi 手動給 k）
         selected_cols_: fit 後選出的欄位名稱清單
     """
 
-    SUPPORTED_METHODS = ("kbest_f", "kbest_chi2", "lasso", "mutual_info", "shap")
+    SUPPORTED_METHODS = ("kbest_f", "kbest_chi2", "lasso", "mutual_info", "shap", "rfe", "cart", "ga")
 
     def __init__(self, method: str = "kbest_f", k: int = 50):
         if method not in self.SUPPORTED_METHODS:
@@ -91,6 +95,22 @@ class FeatureSelector:
             self._mi_top_idx = top_idx
             self._selector = None  # 不用 sklearn selector，自行記錄 idx
 
+        elif self.method == "cart":
+            cart = DecisionTreeClassifier(random_state=42, class_weight="balanced")
+            cart.fit(X, y)
+            importances = np.asarray(cart.feature_importances_, dtype=float)
+            k = min(self.k, n_features)
+            top_idx = np.argsort(importances)[::-1][:k]
+            self._cart_scores = importances
+            self._cart_top_idx = top_idx
+            self._selector = None
+
+        elif self.method == "ga":
+            # GA wrapper：以交叉驗證 AUC 搜尋最佳特徵子集，再取前 k 個基因
+            top_idx = self._run_ga_feature_search(X, y, k=min(self.k, n_features))
+            self._ga_top_idx = top_idx
+            self._selector = None
+
         elif self.method == "shap":
             try:
                 import shap
@@ -114,9 +134,18 @@ class FeatureSelector:
             self._shap_top_idx = top_idx
             self._selector = None  # 自行記錄 idx
 
+        elif self.method == "rfe":
+            est = DecisionTreeClassifier(random_state=42, class_weight="balanced")
+            self._selector = RFE(estimator=est, n_features_to_select=k, step=1)
+            self._selector.fit(X, y)
+
         # 記錄選出的欄位名稱
         if self.method in ("mutual_info",):
             self.selected_cols_ = list(np.array(X.columns)[self._mi_top_idx])
+        elif self.method == "cart":
+            self.selected_cols_ = list(np.array(X.columns)[self._cart_top_idx])
+        elif self.method == "ga":
+            self.selected_cols_ = list(np.array(X.columns)[self._ga_top_idx])
         elif self.method == "shap":
             self.selected_cols_ = list(np.array(X.columns)[self._shap_top_idx])
         else:
@@ -140,7 +169,7 @@ class FeatureSelector:
         if self.method == "kbest_chi2":
             X_scaled = self._chi2_scaler.transform(X)
             arr = self._selector.transform(X_scaled)
-        elif self.method in ("mutual_info", "shap"):
+        elif self.method in ("mutual_info", "cart", "ga", "shap"):
             arr = X[self.selected_cols_].values
         else:
             arr = self._selector.transform(X)
@@ -164,3 +193,97 @@ class FeatureSelector:
             f"FeatureSelector(method={self.method}, "
             f"selected={self.n_selected} features)"
         )
+
+    def _run_ga_feature_search(self, X: pd.DataFrame, y: np.ndarray, k: int) -> np.ndarray:
+        """
+        小型 GA wrapper（不依賴額外套件）：
+        - 個體: 二元向量（1 表示選特徵）
+        - 適應度: 3-fold AUC 平均值（DecisionTreeClassifier）
+        """
+        rng = np.random.default_rng(42)
+        n_features = X.shape[1]
+        if n_features == 1:
+            return np.array([0], dtype=int)
+
+        pop_size = 18
+        n_gen = 10
+        elite_size = 4
+        mutation_rate = 0.03
+        min_keep = max(1, min(k, n_features))
+        max_keep = max(min_keep, min(n_features, int(max(k, 2) * 1.5)))
+
+        base_est = DecisionTreeClassifier(random_state=42, class_weight="balanced")
+        cv = StratifiedKFold(n_splits=3, shuffle=True, random_state=42)
+        X_np = np.asarray(X)
+
+        def _repair(mask: np.ndarray) -> np.ndarray:
+            m = mask.copy()
+            n_on = int(m.sum())
+            if n_on < min_keep:
+                off_idx = np.where(~m)[0]
+                if len(off_idx) > 0:
+                    add = rng.choice(off_idx, size=min_keep - n_on, replace=False)
+                    m[add] = True
+            elif n_on > max_keep:
+                on_idx = np.where(m)[0]
+                drop = rng.choice(on_idx, size=n_on - max_keep, replace=False)
+                m[drop] = False
+            return m
+
+        def _fitness(mask: np.ndarray) -> float:
+            m = _repair(mask)
+            cols = np.where(m)[0]
+            if len(cols) == 0:
+                return -1.0
+            est = clone(base_est)
+            scores = cross_val_score(est, X_np[:, cols], y, cv=cv, scoring="roc_auc")
+            return float(np.mean(scores))
+
+        population = []
+        for _ in range(pop_size):
+            mask = rng.random(n_features) < (min_keep / max(n_features, 1))
+            population.append(_repair(mask))
+
+        best_mask = population[0]
+        best_score = -1.0
+
+        for _ in range(n_gen):
+            scores = np.array([_fitness(ind) for ind in population], dtype=float)
+            order = np.argsort(scores)[::-1]
+            population = [population[i] for i in order]
+            scores = scores[order]
+            if scores[0] > best_score:
+                best_score = float(scores[0])
+                best_mask = population[0].copy()
+
+            next_pop = population[:elite_size]
+            while len(next_pop) < pop_size:
+                p1 = population[int(rng.integers(0, max(2, pop_size // 2)))]
+                p2 = population[int(rng.integers(0, max(2, pop_size // 2)))]
+                cut = int(rng.integers(1, n_features))
+                child = np.concatenate([p1[:cut], p2[cut:]])
+                mut = rng.random(n_features) < mutation_rate
+                child = np.logical_xor(child, mut)
+                next_pop.append(_repair(child))
+            population = next_pop
+
+        final_cols = np.where(best_mask)[0]
+        if len(final_cols) > k:
+            # 若 GA 選超過 k，按 CART 重要度再截斷，保持輸出維度穩定
+            cart = DecisionTreeClassifier(random_state=42, class_weight="balanced")
+            cart.fit(X_np[:, final_cols], y)
+            imp = np.asarray(cart.feature_importances_)
+            keep_local_idx = np.argsort(imp)[::-1][:k]
+            final_cols = final_cols[keep_local_idx]
+        elif len(final_cols) < k:
+            # 若不足 k，以 CART 全域重要度補齊
+            cart = DecisionTreeClassifier(random_state=42, class_weight="balanced")
+            cart.fit(X_np, y)
+            imp = np.asarray(cart.feature_importances_)
+            for idx in np.argsort(imp)[::-1]:
+                if idx not in final_cols:
+                    final_cols = np.append(final_cols, idx)
+                if len(final_cols) >= k:
+                    break
+
+        return np.asarray(final_cols[:k], dtype=int)

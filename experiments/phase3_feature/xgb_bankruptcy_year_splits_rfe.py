@@ -1,19 +1,20 @@
 """
-Phase 3 — Study II: 遞迴特徵刪除 (RFE) 優化實驗 — Bankruptcy
+Phase 3 — Study II: Wrapper RFE（破產）— 與 MI / SHAP 同一套 FeatureSelector
 =============================================================================
-使用 XGBoost 作為基底，透過 RFE 找出最具強健性的特徵子集。
-此實驗單獨執行，不影響其他數據。
+與 `xgb_bankruptcy_year_splits_fs_full.py`、`xgb_bankruptcy_year_splits_fs_dcs.py`
+使用相同的 `FeatureSelector(method="rfe")`（sklearn RFE + DecisionTree 基底），
+僅輸出靜態集成 All_6 一欄，方便快速重跑或對照。
+
+完整靜態／DES／DCS 請跑 `xgb_bankruptcy_year_splits_fs_full.py` 與 `xgb_bankruptcy_year_splits_fs_dcs.py`。
 """
 from __future__ import annotations
 
 import sys
 import warnings
 from pathlib import Path
-from typing import List, Tuple, Optional
 
 import numpy as np
 import pandas as pd
-from sklearn.feature_selection import RFE
 
 warnings.filterwarnings("ignore")
 
@@ -23,7 +24,7 @@ sys.path.insert(0, str(project_root))
 from src.utils import set_seed, get_logger
 from src.data import DataPreprocessor, ImbalanceSampler
 from src.models import XGBoostWrapper
-from src.evaluation import compute_metrics
+from src.features import FeatureSelector
 from experiments._shared.common_bankruptcy import YEAR_SPLITS, get_bankruptcy_year_split
 from experiments.phase2_ensemble.xgb_oldnew_ensemble_common import ensemble_metrics_with_threshold
 
@@ -58,23 +59,18 @@ def main():
         y_old = np.asarray(y_old)
         y_test_arr = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
 
-        # 1. RFE Feature Selection (在 Old 資料上執行)
+        # 1. RFE（與 fs_full / fs_dcs 相同之 FeatureSelector，在 Old 上 fit）
         n_features = X_old_raw.shape[1]
         n_to_select = max(1, int(n_features * FS_RATIO))
-        
-        logger.info(f"    Running RFE: Selecting {n_to_select} / {n_features} features...")
-        
-        # 使用一個基礎 XGBoost 作為 RFE 的 estimator
-        from xgboost import XGBClassifier
-        base_model = XGBClassifier(n_estimators=50, max_depth=5, random_state=42, verbosity=0)
-        rfe = RFE(estimator=base_model, n_features_to_select=n_to_select, step=1)
-        
-        rfe.fit(X_old_raw, y_old)
-        selected_cols = X_old_raw.columns[rfe.support_]
-        
-        X_old_fs = X_old_raw[selected_cols]
-        X_new_fs = X_new_raw[selected_cols]
-        X_test_fs = X_test_raw[selected_cols]
+
+        logger.info(
+            f"    Running RFE (FeatureSelector, DecisionTree base): "
+            f"{n_to_select} / {n_features} features..."
+        )
+        fs = FeatureSelector(method="rfe", k=n_to_select)
+        X_old_fs = fs.fit_transform(X_old_raw, y_old)
+        X_new_fs = fs.transform(X_new_raw)
+        X_test_fs = fs.transform(X_test_raw)
 
         # 2. 訓練與評估 (使用靜態集成 All_6 作為標竿)
         # 這裡簡化流程，直接在 FS 後的資料上跑一次標準集成

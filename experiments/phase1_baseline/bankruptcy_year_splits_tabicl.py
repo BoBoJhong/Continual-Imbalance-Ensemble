@@ -25,6 +25,7 @@ TabICL 實作：使用 `src.models.TabICLWrapper`（底層 TabPFNClassifier）�
 """
 
 import argparse
+import json
 import sys
 import zlib
 from datetime import datetime
@@ -52,6 +53,8 @@ COMPACT_SUMMARY_METRICS = ["AUC", "F1", "G_Mean", "Recall", "Precision"]
 COMPACT_ONLY_METRICS = ["AUC", "F1", "Recall"]
 
 OUTPUT_DIR = project_root / "results" / "phase1_baseline" / "tabicl"
+CHECKPOINT_PATH = OUTPUT_DIR / "bankruptcy_year_splits_tabicl_checkpoint.json"
+PARTIAL_RAW_PATH = OUTPUT_DIR / "bankruptcy_year_splits_tabicl_raw.partial.csv"
 
 
 def _select_threshold_from_validation(y_val, y_proba_val):
@@ -160,9 +163,21 @@ def _train_eval(
     logger,
     *,
     device: str,
-    n_ensemble_configurations: int,
+    n_estimators: int,
     max_train_samples: int,
     subsample: str,
+    norm_methods: list[str],
+    feat_shuffle_method: str,
+    class_shift: bool,
+    outlier_threshold: float,
+    softmax_temperature: float,
+    average_logits: bool,
+    use_hierarchical: bool,
+    batch_size: int,
+    use_amp: bool,
+    checkpoint_version: str,
+    n_jobs: int | None,
+    model_verbose: bool,
     X_val_raw=None,
     y_val=None,
     year_train=None,
@@ -193,10 +208,22 @@ def _train_eval(
     model = TabICLWrapper(
         name=f"{tag}_{strategy}",
         device=device,
-        n_ensemble_configurations=n_ensemble_configurations,
+        n_estimators=n_estimators,
         seed=fit_seed,
         max_train_samples=max_train_samples,
         subsample=subsample,
+        norm_methods=norm_methods,
+        feat_shuffle_method=feat_shuffle_method,
+        class_shift=class_shift,
+        outlier_threshold=outlier_threshold,
+        softmax_temperature=softmax_temperature,
+        average_logits=average_logits,
+        use_hierarchical=use_hierarchical,
+        batch_size=batch_size,
+        use_amp=use_amp,
+        checkpoint_version=checkpoint_version,
+        n_jobs=n_jobs,
+        verbose=model_verbose,
     )
     model.fit(X_r, y_r)
 
@@ -226,9 +253,21 @@ def run_split(
     *,
     include_retrain=True,
     device: str,
-    n_ensemble_configurations: int,
+    n_estimators: int,
     max_train_samples: int,
     subsample: str,
+    norm_methods: list[str],
+    feat_shuffle_method: str,
+    class_shift: bool,
+    outlier_threshold: float,
+    softmax_temperature: float,
+    average_logits: bool,
+    use_hierarchical: bool,
+    batch_size: int,
+    use_amp: bool,
+    checkpoint_version: str,
+    n_jobs: int | None,
+    model_verbose: bool,
 ):
     sampler = ImbalanceSampler()
     rows = []
@@ -246,9 +285,21 @@ def run_split(
             year_train=year_old,
             split_label=label,
             device=device,
-            n_ensemble_configurations=n_ensemble_configurations,
+            n_estimators=n_estimators,
             max_train_samples=max_train_samples,
             subsample=subsample,
+            norm_methods=norm_methods,
+            feat_shuffle_method=feat_shuffle_method,
+            class_shift=class_shift,
+            outlier_threshold=outlier_threshold,
+            softmax_temperature=softmax_temperature,
+            average_logits=average_logits,
+            use_hierarchical=use_hierarchical,
+            batch_size=batch_size,
+            use_amp=use_amp,
+            checkpoint_version=checkpoint_version,
+            n_jobs=n_jobs,
+            model_verbose=model_verbose,
         )
         rows.append({"split": label, "method": "Old", "sampling": strat, **m})
 
@@ -265,9 +316,21 @@ def run_split(
             year_train=year_new,
             split_label=label,
             device=device,
-            n_ensemble_configurations=n_ensemble_configurations,
+            n_estimators=n_estimators,
             max_train_samples=max_train_samples,
             subsample=subsample,
+            norm_methods=norm_methods,
+            feat_shuffle_method=feat_shuffle_method,
+            class_shift=class_shift,
+            outlier_threshold=outlier_threshold,
+            softmax_temperature=softmax_temperature,
+            average_logits=average_logits,
+            use_hierarchical=use_hierarchical,
+            batch_size=batch_size,
+            use_amp=use_amp,
+            checkpoint_version=checkpoint_version,
+            n_jobs=n_jobs,
+            model_verbose=model_verbose,
         )
         rows.append({"split": label, "method": "New", "sampling": strat, **m})
 
@@ -290,9 +353,21 @@ def run_split(
                 y_val=y_val_re,
                 split_label=label,
                 device=device,
-                n_ensemble_configurations=n_ensemble_configurations,
+                n_estimators=n_estimators,
                 max_train_samples=max_train_samples,
                 subsample=subsample,
+                norm_methods=norm_methods,
+                feat_shuffle_method=feat_shuffle_method,
+                class_shift=class_shift,
+                outlier_threshold=outlier_threshold,
+                softmax_temperature=softmax_temperature,
+                average_logits=average_logits,
+                use_hierarchical=use_hierarchical,
+                batch_size=batch_size,
+                use_amp=use_amp,
+                checkpoint_version=checkpoint_version,
+                n_jobs=n_jobs,
+                model_verbose=model_verbose,
             )
             rows.append({"split": label, "method": "Retrain", "sampling": strat, **m})
 
@@ -383,21 +458,121 @@ def export_compact_report(df_raw: pd.DataFrame, logger, output_dir: Path) -> Non
         logger.info(f"  Saved -> {path_m.name}")
 
 
+def _save_raw_snapshot(rows: list[dict], output_dir: Path, logger) -> None:
+    """Persist current accumulated rows as a checkpoint-like raw snapshot."""
+    if not rows:
+        return
+    raw_path = output_dir / "bankruptcy_year_splits_tabicl_raw.csv"
+    pd.DataFrame(rows).to_csv(raw_path, index=False, float_format="%.6f")
+    logger.info(f"  Snapshot saved -> {raw_path.name}  ({len(rows)} rows)")
+
+
+def _deduplicate_rows(rows: list[dict]) -> list[dict]:
+    """Keep the latest row per (split, method, sampling)."""
+    merged: dict[tuple[str, str, str], dict] = {}
+    for r in rows:
+        k = (str(r.get("split", "")), str(r.get("method", "")), str(r.get("sampling", "")))
+        merged[k] = r
+    return list(merged.values())
+
+
+def _load_progress(output_dir: Path, logger):
+    rows: list[dict] = []
+    completed_splits: set[str] = set()
+    retrain_done = False
+
+    partial_raw = output_dir / PARTIAL_RAW_PATH.name
+    checkpoint = output_dir / CHECKPOINT_PATH.name
+
+    if partial_raw.exists():
+        try:
+            rows = pd.read_csv(partial_raw).to_dict("records")
+            rows = _deduplicate_rows(rows)
+            logger.info(f"Loaded partial raw: {partial_raw.name} ({len(rows)} rows)")
+        except Exception as exc:
+            logger.warning(f"Failed to load partial raw, ignore and continue: {exc}")
+
+    if checkpoint.exists():
+        try:
+            payload = json.loads(checkpoint.read_text(encoding="utf-8"))
+            completed_splits = set(payload.get("completed_splits", []))
+            retrain_done = bool(payload.get("retrain_done", False))
+            logger.info(
+                f"Loaded checkpoint: {checkpoint.name} "
+                f"(completed_splits={len(completed_splits)}, retrain_done={retrain_done})"
+            )
+        except Exception as exc:
+            logger.warning(f"Failed to load checkpoint, ignore and continue: {exc}")
+
+    return rows, completed_splits, retrain_done
+
+
+def _save_progress(
+    output_dir: Path,
+    rows: list[dict],
+    completed_splits: set[str],
+    retrain_done: bool,
+) -> None:
+    partial_raw = output_dir / PARTIAL_RAW_PATH.name
+    checkpoint = output_dir / CHECKPOINT_PATH.name
+    if rows:
+        pd.DataFrame(rows).to_csv(partial_raw, index=False, float_format="%.6f")
+
+    payload = {
+        "updated_at": datetime.now().isoformat(timespec="seconds"),
+        "rows_count": len(rows),
+        "completed_splits": sorted(completed_splits),
+        "retrain_done": bool(retrain_done),
+    }
+    tmp = checkpoint.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    tmp.replace(checkpoint)
+
+
+def _clear_progress_files(output_dir: Path, logger) -> None:
+    for p in (
+        output_dir / CHECKPOINT_PATH.name,
+        output_dir / PARTIAL_RAW_PATH.name,
+    ):
+        if p.exists():
+            p.unlink()
+            logger.info(f"Removed progress file: {p.name}")
+
+
 def _run_one_output_dir(
     output_dir: Path,
     *,
     logger,
+    use_resume: bool,
     device: str,
-    n_ensemble_configurations: int,
+    n_estimators: int,
     max_train_samples: int,
     subsample: str,
+    norm_methods: list[str],
+    feat_shuffle_method: str,
+    class_shift: bool,
+    outlier_threshold: float,
+    softmax_temperature: float,
+    average_logits: bool,
+    use_hierarchical: bool,
+    batch_size: int,
+    use_amp: bool,
+    checkpoint_version: str,
+    n_jobs: int | None,
+    model_verbose: bool,
 ):
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    all_rows = []
-    retrain_done = False
+    if use_resume:
+        all_rows, completed_splits, retrain_done = _load_progress(output_dir, logger)
+    else:
+        _clear_progress_files(output_dir, logger)
+        all_rows, completed_splits, retrain_done = [], set(), False
 
     for label, old_end_year in YEAR_SPLITS:
+        if label in completed_splits:
+            logger.info(f"\n[checkpoint skip] {label} already completed")
+            continue
         logger.info(f"\n{'='*60}")
         logger.info(
             f"Split: {label}  (Old<={old_end_year}, New={old_end_year + 1}-2014, Test=2015-2018)"
@@ -420,12 +595,27 @@ def _run_one_output_dir(
                 logger,
                 include_retrain=(not retrain_done),
                 device=device,
-                n_ensemble_configurations=n_ensemble_configurations,
+                n_estimators=n_estimators,
                 max_train_samples=max_train_samples,
                 subsample=subsample,
+                norm_methods=norm_methods,
+                feat_shuffle_method=feat_shuffle_method,
+                class_shift=class_shift,
+                outlier_threshold=outlier_threshold,
+                softmax_temperature=softmax_temperature,
+                average_logits=average_logits,
+                use_hierarchical=use_hierarchical,
+                batch_size=batch_size,
+                use_amp=use_amp,
+                checkpoint_version=checkpoint_version,
+                n_jobs=n_jobs,
+                model_verbose=model_verbose,
             )
             all_rows.extend(rows)
+            _save_raw_snapshot(all_rows, output_dir, logger)
             retrain_done = True
+            completed_splits.add(label)
+            _save_progress(output_dir, all_rows, completed_splits, retrain_done)
         except Exception as e:
             logger.error(f"[ERROR] {label}: {e}")
             import traceback
@@ -438,7 +628,6 @@ def _run_one_output_dir(
 
     df_raw = pd.DataFrame(all_rows)
     raw_path = output_dir / "bankruptcy_year_splits_tabicl_raw.csv"
-    df_raw.to_csv(raw_path, index=False, float_format="%.6f")
     logger.info(f"\n原始結果已儲存 -> {raw_path.name}  ({len(df_raw)} rows)")
 
     logger.info("\n產出指標 pivot 表格...")
@@ -450,6 +639,7 @@ def _run_one_output_dir(
     logger.info("\n=== 完成 ===")
     summary = _mean_pivot_by_method_sampling(df_raw, "AUC")
     logger.info("\nAUC 摘要（method × sampling 平均，跨各年份切割）:\n" + summary.to_string())
+    _clear_progress_files(output_dir, logger)
 
 
 def main():
@@ -461,10 +651,10 @@ def main():
         help="TabPFN 推論/訓練 device（auto 會優先用 cuda）",
     )
     parser.add_argument(
-        "--n-ensemble-configurations",
+        "--n-estimators",
         type=int,
-        default=16,
-        help="TabPFN 的 ensemble configurations 數量（越大越穩但越慢）",
+        default=32,
+        help="TabICL ensemble 成員數（等同官方推薦 n_estimators）",
     )
     parser.add_argument(
         "--max-train-samples",
@@ -479,10 +669,37 @@ def main():
         help="當訓練資料超過 max-train-samples 時的抽樣策略",
     )
     parser.add_argument(
+        "--norm-methods",
+        nargs="+",
+        default=["none", "power"],
+        help="TabICL 正規化候選（預設: none power）",
+    )
+    parser.add_argument("--feat-shuffle-method", type=str, default="latin")
+    parser.add_argument("--no-class-shift", action="store_true", help="停用 class cyclic shift")
+    parser.add_argument("--outlier-threshold", type=float, default=4.0)
+    parser.add_argument("--softmax-temperature", type=float, default=0.9)
+    parser.add_argument("--no-average-logits", action="store_true", help="停用 logits averaging")
+    parser.add_argument("--no-use-hierarchical", action="store_true", help="停用 hierarchical routing")
+    parser.add_argument("--batch-size", type=int, default=8, help="TabICL 推論/集成批次大小")
+    parser.add_argument("--no-amp", action="store_true", help="停用自動混合精度")
+    parser.add_argument(
+        "--checkpoint-version",
+        type=str,
+        default="tabicl-classifier-v1.1-0506.ckpt",
+        help="TabICL checkpoint 版本字串",
+    )
+    parser.add_argument("--n-jobs", type=int, default=None)
+    parser.add_argument("--model-verbose", action="store_true")
+    parser.add_argument(
         "--output-tag",
         type=str,
         default="",
         help="結果輸出子資料夾標籤（例如 rerun_20260406）。會寫到 tabicl/<tag>/",
+    )
+    parser.add_argument(
+        "--no-resume",
+        action="store_true",
+        help="忽略 checkpoint / partial raw，從頭重跑",
     )
 
     args = parser.parse_args()
@@ -497,10 +714,23 @@ def main():
     _run_one_output_dir(
         out_dir,
         logger=logger,
+        use_resume=(not args.no_resume),
         device=args.device,
-        n_ensemble_configurations=args.n_ensemble_configurations,
+        n_estimators=args.n_estimators,
         max_train_samples=args.max_train_samples,
         subsample=args.subsample,
+        norm_methods=args.norm_methods,
+        feat_shuffle_method=args.feat_shuffle_method,
+        class_shift=(not args.no_class_shift),
+        outlier_threshold=args.outlier_threshold,
+        softmax_temperature=args.softmax_temperature,
+        average_logits=(not args.no_average_logits),
+        use_hierarchical=(not args.no_use_hierarchical),
+        batch_size=args.batch_size,
+        use_amp=(not args.no_amp),
+        checkpoint_version=args.checkpoint_version,
+        n_jobs=args.n_jobs,
+        model_verbose=args.model_verbose,
     )
 
 

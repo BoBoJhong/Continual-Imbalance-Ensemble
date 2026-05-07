@@ -4,8 +4,8 @@ Phase 3 — Study II: 特徵選擇 + DCS 動態選擇器（破產資料集）
 Pipeline 與 Phase 2 DCS 腳本完全一致（單一 scaler, Old+New concat），
 差異僅在 scale 前插入 FeatureSelector。
 
-FS 配置與靜態 / DES 實驗完全對齊（5 種），確保跨方法可比較性：
-  no_fs / mutual_info_r50 / mutual_info_r80 / shap_r50 / shap_r80
+FS 配置與靜態 / DES 實驗完全對齊，確保跨方法可比較性：
+  no_fs / mi_r80 / shap_r80 / rfe_r80
 
 輸出：results/phase3_feature/xgb_bankruptcy_fs_full_dcs.csv
 """
@@ -38,11 +38,10 @@ from experiments._shared.common_dcs import _Wrapper, run_dcs_all_variants_from_p
 SAMPLING_STRATEGIES = ["undersampling", "oversampling", "hybrid"]
 
 FS_CONFIGS = [
-    ("no_fs",           None,          None),
-    ("mutual_info_r50", "mutual_info", 0.5),
-    ("mutual_info_r80", "mutual_info", 0.8),
-    ("shap_r50",        "shap",        0.5),
-    ("shap_r80",        "shap",        0.8),
+    ("no_fs",    None,          None),
+    ("mi_r80",   "mutual_info", 0.8),
+    ("shap_r80", "shap",        0.8),
+    ("rfe_r80",  "rfe",         0.8),
 ]
 
 METRICS = ["AUC", "F1", "Recall"]

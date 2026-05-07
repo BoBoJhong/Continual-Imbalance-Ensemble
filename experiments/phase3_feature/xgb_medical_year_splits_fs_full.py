@@ -1,8 +1,8 @@
 """
-Phase 3 — Study II: 醫療資料集 (Medical) 的全集成與特徵選擇實驗
+Phase 3 — Study II: 醫療資料集全流程（Static + DES）+ FS 三法對照
 =============================================================================
 資料集：Diabetes 130-US Hospitals (1999-2008)
-測試 no_fs 與 mutual_info_r80 在醫療資料集上的集成表現。
+FS 配置（與破產 triad 對齊）：no_fs、mi_r80、shap_r80、rfe_r80
 """
 from __future__ import annotations
 
@@ -26,6 +26,7 @@ from src.models import XGBoostWrapper
 from src.features import FeatureSelector
 from src.evaluation import compute_metrics
 from experiments._shared.common_dataset import MEDICAL_YEAR_SPLITS, get_medical_year_split
+from experiments.phase3_feature._core.triad_csv import save_medical_fs_full_split
 from experiments.phase2_ensemble.xgb_oldnew_ensemble_common import (
     ensemble_metrics_with_threshold,
     dynamic_ensemble_metrics_with_threshold,
@@ -39,10 +40,11 @@ from experiments.phase2_ensemble.xgb_oldnew_ensemble_common import (
 SAMPLING_STRATEGIES = ["undersampling", "oversampling", "hybrid"]
 FS_CONFIGS = [
     ("no_fs", None, None),
-    ("mutual_info_r80", "mutual_info", 0.8)
+    ("mi_r80", "mutual_info", 0.8),
+    ("shap_r80", "shap", 0.8),
+    ("rfe_r80", "rfe", 0.8),
 ]
 METRICS = ["AUC", "F1", "Recall"]
-OUTPUT_DIR = project_root / "results" / "phase3_feature"
 
 # ---------------------------------------------------------------------------
 # 工具函式
@@ -66,7 +68,6 @@ def _apply_fs(method, ratio, X_old, y_old, X_new, X_test, logger):
 def main():
     logger = get_logger("Phase3_FS_Full_Medical", console=True, file=True)
     set_seed(42)
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     from experiments.phase2_ensemble.xgb_year_split_shared import (
         _split_fit_val_by_year
@@ -167,10 +168,8 @@ def main():
                     **{k: d_res[k] for k in METRICS}
                 })
 
-    # Save results
-    pd.DataFrame(static_all).to_csv(OUTPUT_DIR / "xgb_medical_fs_full_static.csv", index=False)
-    pd.DataFrame(des_all).to_csv(OUTPUT_DIR / "xgb_medical_fs_full_des.csv", index=False)
-    logger.info(f"Done! Medical Results saved to {OUTPUT_DIR}")
+    save_medical_fs_full_split(project_root, static_all, des_all)
+    logger.info("Done! Medical results saved to method dirs under results/phase3_feature/")
 
 if __name__ == "__main__":
     main()

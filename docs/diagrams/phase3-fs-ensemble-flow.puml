@@ -1,0 +1,55 @@
+@startuml
+!pragma layout smetana
+
+title Phase 3 - Feature Selection + Ensemble (Bankruptcy + Medical)
+
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam linetype ortho
+skinparam nodesep 62
+skinparam ranksep 68
+skinparam ArrowThickness 1.6
+skinparam ArrowColor #444444
+skinparam packageStyle rectangle
+skinparam rectangle {
+  roundCorner 14
+}
+skinparam database {
+  BackgroundColor #E8F4FF
+  BorderColor #2E5A88
+}
+
+database "Datasets\n- Bankruptcy\n- Medical" as DS
+rectangle "Year-based split\nOld / New / Test" as SPLIT
+rectangle "Preprocessing\nhandle_missing_values\nfeature cleanup" as PREP
+rectangle "Feature Selection configs\nno_fs / mi_r80 / shap_r80 / rfe_r80" as FSCFG #FFF4CC
+rectangle "FS execution\nfit selector on Old only\ntransform Old / New / Test" as FSAPPLY #FFFDE7
+rectangle "Chronological fit/val split\nOld_fit/Old_val, New_fit/New_val" as TVS
+rectangle "Scaling\nOld-scaler + New-scaler spaces" as SCALE #FFFACD
+rectangle "Sampling\nunder / over / hybrid" as SMP #FFFACD
+rectangle "Train 6-model pool\nOld x3 + New x3 (XGBoost)" as POOL #E6F6E6
+rectangle "Predict probabilities\nValidation + Test" as PRED #F5F5F5
+
+rectangle "Static route\nOld_3 / New_3 / All_6\nthreshold search on validation F1" as STATIC #FFFACD
+rectangle "DES route\nKNORA-E / KNORA-U / DES-KNN\nDSEL = validation (k=7)" as DES #FFFACD
+rectangle "DCS route\nOLA / LCA / OLA_TW / LCA_TW\nlocal region on pooled classifiers" as DCS #FFFACD
+rectangle "Evaluation + export\nAUC / F1 / Recall\nmethod outputs to\nmutual_info / shap / rfe dirs" as EVAL #FFFFFF
+
+DS --> SPLIT
+SPLIT --> PREP
+PREP --> FSCFG
+FSCFG --> FSAPPLY
+FSAPPLY --> TVS
+TVS --> SCALE
+SCALE --> SMP
+SMP --> POOL
+POOL --> PRED
+PRED --> STATIC
+PRED --> DES
+PRED --> DCS
+STATIC --> EVAL
+DES --> EVAL
+DCS --> EVAL
+
+@enduml

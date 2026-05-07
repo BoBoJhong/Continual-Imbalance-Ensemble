@@ -1,0 +1,52 @@
+@startuml
+!pragma layout smetana
+
+title Phase 2 - Ensemble Learning (Bankruptcy + Medical)
+
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam linetype ortho
+skinparam nodesep 62
+skinparam ranksep 66
+skinparam ArrowThickness 1.6
+skinparam ArrowColor #444444
+skinparam packageStyle rectangle
+skinparam rectangle {
+  roundCorner 14
+}
+skinparam database {
+  BackgroundColor #E8F4FF
+  BorderColor #2E5A88
+}
+
+database "Datasets\n- Bankruptcy\n- Medical" as DS
+rectangle "Year-based split\nOld / New / Test" as SPLIT
+rectangle "Chronological fit/val split\nOld_fit/Old_val, New_fit/New_val" as TVS
+rectangle "Scaling\nOld-scaler + New-scaler views" as SCALE #FFFACD
+
+package "Model pool training" as PKG_POOL #E6F6E6 {
+  rectangle "Old x3\nunder / over / hybrid" as OLD3
+  rectangle "New x3\nunder / over / hybrid" as NEW3
+}
+
+rectangle "Probability prediction\nValidation + Test\n(6 base models)" as PRED #F5F5F5
+
+rectangle "Static ensemble\nOld_3 / New_3 / All_6\nthreshold search on val F1" as STATIC #FFFACD
+rectangle "DES ensemble\nKNORA-E / KNORA-U / DES-KNN\nDSEL = validation space (k=7)" as DES #FFFACD
+rectangle "DCS ensemble\nOLA / LCA / OLA_TW / LCA_TW\nlocal region over pooled classifiers" as DCS #FFFACD
+rectangle "Evaluation + export\nAUC / F1 / Recall\nper split + summary tables" as EVAL #FFFFFF
+
+DS --> SPLIT
+SPLIT --> TVS
+TVS --> SCALE
+SCALE --> PKG_POOL
+PKG_POOL --> PRED
+PRED --> STATIC
+PRED --> DES
+PRED --> DCS
+STATIC --> EVAL
+DES --> EVAL
+DCS --> EVAL
+
+@enduml

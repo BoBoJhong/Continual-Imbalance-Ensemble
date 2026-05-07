@@ -1,0 +1,3 @@
+fs,AUC_no_fs,AUC_fs,AUC_diff,AUC_diff_std,n_positive,n_negative,n_total
+mutual_info_r50,0.8213,0.809,-0.0123,0.0195,3,12,15
+mutual_info_r80,0.8213,0.8219,0.0006,0.0052,9,6,15

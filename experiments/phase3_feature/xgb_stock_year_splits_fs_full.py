@@ -39,7 +39,9 @@ from experiments.phase2_ensemble.xgb_oldnew_ensemble_common import (
 SAMPLING_STRATEGIES = ["undersampling", "oversampling", "hybrid"]
 FS_CONFIGS = [
     ("no_fs", None, None),
-    ("mutual_info_r80", "mutual_info", 0.8)
+    ("mi_r80", "mutual_info", 0.8),
+    ("cart_r80", "cart", 0.8),
+    ("ga_r80", "ga", 0.8),
 ]
 METRICS = ["AUC", "F1", "Recall"]
 OUTPUT_DIR = project_root / "results" / "phase3_feature"
