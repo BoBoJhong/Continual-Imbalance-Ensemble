@@ -21,10 +21,14 @@ Validation：訓練段內 **依 year 逐年**各抽約 20% 作 validation（_spl
   - med_rf_table_{metric}_{old|retrain|new}.csv
   - med_rf_tuning_log.csv（若有 tuning）
 
-用法：
+用法（預設只跑調參 tuned；未調參請加 --tuning default）：
   python experiments/phase1_baseline/medical_year_splits_random_forest.py
-  python experiments/phase1_baseline/medical_year_splits_random_forest.py --tuning tuned --tune-n-iter 48
-  python experiments/phase1_baseline/medical_year_splits_random_forest.py --tuning both  --tune-n-iter 48
+  python experiments/phase1_baseline/medical_year_splits_random_forest.py --tune-n-iter 48
+  python experiments/phase1_baseline/medical_year_splits_random_forest.py --tuning default
+  python experiments/phase1_baseline/medical_year_splits_random_forest.py --tuning both --tune-n-iter 48
+  python experiments/phase1_baseline/medical_year_splits_random_forest.py --results-subdir med_rf_run_20260201
+
+  （`--output-tag` 在未指定 `--results-subdir` 時等同子資料夾名稱，與舊版相容。）
 """
 
 from __future__ import annotations
@@ -406,27 +410,115 @@ def format_tables(df_raw: pd.DataFrame, logger, output_dir: Path) -> None:
         logger.info(f"[SAVE] {out}")
 
 
-def _resolve_output_dir(args) -> Path:
-    base = OUTPUT_DIR
-    tag = (args.output_tag or "").strip()
-    if tag:
-        return base / tag
-    return base
+def _run(
+    tuning_mode: str,
+    n_tune_iter: int,
+    *,
+    results_subdir: str | None = None,
+    resume: bool = False,
+    splits_filter: list[str] | None = None,
+    rf_n_jobs: int = 1,
+) -> None:
+    logger = get_logger("MED_YearSplits_RF", console=True, file=True)
+    set_seed(42)
+
+    results_subdir = (results_subdir or "").strip()
+    base = OUTPUT_DIR / results_subdir if results_subdir else OUTPUT_DIR
+    out_dir = base / "tuned" if tuning_mode == "tuned" else base
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    use_tuning = tuning_mode == "tuned"
+    logger.info(f"Output dir: {out_dir}")
+    logger.info(f"Tuning: {tuning_mode} (n_iter={n_tune_iter})")
+
+    raw_path = out_dir / "medical_year_splits_rf_raw.csv"
+    completed: set[tuple] = set()
+    all_rows: list[dict] = []
+    if resume and raw_path.exists():
+        df0 = pd.read_csv(raw_path)
+        all_rows = df0.to_dict("records")
+        completed = {(r.get("split"), r.get("method"), r.get("sampling")) for r in all_rows}
+        logger.info(f"[RESUME] loaded {len(all_rows)} rows from {raw_path}")
+
+    split_set = set(splits_filter) if splits_filter else None
+    retrain_done = False
+
+    for label, old_end_year in MEDICAL_YEAR_SPLITS:
+        if split_set is not None and label not in split_set:
+            continue
+
+        logger.info("\n" + "=" * 60)
+        logger.info(f"Split: {label}  (Old<= {old_end_year}, New= {old_end_year + 1}-2006, Test=2007-2008)")
+        logger.info("=" * 60)
+
+        X_old, y_old, X_new, y_new, X_test, y_test, year_old, year_new, _ = get_medical_year_split(
+            logger, old_end_year=old_end_year, return_years=True
+        )
+
+        include_retrain = not retrain_done
+        rows = run_split(
+            label,
+            X_old,
+            y_old,
+            year_old,
+            X_new,
+            y_new,
+            year_new,
+            X_test,
+            y_test,
+            logger,
+            include_retrain=include_retrain,
+            use_tuning=use_tuning,
+            n_tune_iter=int(n_tune_iter),
+            rf_n_jobs=int(rf_n_jobs),
+        )
+        if include_retrain:
+            retrain_done = True
+
+        for r in rows:
+            k = (r.get("split"), r.get("method"), r.get("sampling"))
+            if k in completed:
+                continue
+            all_rows.append(r)
+            completed.add(k)
+
+        df_raw = pd.DataFrame(all_rows)
+        df_raw.to_csv(raw_path, index=False)
+        logger.info(f"[SAVE] snapshot -> {raw_path}  ({len(df_raw)} rows)")
+
+        gc.collect()
+
+    if not all_rows:
+        logger.warning("No rows produced (check --splits filter).")
+        return
+
+    df_raw = pd.DataFrame(all_rows)
+    format_tables(df_raw, logger, out_dir)
+    if use_tuning:
+        export_tuning_log(df_raw, out_dir / "med_rf_tuning_log.csv", logger)
+
+    logger.info("\nDone.")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Phase1 medical year splits — RandomForest baseline")
     parser.add_argument(
         "--tuning",
         choices=["default", "tuned", "both"],
-        default="default",
-        help="default=僅未調參；tuned=僅調參；both=兩者都跑並分開存放",
+        default="tuned",
+        help="預設 tuned（validation AUC 調參）；default=未調參；both=兩者都跑（較耗時）",
     )
     parser.add_argument(
         "--tune-n-iter",
         type=int,
         default=48,
-        help="RF validation AUC 隨機搜尋候選數（僅 --tuning tuned/both 時使用；<=0 時改用 48）",
+        help="RF validation AUC 隨機搜尋候選數（<=0 時改用 48）",
+    )
+    parser.add_argument(
+        "--results-subdir",
+        type=str,
+        default="",
+        help="寫入 results/phase1_baseline/random_forest/<subdir>/（與醫療 XGB 的 --results-subdir 相同概念）",
     )
     parser.add_argument(
         "--resume",
@@ -449,91 +541,19 @@ def main():
         "--output-tag",
         type=str,
         default="",
-        help="在 results/phase1_baseline/random_forest/ 下建立子資料夾（留空則直接輸出到 random_forest/）",
+        help="未指定 --results-subdir 時，作為子資料夾名稱（舊版相容）",
     )
     args = parser.parse_args()
 
-    set_seed(42)
-    logger = get_logger("MED_YearSplits_RF", console=True, file=True)
+    sub = (args.results_subdir or "").strip() or (args.output_tag or "").strip() or None
+    n_iter = int(args.tune_n_iter) if int(args.tune_n_iter) > 0 else 48
+    splits = list(args.splits) if args.splits else None
 
-    out_dir = _resolve_output_dir(args)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    tuned_dir = out_dir / "tuned"
-    if args.tuning in ("tuned", "both"):
-        tuned_dir.mkdir(parents=True, exist_ok=True)
-
-    def _run_one(output_dir: Path, use_tuning: bool):
-        raw_path = output_dir / "medical_year_splits_rf_raw.csv"
-        completed = set()
-        all_rows: list[dict] = []
-        if args.resume and raw_path.exists():
-            df0 = pd.read_csv(raw_path)
-            all_rows = df0.to_dict("records")
-            completed = set((r.get("split"), r.get("method"), r.get("sampling")) for r in all_rows)
-            logger.info(f"[RESUME] loaded {len(all_rows)} rows from {raw_path}")
-
-        for split_idx, (label, old_end_year) in enumerate(MEDICAL_YEAR_SPLITS):
-            if args.splits is not None and len(args.splits) > 0 and label not in set(args.splits):
-                continue
-
-            logger.info("\n" + "=" * 60)
-            logger.info(f"Split: {label}  (Old<= {old_end_year}, New= {old_end_year+1}-2006, Test=2007-2008)")
-            logger.info("=" * 60)
-
-            X_old, y_old, X_new, y_new, X_test, y_test, year_old, year_new, _ = get_medical_year_split(
-                logger, old_end_year=old_end_year, return_years=True
-            )
-
-            include_retrain = split_idx == 0
-            rows = run_split(
-                label,
-                X_old,
-                y_old,
-                year_old,
-                X_new,
-                y_new,
-                year_new,
-                X_test,
-                y_test,
-                logger,
-                include_retrain=include_retrain,
-                use_tuning=use_tuning,
-                n_tune_iter=int(args.tune_n_iter),
-                rf_n_jobs=int(args.rf_n_jobs),
-            )
-
-            # 追加 rows（resume 時避免重複）
-            for r in rows:
-                k = (r.get("split"), r.get("method"), r.get("sampling"))
-                if k in completed:
-                    continue
-                all_rows.append(r)
-                completed.add(k)
-
-            df_raw = pd.DataFrame(all_rows)
-            df_raw.to_csv(raw_path, index=False)
-            logger.info(f"[SAVE] snapshot -> {raw_path}  ({len(df_raw)} rows)")
-
-            gc.collect()
-
-        if not all_rows:
-            logger.warning("No rows produced (check --splits filter).")
-            return
-
-        df_raw = pd.DataFrame(all_rows)
-        format_tables(df_raw, logger, output_dir)
-        if use_tuning:
-            export_tuning_log(df_raw, output_dir / "med_rf_tuning_log.csv", logger)
-
-    if args.tuning in ("default", "both"):
-        logger.info("Running: default (no tuning)")
-        _run_one(out_dir, use_tuning=False)
-
-    if args.tuning in ("tuned", "both"):
-        logger.info("Running: tuned (validation AUC search)")
-        _run_one(tuned_dir, use_tuning=True)
-
-    logger.info("\nDone.")
+    if args.tuning == "both":
+        _run("default", n_iter, results_subdir=sub, resume=args.resume, splits_filter=splits, rf_n_jobs=args.rf_n_jobs)
+        _run("tuned", n_iter, results_subdir=sub, resume=args.resume, splits_filter=splits, rf_n_jobs=args.rf_n_jobs)
+    else:
+        _run(str(args.tuning), n_iter, results_subdir=sub, resume=args.resume, splits_filter=splits, rf_n_jobs=args.rf_n_jobs)
 
 
 if __name__ == "__main__":
