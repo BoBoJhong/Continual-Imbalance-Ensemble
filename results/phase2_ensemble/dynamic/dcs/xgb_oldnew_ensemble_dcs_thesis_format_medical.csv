@@ -1,0 +1,8 @@
+dataset_name,split_id,old_window,new_window,test_window,method,train_scope,best_ensemble_size,best_subset,AUC,F1,Recall
+Medical_UCI,split_1+7,1999~1999,2000~2006,2007~2008,DynamicDCS,Old/New pools + dynamic classifier selection,pool6_xgb,DCS_OLA_TW,0.6006,0.1092,0.0757
+Medical_UCI,split_2+6,1999~2000,2001~2006,2007~2008,DynamicDCS,Old/New pools + dynamic classifier selection,pool6_xgb,DCS_OLA_TW,0.6066,0.1163,0.0835
+Medical_UCI,split_3+5,1999~2001,2002~2006,2007~2008,DynamicDCS,Old/New pools + dynamic classifier selection,pool6_xgb,DCS_OLA_TW,0.6099,0.1217,0.0881
+Medical_UCI,split_4+4,1999~2002,2003~2006,2007~2008,DynamicDCS,Old/New pools + dynamic classifier selection,pool6_xgb,DCS_OLA_TW,0.6082,0.1178,0.0868
+Medical_UCI,split_5+3,1999~2003,2004~2006,2007~2008,DynamicDCS,Old/New pools + dynamic classifier selection,pool6_xgb,DCS_OLA_TW,0.6094,0.1121,0.0817
+Medical_UCI,split_6+2,1999~2004,2005~2006,2007~2008,DynamicDCS,Old/New pools + dynamic classifier selection,pool6_xgb,DCS_LCA,0.6082,0.0921,0.0591
+Medical_UCI,split_7+1,1999~2005,2006~2006,2007~2008,DynamicDCS,Old/New pools + dynamic classifier selection,pool6_xgb,DCS_OLA,0.6074,0.1165,0.0794

@@ -311,21 +311,31 @@ def run_phase1_baseline_visualization(
     method_order: list[str],
     method_colors: dict[str, str],
     compact_summary_name: str | None = None,
+    search_subdirs: bool = False,
 ) -> bool:
     """
-    讀取 results/phase1_baseline/<result_subdir>/ 下 raw CSV，輸出折線圖至 plots/；
-    若存在 compact_summary_name 則另產熱力圖。
+    讀取 results/phase1_baseline/<result_subdir>/ 下 raw CSV，輸出折線圖至各 raw 所在目錄的 plots/；
+    若存在 compact_summary_name（與 raw 同層目錄）則另產熱力圖。
+    search_subdirs=True 時以 rglob 遞迴搜尋（供 tabicl/<tag>/ 等多層輸出）。
     成功處理至少一個 raw 檔時回傳 True；找不到 raw 時回傳 False。
     """
     base_dir = project_root / "results" / "phase1_baseline" / result_subdir
-    plots_dir = base_dir / "plots"
-    raw_files = sorted(base_dir.glob(raw_glob)) if base_dir.is_dir() else []
+    if not base_dir.is_dir():
+        print(f"找不到目錄：{base_dir}")
+        return False
+
+    if search_subdirs:
+        raw_files = sorted(base_dir.rglob(raw_glob))
+    else:
+        raw_files = sorted(base_dir.glob(raw_glob))
 
     if not raw_files:
-        print(f"找不到 raw CSV：{base_dir}（glob: {raw_glob}）")
+        mode = f"rglob {raw_glob!r}" if search_subdirs else f"glob {raw_glob!r}"
+        print(f"找不到 raw CSV：{base_dir}（{mode}）")
         return False
 
     print(f"Phase 1 {model_title} 圖表輸出…")
+    plot_roots: set[Path] = set()
     for path in raw_files:
         df = pd.read_csv(path)
         need = {"split", "method", "sampling", *metrics}
@@ -333,6 +343,8 @@ def run_phase1_baseline_visualization(
         if missing:
             print(f"  [SKIP] {path.name} 缺少欄位: {missing}")
             continue
+        plots_dir = path.parent / "plots"
+        plot_roots.add(plots_dir)
         label = dataset_label_from_raw_stem(path.stem, raw_suffix)
         out = plots_dir / f"{path.stem.replace(raw_suffix, '')}_year_splits_{'_'.join(metrics)}.png"
         plot_year_split_lines(
@@ -347,9 +359,15 @@ def run_phase1_baseline_visualization(
         print(f"  [SAVED] {out.relative_to(project_root)}")
 
     if compact_summary_name:
-        summary = base_dir / compact_summary_name
-        if summary.exists():
-            print("\nCompact summary 熱力圖…")
+        parents = {p.parent for p in raw_files}
+        printed_header = False
+        for parent in sorted(parents):
+            summary = parent / compact_summary_name
+            if not summary.exists():
+                continue
+            if not printed_header:
+                print("\nCompact summary 熱力圖…")
+                printed_header = True
             stem = summary.stem
             hprefix = (
                 stem[: -len("_compact_summary")]
@@ -358,11 +376,13 @@ def run_phase1_baseline_visualization(
             )
             plot_compact_heatmaps(
                 summary,
-                plots_dir / hprefix,
+                parent / "plots" / hprefix,
                 model_title=model_title,
                 method_order=method_order,
                 project_root=project_root,
             )
 
-    print(f"\n完成。圖表目錄: {plots_dir.relative_to(project_root)}")
+    if plot_roots:
+        rels = sorted({pr.relative_to(project_root) for pr in plot_roots})
+        print(f"\n完成。圖表目錄: {', '.join(str(r) for r in rels)}")
     return True

@@ -1,0 +1,8 @@
+dataset_name,split_id,old_window,new_window,test_window,method,train_scope,best_ensemble_size,best_subset,AUC,F1,Recall
+Medical_UCI,split_1+7,1999~1999,2000~2006,2007~2008,DynamicDES,Old/New pools + dynamic selection (DES),hybrid,Dynamic_KNORA_E,0.6403,0.2414,0.4029
+Medical_UCI,split_2+6,1999~2000,2001~2006,2007~2008,DynamicDES,Old/New pools + dynamic selection (DES),all6,Dynamic_KNORA_U,0.6455,0.2477,0.4707
+Medical_UCI,split_3+5,1999~2001,2002~2006,2007~2008,DynamicDES,Old/New pools + dynamic selection (DES),hybrid,Dynamic_KNORA_U,0.6493,0.2468,0.4222
+Medical_UCI,split_4+4,1999~2002,2003~2006,2007~2008,DynamicDES,Old/New pools + dynamic selection (DES),hybrid,Dynamic_KNORA_U,0.6524,0.2495,0.5021
+Medical_UCI,split_5+3,1999~2003,2004~2006,2007~2008,DynamicDES,Old/New pools + dynamic selection (DES),hybrid,Dynamic_KNORA_E,0.6544,0.2564,0.4112
+Medical_UCI,split_6+2,1999~2004,2005~2006,2007~2008,DynamicDES,Old/New pools + dynamic selection (DES),hybrid,Dynamic_KNORA_U,0.6559,0.2593,0.4928
+Medical_UCI,split_7+1,1999~2005,2006~2006,2007~2008,DynamicDES,Old/New pools + dynamic selection (DES),hybrid,Dynamic_DES_KNN,0.6515,0.2608,0.4066

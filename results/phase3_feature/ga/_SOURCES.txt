@@ -1,0 +1,11 @@
+Phase 3 — GA 結果整理
+
+此資料夾僅收錄從 FS sweep 表抽出的 ga_r* 列（FeatureSelector method=ga）。
+破產／醫療主線 Phase 3（no_fs + mi/shap/rfe + static/DES/DCS）未含 GA。
+
+來源檔：
+  results\phase3_feature\mutual_info\bankruptcy_fs_sweep.csv -> results\phase3_feature\ga\bankruptcy_ga_fs_sweep.csv (3 rows)
+  results\phase3_feature\mutual_info\medical_fs_sweep.csv -> results\phase3_feature\ga\medical_ga_fs_sweep.csv (3 rows)
+  results\phase3_feature\mutual_info\stock_spx_fs_sweep.csv -> results\phase3_feature\ga\stock_spx_ga_fs_sweep.csv (3 rows)
+  results\phase3_feature\mutual_info\stock_ndx_fs_sweep.csv -> results\phase3_feature\ga\stock_ndx_ga_fs_sweep.csv (3 rows)
+  results\phase3_feature\mutual_info\stock_dji_fs_sweep.csv -> results\phase3_feature\ga\stock_dji_ga_fs_sweep.csv (3 rows)

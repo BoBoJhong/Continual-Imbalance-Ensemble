@@ -1,0 +1,73 @@
+dataset,ensemble,type,subset,subset_indices,F1
+O1 + N7,New,under,,,0.2378
+O1 + N7,New,over,,,0.2512
+O1 + N7,New,hybrid,,,0.2545
+O1 + N7,Old,under,,,0.2045
+O1 + N7,Old,over,,,0.2101
+O1 + N7,Old,hybrid,,,0.2150
+O1 + N7,Retrain,under,,,0.2272
+O1 + N7,Retrain,over,,,0.2424
+O1 + N7,Retrain,hybrid,,,0.2427
+O2 + N6,New,under,,,0.2352
+O2 + N6,New,over,,,0.2457
+O2 + N6,New,hybrid,,,0.2462
+O2 + N6,Old,under,,,0.2066
+O2 + N6,Old,over,,,0.2179
+O2 + N6,Old,hybrid,,,0.2293
+O2 + N6,Retrain,under,,,0.2212
+O2 + N6,Retrain,over,,,0.2422
+O2 + N6,Retrain,hybrid,,,0.2485
+O3 + N5,New,under,,,0.2331
+O3 + N5,New,over,,,0.2413
+O3 + N5,New,hybrid,,,0.2462
+O3 + N5,Old,under,,,0.2192
+O3 + N5,Old,over,,,0.2307
+O3 + N5,Old,hybrid,,,0.2319
+O3 + N5,Retrain,under,,,0.2339
+O3 + N5,Retrain,over,,,0.2484
+O3 + N5,Retrain,hybrid,,,0.2467
+O4 + N4,New,under,,,0.2321
+O4 + N4,New,over,,,0.2355
+O4 + N4,New,hybrid,,,0.2456
+O4 + N4,Old,under,,,0.2260
+O4 + N4,Old,over,,,0.2362
+O4 + N4,Old,hybrid,,,0.2399
+O4 + N4,Retrain,under,,,0.2390
+O4 + N4,Retrain,over,,,0.2492
+O4 + N4,Retrain,hybrid,,,0.2495
+O5 + N3,New,under,,,0.2301
+O5 + N3,New,over,,,0.2334
+O5 + N3,New,hybrid,,,0.2424
+O5 + N3,Old,under,,,0.2298
+O5 + N3,Old,over,,,0.2450
+O5 + N3,Old,hybrid,,,0.2492
+O5 + N3,Retrain,under,,,0.2365
+O5 + N3,Retrain,over,,,0.2531
+O5 + N3,Retrain,hybrid,,,0.2575
+O6 + N2,New,under,,,0.2166
+O6 + N2,New,over,,,0.2278
+O6 + N2,New,hybrid,,,0.2364
+O6 + N2,Old,under,,,0.2294
+O6 + N2,Old,over,,,0.2443
+O6 + N2,Old,hybrid,,,0.2546
+O6 + N2,Retrain,under,,,0.2377
+O6 + N2,Retrain,over,,,0.2472
+O6 + N2,Retrain,hybrid,,,0.2593
+O7 + N1,New,under,,,0.2151
+O7 + N1,New,over,,,0.2242
+O7 + N1,New,hybrid,,,0.2429
+O7 + N1,Old,under,,,0.2332
+O7 + N1,Old,over,,,0.2445
+O7 + N1,Old,hybrid,,,0.2538
+O7 + N1,Retrain,under,,,0.2341
+O7 + N1,Retrain,over,,,0.2514
+O7 + N1,Retrain,hybrid,,,0.2536
+avg,New,under,,,0.2286
+avg,New,over,,,0.2370
+avg,New,hybrid,,,0.2449
+avg,Old,under,,,0.2212
+avg,Old,over,,,0.2327
+avg,Old,hybrid,,,0.2391
+avg,Retrain,under,,,0.2328
+avg,Retrain,over,,,0.2477
+avg,Retrain,hybrid,,,0.2511

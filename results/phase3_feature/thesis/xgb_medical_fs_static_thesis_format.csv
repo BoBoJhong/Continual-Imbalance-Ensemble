@@ -1,0 +1,8 @@
+dataset_name,split_id,old_window,new_window,test_window,method,train_scope,best_fs,best_ensemble,AUC,F1,Recall
+Medical_UCI,split_1+7,1999~1999,2000~2006,2007~2008,FS_Static,Old/New pools + FS + static soft voting,no_fs,New_3,0.6514,0.2530,0.4799
+Medical_UCI,split_2+6,1999~2000,2001~2006,2007~2008,FS_Static,Old/New pools + FS + static soft voting,mi_r80,New_3,0.6531,0.2531,0.5524
+Medical_UCI,split_3+5,1999~2001,2002~2006,2007~2008,FS_Static,Old/New pools + FS + static soft voting,no_fs,All_6,0.6491,0.2483,0.4550
+Medical_UCI,split_4+4,1999~2002,2003~2006,2007~2008,FS_Static,Old/New pools + FS + static soft voting,no_fs,All_6,0.6522,0.2555,0.4689
+Medical_UCI,split_5+3,1999~2003,2004~2006,2007~2008,FS_Static,Old/New pools + FS + static soft voting,no_fs,All_6,0.6536,0.2572,0.4430
+Medical_UCI,split_6+2,1999~2004,2005~2006,2007~2008,FS_Static,Old/New pools + FS + static soft voting,mi_r80,All_6,0.6574,0.2537,0.5662
+Medical_UCI,split_7+1,1999~2005,2006~2006,2007~2008,FS_Static,Old/New pools + FS + static soft voting,no_fs,All_6,0.6516,0.2542,0.5625
