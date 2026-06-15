@@ -29,8 +29,8 @@ def _run_bankruptcy_once(seed: int) -> pd.DataFrame:
     from src.models import ModelPool, LightGBMWrapper
     from src.data import ImbalanceSampler
     from src.evaluation import compute_metrics
-    from experiments.common_bankruptcy import get_bankruptcy_splits
-    from experiments.common_des import run_des
+    from experiments._shared.common_bankruptcy import get_bankruptcy_splits
+    from experiments._shared.common_des import run_des
 
     set_seed(seed)
     logger = get_logger("MultiSeed_BK", console=False, file=False)
@@ -71,8 +71,8 @@ def _run_stock_once(seed: int) -> pd.DataFrame:
     from src.models import ModelPool, LightGBMWrapper
     from src.data import ImbalanceSampler
     from src.evaluation import compute_metrics
-    from experiments.common_dataset import get_splits
-    from experiments.common_des import run_des
+    from experiments._shared.common_dataset import get_splits
+    from experiments._shared.common_des import run_des
 
     set_seed(seed)
     logger = get_logger("MultiSeed_Stock", console=False, file=False)
@@ -107,8 +107,8 @@ def _run_medical_once(seed: int) -> pd.DataFrame:
     from src.models import ModelPool, LightGBMWrapper
     from src.data import ImbalanceSampler
     from src.evaluation import compute_metrics
-    from experiments.common_dataset import get_splits
-    from experiments.common_des import run_des
+    from experiments._shared.common_dataset import get_splits
+    from experiments._shared.common_des import run_des
 
     set_seed(seed)
     logger = get_logger("MultiSeed_Medical", console=False, file=False)
@@ -178,8 +178,14 @@ def run_dataset(dataset_name: str, seeds: list[int]) -> pd.DataFrame:
         print(f"  No valid runs for {dataset_name}, skipping.")
         return pd.DataFrame()
 
-    result = aggregate_seeds(all_runs)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    raw = pd.concat(all_runs)
+    raw.index.name = "method"
+    raw_path = OUT_DIR / f"{dataset_name}_multi_seed_raw.csv"
+    raw.to_csv(raw_path)
+    print(f"\n  raw per-seed 已保存: {raw_path}")
+
+    result = aggregate_seeds(all_runs)
     out_csv = OUT_DIR / f"{dataset_name}_multi_seed.csv"
     result.to_csv(out_csv)
     print(f"\n  已保存: {out_csv}")

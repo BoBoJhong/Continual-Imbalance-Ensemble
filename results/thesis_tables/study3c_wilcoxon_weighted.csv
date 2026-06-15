@@ -1,0 +1,9 @@
+﻿FS,Metric,N Pairs,Selected Mean,Equal Mean,Mean Diff,N Selected Better,p (two-sided),Significant (p<0.05)
+fs,AUC,15,0.8154,0.7866,+0.0287,13,0.000610,True
+fs,F1,15,0.1794,0.1507,+0.0288,12,0.000854,True
+fs,Recall,15,0.4950,0.4720,+0.0230,10,0.276855,False
+fs,Precision,15,0.1109,0.0904,+0.0205,13,0.001160,True
+no_fs,AUC,15,0.8341,0.8095,+0.0246,14,0.000122,True
+no_fs,F1,15,0.1886,0.1625,+0.0262,9,0.035339,True
+no_fs,Recall,15,0.5317,0.5182,+0.0135,8,0.513571,False
+no_fs,Precision,15,0.1155,0.0976,+0.0180,9,0.063721,False

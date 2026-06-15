@@ -1,0 +1,2 @@
+old_end_year,drift_start_year,old_window,new_window,validation_window,old_n,new_n,val_n,best_old_sampling,best_new_sampling,old_val_AUC,new_val_AUC,gap_new_minus_old_val_AUC,old_val_F1,new_val_F1,gap_new_minus_old_val_F1,old_val_Recall,new_val_Recall,old_val_Precision,new_val_Precision,rank_by_new_val_auc,rank_by_new_val_f1
+2008,2009,1999-2008,2009-2011,2012-2014,45046,10881,10473,none,undersampling,0.776244,0.856780,0.080536,0.267319,0.384865,0.117546,0.334012,0.362525,0.222826,0.410138,1,5

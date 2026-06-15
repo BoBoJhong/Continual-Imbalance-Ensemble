@@ -1,0 +1,17 @@
+comparison,baseline,metric,n_years,adaptive_mean,baseline_mean,mean_difference,p_two_sided,p_holm,significant_holm
+AdaptiveChoice_AUC vs Equal6,Equal6,AUC,10,0.84379110,0.81105125,0.03273985,0.00195312,0.03125000,True
+AdaptiveChoice_AUC vs Equal6,Equal6,F1,10,0.32043120,0.27582390,0.04460730,0.00390625,0.05859375,False
+AdaptiveChoice_AUC vs Retrain_under,Retrain_under,AUC,10,0.84379110,0.82393276,0.01985834,0.00585938,0.08203125,False
+AdaptiveChoice_AUC vs Equal6,Equal6,Precision,10,0.30148540,0.24661032,0.05487507,0.00976562,0.12695312,False
+AdaptiveChoice_AUC vs Retrain_under,Retrain_under,F1,10,0.32043120,0.28299007,0.03744113,0.00976562,0.12695312,False
+AdaptiveChoice_AUC vs Retrain_under,Retrain_under,Recall,10,0.35680919,0.30126162,0.05554757,0.05468750,0.60156250,False
+AdaptiveChoice_AUC vs DAWCE_AUC,DAWCE_AUC,AUC,10,0.84379110,0.83357302,0.01021808,0.07812500,0.78125000,False
+AdaptiveChoice_AUC vs DAWCE_AUC,DAWCE_AUC,F1,10,0.32043120,0.32151045,-0.00107925,0.94531250,1.00000000,False
+AdaptiveChoice_AUC vs DAWCE_AUC,DAWCE_AUC,Precision,10,0.30148540,0.32601507,-0.02452967,0.31250000,1.00000000,False
+AdaptiveChoice_AUC vs DAWCE_AUC,DAWCE_AUC,Recall,10,0.35680919,0.33492272,0.02188647,0.21875000,1.00000000,False
+AdaptiveChoice_AUC vs Equal6,Equal6,Recall,10,0.35680919,0.34305152,0.01375767,0.55664062,1.00000000,False
+AdaptiveChoice_AUC vs New_under,New_under,AUC,10,0.84379110,0.84680059,-0.00300949,0.50000000,1.00000000,False
+AdaptiveChoice_AUC vs New_under,New_under,F1,10,0.32043120,0.32340189,-0.00297069,0.50000000,1.00000000,False
+AdaptiveChoice_AUC vs New_under,New_under,Precision,10,0.30148540,0.30275609,-0.00127070,0.50000000,1.00000000,False
+AdaptiveChoice_AUC vs New_under,New_under,Recall,10,0.35680919,0.36514252,-0.00833333,1.00000000,1.00000000,False
+AdaptiveChoice_AUC vs Retrain_under,Retrain_under,Precision,10,0.30148540,0.27350404,0.02798136,0.19335938,1.00000000,False

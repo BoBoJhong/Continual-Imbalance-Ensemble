@@ -1,0 +1,56 @@
+family,comparison,metric,method_a,method_b,alternative,n_pairs,mean_a,mean_b,mean_diff_a_minus_b,median_diff_a_minus_b,n_a_better,n_b_better,n_equal,p_directional,p_two_sided,significant_directional,significant_two_sided,p_directional_holm,p_two_sided_holm,significant_directional_holm,significant_two_sided_holm
+feature_stability,old/mutual_info: r80 > r50 Jaccard,Jaccard,old_mutual_info_r80,old_mutual_info_r50,greater,105,0.77223218,0.42951825,0.34271393,0.37500000,102,3,0,0.00000000,0.00000000,True,True,0.00000000,0.00000000,True,True
+feature_stability,old/rfe: r80 > r50 Jaccard,Jaccard,old_rfe_r80,old_rfe_r50,greater,105,0.75626210,0.52162507,0.23463704,0.23863600,101,4,0,0.00000000,0.00000000,True,True,0.00000000,0.00000000,True,True
+feature_stability,old/shap: r80 > r50 Jaccard,Jaccard,old_shap_r80,old_shap_r50,greater,105,0.82602716,0.66717293,0.15885423,0.16666700,91,11,3,0.00000000,0.00000000,True,True,0.00000000,0.00000000,True,True
+feature_stability,new/rfe: r80 > r50 Jaccard,Jaccard,new_rfe_r80,new_rfe_r50,greater,105,0.74164470,0.53660722,0.20503748,0.23863600,94,11,0,0.00000000,0.00000000,True,True,0.00000000,0.00000000,True,True
+feature_stability,new/mutual_info: r80 > r50 Jaccard,Jaccard,new_mutual_info_r80,new_mutual_info_r50,greater,105,0.81874425,0.66773245,0.15101180,0.12834200,90,15,0,0.00000000,0.00000000,True,True,0.00000000,0.00000000,True,True
+feature_stability,old_new/mutual_info: r80 > r50 Jaccard,Jaccard,old_new_mutual_info_r80,old_new_mutual_info_r50,greater,105,0.95714286,0.88000000,0.07714286,0.07500000,63,16,26,0.00000001,0.00000002,True,True,0.00000004,0.00000008,True,True
+phase2_dynamic_vs_static,DES > DCS,AUC,DES,DCS,greater,15,0.84446667,0.81603333,0.02843333,0.03070000,15,0,0,0.00003052,0.00006104,True,True,0.00030518,0.00061035,True,True
+phase2_dynamic_vs_static,Static > DCS,AUC,Static,DCS,greater,15,0.86872000,0.81603333,0.05268667,0.05630000,15,0,0,0.00003052,0.00006104,True,True,0.00030518,0.00061035,True,True
+phase2_dynamic_vs_static,Static > DES,AUC,Static,DES,greater,15,0.86872000,0.84446667,0.02425333,0.02630000,15,0,0,0.00003052,0.00006104,True,True,0.00030518,0.00061035,True,True
+phase2_static_old_new,over: New > Old,AUC,New_over,Old_over,greater,15,0.83142667,0.68240667,0.14902000,0.18520000,15,0,0,0.00003052,0.00006104,True,True,0.00054932,0.00109863,True,True
+phase2_static_old_new,over: New > Old,Recall,New_over,Old_over,greater,15,0.53146667,0.32218667,0.20928000,0.20200000,15,0,0,0.00003052,0.00006104,True,True,0.00054932,0.00109863,True,True
+phase2_static_old_new,under: New > Old,AUC,New_under,Old_under,greater,15,0.86472000,0.70416667,0.16055333,0.17540000,15,0,0,0.00003052,0.00006104,True,True,0.00054932,0.00109863,True,True
+feature_stability,new/shap: r80 > r50 Jaccard,Jaccard,new_shap_r80,new_shap_r50,greater,105,0.78783859,0.73647698,0.05136161,0.07500000,64,40,1,0.00004917,0.00009835,True,True,0.00014752,0.00029504,True,True
+phase2_static_old_new,hybrid: New > Old,AUC,New_hybrid,Old_hybrid,greater,15,0.85176000,0.71421333,0.13754667,0.14490000,14,1,0,0.00006104,0.00012207,True,True,0.00091553,0.00183105,True,True
+phase2_dynamic_vs_static,Static > DES,F1,Static,DES,greater,15,0.25248000,0.22684667,0.02563333,0.02190000,14,1,0,0.00009155,0.00018311,True,True,0.00064087,0.00091553,True,True
+phase3_feature_selection,New_3: mi_r80 > no_fs,AUC,New_3_mi_r80,New_3_no_fs,greater,15,0.85368377,0.84901676,0.00466701,0.00372629,13,2,0,0.00015259,0.00030518,True,True,0.00274658,0.00549316,True,True
+phase2_static_old_new,hybrid: New > Old,F1,New_hybrid,Old_hybrid,greater,15,0.19472667,0.11329333,0.08143333,0.09690000,14,1,0,0.00021362,0.00042725,True,True,0.00299072,0.00598145,True,True
+phase2_static_old_new,over: New > Old,F1,New_over,Old_over,greater,15,0.18135333,0.10220000,0.07915333,0.09910000,13,2,0,0.00021362,0.00042725,True,True,0.00299072,0.00598145,True,True
+phase2_static_old_new,over: New > OldNew,AUC,New_over,OldNew_over,greater,15,0.83142667,0.80235333,0.02907333,0.03400000,14,1,0,0.00021362,0.00042725,True,True,0.00299072,0.00598145,True,True
+phase2_static_old_new,under: New > Old,F1,New_under,Old_under,greater,15,0.23459333,0.12143333,0.11316000,0.15250000,13,2,0,0.00030518,0.00061035,True,True,0.00335693,0.00671387,True,True
+phase2_static_old_new,under: New > Old,Recall,New_under,Old_under,greater,15,0.57422000,0.29918667,0.27503333,0.23690000,15,0,0,0.00032666,0.00065331,True,True,0.00335693,0.00671387,True,True
+phase2_static_old_new,under: New > OldNew,Recall,New_under,OldNew_under,greater,15,0.57422000,0.48014667,0.09407333,0.10100000,15,0,0,0.00032666,0.00065331,True,True,0.00335693,0.00671387,True,True
+phase2_static_old_new,hybrid: New > Old,Recall,New_hybrid,Old_hybrid,greater,15,0.59280000,0.39234000,0.20046000,0.20560000,14,0,1,0.00049077,0.00098154,True,True,0.00392616,0.00785232,True,True
+phase2_static_old_new,hybrid: New > OldNew,AUC,New_hybrid,OldNew_hybrid,greater,15,0.85176000,0.82272667,0.02903333,0.03260000,13,2,0,0.00057983,0.00115967,True,True,0.00405884,0.00811768,True,True
+phase2_static_old_new,under: New > OldNew,AUC,New_under,OldNew_under,greater,15,0.86472000,0.84133333,0.02338667,0.02630000,13,2,0,0.00100708,0.00201416,True,True,0.00604248,0.01208496,True,True
+phase2_dynamic_vs_static,Static > DCS,F1,Static,DCS,greater,15,0.25248000,0.18973333,0.06274667,0.07800000,11,4,0,0.00131226,0.00262451,True,True,0.00787354,0.00787354,True,True
+phase2_static_old_new,hybrid: New > OldNew,Recall,New_hybrid,OldNew_hybrid,greater,15,0.59280000,0.53286000,0.05994000,0.06270000,11,3,1,0.00315926,0.00631852,True,True,0.01579630,0.03159261,True,True
+phase2_dynamic_vs_static,DES > DCS,F1,DES,DCS,greater,15,0.22684667,0.18973333,0.03711333,0.03900000,12,3,0,0.00418091,0.00836182,True,True,0.02090454,0.00836182,True,True
+phase2_static_old_new,over: New > OldNew,Recall,New_over,OldNew_over,greater,15,0.53146667,0.47687333,0.05459333,0.04880000,12,2,1,0.00459071,0.00918142,True,True,0.01836284,0.03672568,True,True
+phase2_static_old_new,over: New > OldNew,F1,New_over,OldNew_over,greater,15,0.18135333,0.16334000,0.01801333,0.02370000,12,3,0,0.00903320,0.01806641,True,True,0.02709961,0.05419922,True,False
+phase2_static_old_new,hybrid: New > OldNew,F1,New_hybrid,OldNew_hybrid,greater,15,0.19472667,0.17947333,0.01525333,0.02200000,11,4,0,0.03649902,0.07299805,True,False,0.07299805,0.14599609,False,False
+phase3_feature_selection,New_3: shap_r80 > no_fs,AUC,New_3_shap_r80,New_3_no_fs,greater,15,0.85267894,0.84901676,0.00366218,0.00308404,10,5,0,0.03649902,0.07299805,True,False,0.62048340,1.00000000,False,False
+phase3_feature_selection,All_6: mi_r80 > no_fs,F1,All_6_mi_r80,All_6_no_fs,greater,15,0.16707920,0.16019712,0.00688208,0.00413104,10,5,0,0.04730225,0.09460449,True,False,0.75683594,1.00000000,False,False
+phase3_feature_selection,New_3: rfe_r80 > no_fs,F1,New_3_rfe_r80,New_3_no_fs,greater,15,0.19522371,0.18931492,0.00590879,0.00576379,12,3,0,0.05349731,0.10699463,False,False,0.80245972,1.00000000,False,False
+phase2_static_old_new,under: New > OldNew,F1,New_under,OldNew_under,greater,15,0.23459333,0.22185333,0.01274000,0.02210000,12,3,0,0.06768799,0.13537598,False,False,0.07299805,0.14599609,False,False
+phase3_feature_selection,All_6: shap_r80 > no_fs,Recall,All_6_shap_r80,All_6_no_fs,greater,15,0.56260163,0.53286876,0.02973287,0.03832753,11,3,1,0.07002420,0.14004840,False,False,0.98033878,1.00000000,False,False
+phase3_feature_selection,All_6: rfe_r80 > no_fs,Recall,All_6_rfe_r80,All_6_no_fs,greater,15,0.55145180,0.53286876,0.01858304,0.02787456,9,5,1,0.07433927,0.14867855,False,False,0.98033878,1.00000000,False,False
+phase3_feature_selection,New_3: rfe_r80 > no_fs,AUC,New_3_rfe_r80,New_3_no_fs,greater,15,0.85089446,0.84901676,0.00187771,0.00113636,9,6,0,0.08441162,0.16882324,False,False,1.00000000,1.00000000,False,False
+phase3_feature_selection,New_3: mi_r80 > no_fs,Recall,New_3_mi_r80,New_3_no_fs,greater,15,0.62833914,0.60162602,0.02671312,0.03484321,10,4,1,0.10458717,0.20917435,False,False,1.00000000,1.00000000,False,False
+phase3_feature_selection,All_6: mi_r80 > no_fs,AUC,All_6_mi_r80,All_6_no_fs,greater,15,0.82192762,0.82128282,0.00064480,0.00089555,9,6,0,0.35986328,0.71972656,False,False,1.00000000,1.00000000,False,False
+phase3_feature_selection,All_6: shap_r80 > no_fs,AUC,All_6_shap_r80,All_6_no_fs,greater,15,0.82161086,0.82128282,0.00032804,0.00056557,8,7,0,0.38076782,0.76153564,False,False,1.00000000,1.00000000,False,False
+phase3_feature_selection,New_3: shap_r80 > no_fs,F1,New_3_shap_r80,New_3_no_fs,greater,15,0.19112558,0.18931492,0.00181066,0.00412200,9,6,0,0.40197754,0.80395508,False,False,1.00000000,1.00000000,False,False
+phase3_feature_selection,All_6: rfe_r80 > no_fs,F1,All_6_rfe_r80,All_6_no_fs,greater,15,0.16028796,0.16019712,0.00009084,0.00076346,8,7,0,0.48898315,0.97796631,False,False,1.00000000,1.00000000,False,False
+phase3_feature_selection,New_3: shap_r80 > no_fs,Recall,New_3_shap_r80,New_3_no_fs,greater,15,0.60139373,0.60162602,-0.00023229,0.01045296,9,6,0,0.48898315,0.97796631,False,False,1.00000000,1.00000000,False,False
+phase3_feature_selection,All_6: mi_r80 > no_fs,Recall,All_6_mi_r80,All_6_no_fs,greater,15,0.52938444,0.53286876,-0.00348432,-0.00348432,7,8,0,0.59000275,0.81999450,False,False,1.00000000,1.00000000,False,False
+phase3_feature_selection,All_6: shap_r80 > no_fs,F1,All_6_shap_r80,All_6_no_fs,greater,15,0.15778327,0.16019712,-0.00241386,-0.00143974,7,8,0,0.64013672,0.76153564,False,False,1.00000000,1.00000000,False,False
+phase3_feature_selection,All_6: rfe_r80 > no_fs,AUC,All_6_rfe_r80,All_6_no_fs,greater,15,0.82050992,0.82128282,-0.00077290,-0.00118429,7,8,0,0.68066406,0.67877197,False,False,1.00000000,1.00000000,False,False
+phase3_feature_selection,New_3: mi_r80 > no_fs,F1,New_3_mi_r80,New_3_no_fs,greater,15,0.18614801,0.18931492,-0.00316691,-0.01109640,7,8,0,0.78939819,0.45428467,False,False,1.00000000,1.00000000,False,False
+phase3_feature_selection,New_3: rfe_r80 > no_fs,Recall,New_3_rfe_r80,New_3_no_fs,greater,15,0.59186992,0.60162602,-0.00975610,-0.00696864,5,9,1,0.88955055,0.22089889,False,False,1.00000000,1.00000000,False,False
+phase2_dynamic_vs_static,DCS > Static,F1,DCS,Static,greater,15,0.18973333,0.25248000,-0.06274667,-0.07800000,4,11,0,0.99899292,0.00262451,False,True,1.00000000,0.00787354,False,True
+phase2_dynamic_vs_static,DES > Static,F1,DES,Static,greater,15,0.22684667,0.25248000,-0.02563333,-0.02190000,1,14,0,0.99993896,0.00018311,False,True,1.00000000,0.00091553,False,True
+feature_stability,old_new/rfe: r80 > r50 Jaccard,Jaccard,old_new_rfe_r80,old_new_rfe_r50,greater,105,1.00000000,1.00000000,0.00000000,0.00000000,0,0,105,1.00000000,1.00000000,False,False,1.00000000,1.00000000,False,False
+feature_stability,old_new/shap: r80 > r50 Jaccard,Jaccard,old_new_shap_r80,old_new_shap_r50,greater,105,1.00000000,1.00000000,0.00000000,0.00000000,0,0,105,1.00000000,1.00000000,False,False,1.00000000,1.00000000,False,False
+phase2_dynamic_vs_static,DCS > Static,AUC,DCS,Static,greater,15,0.81603333,0.86872000,-0.05268667,-0.05630000,0,15,0,1.00000000,0.00006104,False,True,1.00000000,0.00061035,False,True
+phase2_dynamic_vs_static,DES > Static,AUC,DES,Static,greater,15,0.84446667,0.86872000,-0.02425333,-0.02630000,0,15,0,1.00000000,0.00006104,False,True,1.00000000,0.00061035,False,True

@@ -1,0 +1,3 @@
+method,boundary_source,drift_start_year,old_window,new_window,best_new_sampling,new_AUC,new_F1,new_Recall,new_Precision,gap_new_minus_old_AUC,delta_vs_fixed_AUC,delta_vs_fixed_F1
+Fixed boundary,manual,2012,1999-2011,2012-2014,undersampling,0.856262,0.277910,0.407666,0.210811,0.069089,0.000000,0.000000
+ROSS,best New AUC across sliding splits,2008,1999-2007,2008-2014,none,0.863084,0.315789,0.376307,0.272040,0.147468,0.006822,0.037879

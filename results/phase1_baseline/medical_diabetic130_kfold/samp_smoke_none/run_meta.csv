@@ -1,0 +1,14 @@
+,value
+csv_path,C:\0_git workspace\Continual-Imbalance-Ensemble\data\raw\medical\diabetes130\diabetic_data.csv
+n_splits,2
+random_state,42
+split_mode,stratified_row
+cv_style,stratified_kfold_default_hparams_threshold_0.5
+tune,False
+tune_n_iter,48
+drop_icd,False
+sampling_strategies,none
+max_rows,8000
+smoke,True
+n_samples,8000
+positive_rate,0.110625

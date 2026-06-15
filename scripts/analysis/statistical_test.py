@@ -27,11 +27,23 @@ OUT_DIR        = MULTI_SEED_DIR
 def load_per_seed_scores(dataset: str, metric: str = "AUC") -> pd.DataFrame | None:
     """
     從 multi_seed CSV 還原每個方法的 per-seed 分數。
-    如果找不到 per-seed 詳細資料，回傳 None。
+    優先讀取真正的 per-seed raw 檔：
+      results/multi_seed/{dataset}_multi_seed_raw.csv
 
-    multi_seed CSV 格式：columns = AUC_mean, AUC_std, F1_mean, ...；index = method。
-    由於原始 per-seed 資料未分開儲存，這裡重新跑一次（若需要）。
+    若 raw 檔不存在，才讀取 aggregate mean/std 檔；aggregate 檔只適合示範，
+    不應作為正式論文 p-value。
     """
+    raw_path = MULTI_SEED_DIR / f"{dataset}_multi_seed_raw.csv"
+    if raw_path.exists():
+        raw = pd.read_csv(raw_path)
+        required = {"method", "seed", metric}
+        if not required.issubset(raw.columns):
+            print(f"  [SKIP] {raw_path} 缺少欄位: {required - set(raw.columns)}")
+            return None
+        scores = raw.pivot(index="method", columns="seed", values=metric)
+        print(f"  [OK] 使用 raw per-seed scores: {raw_path}")
+        return scores
+
     path = MULTI_SEED_DIR / f"{dataset}_multi_seed.csv"
     if not path.exists():
         print(f"  [SKIP] 找不到 {path}，請先執行 run_multi_seed.py")
@@ -116,17 +128,25 @@ def print_wilcoxon_summary(pval_mat: pd.DataFrame, sig_mask: pd.DataFrame, datas
 
 def run_dataset(dataset: str, metric: str, alpha: float, n_seeds: int):
     print(f"\n處理資料集：{dataset}...")
-    agg_df = load_per_seed_scores(dataset, metric)
-    if agg_df is None:
+    scores_or_agg = load_per_seed_scores(dataset, metric)
+    if scores_or_agg is None:
         return
 
     mean_col = f"{metric}_mean"
     std_col  = f"{metric}_std"
-    mean_s   = agg_df[mean_col]
-    std_s    = agg_df[std_col] if std_col in agg_df.columns else pd.Series(0.0, index=mean_s.index)
 
-    # 模擬 per-seed 分數（若有真實 raw 資料可改為直接讀取）
-    scores_df = simulate_per_seed_scores(mean_s, std_s, n_seeds=n_seeds)
+    if mean_col in scores_or_agg.columns:
+        # Aggregate mean/std fallback; retained for backward compatibility only.
+        mean_s = scores_or_agg[mean_col]
+        std_s = (
+            scores_or_agg[std_col]
+            if std_col in scores_or_agg.columns
+            else pd.Series(0.0, index=mean_s.index)
+        )
+        print("  [WARN] 未找到 raw per-seed 檔，使用 mean/std 模擬；此結果不適合作正式論文 p-value。")
+        scores_df = simulate_per_seed_scores(mean_s, std_s, n_seeds=n_seeds)
+    else:
+        scores_df = scores_or_agg
 
     pval_mat, sig_mask = wilcoxon_matrix(scores_df, alpha=alpha)
     print_wilcoxon_summary(pval_mat, sig_mask, dataset, metric, alpha)
@@ -140,7 +160,11 @@ def run_dataset(dataset: str, metric: str, alpha: float, n_seeds: int):
 
 def main():
     parser = argparse.ArgumentParser(description="Wilcoxon 統計顯著性檢定")
-    parser.add_argument("--metric",  default="AUC", choices=["AUC","F1","G_Mean","Recall"])
+    parser.add_argument(
+        "--metric",
+        default="AUC",
+        choices=["AUC", "F1", "G_Mean", "Recall", "Precision", "Type1_Error", "Type2_Error"],
+    )
     parser.add_argument("--alpha",   default=0.05,  type=float)
     parser.add_argument("--seeds",   default=3,     type=int, help="multi-seed 執行次數")
     parser.add_argument("--dataset", default="all",

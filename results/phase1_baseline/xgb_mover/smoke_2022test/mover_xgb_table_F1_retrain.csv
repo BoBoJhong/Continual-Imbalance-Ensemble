@@ -1,0 +1,5 @@
+retrain_years,none,undersampling,oversampling,hybrid,avg
+1yr,0.0854,0.0904,0.0823,0.1075,0.0914
+2yr,,,,,
+3yr,,,,,
+avg,0.0854,0.0904,0.0823,0.1075,0.0914

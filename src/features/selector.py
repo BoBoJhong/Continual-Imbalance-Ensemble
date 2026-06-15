@@ -114,19 +114,36 @@ class FeatureSelector:
         elif self.method == "shap":
             try:
                 import shap
+            except ImportError:
+                shap = None
+            try:
                 from lightgbm import LGBMClassifier
             except ImportError:
-                raise ImportError("SHAP 方法需要安裝 shap 與 lightgbm：pip install shap lightgbm")
+                raise ImportError("SHAP 方法需要安裝 lightgbm：pip install lightgbm")
             _clf = LGBMClassifier(n_estimators=100, random_state=42, verbose=-1,
                                   is_unbalance=True)
             _clf.fit(X, y)
-            explainer = shap.TreeExplainer(_clf)
-            shap_values = explainer.shap_values(X)
-            # 對二元分類取正類的 SHAP（list[1] 或直接 array）
+            tree_explainer = getattr(shap, "TreeExplainer", None) if shap is not None else None
+            if tree_explainer is not None:
+                try:
+                    explainer = tree_explainer(_clf)
+                    shap_values = explainer.shap_values(X)
+                except Exception:
+                    shap_values = _clf.booster_.predict(X, pred_contrib=True)
+            else:
+                shap_values = _clf.booster_.predict(X, pred_contrib=True)
+            # 對二元分類取正類的 SHAP；不同 SHAP 版本可能回傳
+            # list[class]、2D array，或 3D array(samples, features, classes)。
+            # LightGBM pred_contrib 的最後一欄是 bias term，需排除。
             if isinstance(shap_values, list):
                 sv = np.abs(shap_values[1])
             else:
-                sv = np.abs(shap_values)
+                sv_arr = np.asarray(shap_values)
+                if sv_arr.ndim == 3:
+                    sv_arr = sv_arr[:, :, 1]
+                if sv_arr.shape[1] == n_features + 1:
+                    sv_arr = sv_arr[:, :-1]
+                sv = np.abs(sv_arr)
             mean_abs_shap = sv.mean(axis=0)
             k = min(self.k, n_features)
             top_idx = np.argsort(mean_abs_shap)[::-1][:k]

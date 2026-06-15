@@ -1,0 +1,67 @@
+@startuml
+
+title 批次自適應破產預測研究架構
+
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName "Microsoft JhengHei"
+skinparam defaultFontSize 14
+skinparam titleFontSize 24
+skinparam titleFontStyle bold
+skinparam linetype ortho
+skinparam nodesep 38
+skinparam ranksep 52
+skinparam ArrowThickness 1.7
+skinparam ArrowColor #64748B
+skinparam rectangle {
+  roundCorner 14
+  BorderThickness 1.5
+  FontColor #1E293B
+}
+skinparam note {
+  BackgroundColor #FFFDF5
+  BorderColor #D6B656
+  FontColor #475569
+}
+
+rectangle "① 時序批次與\n無洩漏切分\n\n歷史批次\n→ Validation\n→ 未知批次 t+1\n\n月／季／年／\n固定樣本數" as DATA #DBEAFE
+
+rectangle "② ROSS\n時間邊界選擇\n\n枚舉候選邊界\nb1, b2, ..., bk\n\n依 Validation\nAUC／F1 選出 b*" as ROSS #EDE9FE
+
+rectangle "③ 不平衡處理與\n候選模型生成\n\n在最佳邊界 b* 下\n使用低採樣、過採樣\n與混合採樣\n\n訓練 Old × 3\n與 New × 3" as TRAIN #EDE9FE
+
+rectangle "A. 候選單模型\n\nOld × 3／New × 3\n由 Validation 選出最佳單模型" as SINGLE #EDE9FE
+rectangle "B. DAWCE 加權集成\n\n搜尋 Old3／New3 群組權重 w\n由 Validation 選出最佳權重" as DAWCE #EDE9FE
+rectangle "C. 固定等權集成\n\nOld3／New3 = 0.5／0.5\n作為比較基準" as EQUAL #F1F5F9
+
+rectangle "④ AdaptiveChoice\nValidation-guided 選模\n\n比較單模型與 DAWCE\n的 Validation AUC／F1\n\n固定部署策略、權重 w*\n與分類門檻 θ*" as SELECT #FEF3C7
+
+rectangle "⑤ 預測下一個\n未知批次 t+1\n\n輸出企業破產機率\n與分類結果" as PREDICT #DCFCE7
+
+rectangle "⑥ 標籤取得後\n進行滾動評估\n\nAUC／F1／Recall／Precision\n\n記錄邊界 b*、策略、\n權重 w* 與門檻 θ*" as EVALUATE #E2E8F0
+
+DATA --> ROSS
+ROSS --> TRAIN
+TRAIN --> SINGLE
+TRAIN --> DAWCE
+TRAIN --> EQUAL
+
+SINGLE --> SELECT
+DAWCE --> SELECT
+EQUAL ..> SELECT : 基準參考
+
+SINGLE -[hidden]down- DAWCE
+DAWCE -[hidden]down- EQUAL
+
+SELECT --> PREDICT
+PREDICT --> EVALUATE
+
+legend bottom
+  |= 研究設計原則 |= 說明 |
+  | 無資料洩漏 | 所有選擇僅使用預測當下可取得的歷史與 Validation 資料 |
+  | 動態策略選擇 | 不預設集成一定較佳；近期單模型較好時可直接選擇單模型 |
+  | 滾動更新 | t+1 標籤取得後加入歷史資料，再以相同流程預測下一批 |
+  | 色彩語意 | 藍：資料切分；紫：方法生成；黃：模型選擇；綠：預測；灰：評估 |
+endlegend
+
+@enduml

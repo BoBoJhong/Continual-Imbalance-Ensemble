@@ -1,0 +1,11 @@
+method,detector,drift_year,best_sampling/combo,AUC,F1,Recall,Precision
+Fixed_New,none,-,none,0.8476,0.2881,0.4286,0.2169
+ADWIN_Single_New,ADWIN,none,undersampling,0.8316,0.2201,0.4007,0.1517
+PHT_Single_New,PHT,2002,undersampling,0.8316,0.2201,0.4007,0.1517
+DDM_Single_New,DDM,none,undersampling,0.8316,0.2201,0.4007,0.1517
+Fixed_Ensemble,none,-,pair_hy,0.8164,0.2030,0.4983,0.1275
+ADWIN_Ensemble,ADWIN,none,new3,0.8289,0.1942,0.4878,0.1212
+DDM_Ensemble,DDM,none,new3,0.8289,0.1942,0.4878,0.1212
+PHT_Ensemble,PHT,2002,new3,0.8289,0.1942,0.4878,0.1212
+Fixed_Retrain,none,-,none,0.8203,0.1819,0.4599,0.1134
+Fixed_Old,none,-,hybrid,0.7595,0.1336,0.4913,0.0773
