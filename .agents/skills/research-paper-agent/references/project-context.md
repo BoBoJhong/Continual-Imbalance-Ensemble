@@ -10,11 +10,11 @@ Treat **DAWCE** and **ROSS** as project-defined methods unless a project documen
 
 | Task | Primary project files |
 |---|---|
-| Research scope | `docs/RESEARCH_SPEC.md`, `README.md` |
-| Literature positioning | `docs/RELATED_LITERATURE.md`, `docs/references.bib` |
-| Dataset provenance and schema | `docs/DATASETS.md`, `src/data/` |
-| Current conclusions | `docs/目前研究結論整理.md`, `docs/reserch_summary.md` |
-| DAWCE/ROSS description | `docs/DAWCE_漂移感知加權持續集成演算法.md` |
+| Research scope | `docs/研究方向.md`, `README.md` |
+| Literature positioning | core-literature section in `docs/研究方向.md` |
+| Dataset provenance and schema | dataset section in `docs/研究方向.md`, `src/data/` |
+| Current conclusions | `docs/研究方向.md` |
+| DAWCE/ROSS description | Study 3 section in `docs/研究方向.md` |
 | Manuscript integration | `thesis/THESIS_FULL.md` |
 | Numerical claims | relevant CSV/JSON under `results/` plus its generating script |
 

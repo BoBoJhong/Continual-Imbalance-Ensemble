@@ -20,8 +20,7 @@ try:
 except ImportError as e:
     raise ImportError(
         "Phase 1 baseline plots need matplotlib and seaborn. "
-        "Run: pip install matplotlib seaborn "
-        "(full requirements.txt includes them; requirements-core.txt does not.)"
+        "Run: python -m pip install -r requirements.txt"
     ) from e
 
 import numpy as np
@@ -269,7 +268,7 @@ def plot_compact_heatmaps(
     metrics = df["metric"].unique()
     n = len(metrics)
     fig, axes = plt.subplots(1, n, figsize=(3.2 * n + 1, 4), squeeze=False)
-    for ax, metric in zip(axes[0], metrics):
+    for ax, metric in zip(axes[0], metrics, strict=True):
         sub = df[df["metric"] == metric].set_index("method")[sampling_cols]
         sub = sub.reindex([m for m in method_order if m in sub.index])
         col_order = [c for c in ["hybrid", "none", "oversampling", "undersampling"] if c in sub.columns]

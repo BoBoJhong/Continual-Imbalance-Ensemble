@@ -78,4 +78,4 @@ python scripts/data/download_real_medical_data.py
 |------|------|
 | `generate_advisor_excel.py` | 指導教授報告 Excel |
 
-單一實驗請直接執行 `experiments/` 下對應腳本，見 **docs/STRUCTURE.md** 與 **README.md**（專案根目錄）。
+單一實驗請直接執行 `experiments/` 下對應腳本；流程與結果見 **docs/研究方向.md**。

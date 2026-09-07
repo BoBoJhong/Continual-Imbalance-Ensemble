@@ -11,7 +11,7 @@ trigger: always_on
 ## 研究背景
 
 本專案為碩士論文研究，主題：**非平穩環境下類別不平衡之持續學習集成框架**。
-詳細研究方向見 `docs/RESEARCH_SPEC.md`，指導教授需求見 `docs/TEACHER_REQUIREMENTS_CHECKLIST.md`。
+研究規格、實驗結果、證據限制與待辦統一見 `docs/研究方向.md`。
 
 ---
 
@@ -26,7 +26,7 @@ trigger: always_on
 | `data/raw/` | **原始資料**（.gitignore 排除） | 禁止修改，只讀 |
 | `data/processed/` | **前處理後資料** | 由 `src/data/preprocessor.py` 輸出 |
 | `results/` | **實驗結果 CSV** | 由實驗腳本自動輸出，禁止手動編輯 |
-| `docs/` | **文件**（Markdown） | 命名規則：UPPER_CASE.md |
+| `docs/` | **研究文件** | 保留研究方向，並可依用途維護獨立報告 |
 | `.agent/` | **Antigravity 設定**（workflows、rules） | 不含業務邏輯 |
 
 根目錄：只保留 `README.md`、`requirements*.txt`、`*.bat`、`.gitignore`。
@@ -172,7 +172,7 @@ from src.features import FeatureSelector
 
 ## Rule 13 — 實驗成果與洞察彙整 (Research Summary Synchronization - **STRICT ENFORCEMENT**)
 
-為了確保論文撰寫時有最即時、最詳盡的參考依據，所有最新的實驗數據、比較圖表與結果分析，都必須統整至 `docs/reserch_summary.md` 中。**絕對不允許有任何實驗已經執行，但數據或方法卻未同步紀錄於該文件中的情況發生。**
+所有最新的實驗流程、數據、比較、限制與待辦，都必須統整至 `docs/研究方向.md`。不得有實驗已執行但方法或結果未同步紀錄的情況。
 
 1. **數據與流程同步**：當實驗腳本產出新的數據結果，或是重跑實驗後數據發生變動，必須同步將**最完整、最詳細的數據指標（包含各個 Sampling 策略、各種細度比較數值表）與實驗步驟流程**摘要至該文件中。
    - **涵蓋範圍要求**：三大資料集 (Bankruptcy, Stock, Medical) 均必須詳列完整的 (1) Baseline 與靜態集成 (2) 動態集成選擇 (DES) (3) 進階研究如特徵選擇、加權 DES 與比例衰退研究。
@@ -191,7 +191,7 @@ data/raw/
     └── synthetic/    → synthetic_medical_data.csv (備用)
 ```
 
-下載說明見 `docs/DATASET_DOWNLOAD_GUIDE.md`。
+資料來源與治理說明見 `docs/研究方向.md` 的資料章節。
 
 ---
 

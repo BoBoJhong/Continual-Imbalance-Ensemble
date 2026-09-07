@@ -55,12 +55,12 @@ Do not write unsupported entries as established facts. Either verify them, quali
 
 ## Repository output rules
 
-1. Put durable research documents under `docs/` with descriptive uppercase English filenames unless updating an existing named document.
-2. Add verified bibliographic records to `docs/references.bib` and keep citation keys stable. Deduplicate by DOI first, then normalized title.
-3. Update `docs/RELATED_LITERATURE.md` when the literature map materially changes.
+1. Keep `docs/研究方向.md` as the canonical research specification; create separate audience-specific reports in `docs/` when requested without deleting existing research assets.
+2. Add verified literature metadata to the core-literature section of that file; deduplicate by DOI first, then normalized title.
+3. Keep study flows, numerical findings, evidence limitations, and next actions synchronized between the canonical research specification and any current audience-specific report.
 4. Update `thesis/THESIS_FULL.md` only when the user explicitly requests thesis integration.
 5. Do not manually alter generated files under `results/`. Regenerate them through the owning script when an experiment change is requested.
-6. When a finding changes, keep the appropriate research summary synchronized, including `docs/reserch_summary.md` where project rules require it.
+6. When a finding changes, update `docs/研究方向.md` and its claim ledger.
 
 ## Delivery contract
 

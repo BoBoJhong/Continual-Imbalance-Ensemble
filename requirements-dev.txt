@@ -1,6 +1,0 @@
--r requirements-core.txt
-
-pytest>=7.4
-pytest-cov>=4.1
-black>=23.0
-ruff>=0.6

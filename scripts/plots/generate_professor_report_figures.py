@@ -1,7 +1,7 @@
 """Generate presentation-ready figures for the professor progress report.
 
-The script reads existing raw/result artifacts and writes only to
-``docs/figures/professor_progress``. It does not alter ``results`` or raw data.
+The script reads existing raw/result artifacts and writes figures to
+``results/report_figures``. It never alters raw data or metric tables.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "docs" / "figures" / "professor_progress"
+OUT = ROOT / "results" / "report_figures"
 
 BLUE = "#2F5D8A"
 BLUE_LIGHT = "#91B3D7"

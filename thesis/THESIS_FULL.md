@@ -576,7 +576,7 @@ DAWCE 的核心主張是：在非平穩資料中，各時期模型池不應被�
 
 每次更新依序執行：(1) ROSS 以 Validation AUC 搜尋 Old/New 邊界；(2) 在選定邊界下訓練 Old/New × under/over/hybrid 六個模型；(3) 以 Validation AUC 搜尋 DAWCE 的 New-side 群組權重；(4) 由 Validation 在最佳單模型與 DAWCE-AUC 之間選擇 AdaptiveChoice；(5) 以 Validation F1 決定各方法分類閾值後，僅在 Test 批次評估。實驗流程如下：
 
-![Rolling AdaptiveChoice 批次式實驗流程](../docs/diagrams/phase4-batch-adaptive-flow.png)
+Rolling AdaptiveChoice 的批次流程、目前結果與可重現命令統一整理於 `docs/研究方向.md`。
 
 本流程的批次單位可定義為年、季或月；但本研究資料僅提供年度標籤，因此實證驗證限於年度更新，不宣稱已驗證季或月層級效能。
 
@@ -1121,4 +1121,4 @@ Wang, S., Minku, L. L., & Yao, X. (2013). Resampling-based ensemble methods for 
 
 **（完）**
 
-*本稿依據專案 `docs/目前研究結論整理.md`、`docs/DAWCE_漂移感知加權持續集成演算法.md` 及 `results/` 下之 CSV 輸出整理；表內統計數值來自 `results/statistical_tests/current_findings/bankruptcy_current_findings_wilcoxon.csv`、`results/phase5_weighted/bk_year_split_weight_wilcoxon.csv`、`results/phase5_weighted/bk_fair_ablation_summary.csv`、`results/phase5_weighted/bk_fair_ablation_vs_new_under_wilcoxon.csv`、`results/phase3_feature/stability/bankruptcy_feature_stability_summary.csv`、`results/statistical_tests/current_findings/bankruptcy_weighted_cost_sensitivity_transitions.csv`，以及 `results/phase_flexible/rolling_bankruptcy/` 下之年度 walk-forward 輸出。*
+*本稿依據專案 `docs/研究方向.md` 及 `results/` 下之 CSV 輸出整理；表內統計數值來自 `results/statistical_tests/current_findings/bankruptcy_current_findings_wilcoxon.csv`、`results/phase5_weighted/bk_year_split_weight_wilcoxon.csv`、`results/phase5_weighted/bk_fair_ablation_summary.csv`、`results/phase5_weighted/bk_fair_ablation_vs_new_under_wilcoxon.csv`、`results/phase3_feature/stability/bankruptcy_feature_stability_summary.csv`、`results/statistical_tests/current_findings/bankruptcy_weighted_cost_sensitivity_transitions.csv`，以及 `results/phase_flexible/rolling_bankruptcy/` 下之年度 walk-forward 輸出。*

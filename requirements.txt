@@ -1,66 +1,25 @@
-# Deep learning (Phase 1 bankruptcy Torch MLP / FT-Transformer baseline)
-# 預設為 PyPI 的 torch（多為 CPU 版）。若要用 NVIDIA GPU，請見 requirements-gpu.txt：
-#   常用 .venv（Python 3.14 + nightly CUDA）或 .venv311（3.11 + stable cu124）；
-#   跑實驗時請用該 venv 的 Scripts\python.exe，勿依賴預設 py -3。
-torch>=2.0.0
-tabm>=0.0.3
-rtdl_num_embeddings>=0.0.12
-tabpfn>=0.1.10
+# Canonical environment for the maintained CPU experiment pipeline.
+# Supported Python: 3.11-3.14 (64-bit CPython recommended).
+# Versions are locked to the stack validated for this repository.
 
-# Core ML Libraries
-numpy>=1.24.0
-pandas>=2.0.0
-scikit-learn>=1.3.0
+numpy==2.4.2
+pandas==2.3.3
+scipy==1.17.1
+scikit-learn==1.8.0
+imbalanced-learn==0.14.1
+lightgbm==4.6.0
+xgboost==3.2.0
+PyYAML==6.0.3
 
-# Imbalanced Learning
-imbalanced-learn>=0.11.0
+# Feature analysis, figures, and report export
+shap==0.52.0
+matplotlib==3.10.8
+seaborn==0.13.2
+openpyxl==3.1.5
+joblib==1.5.3
+tqdm==4.67.1
 
-# Gradient Boosting Models
-lightgbm>=4.0.0
-xgboost>=2.0.0
-catboost>=1.2.0
-
-# Dynamic Ensemble Selection
-deslib>=0.3.7
-
-# Feature Selection
-mrmr-selection>=0.2.8
-# Note: scikit-feature-py3 is not available, use scikit-learn's feature_selection instead
-
-# Configuration Management
-pyyaml>=6.0
-python-dotenv>=1.0.0
-
-# Data Processing
-scipy>=1.11.0
-statsmodels>=0.14.0
-
-# Time Series
-ta>=0.11.0  # Technical Analysis library for stock features
-
-# Visualization
-matplotlib>=3.7.0
-seaborn>=0.12.0
-plotly>=5.17.0
-
-# Experiment Tracking
-mlflow>=2.8.0  # Optional but recommended
-wandb>=0.16.0  # Optional but recommended
-
-# Utilities
-tqdm>=4.66.0
-joblib>=1.3.0
-
-# Testing
-pytest>=7.4.0
-pytest-cov>=4.1.0
-
-# Jupyter
-jupyter>=1.0.0
-jupyterlab>=4.0.0
-ipywidgets>=8.1.0
-
-# Code Quality
-black>=23.0.0
-flake8>=6.1.0
-isort>=5.12.0
+# Verification and development
+pytest==9.0.2
+pytest-cov==4.1.0
+ruff==0.15.11

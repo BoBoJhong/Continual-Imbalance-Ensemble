@@ -29,12 +29,9 @@
    - 參考文獻：補齊卷期頁碼並改為貴校指定格式。
 
 3. **對照與口試**  
-   - 老師方向逐條對照：`docs/TEACHER_REQUIREMENTS_CHECKLIST.md`  
-   - 實驗正當性：`docs/EXPERIMENT_VALIDATION.md`  
-   - 碩論適用性：`docs/THESIS_READINESS.md`
+   - 研究方向、各 Study 流程、結果、限制與待辦：`docs/研究方向.md`
 
 ## 資料來源
 
-- 方法與切割：`docs/EXPERIMENT_VALIDATION.md`、`docs/TEACHER_REQUIREMENTS_CHECKLIST.md`  
+- 方法、切割與解讀：`docs/研究方向.md`
 - 結果表：`results/bankruptcy_all_results.csv`、`results/summary_all_datasets.csv`、`results/des_advanced/`、`results/proportion_study/`、`results/feature_study/`  
-- 解讀：`docs/RESULTS_09_10_INTERPRETATION.md`、`docs/THESIS_READINESS.md`
