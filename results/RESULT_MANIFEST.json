@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-09-07T17:03:22.373659+00:00",
+  "generated_at_utc": "2026-09-07T17:14:47.721973+00:00",
   "generator": "scripts/analysis/generate_result_manifest.py",
   "git": {
-    "commit": "e024fa31e4dfc5e955fade27aba891ce8c90a3e7",
-    "dirty": true
+    "commit": "8d290746379ab8a50d03cea70532507799fbe042",
+    "dirty": false
   },
   "runtime": {
     "python": "3.14.0",
