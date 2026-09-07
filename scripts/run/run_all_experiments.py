@@ -1,66 +1,161 @@
-"""
-一鍵執行所有實驗（依研究階段順序）。
+"""Run the maintained experiment pipeline from a validated manifest.
 
-Phase 1  Baseline      : 基準方法 (Old / New / Re-training)，全資料集
-Phase 2  Ensemble      : XGB Old/New 年份切割（靜態／DES／DCS 分腳本；結果分 static、dynamic/des、dcs）
-Phase 3  Feature       : 特徵選擇研究 & 掃描（Study II）
-Phase 4  Analysis      : 比例研究、Split 比較、Base Learner、閾值分析
+Use ``--list`` before a long run. The default selection includes every
+maintained stage and can take several hours depending on hardware.
 """
-import sys
+
+from __future__ import annotations
+
+import argparse
 import subprocess
+import sys
+from dataclasses import dataclass
 from pathlib import Path
 
-project_root = Path(__file__).resolve().parent.parent.parent
-
-# (相對於 experiments/ 的子路徑, 腳本名稱不含 .py, timeout 秒)
-# 注意：dynamic 下的 des/、dcs/ 是第二層子目錄
-EXPERIMENTS = [
-    # ── Phase 1: Baseline ──────────────────────────────────────
-    ("phase1_baseline",         "retrain",                  300),
-    # ── Phase 2: XGB ensemble（static／dynamic/des／dynamic/dcs 分開；檔名 xgb_oldnew_*）──
-    ("phase2_ensemble/static", "xgb_oldnew_bankruptcy_year_splits_static", 1200),
-    ("phase2_ensemble/static", "xgb_oldnew_stock_year_splits_static", 1200),
-    ("phase2_ensemble/static", "xgb_oldnew_medical_year_splits_static", 1200),
-    ("phase2_ensemble/dynamic/des", "xgb_oldnew_bankruptcy_year_splits_des", 1800),
-    ("phase2_ensemble/dynamic/des", "xgb_oldnew_stock_year_splits_des", 1800),
-    ("phase2_ensemble/dynamic/des", "xgb_oldnew_medical_year_splits_des", 1800),
-    ("phase2_ensemble/dynamic/dcs", "xgb_oldnew_bankruptcy_year_splits_dcs", 1800),
-    ("phase2_ensemble/dynamic/dcs", "xgb_oldnew_stock_year_splits_dcs", 1800),
-    ("phase2_ensemble/dynamic/dcs", "xgb_oldnew_medical_year_splits_dcs", 1800),
-    # ── Phase 3: Feature Selection (Study II) ──────────────────
-    ("phase3_feature",          "fs_study",                 300),
-    ("phase3_feature",          "fs_sweep",                 2700),
-    # ── Phase 4: Supplementary Analysis ────────────────────────
-    ("phase4_analysis",         "split_comparison",         300),
-    ("phase4_analysis",         "proportion_study",         600),
-    ("phase4_analysis",         "base_learner_comparison",  600),
-    ("phase4_analysis",         "stock_threshold_cost",     300),
-]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
-def main():
-    ok, fail, skip = 0, 0, 0
-    for subdir, name, timeout in EXPERIMENTS:
-        path = project_root / "experiments" / subdir / f"{name}.py"
-        if not path.exists():
-            print(f"[SKIP] {subdir}/{name}.py 不存在")
-            skip += 1
-            continue
-        print(f"\n{'='*60}\n[{subdir}] {name}\n{'='*60}")
-        r = subprocess.run(
-            [sys.executable, str(path)],
-            cwd=str(project_root),
-            timeout=timeout,
-        )
-        if r.returncode != 0:
-            print(f"[FAIL] {subdir}/{name} 結束碼 {r.returncode}")
-            fail += 1
+@dataclass(frozen=True)
+class Experiment:
+    phase: str
+    path: str
+    timeout_seconds: int
+
+
+EXPERIMENTS = (
+    Experiment("phase1", "experiments/phase1_baseline/retrain.py", 600),
+    Experiment(
+        "phase2",
+        "experiments/phase2_ensemble/static/xgb_oldnew_bankruptcy_year_splits_static.py",
+        1_800,
+    ),
+    Experiment(
+        "phase2",
+        "experiments/phase2_ensemble/dynamic/des/xgb_oldnew_bankruptcy_year_splits_des.py",
+        2_700,
+    ),
+    Experiment(
+        "phase2",
+        "experiments/phase2_ensemble/dynamic/dcs/xgb_oldnew_bankruptcy_year_splits_dcs.py",
+        2_700,
+    ),
+    Experiment("phase3", "experiments/phase3_feature/fs_study.py", 900),
+    Experiment("phase3", "experiments/phase3_feature/fs_sweep.py", 3_600),
+    Experiment(
+        "phase3",
+        "experiments/phase3_feature/feature_stability_analysis.py",
+        3_600,
+    ),
+    Experiment(
+        "phase4",
+        "experiments/phase4_drift/bankruptcy_drift_stream.py",
+        3_600,
+    ),
+    Experiment(
+        "phase4",
+        "experiments/phase4_drift/bankruptcy_drift_auc_signal.py",
+        1_800,
+    ),
+    Experiment(
+        "phase4",
+        "experiments/phase4_drift/bankruptcy_ross_validation.py",
+        3_600,
+    ),
+    Experiment(
+        "phase4",
+        "experiments/phase4_drift/bankruptcy_ross_fs_static_ensemble.py",
+        3_600,
+    ),
+    Experiment(
+        "phase4",
+        "experiments/phase4_drift/bankruptcy_multi_boundary_ross.py",
+        3_600,
+    ),
+    Experiment(
+        "phase5",
+        "experiments/phase5_weighted/bankruptcy_ross_weight_sweep.py",
+        3_600,
+    ),
+    Experiment("phase5", "experiments/phase5_weighted/awe_comparison.py", 3_600),
+    Experiment(
+        "rolling",
+        "experiments/phase_flexible/rolling_bankruptcy_adaptive.py",
+        7_200,
+    ),
+    Experiment("analysis", "scripts/analysis/fair_weighted_ablation.py", 1_800),
+    Experiment("analysis", "scripts/analysis/weighted_split_validation.py", 1_800),
+    Experiment("analysis", "scripts/analysis/current_findings_statistical_tests.py", 600),
+    Experiment("analysis", "scripts/analysis/current_findings_cost_sensitivity.py", 600),
+    Experiment("analysis", "scripts/analysis/export_thesis_tables.py", 600),
+    Experiment("report", "scripts/plots/generate_professor_report_figures.py", 600),
+)
+
+
+def _selected(phases: list[str] | None) -> list[Experiment]:
+    if not phases:
+        return list(EXPERIMENTS)
+    requested = set(phases)
+    return [experiment for experiment in EXPERIMENTS if experiment.phase in requested]
+
+
+def _validate_manifest(experiments: list[Experiment]) -> list[Path]:
+    missing = [
+        PROJECT_ROOT / item.path for item in experiments if not (PROJECT_ROOT / item.path).is_file()
+    ]
+    if missing:
+        rendered = "\n".join(f"- {path}" for path in missing)
+        raise FileNotFoundError(f"Experiment manifest contains missing files:\n{rendered}")
+    return [PROJECT_ROOT / item.path for item in experiments]
+
+
+def main() -> int:
+    phases = sorted({item.phase for item in EXPERIMENTS})
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--phase", action="append", choices=phases)
+    parser.add_argument("--list", action="store_true", help="Validate and list without running")
+    parser.add_argument(
+        "--continue-on-error",
+        action="store_true",
+        help="Continue after a failed or timed-out experiment",
+    )
+    args = parser.parse_args()
+
+    selected = _selected(args.phase)
+    paths = _validate_manifest(selected)
+    for item, path in zip(selected, paths, strict=True):
+        print(f"[{item.phase:8s}] {path.relative_to(PROJECT_ROOT)}")
+    if args.list:
+        print(f"Validated {len(selected)} maintained pipeline entries.")
+        return 0
+
+    failures: list[str] = []
+    for item, path in zip(selected, paths, strict=True):
+        print(f"\n{'=' * 72}\n[{item.phase}] {item.path}\n{'=' * 72}")
+        try:
+            completed = subprocess.run(
+                [sys.executable, str(path)],
+                cwd=PROJECT_ROOT,
+                timeout=item.timeout_seconds,
+                check=False,
+            )
+        except subprocess.TimeoutExpired:
+            failures.append(f"{item.path}: timeout after {item.timeout_seconds}s")
         else:
-            print(f"[OK]   {subdir}/{name}")
-            ok += 1
-    print(f"\n=== 完成：OK={ok}  FAIL={fail}  SKIP={skip} ===")
-    print("可再執行: python scripts\\analysis\\compare_all_results.py")
+            if completed.returncode == 0:
+                continue
+            failures.append(f"{item.path}: exit code {completed.returncode}")
+        print(f"[FAIL] {failures[-1]}")
+        if not args.continue_on_error:
+            break
+
+    if failures:
+        print("\nPipeline failures:")
+        for failure in failures:
+            print(f"- {failure}")
+        return 1
+    print(f"\nCompleted {len(selected)} pipeline entries successfully.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

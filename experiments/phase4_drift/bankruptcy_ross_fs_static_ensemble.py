@@ -73,21 +73,28 @@ def _apply_old_fit_fs(
     X_new: pd.DataFrame,
     X_test: pd.DataFrame,
     logger,
+    n_old_val: int = 0,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, int, str]:
     """
     Fit FS on Old only, transform Old/New/Test.
 
-    Mean imputation is fitted from Old only to avoid peeking at New/Test
-    distribution during feature selection.
+    Mean imputation and feature selection are fitted from the Old fitting
+    subset only. When n_old_val > 0, the held-out Old validation tail does
+    not participate in fitting.
     """
-    fill_values = X_old.mean(numeric_only=True)
+    if n_old_val < 0 or n_old_val >= len(X_old):
+        raise ValueError("n_old_val must leave at least one Old fitting row")
+    X_old_fit = X_old.iloc[:-n_old_val] if n_old_val else X_old
+    y_old_fit = y_old[:-n_old_val] if n_old_val else y_old
+    fill_values = X_old_fit.mean(numeric_only=True)
     X_old_f = X_old.fillna(fill_values)
     X_new_f = X_new.fillna(fill_values)
     X_test_f = X_test.fillna(fill_values)
 
     k = max(1, int(X_old_f.shape[1] * FS_RATIO))
     selector = FeatureSelector(method=FS_METHOD, k=k)
-    X_old_fs = selector.fit_transform(X_old_f, y_old)
+    selector.fit(X_old_fit.fillna(fill_values), y_old_fit)
+    X_old_fs = selector.transform(X_old_f)
     X_new_fs = selector.transform(X_new_f)
     X_test_fs = selector.transform(X_test_f)
 
@@ -124,12 +131,14 @@ def _run_boundary_variant(
     )
 
     if fs_variant == "fs":
+        n_old_val = max(1, int(len(X_old) * 0.2))
         X_old, X_new, X_test_used, n_features_after, selected_preview = _apply_old_fit_fs(
             X_old,
             y_old,
             X_new,
             X_test,
             logger,
+            n_old_val=n_old_val,
         )
     elif fs_variant == "no_fs":
         X_test_used = X_test

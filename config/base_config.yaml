@@ -1,8 +1,8 @@
 base_config:
   project_name: "Continual-Imbalance-Ensemble"
   random_seed: 42
-  n_runs: 5
-  random_seeds: [42, 123, 456, 789, 2024]
+  n_runs: 10
+  random_seeds: [42, 123, 456, 789, 2024, 7, 21, 84, 168, 999]
   
 paths:
   data_dir: "data"
@@ -15,22 +15,22 @@ paths:
 
 datasets:
   bankruptcy:
-    name: "Taiwan_Bankruptcy_Prediction"
+    name: "US_Corporate_Bankruptcy_1999_2018"
     source: "Kaggle"
-    target_column: "Bankrupt?"
-    time_column: "Year"
+    target_column: "status_label"
+    time_column: "fyear"
     
   medical:
-    name: "MIMIC-III"
-    source: "PhysioNet"
+    name: "Diabetes_130_US_Hospitals"
+    source: "UCI"
     target_column: "mortality"
-    time_column: "charttime"
+    time_column: "date"
     
   stock:
-    name: "Stock_Market_Crash"
-    source: "Kaggle"
-    target_column: "crash_event"
-    time_column: "date"
+    name: "Stock_Market_Crash_SPX"
+    source: "Project dataset"
+    target_column: "Crash_Event"
+    time_column: "Date"
 
 split_modes:
   chronological:

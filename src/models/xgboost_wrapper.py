@@ -1,4 +1,5 @@
 """XGBoost model wrapper."""
+from copy import deepcopy
 import xgboost as xgb
 import numpy as np
 import pandas as pd
@@ -28,10 +29,14 @@ class XGBoostWrapper:
         self.logger = get_logger(f"XGBoost-{name}", console=True, file=False)
         self.config = get_config_loader()
         
-        base_params = self.config.get("model_config", "xgboost.base_params", {})
+        base_params = deepcopy(
+            self.config.get("model_config", "xgboost.base_params", {})
+        )
         
         if use_imbalance:
-            imbalance_params = self.config.get("model_config", "xgboost.imbalance_params", {})
+            imbalance_params = deepcopy(
+                self.config.get("model_config", "xgboost.imbalance_params", {})
+            )
             base_params.update(imbalance_params)
         
         base_params.update(custom_params)
@@ -65,12 +70,13 @@ class XGBoostWrapper:
         self.logger.info(f"Training XGBoost on {len(X_train)} samples")
         
         # Auto-calculate scale_pos_weight if set to 'auto'
-        if self.params.get('scale_pos_weight') == 'auto':
-            self.params['scale_pos_weight'] = self._calculate_scale_pos_weight(y_train)
-            self.logger.info(f"Auto scale_pos_weight: {self.params['scale_pos_weight']:.2f}")
+        model_params = deepcopy(self.params)
+        if model_params.get('scale_pos_weight') == 'auto':
+            model_params['scale_pos_weight'] = self._calculate_scale_pos_weight(y_train)
+            self.logger.info(f"Auto scale_pos_weight: {model_params['scale_pos_weight']:.2f}")
         
         # Create model
-        self.model = xgb.XGBClassifier(**self.params)
+        self.model = xgb.XGBClassifier(**model_params)
         
         # Prepare eval set
         eval_set = [(X_train, y_train)]

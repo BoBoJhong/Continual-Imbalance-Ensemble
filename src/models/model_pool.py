@@ -52,7 +52,12 @@ class ModelPool:
         )
         
         # Create and train model
-        model = model_class(name=model_name)
+        seed_param = (
+            {"seed": self.random_state}
+            if model_class is LightGBMWrapper
+            else {"random_state": self.random_state}
+        )
+        model = model_class(name=model_name, **seed_param)
         model.fit(X_resampled, y_resampled)
         
         # Store model

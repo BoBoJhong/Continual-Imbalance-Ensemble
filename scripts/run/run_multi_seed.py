@@ -1,217 +1,151 @@
-"""
-多 Seed 重現性實驗（擴展版）
-涵蓋 Bankruptcy / Stock / Medical 的 Baseline + Ensemble + DES。
-輸出每個資料集的 mean±std CSV 到 results/multi_seed/。
+"""Run the legacy LightGBM ensemble comparison across configured seeds.
 
-使用方式：
-    python scripts/run/run_multi_seed.py
-    python scripts/run/run_multi_seed.py --seeds 42 123 456 789 2024
-    python scripts/run/run_multi_seed.py --dataset bankruptcy --seeds 42 123
+This protocol uses fixed block/time splits and is a reproducibility diagnostic,
+not the confirmatory rolling evaluation. Per-seed rows are retained in Git.
 """
-import sys
+
+from __future__ import annotations
+
 import argparse
+import sys
 from pathlib import Path
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 
-project_root = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(project_root))
-
-DEFAULT_SEEDS = [42, 123, 456]          # 可改為 [42,123,456,789,2024] 跑滿 5 次
-OUT_DIR = project_root / "results" / "multi_seed"
-
-
-# ─────────────────────────── per-seed runners ────────────────────────────
-
-def _run_bankruptcy_once(seed: int) -> pd.DataFrame:
-    """跑一次 Bankruptcy：Baseline(retrain) + Ensemble(old3/new3/all6) + DES。"""
-    from src.utils import set_seed, get_logger
-    from src.models import ModelPool, LightGBMWrapper
-    from src.data import ImbalanceSampler
-    from src.evaluation import compute_metrics
-    from experiments._shared.common_bankruptcy import get_bankruptcy_splits
-    from experiments._shared.common_des import run_des
-
-    set_seed(seed)
-    logger = get_logger("MultiSeed_BK", console=False, file=False)
-    X_hist, y_hist, X_new, y_new, X_test, y_test = get_bankruptcy_splits(logger, split_mode="block_cv")
-    y_test_arr = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
-    sampler = ImbalanceSampler(random_state=seed)
-    lgbm_params = {"seed": seed, "verbose": -1}
-    results = {}
-
-    # Baseline: Re-training
-    X_c = pd.concat([X_hist, X_new]); y_c = pd.concat([y_hist, y_new])
-    Xr, yr = sampler.apply_sampling(X_c, y_c.values, strategy="hybrid")
-    m = LightGBMWrapper(name="retrain", **lgbm_params); m.fit(Xr, yr)
-    p = m.predict_proba(X_test)
-    results["retrain"] = compute_metrics(y_test_arr, p)
-
-    # Ensemble: Old 3 / New 3 / All 6
-    old_pool = ModelPool(pool_name="old", random_state=seed); old_pool.create_pool(X_hist, y_hist.values, prefix="old")
-    new_pool = ModelPool(pool_name="new", random_state=seed); new_pool.create_pool(X_new,  y_new.values,  prefix="new")
-    all_proba = {**old_pool.predict_proba(X_test), **new_pool.predict_proba(X_test)}
-    for name, keys in [
-        ("ensemble_old_3", ["old_under","old_over","old_hybrid"]),
-        ("ensemble_new_3", ["new_under","new_over","new_hybrid"]),
-        ("ensemble_all_6", list(all_proba.keys())),
-    ]:
-        p_avg = np.mean([all_proba[k] for k in keys], axis=0)
-        results[name] = compute_metrics(y_test_arr, p_avg)
-
-    # DES KNORA-E
-    results["DES_KNORAE"] = run_des(X_hist, y_hist, X_new, y_new, X_test, y_test, logger)
-
-    return pd.DataFrame(results).T
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT))
+OUT_DIR = PROJECT_ROOT / "results" / "multi_seed"
 
 
-def _run_stock_once(seed: int) -> pd.DataFrame:
-    """跑一次 Stock：Baseline + Ensemble + DES。"""
-    from src.utils import set_seed, get_logger
-    from src.models import ModelPool, LightGBMWrapper
-    from src.data import ImbalanceSampler
-    from src.evaluation import compute_metrics
+def get_default_seeds() -> list[int]:
+    """Load the canonical seed list from ``config/base_config.yaml``."""
+    from src.utils import get_config_loader
+
+    values = get_config_loader().get("base_config", "base_config.random_seeds", default=[42])
+    return [int(value) for value in values]
+
+
+def _get_dataset_splits(dataset_name: str, logger):
+    if dataset_name == "bankruptcy":
+        from experiments._shared.common_bankruptcy import get_bankruptcy_splits
+
+        return get_bankruptcy_splits(logger, split_mode="block_cv")
+
     from experiments._shared.common_dataset import get_splits
+
+    return get_splits(dataset_name, logger)
+
+
+def _run_once(dataset_name: str, seed: int) -> pd.DataFrame:
     from experiments._shared.common_des import run_des
-
-    set_seed(seed)
-    logger = get_logger("MultiSeed_Stock", console=False, file=False)
-    X_hist, y_hist, X_new, y_new, X_test, y_test = get_splits("stock", logger)
-    y_test_arr = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
-    sampler = ImbalanceSampler(random_state=seed)
-    results = {}
-
-    X_c = pd.concat([X_hist, X_new]); y_c = pd.concat([y_hist, y_new])
-    Xr, yr = sampler.apply_sampling(X_c, y_c.values, strategy="hybrid")
-    m = LightGBMWrapper(name="retrain", seed=seed, verbose=-1); m.fit(Xr, yr)
-    results["retrain"] = compute_metrics(y_test_arr, m.predict_proba(X_test))
-
-    old_pool = ModelPool(pool_name="old", random_state=seed); old_pool.create_pool(X_hist, y_hist.values, prefix="old")
-    new_pool = ModelPool(pool_name="new", random_state=seed); new_pool.create_pool(X_new,  y_new.values,  prefix="new")
-    all_proba = {**old_pool.predict_proba(X_test), **new_pool.predict_proba(X_test)}
-    for name, keys in [
-        ("ensemble_old_3", ["old_under", "old_over", "old_hybrid"]),
-        ("ensemble_new_3", ["new_under", "new_over", "new_hybrid"]),
-        ("ensemble_all_6", list(all_proba.keys())),
-    ]:
-        p_avg = np.mean([all_proba[k] for k in keys], axis=0)
-        results[name] = compute_metrics(y_test_arr, p_avg)
-    results["DES_KNORAE"] = run_des(X_hist, y_hist, X_new, y_new, X_test, y_test, logger)
-
-    return pd.DataFrame(results).T
-
-
-def _run_medical_once(seed: int) -> pd.DataFrame:
-    """跑一次 Medical：Baseline + Ensemble + DES。"""
-    from src.utils import set_seed, get_logger
-    from src.models import ModelPool, LightGBMWrapper
     from src.data import ImbalanceSampler
     from src.evaluation import compute_metrics
-    from experiments._shared.common_dataset import get_splits
-    from experiments._shared.common_des import run_des
+    from src.models import LightGBMWrapper, ModelPool
+    from src.utils import get_logger, set_seed
 
     set_seed(seed)
-    logger = get_logger("MultiSeed_Medical", console=False, file=False)
-    X_hist, y_hist, X_new, y_new, X_test, y_test = get_splits("medical", logger)
-    y_test_arr = np.asarray(y_test.values if hasattr(y_test, "values") else y_test)
+    logger = get_logger(f"MultiSeed_{dataset_name}", console=False, file=False)
+    X_hist, y_hist, X_new, y_new, X_test, y_test = _get_dataset_splits(dataset_name, logger)
+    y_hist_array = np.asarray(y_hist)
+    y_new_array = np.asarray(y_new)
+    y_test_array = np.asarray(y_test)
+
+    combined_X = pd.concat([X_hist, X_new])
+    combined_y = np.concatenate([y_hist_array, y_new_array])
     sampler = ImbalanceSampler(random_state=seed)
-    results = {}
+    resampled_X, resampled_y = sampler.apply_sampling(combined_X, combined_y, strategy="hybrid")
+    retrained = LightGBMWrapper(name="retrain", seed=seed, verbose=-1)
+    retrained.fit(resampled_X, resampled_y)
+    results = {"retrain": compute_metrics(y_test_array, retrained.predict_proba(X_test))}
 
-    X_c = pd.concat([X_hist, X_new]); y_c = pd.concat([y_hist, y_new])
-    Xr, yr = sampler.apply_sampling(X_c, y_c.values, strategy="hybrid")
-    m = LightGBMWrapper(name="retrain", seed=seed, verbose=-1); m.fit(Xr, yr)
-    results["retrain"] = compute_metrics(y_test_arr, m.predict_proba(X_test))
+    old_pool = ModelPool(pool_name="old", random_state=seed)
+    old_pool.create_pool(X_hist, y_hist_array, prefix="old")
+    new_pool = ModelPool(pool_name="new", random_state=seed)
+    new_pool.create_pool(X_new, y_new_array, prefix="new")
+    probabilities = {
+        **old_pool.predict_proba(X_test),
+        **new_pool.predict_proba(X_test),
+    }
+    combinations = {
+        "ensemble_old_3": ["old_under", "old_over", "old_hybrid"],
+        "ensemble_new_3": ["new_under", "new_over", "new_hybrid"],
+        "ensemble_all_6": list(probabilities),
+    }
+    for method_name, model_names in combinations.items():
+        average = np.mean([probabilities[name] for name in model_names], axis=0)
+        results[method_name] = compute_metrics(y_test_array, average)
 
-    old_pool = ModelPool(pool_name="old", random_state=seed); old_pool.create_pool(X_hist, y_hist.values, prefix="old")
-    new_pool = ModelPool(pool_name="new", random_state=seed); new_pool.create_pool(X_new,  y_new.values,  prefix="new")
-    all_proba = {**old_pool.predict_proba(X_test), **new_pool.predict_proba(X_test)}
-    for name, keys in [
-        ("ensemble_old_3", ["old_under", "old_over", "old_hybrid"]),
-        ("ensemble_new_3", ["new_under", "new_over", "new_hybrid"]),
-        ("ensemble_all_6", list(all_proba.keys())),
-    ]:
-        p_avg = np.mean([all_proba[k] for k in keys], axis=0)
-        results[name] = compute_metrics(y_test_arr, p_avg)
-    results["DES_KNORAE"] = run_des(X_hist, y_hist, X_new, y_new, X_test, y_test, logger)
-
+    results["DES_KNORAE"] = run_des(
+        X_hist,
+        y_hist,
+        X_new,
+        y_new,
+        X_test,
+        y_test,
+        logger,
+        random_state=seed,
+    )
     return pd.DataFrame(results).T
 
-
-RUNNERS = {
-    "bankruptcy": _run_bankruptcy_once,
-    "stock":      _run_stock_once,
-    "medical":    _run_medical_once,
-}
-
-
-# ──────────────────────────── aggregation ────────────────────────────────
 
 def aggregate_seeds(all_runs: list[pd.DataFrame]) -> pd.DataFrame:
-    """將多次 seed 結果合併為 mean±std DataFrame。"""
+    """Aggregate metric means and sample standard deviations by method."""
     combined = pd.concat(all_runs)
-    metrics = [c for c in combined.columns if c != "seed"]
-    agg = {}
-    for m in metrics:
-        group = combined.groupby(combined.index)[m]
-        agg[f"{m}_mean"] = group.mean()
-        agg[f"{m}_std"]  = group.std().fillna(0)
-    return pd.DataFrame(agg)
+    metrics = [column for column in combined.columns if column != "seed"]
+    aggregated = {}
+    for metric in metrics:
+        grouped = combined.groupby(combined.index)[metric]
+        aggregated[f"{metric}_mean"] = grouped.mean()
+        aggregated[f"{metric}_std"] = grouped.std().fillna(0)
+    return pd.DataFrame(aggregated)
 
 
 def run_dataset(dataset_name: str, seeds: list[int]) -> pd.DataFrame:
-    runner = RUNNERS[dataset_name]
-    print(f"\n{'='*60}")
-    print(f"  {dataset_name.upper()} — seeds={seeds}")
-    print(f"{'='*60}")
-    all_runs = []
+    print(f"\n{'=' * 60}\n{dataset_name.upper()} seeds={seeds}\n{'=' * 60}")
+    all_runs: list[pd.DataFrame] = []
+    failures: list[tuple[int, str]] = []
     for seed in seeds:
-        print(f"  Running seed={seed}...", end=" ", flush=True)
+        print(f"Running seed={seed}...", end=" ", flush=True)
         try:
-            df = runner(seed)
-            df["seed"] = seed
-            all_runs.append(df)
-            print("OK")
-        except Exception as e:
-            print(f"SKIP ({e})")
+            frame = _run_once(dataset_name, seed)
+        except Exception as exc:  # Keep other seeds auditable if one run fails.
+            failures.append((seed, f"{type(exc).__name__}: {exc}"))
+            print(f"FAILED ({failures[-1][1]})")
+            continue
+        frame["seed"] = seed
+        all_runs.append(frame)
+        print("OK")
 
     if not all_runs:
-        print(f"  No valid runs for {dataset_name}, skipping.")
-        return pd.DataFrame()
+        raise RuntimeError(f"No successful runs for {dataset_name}: {failures}")
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     raw = pd.concat(all_runs)
     raw.index.name = "method"
-    raw_path = OUT_DIR / f"{dataset_name}_multi_seed_raw.csv"
-    raw.to_csv(raw_path)
-    print(f"\n  raw per-seed 已保存: {raw_path}")
-
+    raw.to_csv(OUT_DIR / f"{dataset_name}_multi_seed_raw.csv")
     result = aggregate_seeds(all_runs)
-    out_csv = OUT_DIR / f"{dataset_name}_multi_seed.csv"
-    result.to_csv(out_csv)
-    print(f"\n  已保存: {out_csv}")
-    # 只顯示 AUC
-    auc_cols = [c for c in result.columns if "AUC" in c]
-    print(result[auc_cols].to_string(float_format="{:.4f}".format))
+    result.to_csv(OUT_DIR / f"{dataset_name}_multi_seed.csv")
+
+    if failures:
+        failure_frame = pd.DataFrame(failures, columns=["seed", "error"])
+        failure_frame.to_csv(OUT_DIR / f"{dataset_name}_multi_seed_errors.csv", index=False)
+    print(result.filter(like="AUC").to_string(float_format="{:.4f}".format))
     return result
 
 
-# ──────────────────────────── main ───────────────────────────────────────
-
-def main():
-    parser = argparse.ArgumentParser(description="多 Seed 重現性實驗")
-    parser.add_argument("--seeds", nargs="+", type=int, default=DEFAULT_SEEDS)
-    parser.add_argument("--dataset", choices=list(RUNNERS.keys()) + ["all"], default="all")
+def main() -> int:
+    datasets = ("bankruptcy", "stock", "medical")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--seeds", nargs="+", type=int, default=get_default_seeds())
+    parser.add_argument("--dataset", choices=(*datasets, "all"), default="all")
     args = parser.parse_args()
 
-    datasets = list(RUNNERS.keys()) if args.dataset == "all" else [args.dataset]
-    print(f"Seeds: {args.seeds}")
-    print(f"Datasets: {datasets}")
-
-    for ds in datasets:
-        run_dataset(ds, args.seeds)
-
-    print("\n\n多 Seed 實驗完成！結果在 results/multi_seed/")
+    selected = datasets if args.dataset == "all" else (args.dataset,)
+    for dataset_name in selected:
+        run_dataset(dataset_name, args.seeds)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -6,7 +6,7 @@
 
 ## 使用說明
 
-- 本稿為依專案實際實驗成果整理之碩士論文架構，已納入真實統計數字（Wilcoxon p-value、Jaccard stability 等）及 APA 第七版文獻引用，可依貴校格式調整後繳交。
+- 本稿為依專案實際實驗成果整理之碩士論文架構，已納入現有統計數字與 APA 第七版文獻引用；惟部分檢定仍有相依樣本、偽重複與跨種子驗證未完成等限制，應先完成 §5.3 所列補強再作正式投稿或繳交。
 - 若為**國立中央大學資管所**，請依學校「研究生畢業論文格式條例」及系所公告為準；格式對照表見同目錄 `NCU_IM_FORMAT.md`。
 - 本稿已納入中英文摘要、正文、表格與參考文獻；封面、授權書、審定書、謝辭、正式目次頁碼與圖表目錄仍須於排版成 Word/PDF 後，依學校規定及個人資料補入。
 
@@ -16,13 +16,13 @@
 
 金融風險預測模型面臨**概念漂移**（concept drift）與**類別不平衡**（class imbalance）的雙重挑戰：前者使歷史規律隨時間失效，後者使少數類（如破產企業）難以被準確識別。兩者交疊時，主流的「全量合併重訓」策略不僅無法凸顯近期規律，更會因過時的多數類樣本稀釋少數類的現代特徵分布，導致誤判率顯著攀升。針對此缺口，本研究以美國破產預測資料（1999–2018，共 78,682 筆，破產率 6.63%）為主要實驗場域，依時序嚴格切割為訓練搜尋期、驗證期（2012–2014）與測試期（2015–2018），並系統性地執行四項遞進式研究（Study 1–4）。
 
-**Study 1**建立方法比較基準，對照再訓練、微調、靜態集成（Old/New 模型池）、動態集成選擇（DES）與動態分類器選擇（DCS）。跨 15 個年份切割的 paired Wilcoxon signed-rank 檢定顯示：New-side 模型在 AUC（two-sided p = 0.000061，rank-biserial r = 1.00）與 F1（p = 0.000610，r = 0.87）上顯著優於 Old-side 模型，效果量均達大效果（|r| > 0.5）水準；以測試指標逐切割選出的靜態 oracle 上界（均值 AUC = 0.8687）高於 DES（AUC = 0.8445）與 DCS（AUC = 0.8160），但此結果不視為可部署方法間的無偏比較。
+**Study 1**建立方法比較基準，對照再訓練、微調、靜態集成（Old/New 模型池）、動態集成選擇（DES）與動態分類器選擇（DCS）。跨 15 個相依年份切割，New-side 模型在 AUC 與 F1 上呈現一致優勢（原始 two-sided p = 0.000061/0.000610）；以測試指標逐切割選出的靜態 oracle 上界（均值 AUC = 0.8687）高於 DES（AUC = 0.8445）與 DCS（AUC = 0.8160）。因切割共享測試期，且靜態端為 test-selected oracle，兩者均定位為診斷性而非無偏確認性證據。
 
-**Study 2**比較四種特徵選取方法（MI、CART、SHAP、RFE）對集成效能的影響，並針對 MI、SHAP 與 RFE 執行跨年份特徵穩定性分析。`New_3 + MI r80` 在 AUC 上對比無特徵選取達統計顯著提升（p = 0.000305）；穩定性分析顯示 r80 在三種方法與資料期下之跨年份 Jaccard 相似度均顯著高於 r50（p < 0.000001），差距達 0.09–0.33 Jaccard 單位，說明激進特徵壓縮在時序非平穩資料中對可解釋性的負面影響。
+**Study 2**比較四種特徵選取方法（MI、CART、SHAP、RFE）對集成效能的影響，並針對 MI、SHAP 與 RFE 執行跨年份特徵穩定性分析。`New_3 + MI r80` 在 AUC 上對比無特徵選取呈現診斷性提升（跨 15 個相依切割之 p = 0.000305）。描述性穩定性分析顯示，在已彙整的 Old、New 與 MI joint 組合中，r80 的跨年份 Jaccard 均值高於 r50；但原分析將 15 個切割形成的 105 個相依特徵集配對當作獨立檢定單位，因此極小 p-value 不作確認性推論。
 
-**Study 3**提出核心方法貢獻：**ROSS（Retrospective Optimal Split Selection）**以驗證集效能為目標函數，將 Old/New 邊界選擇從人工假設轉化為資料驅動的最佳化問題；**DAWCE（Drift-Aware Weighted Continual Ensemble）**則在 ROSS 選出的邊界基礎上，以群組加權網格搜尋確定最佳 New-dominant 比重。ROSS 自動將破產資料的最佳邊界從人工設定的 2012 年調整至 2009 年；最佳配置相較固定等權基準提升 F1 = +0.052、Precision = +0.060。然而，在公平消融中，無 FS 的 New-under 單模型（AUC = 0.8473，F1 = 0.2217）顯著高於 DAWCE-F1（AUC = 0.8341，F1 = 0.1886）。本研究進一步以 2009–2018 十個互不重疊年度測試批次實作 leakage-safe Rolling AdaptiveChoice；其 pooled AUC/F1 為 0.8221/0.3283，仍低於固定 New-under 的 0.8403/0.3287，且差異未達 Holm 校正後顯著，顯示動態選擇流程可部署，但尚未證明優於強單模型。
+**Study 3**提出核心方法貢獻：**ROSS（Retrospective Optimal Split Selection）**以驗證集效能為目標函數，將 Old/New 邊界選擇從人工假設轉化為資料驅動的最佳化問題；**DAWCE（Drift-Aware Weighted Continual Ensemble）**則以群組加權網格搜尋決定 New-side 比重。ROSS 依 Validation AUC 將候選邊界從人工設定的 2012 年調整至 2009 年，但修正前處理資料洩漏後，ROSS 邊界未在 Test F1 上優於固定 2012 邊界。跨 15 個相依切割，DAWCE-F1 相較 Equal6 的無 FS AUC/F1 分別提升 0.0250/0.0275；然而，公平消融顯示無 FS 的 New-under 單模型（AUC = 0.8498，F1 = 0.2143）高於 DAWCE-F1（AUC = 0.8336，F1 = 0.1886）。本研究進一步以 2009–2018 十個資料列互不重疊的年度測試批次實作 leakage-safe Rolling AdaptiveChoice；其 pooled AUC/F1 為 0.8221/0.3283，低於固定 New-under 的 0.8403/0.3287，且差異未達 Holm 校正後顯著，顯示動態選擇流程可運行，但尚未證明優於強單模型。
 
-**Study 4**以 10-seed raw Wilcoxon 補強跨種子重現性，並執行成本敏感分析，揭示最佳模型配置隨 Type2:Type1 成本比的系統性轉換：低成本比（r < 0.5）宜選 Precision-oriented 配置（ValROSS + FS + w\_new = 0.95，Precision = 0.177）；高成本比（r ≥ 0.75）宜選 Recall-oriented 配置（ValROSS + no-FS + w\_new = 1.0，Recall = 0.634），為不同風險偏好的實務部署提供可操作的決策依據。
+**Study 4**提供有限的 10-seed 輔助敏感度檢查，並以盛行率中性的條件錯誤成本分數比較配置。該 multi-seed 流程採 LightGBM 與 block-CV，並非主 XGBoost 流程的完整重複；成本分數亦未納入類別盛行率與實際金額，故結果僅用於呈現模型排序可能隨 FNR:FPR 權重改變，不直接視為部署期望成本或主要假設的確認性證據。
 
 綜合而言，本研究證明 validation-guided 邊界與群組權重選擇可改善固定等權集成；同時，公平消融與 rolling walk-forward 均顯示，在近期資料已足以形成強模型時，固定選擇單一 New-side 模型仍可能優於動態選擇或強制集成。此結果界定了 DAWCE 與 AdaptiveChoice 的適用邊界。
 
@@ -34,7 +34,7 @@
 
 Financial risk prediction under non-stationary and highly imbalanced data is challenging because historical patterns may become obsolete while minority-class events, such as corporate bankruptcy, remain difficult to identify. This study investigates whether the boundary between historical and recent knowledge, together with their relative ensemble weights, can be selected objectively through validation data rather than fixed by expert judgment.
 
-Using a public U.S. corporate bankruptcy dataset covering 1999–2018 (78,682 observations; bankruptcy rate: 6.63%), this study conducts four experiments with temporally isolated training, validation, and test periods. Across 15 temporal splits, New-side models significantly outperform Old-side models in AUC and F1. Study 2 evaluates feature-selection performance and temporal stability. Study 3 proposes Retrospective Optimal Split Selection (ROSS) and the Drift-Aware Weighted Continual Ensemble (DAWCE). DAWCE improves over fixed equal weighting; however, a fair ablation shows that the New-under single model (AUC = 0.8473; F1 = 0.2217) significantly outperforms DAWCE-F1 (AUC = 0.8341; F1 = 0.1886). A leakage-safe rolling walk-forward evaluation over ten non-overlapping annual test batches further shows pooled AUC/F1 of 0.8221/0.3283 for AdaptiveChoice versus 0.8403/0.3287 for fixed New-under; the difference is not significant after Holm correction.
+Using a public U.S. corporate bankruptcy dataset covering 1999–2018 (78,682 firm-year observations; bankruptcy rate: 6.63%), this study conducts four experiments with temporally isolated training, validation, and test periods. Across 15 dependent temporal splits, New-side models show a consistent directional advantage over Old-side models in AUC and F1. Study 2 evaluates feature-selection performance and temporal stability, while noting that the original pairwise-Jaccard significance test is affected by pseudoreplication. Study 3 proposes Retrospective Optimal Split Selection (ROSS) and the Drift-Aware Weighted Continual Ensemble (DAWCE). After correcting preprocessing leakage, ROSS still selects 2009 by validation AUC but does not outperform the fixed 2012 boundary in test F1. DAWCE improves over fixed equal weighting in the diagnostic split analysis; however, a fair ablation shows that the New-under single model (AUC = 0.8498; F1 = 0.2143) outperforms DAWCE-F1 (AUC = 0.8336; F1 = 0.1886). A leakage-safe rolling walk-forward evaluation over ten row-disjoint annual test batches further shows pooled AUC/F1 of 0.8221/0.3283 for AdaptiveChoice versus 0.8403/0.3287 for fixed New-under; the difference is not significant after Holm correction. Because firms recur across years, these annual batches are not entity-level independent.
 
 The results show that validation-guided temporal boundary selection and group weighting provide a reproducible approach for improving equal-weight ensembles. They also establish an important boundary condition: when one recent-period model is clearly dominant, selecting that model can be preferable to enforcing an ensemble.
 
@@ -89,7 +89,7 @@ The results show that validation-guided temporal boundary selection and group we
 
 上述分析揭示一個在現有文獻中尚未被系統性解決的設計問題：**在批次年度資料、類別高度不平衡、且初始期本身不穩定的情境下，如何自動且客觀地決定 Old/New 模型池的分界點，並以驗證集引導的方式確定最佳的 New-dominant 加權比重？**
 
-本研究以美國破產預測資料（1999–2018）為主要實驗場域，提出 **ROSS（Retrospective Optimal Split Selection）**與 **DAWCE（Drift-Aware Weighted Continual Ensemble）**框架，將上述兩個長期依賴人工經驗或固定假設的設計決策，轉化為以驗證集效能為目標函數的最佳化問題，並透過四項系統性研究（Study 1–4）逐步建立比較基準、探討特徵選取的效益與穩定性、驗證 DAWCE 的統計顯著性，以及分析成本敏感決策下的模型選擇彈性。
+本研究以美國破產預測資料（1999–2018）為主要實驗場域，提出 **ROSS（Retrospective Optimal Split Selection）**與 **DAWCE（Drift-Aware Weighted Continual Ensemble）**框架，將上述兩個長期依賴人工經驗或固定假設的設計決策，轉化為以驗證集效能為目標函數的最佳化問題，並透過四項系統性研究（Study 1–4）逐步建立比較基準、探討特徵選取的效益與穩定性、評估 DAWCE 的適用邊界，以及分析條件錯誤權重下的模型排序彈性。
 
 ---
 
@@ -99,7 +99,7 @@ The results show that validation-guided temporal boundary selection and group we
 
 **Study 1 — 建立方法比較基準**
 
-目的：在時序切割設定下，系統性比較 Re-training、Fine-tuning、Old/New 模型池靜態集成（2–6 模型組合）、DES（KNORA-E 風格）與 DCS，以跨年份切割的 Wilcoxon 檢定確立各方法的統計顯著性排序。
+目的：在時序切割設定下，系統性比較 Re-training、Fine-tuning、Old/New 模型池靜態集成（2–6 模型組合）、DES（KNORA-E 風格）與 DCS，以跨年份切割描述方法排序與敏感度，並以 rolling 評估補強時序證據。
 
 - **H₁₁（New vs. Old）**：$H_0$：New-side 模型的跨切割 AUC 中位數 = Old-side 模型；$H_a$：New-side 顯著更高。
 - **H₁₂（Static vs. DES）**：$H_0$：最佳靜態集成的跨切割 AUC 中位數 = DES；$H_a$：靜態集成顯著更高。
@@ -113,16 +113,16 @@ The results show that validation-guided temporal boundary selection and group we
 
 **Study 3 — Drift-Aware 加權集成（DAWCE）**
 
-目的：提出 ROSS 邊界選擇流程，自動以驗證集決定最佳 Old/New 邊界；以網格搜尋確定最佳 New-dominant 權重；以多切割 Wilcoxon 檢定確認統計顯著性。
+目的：提出 ROSS 邊界選擇流程，自動以驗證集決定最佳 Old/New 邊界；以網格搜尋確定最佳 New-dominant 權重；以多切割與 rolling 分析評估效果方向與適用邊界。
 
 - **H₃₁（加權效益）**：$H_0$：Validation-selected weighting 跨切割 AUC 中位數 = 等權集成；$H_a$：選擇性加權顯著更高。
 - **H₃₂（ROSS vs. Fixed）**：ROSS 選出的邊界在測試集效能上不低於人工設定之固定邊界。
 
 **Study 4 — 穩健性與成本敏感分析**
 
-目的：以 10-seed raw Wilcoxon 補強重現性；以 Type2:Type1 成本比曲線說明實務決策下的模型選擇策略。
+目的：以多種子實驗診斷亂數敏感度，並以 Type2:Type1 條件錯誤分數說明模型排序如何隨權重改變；現有 10-seed 結果尚未對齊主 XGBoost rolling protocol，因此不作確認性重現證據。
 
-- **H₄₁（重現性）**：主要比較結論在 10 個不同隨機種子下均達統計顯著（p < 0.05）。
+- **H₄₁（重現性）**：主 XGBoost 實驗流程的主要比較結論在不同隨機種子下具有一致方向；現有 LightGBM/block-CV 10-seed 結果僅作輔助檢查。
 
 ---
 
@@ -138,7 +138,7 @@ The results show that validation-guided temporal boundary selection and group we
 ## 1.4 研究範圍與限制
 
 - **資料集**：以美國破產預測（1999–2018）為主要實驗資料；Medical（UCI Diabetes 130）與 Stock 資料集用於輔助驗證，主要結論以破產資料為準。
-- **切割方式**：破產資料採時序年份切割，前處理（標準化、特徵選取）僅在 Old-period 擬合，再套用至 New、Validation 與 Test，嚴格避免測試集資訊洩漏。
+- **切割方式**：破產資料採時序年份切割。Study 3 確認性與 rolling 流程的補值、標準化及特徵選取只以 fitting data 擬合；部分既有 Phase 4/5 路徑仍有各分割自行估計補值平均數的轉導式限制。原始 bankruptcy 資料目前無缺失值，因此該限制不改變本次數值，但不可概括為全專案皆嚴格 inductive。
 - **Fine-tuning 定義**：本研究之 Fine-tuning 為「先在歷史資料訓練，再以新資料做第二階段訓練」，未強制使用降低學習率的古典微調形式。
 - **泛化限制**：目前主要統計結論來自 Bankruptcy 資料集；模型設計的泛化能力尚待跨市場、跨產業或跨國資料進一步驗證。
 
@@ -251,7 +251,7 @@ $$\text{PHT}_t = \sum_{i=1}^{t}(x_i - \bar{x} + \delta) > \lambda$$
 
 ### 2.3.5 KNORA-E 與動態集成選擇（DES）
 
-**KNORA-E（Ko et al., 2008）** 在每個測試樣本的 k-NN 鄰域上，只保留對鄰域中所有樣本均預測正確的分類器參與投票，是 DES 的典型代表。然而，在跨越概念漂移的時序切割下，以歷史樣本構建的 DSEL 局部鄰域可能同時包含「漂移前」與「漂移後」樣本，使鄰域相似度的參考性降低（Cruz et al., 2018）——本研究的實驗（Study 1）以 p < 0.001 統計顯著性確認靜態集成優於 DES 與 DCS，驗證了這一假說。
+**KNORA-E（Ko et al., 2008）** 在每個測試樣本的 k-NN 鄰域上，只保留對鄰域中所有樣本均預測正確的分類器參與投票，是 DES 的典型代表。然而，在跨越概念漂移的時序切割下，以歷史樣本構建的 DSEL 局部鄰域可能同時包含「漂移前」與「漂移後」樣本，使鄰域相似度的參考性降低（Cruz et al., 2018）。本研究的 test-selected static oracle 高於特定 DES/DCS 實作，僅提供符合此機制的探索性線索；因靜態端為 oracle，且舊版 DSEL 與模型訓練資料重疊，此結果不能證明一般性的靜態集成優勢。
 
 ---
 
@@ -327,10 +327,10 @@ Wang 等人（2013）指出，在資料串流中同時存在類別不平衡與�
 現有方法要麼無顯式邊界概念（AWE、DWM、OAUE、ARF），要麼依賴人工設定（DES）或即時偵測器（ADWIN）。即時偵測器在高不平衡批次資料上的失效已有記錄（Brzezinski & Stefanowski, 2014；本研究 §4.4.0 實驗佐證），而人工設定本質上是對「漂移發生年份」的主觀假設，缺乏可重現性。**ROSS 將邊界選擇重新定義為驗證集效能最大化問題**，提供客觀且可重現的決策機制。
 
 **缺口 2：群組層級加權**
-所有現有方法均以「個別模型」為加權粒度，對 Old/New 兩組模型的群體行為無法直接施加偏好。當「新期規律顯著優於舊期」時（本研究 Study 1 以 p < 0.001 確認），個別模型的加權分散效果有限——AWE 在實驗中的 Old/New 比例實際仍接近均等（Old 各模型均值 0.142，New 各模型均值 0.192）。**DAWCE 以群組為單位**，允許選擇 w\_new = 1.0 的極端配置，在新期規律明顯占優的情境下反映更精確的知識優先性。
+本文比較範圍內的逐模型加權方法無法直接對 Old/New 兩組模型施加群組偏好。當新期模型在本資料上呈現較佳表現時，個別模型的加權分散效果有限——AWE-inspired 診斷中的 Old/New 單模型權重均值分別為 0.142 與 0.192。**DAWCE 以群組為單位**，允許選擇 w\_new = 1.0 的極端配置，在新期規律占優的情境下表達知識優先性。
 
 **缺口 3：不平衡與漂移的聯合設計**
-除 DAWCE 外，無任何上述方法在演算法層面同時處理概念漂移與類別不平衡。Wang 等人（2013）已理論性地指出在串流不平衡資料中，標準取樣策略可能因少數類漂移速度快於多數類而失效；本研究透過三種取樣策略的模型池設計，在訓練階段即將多樣性取樣納入集成基礎，而非事後修正。
+在本文納入的比較方法中，對「明確 Old/New 群組權重」與「多種不平衡取樣模型池」的聯合設計仍有限。Wang 等人（2013）指出在串流不平衡資料中，標準取樣策略可能因少數類漂移速度快於多數類而失效；本研究透過三種取樣策略的模型池設計，在訓練階段即將多樣性取樣納入集成基礎。
 
 DAWCE 在「批次年度資料、離線訓練、類別不平衡、有明確驗證集可用」的場景下，以資料驅動的方式同時解決上述三個缺口，更契合金融風險預測的實務限制（年度財報批次公告、標籤有延遲、不平衡率極高）。
 
@@ -348,7 +348,7 @@ DAWCE 在「批次年度資料、離線訓練、類別不平衡、有明確驗�
 
 ### 3.1.1 主要資料集：美國破產預測（1999–2018）
 
-本研究以美國 1999–2018 年的公司財務資料為主要實驗對象，資料來源為公開的 American Companies Bankruptcy Prediction 資料集（專案原始檔：`data/raw/bankruptcy/american_bankruptcy_dataset.csv`；公開來源：`https://github.com/sowide/bankruptcy_dataset`，亦可由 Kaggle 取得），包含 78,682 筆公司年度觀測值，破產率約 6.63%。原始欄位包括公司識別碼、會計年度 `fyear`、破產狀態 `status_label`、18 個財務特徵（X1–X18）及產業分類欄位；模型訓練時移除 `company_name`、`status_label`、`Division` 與 `fyear`，並將 `failed` 編碼為正類 1。時序切割採用 `fyear` 進行如下劃分：
+本研究以美國 1999–2018 年的公司財務資料為主要實驗對象，資料來源為公開的 American Companies Bankruptcy Prediction 資料集（專案原始檔：`data/raw/bankruptcy/american_bankruptcy_dataset.csv`；公開來源：`https://github.com/sowide/bankruptcy_dataset`，亦可由 Kaggle 取得），包含 78,682 筆公司年度觀測值、8,971 家公司，破產 5,220 筆（6.63%）。資料無缺失值、無無限值，且無重複 company-year。原始欄位包括公司識別碼、會計年度 `fyear`、破產狀態 `status_label`、18 個財務特徵（X1–X18）及產業分類欄位；模型訓練時移除 `company_name`、`status_label`、`Division` 與 `fyear`，並將 `failed` 編碼為正類 1。時序切割採用 `fyear` 進行如下劃分：
 
 | 資料期別 | 年份範圍 | 用途 |
 |---------|---------|------|
@@ -367,6 +367,8 @@ Study 3 中，ROSS 邊界搜尋使用以下延伸切割：
 
 其中 b 為候選 drift start year（範圍：2003–2011）。
 
+本資料屬公司年度 panel data：1999–2014 訓練期有 8,503 家公司，2015–2018 測試期有 3,700 家，其中 3,232 家（87.35%）曾出現在訓練期；且同一公司的 `status_label` 在資料內不隨年度改變。雖然模型移除公司識別碼而避免直接 ID 洩漏，但目前評估代表「已見與未見公司混合的未來年度辨識」，不是完全未見公司的 entity-holdout 泛化；公司跨年重複亦使年度觀測可能具有群聚相關性。
+
 ### 3.1.2 輔助資料集
 
 - **Medical（UCI Diabetes 130）**：約 11% 再入院率，用於輔助驗證集成設計在中度不平衡場域的適用性。
@@ -374,7 +376,7 @@ Study 3 中，ROSS 邊界搜尋使用以下延伸切割：
 
 ### 3.1.3 無資料洩漏原則
 
-模型訓練、邊界選擇、權重搜尋與分類閾值選擇均不使用 Test 標籤；Validation period 專門用於邊界、權重與閾值選擇，Test period 僅用於最終評估。特徵選取器與 StandardScaler 以對應訓練期資料擬合，再套用至後續時期。既有 Phase 4/5 實作的缺失值補值對各資料分割使用自身欄位平均數，仍屬轉導式前處理限制；新增 Rolling AdaptiveChoice 已改為僅以訓練歷史擬合補值器與 StandardScaler（見 §3.9 與 §5.3.1）。
+模型訓練、邊界選擇、權重搜尋與分類閾值選擇均不使用 Test 標籤；Validation period 專門用於邊界、權重與閾值選擇，Test period 僅用於最終評估。所有 Study 3 確認性實驗均先切出 fitting、Validation 與 Test，再僅以 fitting data 擬合缺失值補值、StandardScaler 與特徵選取器，最後套用至 Validation 與 Test，避免前處理階段看見未來資料。
 
 ---
 
@@ -420,7 +422,7 @@ Old-side 與 New-side 各以三種取樣策略訓練三個基學習器（基學�
 
 **DCS（動態分類器選擇）**：與 DES 相同的鄰域搜尋流程，但最終僅選擇在鄰域中表現最佳的**單一**模型進行預測，而非多個模型的集成。
 
-兩種方法皆以 historical + new 合併資料作為 DSEL，以 Old/New 六個模型為候選池，評估僅在 Test 集上進行。
+兩種方法皆以 historical + new 合併資料作為 DSEL，以 Old/New 六個模型為候選池，評估僅在 Test 集上進行。此舊版實作的 DSEL 與候選模型訓練資料重疊，可能使局部 competence 估計偏樂觀；因此其結果僅代表本研究特定實作，不作為 DES/DCS 一般能力的上限判定。
 
 ---
 
@@ -585,13 +587,13 @@ DAWCE 的核心主張是：在非平穩資料中，各時期模型池不應被�
 ## 4.1 實驗設定
 
 - **基學習器**：主要實驗採 XGBoost（Chen & Guestrin, 2016）。設定為 `objective=binary:logistic`、`eval_metric=auc`、`tree_method=hist`、`seed=42`，其餘使用套件預設值；各模型先以對應取樣策略處理訓練集，再使用相同模型設定訓練，以確保跨切割比較公平。
-- **取樣參數**：Undersampling 使用 TomekLinks（`sampling_strategy=auto`）；Oversampling 使用 ADASYN（`n_neighbors=5`、`random_state=42`）；Hybrid 使用 SMOTEENN（SMOTE `k_neighbors=5`、`random_state=42`；ENN `n_neighbors=3`、`kind_sel=all`）。
+- **取樣參數**：產生既有主要結果時，Undersampling 使用 TomekLinks；Oversampling 使用 ADASYN（`n_neighbors=5`、`random_state=42`）；Hybrid 呼叫 `SMOTEENN(random_state=42)`，內部元件依當時安裝版 imbalanced-learn 預設。現行程式已把 `sampling_config.yaml` 的 SMOTE（`k_neighbors=5`）與 ENN（`n_neighbors=3`、`kind_sel=all`）明確傳入；因此新舊結果必須以 manifest/commit 區分，且主結果在採用新設定後需重新產生才可直接比較。
 - **分類閾值**：在 Validation 資料上枚舉 0.05–0.95（步長 0.01），以 F1 最大者作為最終分類閾值；Test 僅套用已選定閾值。
-- **評估指標**：AUC-ROC、F1-score、Recall、Precision、Type 1 Error（FPR）、Type 2 Error（FNR）。評估集一律為 Test period（2015–2018），未參與任何訓練、驗證或超參數搜尋流程，確保 leakage-free 評估。準確率（Accuracy）不作為主要指標，原因為測試期破產率僅 2.3%，全預測存活即可達 97.7% 準確率，無評估意義（He & Garcia, 2009）。
-- **統計檢定**：方法比較採 paired Wilcoxon signed-rank test（雙尾）；既有實驗以 15 個年份切割作為 paired samples，Rolling AdaptiveChoice 則以 10 個互不重疊年度 Test 批次作為 paired samples，並以 Holm 方法校正多重比較。顯著性水準為 $\alpha = 0.05$。
+- **評估指標**：AUC-ROC、F1-score、Recall、Precision、Type 1 Error（FPR）、Type 2 Error（FNR）；程式亦支援 PR-AUC，但既有主要結果尚未一致保存與呈現，投稿前應補報。Test period 不參與模型、邊界、權重或閾值選擇；惟前處理的歷史路徑限制另見下一點。準確率（Accuracy）不作為主要指標，原因為測試期破產率僅 2.3%，全預測存活即可達 97.7% 準確率，無評估意義（He & Garcia, 2009）。
+- **統計檢定**：方法比較採 paired Wilcoxon signed-rank test（雙尾）；既有 15 個年份切割多數共享測試期且訓練窗巢狀重疊，只作診斷性敏感度分析。Rolling AdaptiveChoice 以 10 個資料列互不重疊的年度 Test 批次比較並作 Holm 校正，但同一公司可跨年度出現，因此仍可能有時間與公司群聚相關性。顯著性水準為 $\alpha = 0.05$。
 - **資訊洩漏防護**：模型選擇與主要統計推論不使用 Test 標籤。既有 Phase 4/5 的缺失值補值仍存在使用各分割自身特徵平均數的轉導式限制；新增 rolling 實驗則將補值器與 StandardScaler 僅在截至 $t-2$ 的訓練歷史上擬合，屬完全 inductive 的 walk-forward 評估。
-- **多種子驗證（Study 4）**：以 10 個隨機種子重複執行主要方法比較，以 raw per-seed Wilcoxon 檢定補強重現性，確認結論不依賴特定亂數初始化。
-- **軟體環境**：主要結果由 Python 實作產生；目前重現環境為 Python 3.14.0、NumPy 2.4.2、pandas 3.0.1、scikit-learn 1.8.0、SciPy 1.17.1、XGBoost 3.2.0 與 imbalanced-learn 0.14.1。完整依賴範圍記錄於專案 `requirements.txt`。
+- **多種子驗證（Study 4）**：現有 10-seed 檔案來自 LightGBM/block-CV 輔助流程，不是主要 XGBoost Study 1/3 的完整重跑；產生舊結果時 DES 未接收外部 seed。程式已修正，但舊結果尚未重跑，故不可用來確認所有主要結論均不依賴亂數初始化。
+- **軟體環境**：主要結果由 Python 實作產生；本次審查環境為 Python 3.14.0、NumPy 2.4.0、pandas 2.3.3、scikit-learn 1.8.0、SciPy 1.17.1、XGBoost 3.2.0 與 imbalanced-learn 0.14.1。完整依賴範圍記錄於專案 `requirements.txt`。
 
 ---
 
@@ -636,19 +638,21 @@ DAWCE 的核心主張是：在非平穩資料中，各時期模型池不應被�
 | — | DES > DCS | AUC | 0.8445 | 0.8160 | +0.0285 | 0.000061 | 1.00 | ✓ 大效果 |
 | — | DES > DCS | F1 | 0.2268 | 0.1897 | +0.0371 | 0.008362 | 0.60 | ✓ 中效果 |
 
-**H₁₁ 驗證**：New-side 模型在 AUC、F1、Recall 上均以 $p < 0.001$、效果量 $|r| \geq 0.87$ 顯著優於 Old-side 對應模型，拒絕虛無假設。效果量達「大效果」水準（|r| > 0.5），說明此差異在實務上具備高度顯著性，而非僅統計上顯著。這一結果支持在測試期（新時期）New models 的預測資訊更具參考性的核心假設。
+**H₁₁ 診斷**：New-side 模型在 AUC、F1、Recall 上皆呈一致優勢，原始 $p < 0.001$ 且 rank-biserial $|r| \geq 0.87$。但 15 個切割共享測試資料，不能視為獨立複驗；因此本文將其解讀為效果方向與切割敏感度證據，而非僅憑 p-value 拒絕虛無假設。rolling 中 `New_under` 的領先方向提供額外支持。
 
 **H₁₂ 驗證與限制**：靜態方法的最佳點在數值上高於 DES 與 DCS；然而，`Static oracle best` 是在每個切割上依 Test 指標事後選出最佳靜態配置，屬於 oracle upper bound，而非可部署的 validation-selected 方法。因此此比較僅支持「候選靜態模型中存在高於 DES/DCS 的配置」，不可解讀為某個預先指定的靜態方法必然顯著優於 DES/DCS。
 
-### 4.2.3 多種子重現性（10-seed Wilcoxon）
+### 4.2.3 多種子輔助敏感度檢查（10-seed Wilcoxon）
 
-10-seed raw Wilcoxon 結果確認上述比較在不同隨機種子下的重現性：
+現有 10-seed raw Wilcoxon 檔案來自 LightGBM/block-CV 輔助流程，並非主要 XGBoost Study 1/3 流程的完整重跑；此外，產生這批舊檔案時 DES 路徑未把外部 seed 傳入模型池，DES 結果在十個 seeds 間相同。程式目前已修正 seed 傳遞，但下表在重新執行前仍只能顯示部分 LightGBM 配置的歷史方向，不能確認全部主要結論的跨種子重現性：
 
 | 比較 | AUC p-value | F1 p-value |
 |------|-------------|------------|
 | ensemble\_old\_3 vs retrain | 0.0020 | 0.0020 |
 | ensemble\_all\_6 vs retrain | 0.0020 | 0.0020 |
 | ensemble\_all\_6 vs DES\_KNORAE | — | 0.0020 |
+
+未列於上表的 DES vs retrain AUC 比較為 $p=0.1934$，也顯示「所有主要比較皆顯著」並不成立。投稿前需以相同 XGBoost 主流程、相同時序協定及完整 seed 傳遞重新執行多種子實驗。
 
 ---
 
@@ -663,13 +667,13 @@ DAWCE 的核心主張是：在非平穩資料中，各時期模型池不應被�
 | New\_3 + MI r80 > no\_fs | AUC | 0.8537 | 0.8490 | 0.000305 | ✓ |
 | All\_6 + MI r80 > no\_fs | F1（方向性） | 0.1671 | 0.1602 | 0.094604 | — |
 
-MI r80 對 New\_3 集成的 AUC 有統計顯著提升；對 All\_6 的 F1 則有正向趨勢但雙尾未達顯著水準。綜合結果顯示，特徵選取對部分集成組合與特定指標（AUC）有明確效益，但效果因組合與指標而異，不宜過度概化。
+MI r80 對 New\_3 集成的 AUC 呈現正向差異，原始 p-value 為 0.000305；對 All\_6 的 F1 則僅有正向趨勢。因 15 個切割相依，這些結果作診斷性證據；它們顯示特徵選取效果可能因模型組合與指標而異，不宜過度概化。
 
 ### 4.3.2 特徵穩定性分析
 
 **表 4-4　r80 vs r50 的跨年份特徵穩定性（Jaccard 均值）**
 
-| 資料期 | 方法 | r80 Jaccard | r50 Jaccard | Two-sided p |
+| 資料期 | 方法 | r80 Jaccard | r50 Jaccard | 原始 two-sided p（描述性） |
 |-------|------|-------------|-------------|-------------|
 | Old | mutual\_info | 0.7722 | 0.4295 | < 0.000001 |
 | Old | SHAP | 0.8260 | 0.6672 | < 0.000001 |
@@ -679,7 +683,7 @@ MI r80 對 New\_3 集成的 AUC 有統計顯著提升；對 All\_6 的 F1 則有
 | New | RFE | 0.7416 | 0.5366 | < 0.000001 |
 | Old/New joint | mutual\_info | 0.9571 | 0.8800 | 0.00000002 |
 
-r80 在各方法與各資料期下，Jaccard 穩定性均顯著高於 r50（p < 0.000001），結果高度一致。在 SHAP r80 下，Old period 的特徵集跨年份 Jaccard 均值達 0.826；相較之下，r50 僅 0.667，差距達 0.159 個 Jaccard 單位。這說明在時序非平穩資料中，過於激進的特徵壓縮（r50）會導致特徵選取結果對年份切割更敏感，降低跨期模型的可解釋性與一致性。
+在表列的 Old、New 與 mutual-info joint 組合中，r80 的 Jaccard 均值皆高於 r50。在 SHAP 的 Old period，r80/r50 均值為 0.826/0.667，描述性差距為 0.159。原程式以 15 個 split 形成的 105 個兩兩 Jaccard 差作 Wilcoxon；每個 split 重複出現在 14 個 pair，違反獨立分析單位的要求，因此表中極小 p-value 僅保留作原始分析紀錄，不用於拒絕 H₂₂ 的確認性推論。此結果支持「r80 較穩定」的描述性線索，但尚需 split-level permutation、cluster bootstrap 或獨立 temporal resampling 驗證。
 
 ---
 
@@ -708,7 +712,7 @@ r80 在各方法與各資料期下，Jaccard 穩定性均顯著高於 r50（p < 
 
 PHT 設計為偵測「信號上升（性能惡化）」，但 burn-in 期（1999–2004）正值 .com 泡沫衰退，初始模型的 hold-out AUC 僅 0.61（1-AUC = 0.39），屬於偏低的基準。後續 2005–2007 年模型在更正常的市場中 AUC 反升至 0.73，信號值（0.27）低於基準（0.39），PHT 累積量無法建立。
 
-**核心發現**：傳統漂移偵測器隱含「模型從穩定好基準逐漸惡化」的假設。破產資料的實際規律是——沒有一個全期穩定的好基準，因為 1999–2004 本身就是異常經濟環境。ROSS 的設計跳過「偵測到漂移點」的前提假設，直接以 Validation period 的集成效能作為邊界選擇依據，因此更適合此類非平穩且初始期本身不穩定的資料場景。
+**核心發現**：傳統漂移偵測器隱含「模型從穩定好基準逐漸惡化」的假設。破產資料的實際規律是——沒有一個全期穩定的好基準，因為 1999–2004 本身就是異常經濟環境。ROSS 的設計跳過「偵測到漂移點」的前提假設，直接以 Validation period 的集成效能作為邊界選擇依據，提供不依賴穩定初始基準的可重現流程；但此流程不保證所選邊界在 Test 上優於固定邊界。
 
 ### 4.4.1 ROSS 邊界選擇結果
 
@@ -734,12 +738,12 @@ PHT 設計為偵測「信號上升（性能惡化）」，但 burn-in 期（1999
 
 | 設定 | w\_old | w\_new | AUC | F1 | Recall | Precision |
 |------|--------|--------|-----|----|--------|-----------|
-| Fixed\_2012（等權，無 FS） | 0.50 | 0.50 | 0.8252 | 0.1916 | — | 0.1174 |
-| ValROSS\_2009（無 FS，w\_new=0.95） | 0.05 | 0.95 | 0.8341 | 0.1963 | — | — |
-| ValROSS\_2009（FS，w\_new=0.95） | 0.05 | 0.95 | **0.8367** | **0.2432** | 0.3868 | **0.1773** |
-| Delta（ValROSS + FS vs Fixed equal） | — | — | +0.0114 | **+0.0516** | — | **+0.0599** |
+| Fixed\_2012（FS，w\_new=0.50） | 0.50 | 0.50 | 0.8127 | 0.2007 | 0.4077 | 0.1331 |
+| **Fixed\_2012（無 FS，w\_new=0.95）** | 0.05 | 0.95 | 0.8409 | **0.2039** | 0.5436 | 0.1255 |
+| ValROSS\_2009（FS，w\_new=0.80） | 0.20 | 0.80 | 0.8135 | 0.2002 | 0.3902 | **0.1346** |
+| ValROSS\_2009（無 FS，w\_new=0.85） | 0.15 | 0.85 | **0.8418** | 0.1947 | **0.5679** | 0.1175 |
 
-在本節主要分析協定中，最佳配置（ValROSS 2009 + FS + w\_new = 0.95）相較固定等權基準，F1 提升 0.052，Precision 提升 0.060，顯示 drift-aware 邊界選擇與 New-dominant 加權的組合效益。此協定從 Old 與 New 訓練窗各保留末段資料形成內部 Validation；下一節的探索性診斷改用明示的 2012–2014 權重評估窗，且存在與 New 訓練窗重疊，因此兩節數值不可直接混合排序。
+修正前處理資料洩漏後，最高 Test F1 為 Fixed 2012 + no-FS + w\_new = 0.95（F1 = 0.2039）；ValROSS 2009 + no-FS 雖具有最高 AUC（0.8418）與 Recall（0.5679），但 F1 僅 0.1947。因此 ROSS 仍能以 Validation 客觀選出 2009 邊界，但本實驗不支持其 Test F1 優於固定 2012 邊界。四種 validation-selected 配置相較固定等權的 F1 仍皆提升 0.0087–0.0179，支持加權而非等權平均。
 
 ### 4.4.3 AWE-inspired 個別權重診斷實驗
 
@@ -769,7 +773,7 @@ PHT 設計為偵測「信號上升（性能惡化）」，但 burn-in 期（1999
 
 2. **AWE-inspired 在此診斷中高於 Equal-weight**。其 F1 在各配置下均高於 Equal-weight（+0.003 至 +0.033），顯示逐模型 validation-AUC 加權具有可進一步驗證的訊號。
 
-3. **DAWCE 的 w\_new = 1.0 現象**：在所有配置下，DAWCE 的網格搜尋均選出 w\_new = 1.0（完全 New-dominant），這與 Study 1 的發現一致——New-side 模型池在測試期的預測力顯著優於 Old-side，且 ROSS\_2009 的邊界選擇使 Old 期（1999–2008）與新期（2009–2014）之間的分布差距更為明確。
+3. **DAWCE 的 w\_new = 1.0 現象**：在所有配置下，DAWCE 的網格搜尋均選出 w\_new = 1.0（完全 New-dominant），與 Study 1 中 New-side 模型占優的方向一致；這也顯示在該診斷協定下，Old 群組未提供額外的 Validation 效益。
 
 4. **DAWCE vs AWE-inspired 的機制差異**：AWE-inspired 對每個模型獨立加權，其 Old 側與 New 側各模型的 AUC 相近（差異約 0.03–0.05），導致加權後 Old/New 的相對比例仍接近均等。DAWCE 以群組為單位，允許直接選擇「完全忽略 Old 群組」的極端配置。
 
@@ -813,19 +817,18 @@ PHT 設計為偵測「信號上升（性能惡化）」，但 burn-in 期（1999
 
 | FS 設定 | 指標 | Selected 均值 | Equal 均值 | Mean Diff | N Selected Better | Two-sided p | 效果量 r |
 |--------|------|--------------|-----------|-----------|-----------------|-------------|---------|
-| 有 FS | AUC | 0.8154 | 0.7866 | +0.0287 | 13/15 | **0.000610** | 0.87 |
-| 有 FS | F1 | 0.1794 | 0.1507 | +0.0288 | 12/15 | **0.000854** | 0.80 |
-| 有 FS | Precision | 0.1109 | 0.0904 | +0.0205 | 13/15 | **0.001160** | 0.87 |
-| 有 FS | Recall | 0.4950 | 0.4720 | +0.0230 | 10/15 | 0.277 | 0.33 |
-| 無 FS | AUC | 0.8341 | 0.8095 | +0.0246 | 14/15 | **0.000122** | 0.93 |
-| 無 FS | F1 | 0.1886 | 0.1625 | +0.0262 | 9/15 | **0.035339** | 0.47 |
-| 無 FS | Recall | 0.5317 | 0.5182 | +0.0135 | 8/15 | 0.514 | 0.20 |
+| 有 FS | AUC | 0.8101 | 0.7843 | +0.0258 | 12/15 | **0.004272** | — |
+| 有 FS | F1 | 0.1781 | 0.1482 | +0.0299 | 10/15 | **0.008362** | — |
+| 有 FS | Precision | 0.1113 | 0.0900 | +0.0213 | 11/15 | **0.006714** | — |
+| 有 FS | Recall | 0.4548 | 0.4455 | +0.0093 | 10/15 | 0.410104 | — |
+| 無 FS | AUC | 0.8336 | 0.8086 | +0.0250 | 15/15 | **0.000061** | — |
+| 無 FS | F1 | 0.1886 | 0.1611 | +0.0275 | 13/15 | **0.002014** | — |
+| 無 FS | Precision | 0.1152 | 0.0966 | +0.0186 | 12/15 | **0.006714** | — |
+| 無 FS | Recall | 0.5405 | 0.5092 | +0.0314 | 11/15 | 0.105303 | — |
 
-**H₃₁ 驗證**：在 AUC 與 F1 上，無論是否使用特徵選取，validation-selected weighting 均以 $p < 0.05$ 顯著優於等權集成，拒絕虛無假設。AUC 效果量（有 FS: $r = 0.87$；無 FS: $r = 0.93$）均達大效果水準。
+**H₃₁ 診斷**：在 AUC、F1 與 Precision 上，validation-selected weighting 的 15-split 原始 p-value 均小於 0.05；Recall 未達顯著（有 FS $p=0.410104$；無 FS $p=0.105303$）。然而這些切割共享測試期且訓練窗巢狀重疊，因此不能作 15 次獨立複驗。確認性較強的 rolling 結果僅支持 AdaptiveChoice 在 AUC 上優於 Equal6，未支持其優於 `New_under`。
 
-Recall 未達顯著（$p > 0.27$），反映 DAWCE 透過提升預測閾值改善 Precision/F1，以一定程度的 Recall 換取更佳的整體 F1——此取捨在 Precision-sensitive 的金融應用場景（需控制誤報率）中屬合理設計，實務上信貸機構通常更難以承受高誤報帶來的資本損耗。
-
-**跨切割一致性**：AUC 在 13–14 個切割（87–93%）下 selected weighting 優於等權，F1 在 9–12 個切割（60–80%）下優於等權，顯示此優勢非依賴特定年份切割的偶然結果，而是具備跨時期系統性效益，確認 H₃₁ 的強健性。
+**跨切割一致性**：無 FS 的 AUC 在 15/15 個切割下 selected weighting 優於等權，F1 在 13/15 個切割下較佳；有 FS 的 AUC/F1 則分別為 12/15 與 10/15。這提供方向一致的敏感度證據，但不單獨確認 H₃₁ 的統計強健性。
 
 ### 4.4.6 與強單模型的公平消融比較
 
@@ -835,27 +838,28 @@ Recall 未達顯著（$p > 0.27$），反映 DAWCE 透過提升預測閾值改�
 
 | FS 設定 | 方法 | Test AUC | Test F1 | Test Recall | Test Precision | 平均 w\_new |
 |--------|------|----------|---------|-------------|----------------|--------------|
-| 無 FS | **New\_under** | **0.8473** | **0.2217** | 0.5280 | **0.1420** | 1.000 |
-| 無 FS | AdaptiveChoice-AUC | 0.8453 | 0.1995 | **0.5510** | 0.1228 | — |
-| 無 FS | ValBestSingle-AUC | 0.8423 | 0.2055 | 0.5429 | 0.1281 | — |
-| 無 FS | DAWCE-AUC | 0.8367 | 0.1880 | 0.5347 | 0.1150 | 0.963 |
-| 無 FS | New3 mean | 0.8356 | 0.1850 | 0.5454 | 0.1124 | 1.000 |
-| 無 FS | DAWCE-F1 | 0.8341 | 0.1886 | 0.5317 | 0.1155 | 0.843 |
-| 無 FS | Equal6 | 0.8095 | 0.1625 | 0.5182 | 0.0976 | 0.500 |
-| 有 FS | **New\_under** | **0.8337** | **0.1941** | **0.5059** | **0.1217** | 1.000 |
-| 有 FS | AdaptiveChoice-AUC | 0.8336 | 0.1938 | 0.5082 | 0.1213 | — |
-| 有 FS | DAWCE-AUC | 0.8203 | 0.1825 | 0.4948 | 0.1134 | 0.950 |
-| 有 FS | DAWCE-F1 | 0.8154 | 0.1794 | 0.4950 | 0.1109 | 0.820 |
+| 無 FS | **New\_under** | **0.8498** | **0.2143** | 0.5422 | **0.1354** | 1.000 |
+| 無 FS | AdaptiveChoice-AUC | 0.8481 | 0.2028 | 0.5573 | 0.1248 | 0.950 |
+| 無 FS | ValBestSingle-AUC | 0.8470 | 0.2051 | **0.5591** | 0.1267 | — |
+| 無 FS | DAWCE-AUC | 0.8361 | 0.1878 | 0.5447 | 0.1144 | 0.967 |
+| 無 FS | New3 mean | 0.8349 | 0.1854 | 0.5512 | 0.1122 | 1.000 |
+| 無 FS | DAWCE-F1 | 0.8336 | 0.1886 | 0.5405 | 0.1152 | 0.853 |
+| 無 FS | Equal6 | 0.8086 | 0.1611 | 0.5092 | 0.0966 | 0.500 |
+| 有 FS | **New\_under** | **0.8310** | **0.2021** | 0.4708 | **0.1295** | 1.000 |
+| 有 FS | AdaptiveChoice-AUC | 0.8285 | 0.1891 | **0.4771** | 0.1187 | 0.825 |
+| 有 FS | DAWCE-AUC | 0.8161 | 0.1800 | 0.4618 | 0.1127 | 0.907 |
+| 有 FS | DAWCE-F1 | 0.8101 | 0.1781 | 0.4548 | 0.1113 | 0.780 |
+| 有 FS | Equal6 | 0.7843 | 0.1482 | 0.4455 | 0.0900 | 0.500 |
 
-無 FS 下，DAWCE-AUC 相較 `New_under` 的 AUC/F1 分別低 0.0107/0.0338（two-sided $p=0.001526/0.000854$）；DAWCE-F1 則低 0.0132/0.0331（$p=0.000305/0.001160$）。有 FS 時方向一致。`ValBestSingle-AUC` 在 15 個切割中有 12 次選到 `New_under`，其 AUC 與 `New_under` 的差異未達顯著（$p=0.108809$）。
+無 FS 下，DAWCE-AUC 相較 `New_under` 的 AUC/F1 分別低 0.0137/0.0265（two-sided $p=0.000061/0.000427$）；DAWCE-F1 則低 0.0162/0.0257（$p=0.000061/0.000427$）。有 FS 時方向一致。`ValBestSingle-AUC` 的 AUC 與 `New_under` 差異未達顯著（$p=0.179712$）。
 
-本研究進一步實作 `AdaptiveChoice-AUC`，讓 Validation 在「最佳單模型」與「DAWCE-AUC」之間選擇，正式將「不集成」納入框架候選。無 FS 時其平均 AUC 為 0.8453，與固定 `New_under` 差異未達顯著（$p=0.224916$），並在 15 個切割中有 10 次選擇 `New_under`；有 FS 時 AUC 為 0.8336，幾乎等同 `New_under` 的 0.8337（$p=0.685830$）。此結果顯示擴充候選空間可大幅避免強制群組平均的損失，但 Validation 選擇仍可能受單次切分偏差影響。
+本研究進一步實作 `AdaptiveChoice-AUC`，讓 Validation 在「最佳單模型」與「DAWCE-AUC」之間選擇，正式將「不集成」納入框架候選。無 FS 時其平均 AUC 為 0.8481，與固定 `New_under` 的 0.8498 差異未達顯著（$p=0.067889$）；有 FS 時 AUC 為 0.8285，低於 `New_under` 的 0.8310。此結果顯示擴充候選空間可避免大部分強制群組平均的損失，但 Validation 選擇仍可能受單次切分偏差影響。
 
 本消融回答了 Study 1 與 Study 3 數值差異的原因：DAWCE 可藉由提高 New-side 權重修正 Old/New 等權造成的稀釋，但其 New-side 群組內仍固定平均 under、over 與 hybrid 三個模型；當 `New_under` 已明顯較強時，群組內平均會再次稀釋其排序能力。因此，本研究支持「DAWCE 優於固定等權集成」，但不支持「DAWCE 優於最佳單模型」；擴充後的 AdaptiveChoice 則提供一個可部署的修正方向。
 
 ### 4.4.7 年度 Walk-forward Rolling AdaptiveChoice
 
-為驗證框架是否能隨新批次資料進入而自行重新選擇邊界、權重與模型，本研究依 §3.9 執行 2009–2018 年度 walk-forward。每個測試年 $t$ 的訓練資料截止於 $t-2$，$t-1$ 僅作 Validation，$t$ 僅作一次最終測試；十個年度 Test 批次在資料列上互不重疊。下表將各年度預測串接後計算 pooled out-of-sample 指標，各年度仍使用其獨立 Validation 所選閾值。
+為驗證框架是否能隨新批次資料進入而自行重新選擇邊界、權重與模型，本研究依 §3.9 執行 2009–2018 年度 walk-forward。每個測試年 $t$ 的訓練資料截止於 $t-2$，$t-1$ 僅作 Validation，$t$ 僅作一次最終測試；十個年度 Test 批次在資料列上互不重疊，但同一公司可跨年度出現，故不是 entity-level 獨立樣本。下表將各年度預測串接後計算 pooled out-of-sample 指標，各年度仍使用其獨立 Validation 所選閾值。
 
 **表 4-12　Rolling walk-forward pooled out-of-sample 結果（Test 2009–2018）**
 
@@ -877,21 +881,21 @@ ROSS 選出的邊界隨年度在 2005–2011 間移動，證明程式已能依�
 
 ## 4.5 Study 4：成本敏感分析
 
-在實務破產預測中，漏失破產企業（Type 2 Error，FNR）與誤報健康企業為破產（Type 1 Error，FPR）的成本往往不對稱。定義期望成本：
+在實務破產預測中，漏失破產企業（Type 2 Error，FNR）與誤報健康企業為破產（Type 1 Error，FPR）的成本往往不對稱。本研究既有程式定義以下**盛行率中性的條件錯誤成本分數**：
 
-$$\text{Expected Cost} = \text{Type1\_Error} + r \times \text{Type2\_Error}$$
+$$S_r = \mathrm{FPR} + r \times \mathrm{FNR}$$
 
-其中 r 為 Type2:Type1 成本比，代表漏判破產的相對成本是誤判的 r 倍。
+其中 $r$ 是 FNR 相對於 FPR 的權重。由於 $S_r$ 未以類別盛行率加權，它不是每家公司或金額尺度的 expected cost。若正類盛行率為 $\pi$，且單次假陽性與假陰性成本為 $c_{FP}$、$c_{FN}$，每筆觀測的期望成本應寫為 $(1-\pi)c_{FP}\mathrm{FPR}+\pi c_{FN}\mathrm{FNR}$。因此下表只作模型排序的敏感度分析。
 
 **表 4-13　不同成本比下的最佳模型選擇轉換**
 
 | 成本比 r | 最佳設定 | F1 | Recall | Precision | Type1 Error | Type2 Error |
 |---------|---------|-----|--------|-----------|-------------|-------------|
-| 0.25 | ValROSS\_2009 + FS + w\_new=0.95 | 0.2432 | 0.3868 | 0.1773 | 0.0429 | 0.6132 |
-| 0.50 | ValROSS\_2009 + no-FS + w\_new=0.95 | 0.1962 | 0.5610 | 0.1189 | 0.0995 | 0.4390 |
-| 0.75+ | ValROSS\_2009 + no-FS + w\_new=1.00 | 0.1732 | 0.6341 | 0.1003 | 0.1361 | 0.3659 |
+| 0.25 | Fixed\_2012 + no-FS + w\_new=0.95 | 0.2039 | 0.5436 | 0.1255 | 0.0906 | 0.4564 |
+| 0.50 | Fixed\_2012 + no-FS + w\_new=0.60 | 0.1995 | 0.5854 | 0.1203 | 0.1025 | 0.4146 |
+| 0.75+ | ValROSS\_2009 + no-FS + w\_new=0.95 | 0.1740 | 0.6376 | 0.1008 | 0.1361 | 0.3624 |
 
-**解讀**：當 r < 0.5 時（即誤報成本相對較高，如貸款機構需謹慎放款），最佳配置偏向 Precision-oriented 的 ValROSS + FS + w\_new=0.95；當 r ≥ 0.75 時（即漏判破產的監管或信用損失遠高於誤報成本），最佳配置轉向 Recall-oriented 的 ValROSS + no-FS + w\_new=1.00，即完全依賴 New-side 模型池。此分析直接為實務部署提供可操作的模型選擇建議。
+**解讀**：在此盛行率中性分數下，$r=0.25$、$r=0.50$ 與 $r\geq0.75$ 的最低分配置分別如表所示，說明排序會隨 FNR/FPR 權重改變。這不等同實際部署建議；實務選擇仍需納入目標族群盛行率、校準、決策閾值與可辯護的金額成本。
 
 ---
 
@@ -899,7 +903,7 @@ $$\text{Expected Cost} = \text{Type1\_Error} + r \times \text{Type2\_Error}$$
 
 ### 4.6.1 歷史資料在漂移環境中的「稀釋效應」
 
-Re-training 的 Type 1 Error 高達 0.2450，遠超 ensemble\_new\_3 的 0.0674。在破產率僅 2.3% 的測試期中，將 2008 年金融危機前的大量正常企業樣本合併重訓，等同引入「已失效的正常基準」，使模型的正常/破產邊界被過時分布稀釋，因而對現有的破產訊號過度敏感（高 Recall 但低 Precision）。Study 3 進一步顯示，當 Old/New 邊界從 2012 前移至 2009，可以更精準地隔離金融危機後的特徵分布，提升 F1 與 Precision。
+Re-training 的 Type 1 Error 高達 0.2450，遠超 ensemble\_new\_3 的 0.0674。在破產率僅 2.3% 的測試期中，將 2008 年金融危機前的大量正常企業樣本合併重訓，等同引入「已失效的正常基準」，使模型的正常/破產邊界被過時分布稀釋，因而對現有的破產訊號過度敏感（高 Recall 但低 Precision）。Study 3 顯示 ROSS 可依 Validation 選出 2009 邊界，但該邊界在最終 Test F1 未優於固定 2012；因此邊界的經濟事件對應性可作解釋性線索，不能直接視為效能提升證據。
 
 ### 4.6.2 動態選擇在非平穩資料中的侷限性
 
@@ -911,7 +915,7 @@ Study 2 的特徵穩定性分析揭示了一個在時序資料中常被忽略的
 
 ### 4.6.4 DAWCE 框架的機制合理性
 
-DAWCE 的 Validation-guided 權重可有效修正固定等權集成對 New-side 訊號的稀釋，跨切割結果亦顯示其顯著優於 Equal6。然而，§4.4.6 的公平消融顯示，權重搜尋只能調整 Old3/New3 兩個群組之間的比例，無法避免 New3 群組內較弱模型對 `New_under` 的稀釋。因此 DAWCE 的機制效益具有明確邊界：當各群組內模型品質接近時，群組加權可帶來穩健改善；當某一單模型明顯占優時，框架應允許選擇該單模型，而非強制保留群組平均。
+DAWCE 的 Validation-guided 權重可修正固定等權集成對 New-side 訊號的稀釋，跨切割結果呈一致改善，rolling 亦支持 AdaptiveChoice 的 AUC 優於 Equal6。然而，§4.4.6 的公平消融顯示，權重搜尋只能調整 Old3/New3 兩個群組之間的比例，無法避免 New3 群組內較弱模型對 `New_under` 的稀釋。因此 DAWCE 的機制效益具有明確邊界：當各群組內模型品質接近時，群組加權可能改善等權基準；當某一單模型明顯占優時，框架應允許選擇該單模型，而非強制保留群組平均。
 
 §4.4.7 進一步顯示，即使框架已允許在單模型與 DAWCE 間動態選擇，Validation 仍可能因有限批次樣本而誤選。故「擴大候選空間」只能降低強制集成的結構性偏誤，不能消除模型選擇變異；部署時應同步監控選擇穩定性，並考慮要求候選方法超過最小改善門檻後才切換。
 
@@ -927,25 +931,25 @@ DAWCE 的 Validation-guided 權重可有效修正固定等權集成對 New-side 
 
 | 假設 | 驗證結果 | 關鍵統計依據 |
 |------|---------|------------|
-| H₁₁：New > Old 模型 | **拒絕 H₀**（支持研究假設） | AUC: p = 0.000061, r = 1.00；F1: p = 0.000610, r = 0.87 |
+| H₁₁：New > Old 模型 | **方向性支持** | 15 個相依切割皆呈一致方向；原始 AUC p = 0.000061、F1 p = 0.000610 |
 | H₁₂：靜態集成 > DES | **探索性支持，未完成無偏驗證** | Test-selected static oracle: AUC p = 0.000061, r = 1.00 |
-| H₂₁：MI r80 FS 提升 AUC | **拒絕 H₀**（支持研究假設） | p = 0.000305 |
-| H₂₂：r80 穩定性 > r50 | **拒絕 H₀**（支持研究假設） | p < 0.000001，差距 0.09–0.33 Jaccard |
-| H₃₁：Selected weighting > Equal | **拒絕 H₀**（支持研究假設） | AUC: p = 0.000122–0.000610, r = 0.87–0.93 |
-| H₃₂：ROSS ≥ Fixed boundary | **成立** | ValROSS F1 = 0.243 > Fixed F1 = 0.192（+27%） |
-| H₄₁：10-seed 重現性 | **確認** | ensemble\_old\_3 vs retrain: AUC p = 0.0020 |
+| H₂₁：MI r80 FS 提升 AUC | **診斷性支持** | 相依 15-split 原始 p = 0.000305 |
+| H₂₂：r80 穩定性 > r50 | **描述性支持，確認性檢定無效** | r80 均值較高；105 pair 存在偽重複 |
+| H₃₁：Selected weighting > Equal | **部分支持** | 15-split 方向一致；rolling 僅 AUC 對 Equal6 經 Holm 後顯著 |
+| H₃₂：ROSS ≥ Fixed boundary | **不成立** | ValROSS no-FS F1 = 0.1947 < Fixed no-FS F1 = 0.2039 |
+| H₄₁：10-seed 重現性 | **未完成主流程驗證** | 現有結果為 LightGBM/block-CV；seed 傳遞已修正但尚未依主流程重跑 |
 
 **核心結論陳述**
 
-1. **New-side 模型池的主導性（H₁₁ 確認）**。New-side 模型在 AUC（$p = 0.000061$，$r = 1.00$）與 F1（$p = 0.000610$，$r = 0.87$）上均以大效果量顯著優於 Old-side 模型。結合 Study 3 的 DAWCE 最佳配置（$w_{\text{new}} = 0.95$），兩項結果相互強化，共同指出在漂移後的測試期中，優先賦予 New-side 模型高比重是統計上可支撐的設計選擇。
+1. **New-side 模型池的主導性（H₁₁ 方向性支持）**。New-side 模型在 15 個相依切割中呈現一致的 AUC/F1 優勢，Study 3 的最佳 F1 配置亦採 $w_{\text{new}} = 0.95$。由於切割共享測試期，原始極小 p-value 不視為 15 次獨立確認；rolling 結果仍顯示固定 `New_under` 為 pooled AUC/F1 最佳方法，支持近期模型占優的實證方向。
 
 2. **靜態候選模型相對動態選擇的探索性線索（H₁₂ 尚待無偏驗證）**。Test-selected static oracle 以大效果量（$r = 1.00$）高於 DES，提示跨時序漂移時 DSEL 局部鄰域可能失效；但因靜態端使用 Test 指標事後選擇配置，此結果不能證明某個可部署靜態方法必然優於 DES。後續需以獨立 Validation 選擇靜態配置後重新檢驗 H₁₂。
 
-3. **特徵選取的雙重效益（H₂₁、H₂₂ 確認）**。MI r80 不僅對 New\_3 集成的 AUC 有顯著提升（$p = 0.000305$），r80 的跨年份 Jaccard 穩定性也全面顯著高於 r50（$p < 0.000001$）。兩個維度同時獲益說明，在時序非平穩資料中，80% 特徵保留率是兼顧「效能提升」與「特徵選取一致性」的帕雷托最佳點。
+3. **特徵選取的效能與穩定性線索（H₂₁、H₂₂ 尚待獨立驗證）**。MI r80 對 New\_3 AUC 呈正向診斷結果，表列穩定性組合的 r80 Jaccard 均值也高於 r50；但 15-split 相依性與 105 個 pair 的偽重複使原始 p-value 不具確認性。80% 保留率可視為本資料上的候選設定，尚不能宣稱為帕雷托最佳或一般性最佳點。
 
-4. **DAWCE 改善等權集成，但未超越強單模型（H₃₁、H₃₂ 限定確認）**。ROSS 自動將最佳邊界從人工假設的 2012 年調整至 2009 年；DAWCE 跨 15 個切割顯著優於 Equal6。然而，在公平消融中，無 FS `New_under` 的 AUC/F1（0.8473/0.2217）均顯著高於 DAWCE-F1（0.8341/0.1886）。年度 rolling 實驗亦得到一致方向：AdaptiveChoice pooled AUC/F1 為 0.8221/0.3283，低於 `New_under` 的 0.8403/0.3287，差異未達 Holm 校正後顯著。因此 H₃₁ 僅支持 validation-selected weighting 或選擇相較固定等權的改善，不支持 DAWCE 或 AdaptiveChoice 優於最佳單模型。
+4. **DAWCE 改善等權集成，但 ROSS 未優於固定邊界，且 DAWCE 未超越強單模型（H₃₁ 部分支持、H₃₂ 不支持）**。ROSS 依 Validation AUC 將候選邊界從 2012 年調整至 2009 年，但 ValROSS no-FS 的 Test F1（0.1947）低於 Fixed no-FS（0.2039）。DAWCE 對 Equal6 的 15-split 差異具一致方向；rolling 中 AdaptiveChoice 僅在 AUC 上經 Holm 校正後優於 Equal6。公平消融與 rolling 均未顯示 DAWCE/AdaptiveChoice 優於 `New_under`，故證據支持「避免固定等權稀釋」，不支持動態框架必然優於固定邊界或最佳單模型。
 
-5. **成本敏感分析揭示模型部署的彈性邊界**。隨 Type2:Type1 成本比從 0.25 升至 0.75+，最佳配置從 Precision-oriented（ValROSS + FS + $w_{\text{new}} = 0.95$，Precision = 0.177）系統性轉向 Recall-oriented（ValROSS + no-FS + $w_{\text{new}} = 1.00$，Recall = 0.634）。此項為部署診斷，不作為 H₄₁ 重現性假設的驗證依據。
+5. **條件錯誤成本敏感度顯示排序會隨權重改變**。在未依盛行率加權的 $S_r=\mathrm{FPR}+r\mathrm{FNR}$ 下，不同 $r$ 會選出不同配置。此項只作排序敏感度診斷；在加入類別盛行率與實際 FP/FN 金額前，不解讀為部署期望成本。
 
 6. **Rolling AdaptiveChoice 完成動態批次實作，但未建立新效能優勢**。框架能在每個新年度到達後重新搜尋 ROSS 邊界、DAWCE 權重與候選模型，且全流程不使用當年度 Test 資訊；然而十次更新的最佳單模型皆為 `New_under`，顯示本資料上的核心訊號是近期 under-sampling 模型的持續主導性，而非頻繁切換方法。
 
@@ -971,19 +975,19 @@ DAWCE 不引入新的分類器架構，而是在現有模型池基礎上以 vali
 
 ### 5.2.2 實證貢獻（Empirical Contribution）
 
-**貢獻 2：DES 在時序概念漂移資料中的侷限性記錄**
+**貢獻 2：特定 DES/DCS 實作在時序資料中的侷限性線索**
 
-本研究以統計顯著性（$p < 0.001$，$r = 1.00$）記錄了靜態集成優於 DES/DCS 的現象，並提供「DSEL 局部鄰域在跨漂移點資料中失效」的機制解釋。此記錄為後續探索 drift-aware DSEL 構成策略提供了清晰的起點：問題不在於動態選擇的概念本身，而在於如何設計能夠感知時序結構的局部鄰域。
+本研究觀察到 test-selected static oracle 高於特定 DES/DCS 實作，並提出「DSEL 局部鄰域跨越漂移點」的可能機制。由於靜態端為 oracle，且舊版 DSEL 與模型訓練資料重疊，此結果不是一般性的演算法優劣證明，而是後續設計獨立、時序感知 DSEL 的研究起點。
 
 **貢獻 3：特徵穩定性的系統性量化**
 
-在四種特徵選取方法的效能比較之外，本研究針對 MI、SHAP 與 RFE 執行跨年份切割的 Jaccard 穩定性分析，以統計檢定確認 r80 的穩定性優勢（$p < 0.000001$，差距達 0.09–0.33 Jaccard 單位）。此分析維度在現有集成學習文獻中較少系統性呈現，揭示了「特徵選取不僅影響當期效能，更影響跨期一致性」這一在時序非平穩場景中尤為重要的設計考量。
+在四種特徵選取方法的效能比較之外，本研究針對 MI、SHAP 與 RFE 執行跨年份切割的 Jaccard 穩定性描述。r80 在表列組合中的均值高於 r50，揭示「特徵選取不僅影響當期效能，也影響跨期一致性」的研究方向；惟原 105-pair 檢定存在偽重複，統計確認需以適當分析單位重做。
 
 ### 5.2.3 方法論貢獻（Methodological Contribution）
 
 **貢獻 4：以 walk-forward 與多重比較校正補強時序驗證**
 
-本研究除既有跨 15 個年份切割比較外，另建立十個互不重疊年度 Test 批次的 walk-forward 評估，並對 Rolling AdaptiveChoice 的 16 項方法指標比較使用 Holm 校正。此設計將「共享同一測試期的多切割診斷」與「逐年真正未見批次的部署式驗證」分開報告，使統計證據與部署主張的界線更清楚。
+本研究除既有跨 15 個年份切割比較外，另建立十個資料列互不重疊年度 Test 批次的 walk-forward 評估，並對 Rolling AdaptiveChoice 的 16 項方法指標比較使用 Holm 校正。此設計將「共享同一測試期的多切割診斷」與「逐年未見批次的部署式驗證」分開報告；但公司可跨年度重複，因此後續仍需 company-cluster inference 補強。
 
 ---
 
@@ -1003,9 +1007,9 @@ ROSS 在設計上為離線、回顧式搜尋，需要上一批次完整標籤才
 
 加權網格目前為 $W = \{0.00, 0.05, \ldots, 1.00\}$（間距 0.05），理論最佳 $w_{\text{new}}$ 可能在連續空間中存在但未被捕捉。在本研究中，最佳 $w_{\text{new}}$ 集中在 0.95 或 1.00，離散性對結論的影響可能有限，但在最佳值落在中間範圍的其他資料集上仍需注意。
 
-**限制 4：前處理仍含轉導式特徵統計**
+**限制 4：前處理修正後仍需跨資料集重現**
 
-主要模型選擇不使用 Test 標籤，但既有 Phase 4/5 程式對不同資料分割分別以自身欄位平均數補值，因此會使用 Test 特徵分布的摘要統計。新增 rolling 實驗已修正此問題，補值器與 StandardScaler 均僅以訓練歷史擬合；然而，舊實驗數值仍可能因轉導式前處理略為樂觀。
+本研究已修正 Phase 4/5 確認性實驗的前處理流程：缺失值補值、StandardScaler 與特徵選取器均僅以 fitting data 擬合，再套用至 Validation 與 Test，並重跑主要 ROSS、DAWCE、15-split 與公平消融結果。修正後部分原始效能主張不再成立，顯示前處理隔離的重要性；目前更新後結論仍僅建立於單一主要資料集，需再以其他時序資料集重現。
 
 **限制 5：AWE-inspired 診斷的 Validation 重疊**
 
@@ -1017,7 +1021,23 @@ ROSS 在設計上為離線、回顧式搜尋，需要上一批次完整標籤才
 
 **限制 7：既有 15-split 檢定的樣本相依性**
 
-既有跨 15 個年份切割多數共享相同的 2015–2018 Test 期，因此 paired samples 並非完全獨立，且早期分析未全面校正多重比較。本文已另以十個互不重疊年度 Test 批次與 Holm 校正補強主要 rolling 結論，但年度資料仍可能存在時間自相關，故 p-value 應搭配效果方向與 pooled 指標解讀。
+既有跨 15 個年份切割多數共享相同的 2015–2018 Test 期，因此 paired samples 並非完全獨立，且早期分析未全面校正多重比較。本文已另以十個資料列互不重疊年度 Test 批次與 Holm 校正補強主要 rolling 結論，但年度資料仍可能存在時間自相關與公司群聚相關，故 p-value 應搭配效果方向與 pooled 指標解讀。
+
+**限制 8：公司年度 panel 與 entity-level 泛化**
+
+訓練期與測試期公司高度重疊：3,700 家測試公司中有 3,232 家（87.35%）已出現在訓練期，而且同一公司的標籤在資料內固定。模型雖未使用公司識別碼，但目前結果主要衡量已見與未見公司混合的未來年度辨識，不能直接外推為對全新公司的泛化能力。後續應報告 seen/unseen company 分層效能，並加入 company-level holdout 或 cluster bootstrap。
+
+**限制 9：特徵穩定性檢定的偽重複**
+
+既有穩定性程式將 15 個切割形成的 105 個兩兩 Jaccard 差作 Wilcoxon 樣本；每個切割重複參與多個 pair，因而不能把極小 p-value 當成 105 個獨立觀測的確認性證據。本文保留 Jaccard 均值作描述，未來需用 split-level permutation、cluster bootstrap 或獨立重複時序抽樣重做推論。
+
+**限制 10：多種子驗證尚未對齊主流程**
+
+現有 10-seed 結果採 LightGBM/block-CV，並非主要 XGBoost 實驗的完整重跑；產生舊結果時 DES 路徑也未完整接收外部 seed。程式已修正，但 H₄₁ 尚未獲確認，仍需統一資料切割、基學習器、取樣、DSEL 與閾值後重新驗證。
+
+**限制 11：不平衡指標與成本解讀尚待補強**
+
+程式已支援 PR-AUC，但既有主要結果尚未一致呈現；投稿前應補報 PR-AUC 與信賴區間。Study 4 的 $\mathrm{FPR}+r\mathrm{FNR}$ 是盛行率中性的條件錯誤分數，不是實際 expected cost；部署分析需納入類別盛行率、機率校準與可辯護的假陽性／假陰性金額成本。
 
 ### 5.3.2 未來工作方向
 

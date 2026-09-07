@@ -1,0 +1,130 @@
+{
+  "root": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results",
+  "csv_files": 985,
+  "total_rows": 199972,
+  "schema_count": 108,
+  "files_with_nulls": 65,
+  "files_with_exact_duplicates": 0,
+  "files_with_seed_column": 1,
+  "issues": [],
+  "top_schemas": [
+    {
+      "files": 189,
+      "columns": [
+        "new_years",
+        "none",
+        "undersampling",
+        "oversampling",
+        "hybrid",
+        "avg"
+      ]
+    },
+    {
+      "files": 189,
+      "columns": [
+        "old_years",
+        "none",
+        "undersampling",
+        "oversampling",
+        "hybrid",
+        "avg"
+      ]
+    },
+    {
+      "files": 168,
+      "columns": [
+        "retrain_scope",
+        "none",
+        "undersampling",
+        "oversampling",
+        "hybrid",
+        "avg"
+      ]
+    },
+    {
+      "files": 78,
+      "columns": [
+        "method",
+        "hybrid",
+        "none",
+        "oversampling",
+        "undersampling"
+      ]
+    },
+    {
+      "files": 27,
+      "columns": [
+        "split",
+        "fs",
+        "ensemble",
+        "AUC",
+        "F1",
+        "Recall"
+      ]
+    },
+    {
+      "files": 25,
+      "columns": [
+        "metric",
+        "method",
+        "hybrid",
+        "none",
+        "oversampling",
+        "undersampling"
+      ]
+    },
+    {
+      "files": 18,
+      "columns": [
+        "split",
+        "method",
+        "sampling",
+        "AUC",
+        "F1",
+        "G_Mean",
+        "Recall",
+        "Precision",
+        "Type1_Error",
+        "Type2_Error"
+      ]
+    },
+    {
+      "files": 15,
+      "columns": [
+        "split",
+        "method",
+        "sampling",
+        "AUC",
+        "F1",
+        "G_Mean",
+        "Recall",
+        "Precision",
+        "Type1_Error",
+        "Type2_Error",
+        "tune_val_auc",
+        "tune_best_params"
+      ]
+    },
+    {
+      "files": 14,
+      "columns": [
+        "split",
+        "hybrid",
+        "none",
+        "oversampling",
+        "undersampling"
+      ]
+    },
+    {
+      "files": 14,
+      "columns": [
+        "old+new_years_finetune",
+        "none",
+        "undersampling",
+        "oversampling",
+        "hybrid",
+        "avg"
+      ]
+    }
+  ]
+}

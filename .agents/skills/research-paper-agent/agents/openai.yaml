@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research & Paper Agent"
+  short_description: "Evidence-grounded research and academic writing workflow"
+  default_prompt: "Use $research-paper-agent to research this topic, verify citations and project evidence, and produce a thesis-ready draft with explicit limitations."

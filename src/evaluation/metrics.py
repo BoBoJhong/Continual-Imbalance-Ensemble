@@ -7,6 +7,9 @@ src/evaluation/metrics.py
 import numpy as np
 import pandas as pd
 from sklearn.metrics import (
+    average_precision_score,
+    balanced_accuracy_score,
+    cohen_kappa_score,
     roc_auc_score,
     f1_score,
     precision_score,
@@ -34,6 +37,21 @@ def compute_metrics(y_true, y_proba, y_pred=None, threshold: float = 0.5) -> dic
     y_true = np.asarray(y_true)
     y_proba = np.asarray(y_proba)
 
+    if y_true.ndim != 1 or y_proba.ndim != 1:
+        raise ValueError("y_true and y_proba must be one-dimensional")
+    if len(y_true) != len(y_proba):
+        raise ValueError("y_true and y_proba must have the same length")
+    if len(y_true) == 0:
+        raise ValueError("Cannot compute metrics for empty inputs")
+    if not 0.0 <= threshold <= 1.0:
+        raise ValueError("threshold must be between 0 and 1")
+    if not np.isfinite(y_proba).all():
+        raise ValueError("y_proba contains non-finite values")
+
+    labels = np.unique(y_true)
+    if not set(labels).issubset({0, 1}):
+        raise ValueError(f"Only binary labels 0/1 are supported; received {labels}")
+
     if y_pred is None:
         y_pred = (y_proba >= threshold).astype(int)
     else:
@@ -51,12 +69,33 @@ def compute_metrics(y_true, y_proba, y_pred=None, threshold: float = 0.5) -> dic
     # Type 2 Error (False Negative Rate) = FN / (FN + TP)
     type2_error = fn / (fn + tp) if (fn + tp) > 0 else 0.0
 
+    has_both_classes = len(labels) == 2
+    auc = float(roc_auc_score(y_true, y_proba)) if has_both_classes else float("nan")
+    pr_auc = (
+        float(average_precision_score(y_true, y_proba))
+        if has_both_classes
+        else float("nan")
+    )
+    balanced_accuracy = (
+        float(balanced_accuracy_score(y_true, y_pred))
+        if has_both_classes
+        else float("nan")
+    )
+    cohen_kappa = (
+        float(cohen_kappa_score(y_true, y_pred))
+        if has_both_classes
+        else float("nan")
+    )
+
     return {
-        "AUC": float(roc_auc_score(y_true, y_proba)),
+        "AUC": auc,
+        "PR_AUC": pr_auc,
         "F1": float(f1_score(y_true, y_pred, zero_division=0)),
         "G_Mean": g_mean,
         "Recall": float(recall_score(y_true, y_pred, zero_division=0)),
         "Precision": float(precision_score(y_true, y_pred, zero_division=0)),
+        "Balanced_Accuracy": balanced_accuracy,
+        "Cohen_Kappa": cohen_kappa,
         "Type1_Error": type1_error,
         "Type2_Error": type2_error,
     }

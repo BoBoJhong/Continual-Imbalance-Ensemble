@@ -111,19 +111,20 @@ def load_bankruptcy_with_year(logger) -> tuple[pd.DataFrame, pd.Series]:
 # ── 前處理工具 ───────────────────────────────────────────────────────────────
 def _preprocess(X_train_raw: pd.DataFrame, *others: pd.DataFrame):
     """
-    對 X_train_raw fit StandardScaler，transform 其他所有 DataFrame。
-    先用均值補缺，再標準化。回傳 (X_train_scaled, *others_scaled, scaler)。
-    """
-    def _fill(df):
-        return df.fillna(df.mean())
+    Fit imputation statistics and StandardScaler on X_train_raw only.
 
-    Xtr = _fill(X_train_raw)
+    Validation/test frames are only transformed with training-derived
+    statistics. Returns (X_train_scaled, *others_scaled, scaler).
+    """
+    fill_values = X_train_raw.mean(numeric_only=True)
+    Xtr = X_train_raw.fillna(fill_values)
     scaler = StandardScaler()
     Xtr_s = pd.DataFrame(scaler.fit_transform(Xtr), columns=Xtr.columns)
+    scaler.training_fill_values_ = fill_values
 
     result = [Xtr_s]
     for df in others:
-        df_c = _fill(df)
+        df_c = df.fillna(fill_values)
         result.append(pd.DataFrame(scaler.transform(df_c), columns=df_c.columns))
     result.append(scaler)
     return tuple(result)
@@ -153,12 +154,11 @@ def train_eval_single(
     訓練一個 XGBoost 模型（指定採樣策略），在測試集評估後回傳指標 dict。
     內部用訓練集最後 20% 做 validation 搜尋閾值。
     """
-    X_tr_s, X_te_s, scaler = _preprocess(X_train_raw, X_test_raw)
-
     # 訓練 / validation 分割（最後 20%，不 shuffle 保持時序）
-    n_val = max(1, int(len(X_tr_s) * 0.2))
-    X_fit, X_val = X_tr_s.iloc[:-n_val], X_tr_s.iloc[-n_val:]
+    n_val = max(1, int(len(X_train_raw) * 0.2))
+    X_fit_raw, X_val_raw = X_train_raw.iloc[:-n_val], X_train_raw.iloc[-n_val:]
     y_fit, y_val = y_train[:-n_val],     y_train[-n_val:]
+    X_fit, X_val, X_te_s, _ = _preprocess(X_fit_raw, X_val_raw, X_test_raw)
 
     sampler = ImbalanceSampler()
     X_r, y_r = sampler.apply_sampling(X_fit, y_fit, strategy=sampling)
@@ -193,25 +193,32 @@ def train_eval_ensemble(
     Scaler 以 Old 資料 fit（對齊 Phase 2 設計）。
     閾值以 Old+New 混合 val 搜尋（各自取最後 20% 合併）。
     """
-    X_old_s, X_new_s, X_te_s, scaler = _preprocess(X_old_raw, X_new_raw, X_test_raw)
-
     sampler = ImbalanceSampler()
     pool: dict[str, XGBoostWrapper] = {}
 
-    n_old_val = max(1, int(len(X_old_s) * 0.2))
-    n_new_val = max(1, int(len(X_new_s) * 0.2))
-    X_val = pd.concat([X_old_s.iloc[-n_old_val:], X_new_s.iloc[-n_new_val:]], ignore_index=True)
+    n_old_val = max(1, int(len(X_old_raw) * 0.2))
+    n_new_val = max(1, int(len(X_new_raw) * 0.2))
+    X_old_fit_raw, X_old_val_raw = X_old_raw.iloc[:-n_old_val], X_old_raw.iloc[-n_old_val:]
+    X_new_fit_raw, X_new_val_raw = X_new_raw.iloc[:-n_new_val], X_new_raw.iloc[-n_new_val:]
+    X_old_fit, X_new_fit, X_old_val, X_new_val, X_te_s, _ = _preprocess(
+        X_old_fit_raw,
+        X_new_fit_raw,
+        X_old_val_raw,
+        X_new_val_raw,
+        X_test_raw,
+    )
+    X_val = pd.concat([X_old_val, X_new_val], ignore_index=True)
     y_val = np.concatenate([y_old[-n_old_val:], y_new[-n_new_val:]])
 
     for s in POOL_SAMPLING:
         # Old model
-        X_r, y_r = sampler.apply_sampling(X_old_s.iloc[:-n_old_val], y_old[:-n_old_val], strategy=s)
+        X_r, y_r = sampler.apply_sampling(X_old_fit, y_old[:-n_old_val], strategy=s)
         m = XGBoostWrapper(name=f"old_{s}_{tag}", use_imbalance=False)
         m.fit(X_r, y_r)
         pool[f"old_{s}"] = m
 
         # New model
-        X_r, y_r = sampler.apply_sampling(X_new_s.iloc[:-n_new_val], y_new[:-n_new_val], strategy=s)
+        X_r, y_r = sampler.apply_sampling(X_new_fit, y_new[:-n_new_val], strategy=s)
         m = XGBoostWrapper(name=f"new_{s}_{tag}", use_imbalance=False)
         m.fit(X_r, y_r)
         pool[f"new_{s}"] = m
@@ -248,10 +255,12 @@ def _build_init_model(
     y_init = np.asarray(y_all[mask_init])
 
     scaler_init = StandardScaler()
-    X_init_clean = X_init.fillna(X_init.mean())
+    fill_values = X_init.mean(numeric_only=True)
+    X_init_clean = X_init.fillna(fill_values)
     X_init_s = pd.DataFrame(
         scaler_init.fit_transform(X_init_clean), columns=X_init_clean.columns
     )
+    scaler_init.training_fill_values_ = fill_values
 
     sampler = ImbalanceSampler()
     X_r, y_r = sampler.apply_sampling(X_init_s, y_init, strategy="hybrid")
@@ -311,7 +320,7 @@ def find_drift_year(
         if len(y_yr) == 0:
             continue
 
-        X_yr_clean = X_yr.fillna(X_yr.mean())
+        X_yr_clean = X_yr.fillna(scaler_init.training_fill_values_)
         # 保持 burn-in scaler，才能偵測到分布偏移
         X_yr_s = pd.DataFrame(
             scaler_init.transform(X_yr_clean), columns=X_yr_clean.columns

@@ -1,4 +1,5 @@
 """LightGBM model wrapper."""
+from copy import deepcopy
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
@@ -29,10 +30,14 @@ class LightGBMWrapper:
         self.config = get_config_loader()
         
         # Load config parameters
-        base_params = self.config.get("model_config", "lightgbm.base_params", {})
+        base_params = deepcopy(
+            self.config.get("model_config", "lightgbm.base_params", {})
+        )
         
         if use_imbalance:
-            imbalance_params = self.config.get("model_config", "lightgbm.imbalance_params", {})
+            imbalance_params = deepcopy(
+                self.config.get("model_config", "lightgbm.imbalance_params", {})
+            )
             base_params.update(imbalance_params)
         
         # Override with custom params

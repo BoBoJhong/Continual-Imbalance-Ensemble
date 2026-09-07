@@ -15,6 +15,64 @@ class DataPreprocessor:
         self.label_encoder = LabelEncoder()
         self.logger = get_logger("DataPreprocessor", console=True, file=False)
         self.feature_names = None
+        self.missing_strategy_ = None
+        self.missing_fill_values_ = None
+
+    def fit_missing_values(
+        self,
+        X: pd.DataFrame,
+        strategy: str = "mean",
+    ) -> "DataPreprocessor":
+        """Learn missing-value replacements from training data only."""
+        if strategy not in {"mean", "median", "forward_fill"}:
+            raise ValueError(f"Unknown strategy: {strategy}")
+
+        fill_values = {}
+        if strategy in {"mean", "median"}:
+            for column in X.columns:
+                series = X[column]
+                if pd.api.types.is_numeric_dtype(series):
+                    value = series.mean() if strategy == "mean" else series.median()
+                else:
+                    mode = series.mode(dropna=True)
+                    value = mode.iloc[0] if not mode.empty else np.nan
+                fill_values[column] = value
+        else:
+            filled = X.ffill().bfill()
+            fill_values = {
+                column: filled[column].iloc[-1] if len(filled) else np.nan
+                for column in X.columns
+            }
+
+        self.missing_strategy_ = strategy
+        self.missing_fill_values_ = pd.Series(fill_values)
+        return self
+
+    def transform_missing_values(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Apply missing-value replacements learned from training data."""
+        if self.missing_strategy_ is None or self.missing_fill_values_ is None:
+            raise RuntimeError("Call fit_missing_values() before transform_missing_values().")
+
+        missing_columns = set(self.missing_fill_values_.index) - set(X.columns)
+        if missing_columns:
+            raise ValueError(f"Missing fitted columns: {sorted(missing_columns)}")
+
+        X_imputed = X.copy()
+        if self.missing_strategy_ == "forward_fill":
+            seed_row = self.missing_fill_values_.to_frame().T
+            X_imputed = pd.concat([seed_row, X_imputed], ignore_index=True).ffill().iloc[1:]
+            X_imputed.index = X.index
+        else:
+            X_imputed = X_imputed.fillna(self.missing_fill_values_)
+
+        unresolved = X_imputed.isna().sum()
+        unresolved = unresolved[unresolved > 0]
+        if not unresolved.empty:
+            raise ValueError(
+                "Unable to impute columns with no observed training values: "
+                f"{unresolved.index.tolist()}"
+            )
+        return X_imputed
         
     def handle_missing_values(
         self, 
@@ -34,23 +92,9 @@ class DataPreprocessor:
         self.logger.info(f"Handling missing values with strategy: {strategy}")
         
         missing_count = X.isnull().sum().sum()
-        if missing_count == 0:
-            self.logger.info("No missing values found")
-            return X
-        
         self.logger.info(f"Found {missing_count} missing values")
-        
-        X_imputed = X.copy()
-        
-        if strategy == "mean":
-            X_imputed = X_imputed.fillna(X_imputed.mean())
-        elif strategy == "median":
-            X_imputed = X_imputed.fillna(X_imputed.median())
-        elif strategy == "forward_fill":
-            X_imputed = X_imputed.fillna(method='ffill').fillna(method='bfill')
-        else:
-            raise ValueError(f"Unknown strategy: {strategy}")
-        
+        self.fit_missing_values(X, strategy=strategy)
+        X_imputed = self.transform_missing_values(X)
         self.logger.info("Missing values handled")
         
         return X_imputed
@@ -229,9 +273,10 @@ class DataPreprocessor:
         
         # Handle missing values
         if handle_missing:
-            X_train = self.handle_missing_values(X_train)
+            self.fit_missing_values(X_train)
+            X_train = self.transform_missing_values(X_train)
             if X_test is not None:
-                X_test = self.handle_missing_values(X_test)
+                X_test = self.transform_missing_values(X_test)
         
         # Remove outliers (only on training data)
         if remove_outliers:

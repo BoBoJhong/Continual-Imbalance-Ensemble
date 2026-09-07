@@ -51,4 +51,4 @@ def get_seeds_from_config(config_loader) -> list:
     Returns:
         List of random seeds
     """
-    return config_loader.get("base_config", "random_seeds", [42])
+    return config_loader.get("base_config", "base_config.random_seeds", [42])

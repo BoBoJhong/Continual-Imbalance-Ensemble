@@ -11,7 +11,6 @@ sampling_strategies:
       sampling_strategy: "auto"
       n_neighbors: 5
       random_state: 42
-      n_jobs: -1
       
   hybrid:
     method: "SMOTEENN"
@@ -20,7 +19,6 @@ sampling_strategies:
         sampling_strategy: "auto"
         k_neighbors: 5
         random_state: 42
-        n_jobs: -1
       enn:
         n_neighbors: 3
         kind_sel: "all"
@@ -34,7 +32,6 @@ alternative_methods:
       sampling_strategy: "auto"
       k_neighbors: 5
       random_state: 42
-      n_jobs: -1
       
   random_undersampling:
     method: "RandomUnderSampler"

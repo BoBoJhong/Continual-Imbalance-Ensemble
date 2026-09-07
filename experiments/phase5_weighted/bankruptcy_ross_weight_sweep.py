@@ -89,16 +89,21 @@ def _train_old_new_mean_probas(
     Returns:
         y_val, old_val_mean, new_val_mean, old_test_mean, new_test_mean
     """
-    X_old_s, X_new_s, X_te_s, _ = _preprocess(X_old_raw, X_new_raw, X_test_raw)
-
-    n_old_val = max(1, int(len(X_old_s) * 0.2))
-    n_new_val = max(1, int(len(X_new_s) * 0.2))
-    X_old_fit = X_old_s.iloc[:-n_old_val]
+    n_old_val = max(1, int(len(X_old_raw) * 0.2))
+    n_new_val = max(1, int(len(X_new_raw) * 0.2))
+    X_old_fit_raw, X_old_val_raw = X_old_raw.iloc[:-n_old_val], X_old_raw.iloc[-n_old_val:]
+    X_new_fit_raw, X_new_val_raw = X_new_raw.iloc[:-n_new_val], X_new_raw.iloc[-n_new_val:]
+    X_old_fit, X_new_fit, X_old_val, X_new_val, X_te_s, _ = _preprocess(
+        X_old_fit_raw,
+        X_new_fit_raw,
+        X_old_val_raw,
+        X_new_val_raw,
+        X_test_raw,
+    )
     y_old_fit = y_old[:-n_old_val]
-    X_new_fit = X_new_s.iloc[:-n_new_val]
     y_new_fit = y_new[:-n_new_val]
 
-    X_val = pd.concat([X_old_s.iloc[-n_old_val:], X_new_s.iloc[-n_new_val:]], ignore_index=True)
+    X_val = pd.concat([X_old_val, X_new_val], ignore_index=True)
     y_val = np.concatenate([y_old[-n_old_val:], y_new[-n_new_val:]])
 
     sampler = ImbalanceSampler()
@@ -155,12 +160,14 @@ def _run_config(
     )
 
     if fs_variant == "fs":
+        n_old_val = max(1, int(len(X_old) * 0.2))
         X_old, X_new, X_test_used, n_features_after, selected_preview = _apply_old_fit_fs(
             X_old,
             y_old,
             X_new,
             X_test,
             logger,
+            n_old_val=n_old_val,
         )
     elif fs_variant != "no_fs":
         raise ValueError(f"Unknown fs_variant: {fs_variant}")

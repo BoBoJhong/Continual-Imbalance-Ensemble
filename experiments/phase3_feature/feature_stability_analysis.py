@@ -12,8 +12,10 @@ Outputs:
     results/phase3_feature/stability/bankruptcy_feature_stability_frequency.csv
     results/phase3_feature/stability/bankruptcy_feature_stability_errors.csv
 """
+
 from __future__ import annotations
 
+import argparse
 import sys
 import warnings
 from itertools import combinations
@@ -28,15 +30,27 @@ warnings.filterwarnings("ignore")
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from experiments._shared.common_bankruptcy import YEAR_SPLITS, get_bankruptcy_year_split
-from src.features import FeatureSelector
-from src.utils import get_logger, set_seed
-
+from experiments._shared.common_bankruptcy import (  # noqa: E402
+    YEAR_SPLITS,
+    get_bankruptcy_year_split,
+)
+from src.features import FeatureSelector  # noqa: E402
+from src.utils import get_logger, set_seed  # noqa: E402
 
 OUTPUT_DIR = project_root / "results" / "phase3_feature" / "stability"
 FS_METHODS = ("mutual_info", "shap", "rfe")
 FS_RATIOS = (0.5, 0.8)
 TRAIN_SCOPES = ("old", "new", "old_new")
+ERROR_COLUMNS = [
+    "split",
+    "old_end_year",
+    "new_start_year",
+    "train_scope",
+    "fs_method",
+    "fs_ratio",
+    "error_type",
+    "error_message",
+]
 
 
 def _fit_frame_for_scope(
@@ -148,6 +162,24 @@ def _build_frequency(selected_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--repair-empty-errors",
+        action="store_true",
+        help="Normalize an existing blank error artifact without rerunning selectors",
+    )
+    args = parser.parse_args()
+    errors_path = OUTPUT_DIR / "bankruptcy_feature_stability_errors.csv"
+    if args.repair_empty_errors:
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        if errors_path.exists() and errors_path.read_text(encoding="utf-8").strip():
+            pd.read_csv(errors_path)
+            print(f"Existing error artifact is already readable: {errors_path}")
+        else:
+            pd.DataFrame(columns=ERROR_COLUMNS).to_csv(errors_path, index=False)
+            print(f"Normalized empty error artifact: {errors_path}")
+        return
+
     logger = get_logger("Phase3_Feature_Stability", console=True, file=True)
     set_seed(42)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -229,13 +261,12 @@ def main() -> None:
     pairwise_path = OUTPUT_DIR / "bankruptcy_feature_stability_pairwise_jaccard.csv"
     summary_path = OUTPUT_DIR / "bankruptcy_feature_stability_summary.csv"
     frequency_path = OUTPUT_DIR / "bankruptcy_feature_stability_frequency.csv"
-    errors_path = OUTPUT_DIR / "bankruptcy_feature_stability_errors.csv"
 
     selected_df.to_csv(selected_path, index=False)
     pairwise_df.to_csv(pairwise_path, index=False, float_format="%.6f")
     summary_df.to_csv(summary_path, index=False, float_format="%.6f")
     frequency_df.to_csv(frequency_path, index=False, float_format="%.6f")
-    pd.DataFrame(error_rows).to_csv(errors_path, index=False)
+    pd.DataFrame(error_rows, columns=ERROR_COLUMNS).to_csv(errors_path, index=False)
 
     logger.info(f"\nSaved selected features -> {selected_path}")
     logger.info(f"Saved pairwise Jaccard -> {pairwise_path}")

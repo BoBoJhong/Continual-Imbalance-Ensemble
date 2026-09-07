@@ -74,14 +74,16 @@ def load_data(logger):
 # ── 前處理 ────────────────────────────────────────────────────────────────────
 def _scale(X_fit_raw: pd.DataFrame, *others: pd.DataFrame):
     """以 X_fit_raw fit scaler，回傳 (X_fit_s, *others_s, scaler)"""
-    def _fill(df):
-        return df.fillna(df.mean())
-    Xf = _fill(X_fit_raw)
+    fill_values = X_fit_raw.mean(numeric_only=True)
+    Xf = X_fit_raw.fillna(fill_values)
     sc = StandardScaler()
     Xf_s = pd.DataFrame(sc.fit_transform(Xf), columns=Xf.columns)
+    sc.training_fill_values_ = fill_values
     result = [Xf_s]
     for df in others:
-        result.append(pd.DataFrame(sc.transform(_fill(df)), columns=df.columns))
+        result.append(
+            pd.DataFrame(sc.transform(df.fillna(fill_values)), columns=df.columns)
+        )
     result.append(sc)
     return tuple(result)
 
@@ -173,7 +175,8 @@ def find_drift_year_auc(
 
         # 保持 burn-in scaler → 捕捉特徵分布偏移
         X_yr_s = pd.DataFrame(
-            scaler.transform(X_yr.fillna(X_yr.mean())), columns=X_yr.columns
+            scaler.transform(X_yr.fillna(scaler.training_fill_values_)),
+            columns=X_yr.columns,
         )
         proba_yr = model.predict_proba(X_yr_s)
         try:
@@ -217,23 +220,30 @@ def train_eval_ensemble(
     label: str, logger,
 ) -> dict:
     """訓練 Old+New pool，回傳 ensemble_new3 / ensemble_all6 / ensemble_old3 指標。"""
-    X_old_s, X_new_s, X_te_s, _ = _scale(X_old_raw, X_new_raw, X_test_raw)
-
     sampler = ImbalanceSampler()
     pool: dict[str, XGBoostWrapper] = {}
 
-    n_old_val = max(1, int(len(X_old_s) * 0.2))
-    n_new_val = max(1, int(len(X_new_s) * 0.2))
-    X_val = pd.concat([X_old_s.iloc[-n_old_val:], X_new_s.iloc[-n_new_val:]], ignore_index=True)
+    n_old_val = max(1, int(len(X_old_raw) * 0.2))
+    n_new_val = max(1, int(len(X_new_raw) * 0.2))
+    X_old_fit_raw, X_old_val_raw = X_old_raw.iloc[:-n_old_val], X_old_raw.iloc[-n_old_val:]
+    X_new_fit_raw, X_new_val_raw = X_new_raw.iloc[:-n_new_val], X_new_raw.iloc[-n_new_val:]
+    X_old_fit, X_new_fit, X_old_val, X_new_val, X_te_s, _ = _scale(
+        X_old_fit_raw,
+        X_new_fit_raw,
+        X_old_val_raw,
+        X_new_val_raw,
+        X_test_raw,
+    )
+    X_val = pd.concat([X_old_val, X_new_val], ignore_index=True)
     y_val = np.concatenate([y_old[-n_old_val:], y_new[-n_new_val:]])
 
     for s in POOL_SAMPLING:
-        Xr, yr = sampler.apply_sampling(X_old_s.iloc[:-n_old_val], y_old[:-n_old_val], strategy=s)
+        Xr, yr = sampler.apply_sampling(X_old_fit, y_old[:-n_old_val], strategy=s)
         m = XGBoostWrapper(name=f"old_{s}_{label}", use_imbalance=False)
         m.fit(Xr, yr)
         pool[f"old_{s}"] = m
 
-        Xr, yr = sampler.apply_sampling(X_new_s.iloc[:-n_new_val], y_new[:-n_new_val], strategy=s)
+        Xr, yr = sampler.apply_sampling(X_new_fit, y_new[:-n_new_val], strategy=s)
         m = XGBoostWrapper(name=f"new_{s}_{label}", use_imbalance=False)
         m.fit(Xr, yr)
         pool[f"new_{s}"] = m

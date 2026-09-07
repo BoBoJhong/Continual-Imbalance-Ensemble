@@ -62,12 +62,14 @@ def _run_split(
     X_test_used = X_test
 
     if fs_variant == "fs":
+        n_old_val = max(1, int(len(X_old) * 0.2))
         X_old, X_new, X_test_used, n_features_after, selected_preview = _apply_old_fit_fs(
             X_old,
             y_old,
             X_new,
             X_test,
             logger,
+            n_old_val=n_old_val,
         )
     elif fs_variant != "no_fs":
         raise ValueError(f"Unknown fs_variant: {fs_variant}")

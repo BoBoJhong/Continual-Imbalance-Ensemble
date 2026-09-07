@@ -57,16 +57,21 @@ def _train_pool_probas(
     tag: str,
 ) -> tuple[np.ndarray, list[np.ndarray], list[np.ndarray]]:
     """Train the shared six-model pool and return validation/test probabilities."""
-    X_old_s, X_new_s, X_test_s, _ = _preprocess(X_old_raw, X_new_raw, X_test_raw)
-
-    n_old_val = max(1, int(len(X_old_s) * 0.2))
-    n_new_val = max(1, int(len(X_new_s) * 0.2))
-    X_old_fit = X_old_s.iloc[:-n_old_val]
+    n_old_val = max(1, int(len(X_old_raw) * 0.2))
+    n_new_val = max(1, int(len(X_new_raw) * 0.2))
+    X_old_fit_raw, X_old_val_raw = X_old_raw.iloc[:-n_old_val], X_old_raw.iloc[-n_old_val:]
+    X_new_fit_raw, X_new_val_raw = X_new_raw.iloc[:-n_new_val], X_new_raw.iloc[-n_new_val:]
+    X_old_fit, X_new_fit, X_old_val, X_new_val, X_test_s, _ = _preprocess(
+        X_old_fit_raw,
+        X_new_fit_raw,
+        X_old_val_raw,
+        X_new_val_raw,
+        X_test_raw,
+    )
     y_old_fit = y_old[:-n_old_val]
-    X_new_fit = X_new_s.iloc[:-n_new_val]
     y_new_fit = y_new[:-n_new_val]
     X_val = pd.concat(
-        [X_old_s.iloc[-n_old_val:], X_new_s.iloc[-n_new_val:]],
+        [X_old_val, X_new_val],
         ignore_index=True,
     )
     y_val = np.concatenate([y_old[-n_old_val:], y_new[-n_new_val:]])
@@ -142,12 +147,14 @@ def _run_split(
     X_old, y_old, X_new, y_new = _old_new_split(X_train_all, y_train_all, drift_start_year)
     X_test_used = X_test
     if fs_variant == "fs":
+        n_old_val = max(1, int(len(X_old) * 0.2))
         X_old, X_new, X_test_used, _, _ = _apply_old_fit_fs(
             X_old,
             y_old,
             X_new,
             X_test,
             logger,
+            n_old_val=n_old_val,
         )
 
     y_val, val_pool, test_pool = _train_pool_probas(

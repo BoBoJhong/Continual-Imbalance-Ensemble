@@ -4,17 +4,20 @@ from pathlib import Path
 from typing import Dict, Any
 
 
+DEFAULT_CONFIG_DIR = Path(__file__).resolve().parents[2] / "config"
+
+
 class ConfigLoader:
     """Load and manage YAML configuration files."""
     
-    def __init__(self, config_dir: str = "config"):
+    def __init__(self, config_dir: str | Path | None = None):
         """
         Initialize ConfigLoader.
         
         Args:
             config_dir: Directory containing config files
         """
-        self.config_dir = Path(config_dir)
+        self.config_dir = Path(config_dir).resolve() if config_dir else DEFAULT_CONFIG_DIR
         self._configs = {}
         
     def load(self, config_name: str) -> Dict[str, Any]:
@@ -37,6 +40,8 @@ class ConfigLoader:
             
         with open(config_path, 'r', encoding='utf-8') as f:
             config = yaml.safe_load(f)
+        if not isinstance(config, dict):
+            raise ValueError(f"Configuration root must be a mapping: {config_path}")
             
         self._configs[config_name] = config
         return config
@@ -89,12 +94,12 @@ class ConfigLoader:
         return value
 
 
-# Singleton instance
-_config_loader = None
+# Cache one loader per resolved configuration directory.
+_config_loaders: Dict[Path, ConfigLoader] = {}
 
-def get_config_loader(config_dir: str = "config") -> ConfigLoader:
-    """Get the singleton ConfigLoader instance."""
-    global _config_loader
-    if _config_loader is None:
-        _config_loader = ConfigLoader(config_dir)
-    return _config_loader
+def get_config_loader(config_dir: str | Path | None = None) -> ConfigLoader:
+    """Get a cached ConfigLoader for the requested configuration directory."""
+    resolved = Path(config_dir).resolve() if config_dir else DEFAULT_CONFIG_DIR
+    if resolved not in _config_loaders:
+        _config_loaders[resolved] = ConfigLoader(resolved)
+    return _config_loaders[resolved]

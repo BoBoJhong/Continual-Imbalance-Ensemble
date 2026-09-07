@@ -23,15 +23,15 @@ def test_config_loading():
         loader = get_config_loader()
         
         # Load all configs
-        print("\n✓ Loading all configurations...")
+        print("\n[OK] Loading all configurations...")
         all_configs = loader.load_all()
         
         for config_name, config in all_configs.items():
-            print(f"  ✓ {config_name}: {len(config)} sections")
+            print(f"  [OK] {config_name}: {len(config)} sections")
         
         # Test specific value retrieval
-        print("\n✓ Testing specific value retrieval...")
-        random_seed = loader.get("base_config", "random_seed")
+        print("\n[OK] Testing specific value retrieval...")
+        random_seed = loader.get("base_config", "base_config.random_seed")
         print(f"  Random seed: {random_seed}")
         
         lgb_objective = loader.get("model_config", "lightgbm.base_params.objective")
@@ -39,14 +39,18 @@ def test_config_loading():
         
         des_method = loader.get("des_config", "des_algorithm.method")
         print(f"  DES method: {des_method}")
+
+        assert random_seed == 42
+        assert lgb_objective == "binary"
+        assert des_method is not None
         
-        print("\n✅ Configuration loading: SUCCESS")
-        return True
+        print("\n[OK] Configuration loading: SUCCESS")
+        return None
         
     except Exception as e:
-        print(f"\n❌ Configuration loading: FAILED")
+        print(f"\n[FAIL] Configuration loading: FAILED")
         print(f"  Error: {e}")
-        return False
+        raise
 
 
 def test_seed_setting():
@@ -57,11 +61,11 @@ def test_seed_setting():
     
     try:
         set_seed(42)
-        print("✅ Seed setting: SUCCESS")
-        return True
+        print("[OK] Seed setting: SUCCESS")
+        return None
     except Exception as e:
-        print(f"❌ Seed setting: FAILED - {e}")
-        return False
+        print(f"[FAIL] Seed setting: FAILED - {e}")
+        raise
 
 
 def test_logging():
@@ -74,11 +78,11 @@ def test_logging():
         logger = get_logger("test", console=True, file=False)
         logger.info("This is a test log message")
         logger.warning("This is a test warning")
-        print("✅ Logging system: SUCCESS")
-        return True
+        print("[OK] Logging system: SUCCESS")
+        return None
     except Exception as e:
-        print(f"❌ Logging system: FAILED - {e}")
-        return False
+        print(f"[FAIL] Logging system: FAILED - {e}")
+        raise
 
 
 def test_directory_structure():
@@ -101,7 +105,6 @@ def test_directory_structure():
         "data/splits",
         "results",
         "experiments",
-        "notebooks",
         "tests",
         "docs",
         "logs"
@@ -111,17 +114,17 @@ def test_directory_structure():
     for dir_path in required_dirs:
         full_path = project_root / dir_path
         exists = full_path.exists()
-        status = "✓" if exists else "✗"
+        status = "OK" if exists else "MISSING"
         print(f"  {status} {dir_path}")
         if not exists:
             all_exist = False
     
     if all_exist:
-        print("\n✅ Directory structure: SUCCESS")
+        print("\n[OK] Directory structure: SUCCESS")
     else:
-        print("\n⚠ Directory structure: INCOMPLETE")
+        print("\n[WARN] Directory structure: INCOMPLETE")
     
-    return all_exist
+    assert all_exist
 
 
 def main():
@@ -130,33 +133,40 @@ def main():
     print("CONTINUAL-IMBALANCE-ENSEMBLE SETUP TEST")
     print("="*50)
     
-    results = {
-        "Directory Structure": test_directory_structure(),
-        "Configuration Loading": test_config_loading(),
-        "Seed Setting": test_seed_setting(),
-        "Logging System": test_logging()
+    checks = {
+        "Directory Structure": test_directory_structure,
+        "Configuration Loading": test_config_loading,
+        "Seed Setting": test_seed_setting,
+        "Logging System": test_logging,
     }
+    results = {}
+    for name, check in checks.items():
+        try:
+            check()
+            results[name] = True
+        except Exception:
+            results[name] = False
     
     print("\n" + "="*50)
     print("TEST SUMMARY")
     print("="*50)
     
     for test_name, passed in results.items():
-        status = "✅ PASSED" if passed else "❌ FAILED"
+        status = "PASSED" if passed else "FAILED"
         print(f"{test_name}: {status}")
     
     all_passed = all(results.values())
     
     print("\n" + "="*50)
     if all_passed:
-        print("🎉 ALL TESTS PASSED! Setup is complete.")
+        print("ALL TESTS PASSED! Setup is complete.")
         print("="*50)
         print("\nNext steps:")
         print("1. Install dependencies: pip install -r requirements.txt")
         print("2. Download datasets to data/raw/")
-        print("3. Run experiments: python experiments/run_baseline.py")
+        print("3. Run experiments: python scripts/run/run_all_experiments.py")
     else:
-        print("⚠ SOME TESTS FAILED. Please review the errors above.")
+        print("SOME TESTS FAILED. Please review the errors above.")
     print("="*50)
     
     return 0 if all_passed else 1

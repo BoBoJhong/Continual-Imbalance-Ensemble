@@ -1,22 +1,29 @@
 """Data loading utilities."""
 import pandas as pd
-import numpy as np
 from pathlib import Path
 from typing import Tuple, Optional, Dict, Any
 from ..utils import get_logger
 
 
+DEFAULT_DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "raw"
+STOCK_COLUMNS = [
+    "Date", "Close", "High", "Low", "Open", "Volume", "Returns",
+    "Log_Returns", "SMA_5", "SMA_20", "SMA_60", "Volatility_20",
+    "RSI", "Future_Returns_20", "Crash_Event",
+]
+
+
 class DataLoader:
     """Load datasets from various sources."""
     
-    def __init__(self, data_dir: str = "data/raw"):
+    def __init__(self, data_dir: str | Path | None = None):
         """
         Initialize DataLoader.
         
         Args:
             data_dir: Directory containing raw data
         """
-        self.data_dir = Path(data_dir)
+        self.data_dir = Path(data_dir).resolve() if data_dir else DEFAULT_DATA_DIR
         self.logger = get_logger("DataLoader", console=True, file=False)
         
     def load_bankruptcy(
@@ -33,19 +40,25 @@ class DataLoader:
             Tuple of (features DataFrame, target Series)
         """
         if file_path is None:
-            file_path = self.data_dir / "bankruptcy" / "data.csv"
+            us_path = self.data_dir / "bankruptcy" / "american_bankruptcy_dataset.csv"
+            taiwan_path = self.data_dir / "bankruptcy" / "data.csv"
+            file_path = us_path if us_path.exists() else taiwan_path
         
         self.logger.info(f"Loading bankruptcy data from {file_path}")
         
         df = pd.read_csv(file_path)
         
-        # Assume target column is 'Bankrupt?' and time column is 'Year'
-        target_col = 'Bankrupt?'
-        time_col = 'Year'
-        
-        # Separate features and target
-        X = df.drop(columns=[target_col])
-        y = df[target_col]
+        if "status_label" in df.columns:
+            y = (df["status_label"].astype(str).str.lower() == "failed").astype(int)
+            drop_columns = ["status_label", "company_name", "Division"]
+            X = df.drop(columns=[c for c in drop_columns if c in df.columns])
+        elif "Bankrupt?" in df.columns:
+            y = df["Bankrupt?"].astype(int)
+            X = df.drop(columns=["Bankrupt?"])
+        else:
+            raise ValueError(
+                "Bankruptcy data must contain 'status_label' or 'Bankrupt?'"
+            )
         
         self.logger.info(f"Loaded {len(df)} samples with {X.shape[1]} features")
         self.logger.info(f"Class distribution: {y.value_counts().to_dict()}")
@@ -57,7 +70,7 @@ class DataLoader:
         file_path: Optional[str] = None
     ) -> Tuple[pd.DataFrame, pd.Series]:
         """
-        Load medical time series dataset (MIMIC-III).
+        Load the processed UCI Diabetes 130 time-series dataset.
         
         Args:
             file_path: Path to medical data file
@@ -66,17 +79,22 @@ class DataLoader:
             Tuple of (features DataFrame, target Series)
         """
         if file_path is None:
-            file_path = self.data_dir / "medical" / "data.csv"
+            file_path = (
+                self.data_dir / "medical" / "diabetes130" / "diabetes130_medical.csv"
+            )
         
         self.logger.info(f"Loading medical data from {file_path}")
         
         df = pd.read_csv(file_path)
         
-        # Assume target column is 'mortality'
-        target_col = 'mortality'
-        
+        target_col = "mortality"
+        if target_col not in df.columns:
+            raise ValueError(f"Medical data must contain '{target_col}'")
+        y = df[target_col].astype(int)
         X = df.drop(columns=[target_col])
-        y = df[target_col]
+        if "date" in X.columns:
+            X = X.copy()
+            X["Year"] = pd.to_datetime(X.pop("date"), errors="coerce").dt.year
         
         self.logger.info(f"Loaded {len(df)} samples with {X.shape[1]} features")
         self.logger.info(f"Class distribution: {y.value_counts().to_dict()}")
@@ -97,17 +115,17 @@ class DataLoader:
             Tuple of (features DataFrame, target Series)
         """
         if file_path is None:
-            file_path = self.data_dir / "stock" / "data.csv"
+            file_path = self.data_dir / "stock" / "stock_spx.csv"
         
         self.logger.info(f"Loading stock data from {file_path}")
         
-        df = pd.read_csv(file_path)
-        
-        # Assume target column is 'crash_event'
-        target_col = 'crash_event'
-        
-        X = df.drop(columns=[target_col])
-        y = df[target_col]
+        df = pd.read_csv(file_path, skiprows=2, names=STOCK_COLUMNS, header=None)
+        df = df.dropna(subset=["Crash_Event"])
+        y = pd.to_numeric(df["Crash_Event"], errors="raise").astype(int)
+        X = df.drop(columns=["Crash_Event", "Future_Returns_20"]).copy()
+        X["Year"] = pd.to_datetime(X.pop("Date"), errors="coerce").dt.year
+        for column in X.columns:
+            X[column] = pd.to_numeric(X[column], errors="coerce")
         
         self.logger.info(f"Loaded {len(df)} samples with {X.shape[1]} features")
         self.logger.info(f"Class distribution: {y.value_counts().to_dict()}")

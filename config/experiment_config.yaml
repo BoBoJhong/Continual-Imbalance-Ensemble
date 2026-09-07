@@ -53,20 +53,23 @@ feature_selection_study:
 
 evaluation:
   primary_metrics:
-    - "roc_auc"
-    - "f1_macro"
-    - "g_mean"
+    - "AUC"
+    - "PR_AUC"
+    - "F1"
+    - "G_Mean"
     
   secondary_metrics:
-    - "recall_minority"
-    - "precision_minority"
-    - "balanced_accuracy"
-    - "cohen_kappa"
+    - "Recall"
+    - "Precision"
+    - "Balanced_Accuracy"
+    - "Cohen_Kappa"
+    - "Type1_Error"
+    - "Type2_Error"
     
   statistical_test:
     method: "wilcoxon"  # Wilcoxon signed-rank test
     alpha: 0.05
-    correction: "bonferroni"  # For multiple comparisons
+    correction: "holm"  # Family-wise error correction used by confirmatory rolling tests
     
   cross_validation:
     method: "TimeSeriesSplit"
@@ -74,8 +77,8 @@ evaluation:
     test_size: null  # Auto-calculated
 
 reproducibility:
-  random_seeds: [42, 123, 456, 789, 2024]
-  n_runs: 5
+  random_seeds: [42, 123, 456, 789, 2024, 7, 21, 84, 168, 999]
+  n_runs: 10
   save_all_runs: true
   aggregate_method: "mean_std"  # Report mean ± std
 

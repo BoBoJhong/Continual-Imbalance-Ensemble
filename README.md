@@ -29,7 +29,7 @@ A continual learning framework for class imbalance in non-stationary datasets, c
 
 ### 研究方向與實驗階段及 UML 對照
 
-以下將 [docs/研究方向.md](docs/研究方向.md) 的條目，對到本儲存庫的**階段／腳本**與 **PlantUML**（細節見 [UML/README_圖表建議.md](UML/README_圖表建議.md)、完整矩陣見 [docs/研究方向對照表.md](docs/研究方向對照表.md)）。
+以下將 [docs/研究方向.md](docs/研究方向.md) 的條目，對到本儲存庫的**階段／腳本**與 **PlantUML**（細節見 [docs/diagrams/README.md](docs/diagrams/README.md)、完整矩陣見 [docs/研究方向對照表.md](docs/研究方向對照表.md)）。
 
 | 研究方向.md 要點 | 實驗階段與主要路徑 | 建議對照之 UML |
 |------------------|-------------------|----------------|
@@ -67,7 +67,7 @@ A continual learning framework for class imbalance in non-stationary datasets, c
 | Phase 2｜DES | 鄰域動態選模 | **XGB** 池 + **DES**（KNORA-E／U、DES-KNN 等） | 完成 | `…/dynamic/des/`、`xgb_oldnew_ensemble_des_*_bankruptcy*` |
 | Phase 2｜DCS | 鄰域競爭選模 | **XGB** 池 + **DCS**（OLA／LCA／TW） | 完成 | `…/dynamic/dcs/`、`xgb_oldnew_ensemble_dcs_*`（列數精簡，見 [Phase 2 集成](#method-phase2-ensemble)） |
 | Phase 3 | Study II 特徵選擇 | **LightGBM** `ModelPool` + `FeatureSelector`（見 `phase3_feature/fs_study.py`） | 完成 | 篩選比例已修正（`FS_RATIO` 等） |
-| Phase 4 | 比例、DES Advanced、split 比較等 | 視子實驗（多為 **XGB**／既有集成元件） | 完成 | 見 `results/phase4_analysis/` |
+| Phase 4/5 | Drift、ROSS、DAWCE 與加權分析 | 視子實驗（多為 **XGB**／既有集成元件） | 進行中 | 見 `results/phase4_drift/`、`results/phase5_weighted/` |
 
 #### 股票 (Stock，預設 SPX)
 
@@ -122,7 +122,7 @@ A continual learning framework for class imbalance in non-stationary datasets, c
 
 ```text
 src/             ← 核心模組（資料處理、模型封裝、集成、評估）
-experiments/     ← 可執行實驗（phase1_baseline … phase4_analysis）
+experiments/     ← 可執行實驗（phase1_baseline … phase5_weighted）
 scripts/         ← 工具腳本（見下表）
 config/          ← YAML 實驗與模型超參數
 ```
@@ -136,7 +136,8 @@ config/          ← YAML 實驗與模型超參數
 | Phase 1 | Baseline（多分類器、多資料集） | `experiments/phase1_baseline/` |
 | Phase 2 | 集成（XGB）：靜態／DES／DCS 分腳本；產物分子目錄 | 見下表「Phase 2」 |
 | Phase 3（FS） | 特徵選取（Study II） | `experiments/phase3_feature/` |
-| Phase 4 | 補充分析（比例、split、成本等） | `experiments/phase4_analysis/` |
+| Phase 4 | Drift、ROSS 與 rolling 分析 | `experiments/phase4_drift/`、`experiments/phase_flexible/` |
+| Phase 5 | DAWCE、AWE 與加權分析 | `experiments/phase5_weighted/` |
 
 **Phase 2 集成腳本與結果（以破產為例；`*` = 資料集後綴）**
 
@@ -148,7 +149,7 @@ config/          ← YAML 實驗與模型超參數
 
 共用邏輯：`experiments/phase2_ensemble/xgb_oldnew_ensemble_common.py`、`xgb_year_split_shared.py`。`python scripts/run/run_all_experiments.py` 會一併觸發股票／醫療 Phase 2；**論文主線完成度**仍以 [研究現況](#研究現況-current-progress) 為準。
 
-**UML／方法圖**（PlantUML）：[UML/README_圖表建議.md](UML/README_圖表建議.md)。與 [研究目標](#研究目標) 內之 UML 對照表呼應。
+**UML／方法圖**（PlantUML）：[docs/diagrams/README.md](docs/diagrams/README.md)。與 [研究目標](#研究目標) 內之 UML 對照表呼應。
 
 **`scripts/`**（專案根執行；完整指令：[scripts/README.md](scripts/README.md)）
 
@@ -181,7 +182,9 @@ results/
 │       ├── des/
 │       └── dcs/          ← DCS 建池 scaler 與靜態／DES 可能不同，見腳本註解
 ├── phase3_feature/
-├── phase4_analysis/
+├── phase4_drift/
+├── phase5_weighted/
+├── phase_flexible/
 ├── multi_seed/
 └── visualizations/
 ```
@@ -243,7 +246,7 @@ results/
 
 > **三資料集並非同一套 Phase 1 定義**：僅 **破產** `bankruptcy_year_splits_xgb.py` 實作 **Retrain**（Old+New 全量合併重訓）與 **Finetune**（Old 訓練後以 New 接續同一 booster）。**股票、醫療** 的 `stock_year_splits_xgb.py`、`medical_year_splits_xgb.py` 為 **Old／Old+New（平衡混合）／New** 三種，**沒有**與破產同名的 Retrain／Finetune；若論文要三資料集嚴格可比，需另補程式或改寫腳本。
 
-與 [docs/研究方向.md](docs/研究方向.md) 對齊時，**單一基學習器**在「每個年份切割」下會比較下列 **四種訓練策略**（再各自 × **四種採樣**：none／undersampling／oversampling／hybrid）。**完整實作**見 **破產** `bankruptcy_year_splits_xgb.py`、`bankruptcy_year_splits_torch_mlp.py`；流程圖見 `UML/baseline_flow.puml`。
+與 [docs/研究方向.md](docs/研究方向.md) 對齊時，**單一基學習器**在「每個年份切割」下會比較下列 **四種訓練策略**（再各自 × **四種採樣**：none／undersampling／oversampling／hybrid）。**完整實作**見 **破產** `bankruptcy_year_splits_xgb.py`、`bankruptcy_year_splits_torch_mlp.py`；流程圖見 `docs/diagrams/phase1-baseline-flow.puml`。
 
 | 策略 | 怎麼 train | 備註 |
 |------|------------|------|
@@ -346,9 +349,11 @@ results/
 > 類別不平衡：**勿單獨報告 Accuracy**
 
 - **AUC-ROC** — 排序能力  
+- **PR-AUC** — 少數類排序品質
 - **F1** — 精確度與召回平衡  
 - **G-Mean** — 敏感度與特異度幾何平均  
 - **Recall** — 少數類召回  
+- **Balanced Accuracy／Cohen's Kappa** — 類別平衡與超越隨機一致性的補充指標
 
 ---
 
@@ -356,10 +361,14 @@ results/
 
 ```powershell
 # 1. 虛擬環境
-.\venv\Scripts\activate
+.\.venv\Scripts\activate
 
 # 2. 依賴
 pip install -r requirements.txt
+
+# 僅安裝核心與開發／測試工具
+# pip install -r requirements-dev.txt
+# python -m pytest -q
 
 # 3. 資料（必要時）
 #    python scripts\data\download_real_medical_data.py
@@ -419,8 +428,9 @@ from src.utils import get_logger, set_seed
 | [experiments/README.md](experiments/README.md) | 實驗目錄與執行慣例 |
 | [docs/STRUCTURE.md](docs/STRUCTURE.md) | 完整目錄結構 |
 | [docs/RESEARCH_SPEC.md](docs/RESEARCH_SPEC.md) | 研究方向規格 |
+| [docs/DATASETS.md](docs/DATASETS.md) | 資料來源、欄位與治理注意事項 |
 | [docs/研究方向.md](docs/研究方向.md) | 研究課題說明（中文） |
 | [docs/研究方向對照表.md](docs/研究方向對照表.md) | 實作與論文對照 |
-| [UML/README_圖表建議.md](UML/README_圖表建議.md) | PlantUML 流程圖與論文用圖建議 |
+| [docs/diagrams/README.md](docs/diagrams/README.md) | PlantUML 流程圖與論文用圖建議 |
 | [results/README.md](results/README.md) | 結果目錄說明 |
 | [.agents/rules/rules.md](.agents/rules/rules.md) | 專案規範（路徑、import） |

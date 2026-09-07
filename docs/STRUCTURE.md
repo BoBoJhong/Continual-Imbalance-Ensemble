@@ -1,6 +1,6 @@
 # Continual-Imbalance-Ensemble — 目錄結構說明
 
-> 最後更新：2026-03-03
+> 最後更新：2026-09-07
 
 ## 整體架構
 
@@ -76,11 +76,9 @@ Continual-Imbalance-Ensemble/
 │   ├── phase3_feature/             ← 特徵選擇研究（Phase 3 FS）
 │   │   ├── fs_study.py             ← 特徵選擇方法比較
 │   │   └── fs_sweep.py             ← 特徵數量 sweep
-│   └── phase4_analysis/            ← 深度／補充分析
-│       ├── base_learner_comparison.py  ← 基學習器比較（LGB/XGB/RF）
-│       ├── proportion_study.py         ← New data 比例研究
-│       ├── split_comparison.py         ← chronological vs. block_cv 比較
-│       └── stock_threshold_cost.py     ← 股票門檻/成本分析
+│   ├── phase4_drift/               ← Drift detection、ROSS 與 rolling 分析
+│   ├── phase5_weighted/            ← DAWCE、AWE 與加權分析
+│   └── phase_flexible/             ← 彈性批次與 AdaptiveChoice
 │
 ├── scripts/                        ← 工具腳本（非實驗），詳見 scripts/README.md
 │   ├── README.md
@@ -107,7 +105,7 @@ Continual-Imbalance-Ensemble/
 │   └── reports/                    ← 報表匯出
 │       └── generate_advisor_excel.py
 │
-├── data/                           ← 資料（raw/ 已 .gitignore）
+├── data/                           ← 資料（raw/ 依專案決策保留於 Git）
 │   ├── raw/
 │   │   ├── bankruptcy/
 │   │   │   └── american_bankruptcy_dataset.csv
@@ -130,19 +128,34 @@ Continual-Imbalance-Ensemble/
 │   ├── phase1_baseline/            ← baseline 輸出（Old / New / Retrain）
 │   ├── phase2_ensemble/            ← static/、dynamic/des/（XGB 主線）；dynamic/dcs/ 僅舊版腳本可寫入
 │   ├── phase3_feature/             ← 特徵選擇研究輸出
-│   ├── phase4_analysis/            ← 深度／補充分析輸出
+│   ├── phase4_drift/               ← Drift 與 ROSS 輸出
+│   ├── phase5_weighted/            ← 加權集成輸出
+│   ├── phase_flexible/             ← rolling 評估輸出
 │   ├── multi_seed/                 ← 多 Seed 重現性結果
 │   │   ├── bankruptcy_multi_seed.csv
 │   │   ├── medical_multi_seed.csv
 │   │   └── stock_multi_seed.csv
 │   └── visualizations/             ← 產出圖表（PNG）
 │
-├── UML/                            ← PlantUML 方法／流程圖（見 UML/README_圖表建議.md）
+├── docs/diagrams/                  ← PlantUML 方法／流程圖
 ├── docs/                           ← 核心文件
 │   ├── STRUCTURE.md                ← 本文件（目錄說明）
+│   ├── RESEARCH_AGENT_AND_SKILLS.md← 研究 agent 用法與外部 skill 評估
+│   ├── RELATED_LITERATURE.md       ← 相關論文、引用優先級與寫作對照
+│   ├── EXPERIMENT_VALIDATION_REPORT.md ← 實驗、統計與論文主張審查
+│   ├── PROFESSOR_PROGRESS_REPORT.md ← 指導教授成果報告（含圖表）
+│   ├── PROFESSOR_PROGRESS_REPORT_SOURCES.md ← 報告 claim ledger 與圖表來源
+│   ├── references.bib              ← 可供 LaTeX／Zotero 使用的 BibTeX
+│   ├── DATASETS.md                 ← 資料集格式、治理與洩漏防護
 │   ├── RESEARCH_SPEC.md            ← 指導教授研究方向規格
 │   ├── reserch_summary.md          ← 研究摘要
 │   └── 研究方向.md                 ← 研究方向規劃
+│
+├── .agents/skills/                 ← 專案可版本控制的 Codex skills
+│   └── research-paper-agent/       ← 文獻、引註、方法、寫作與審查工作流
+│
+├── .codex/agents/                  ← Codex 專案 custom agents
+│   └── researcher.toml             ← 可委派的研究與論文寫作 agent
 │
 ├── examples/                       ← 示範腳本
 │   ├── demo_complete_workflow.py   ← 完整流程示範

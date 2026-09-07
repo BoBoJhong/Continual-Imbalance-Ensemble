@@ -28,7 +28,7 @@
 
 ## Phase 4 — 補充分析
 
-`phase4_analysis/`：split 比較、比例、基學習器、股票閾值成本等。
+`phase4_drift/`：Drift detection、ROSS 與 rolling 比較；`phase5_weighted/`：DAWCE、AWE 與權重分析。
 
 ---
 

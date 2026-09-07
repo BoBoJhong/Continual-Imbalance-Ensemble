@@ -46,7 +46,6 @@ def _load_stock(logger, ticker="spx", keep_year=False):
     X = df.drop(columns=drop_cols)
     for c in X.columns:
         X[c] = pd.to_numeric(X[c], errors="coerce")
-    X = X.fillna(X.median())
     if keep_year:
         X = X.copy()
         X["_year"] = pd.to_datetime(df["Date"], errors="coerce").dt.year.values
@@ -169,9 +168,10 @@ def get_splits(dataset_name, logger, split_mode="block_cv"):
 
     logger.info("步驟 3: 資料前處理")
     preprocessor = DataPreprocessor()
-    X_hist_clean = preprocessor.handle_missing_values(X_hist)
-    X_new_clean = preprocessor.handle_missing_values(X_new)
-    X_test_clean = preprocessor.handle_missing_values(X_test)
+    preprocessor.fit_missing_values(X_hist)
+    X_hist_clean = preprocessor.transform_missing_values(X_hist)
+    X_new_clean = preprocessor.transform_missing_values(X_new)
+    X_test_clean = preprocessor.transform_missing_values(X_test)
     X_hist_scaled, X_test_scaled = preprocessor.scale_features(
         X_hist_clean, X_test_clean, fit=True
     )

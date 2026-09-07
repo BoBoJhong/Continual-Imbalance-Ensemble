@@ -14,6 +14,24 @@ from itertools import combinations
 from sklearn.neighbors import NearestNeighbors
 
 
+def _positive_class_probability(model, X, expected_rows: int) -> np.ndarray:
+    """Normalize wrapper/sklearn probability outputs to shape ``(n_samples,)``."""
+    proba = np.asarray(model.predict_proba(X))
+    if proba.ndim == 1:
+        positive = proba
+    elif proba.ndim == 2 and proba.shape[1] == 2:
+        positive = proba[:, 1]
+    elif proba.ndim == 2 and proba.shape[1] == 1:
+        positive = proba[:, 0]
+    else:
+        raise ValueError(f"Unsupported predict_proba shape: {proba.shape}")
+    if len(positive) != expected_rows:
+        raise ValueError(
+            f"predict_proba returned {len(positive)} rows; expected {expected_rows}"
+        )
+    return positive.astype(float, copy=False)
+
+
 class DynamicEnsembleSelector:
     """
     KNORA-E 風格的 Dynamic Ensemble Selection。
@@ -45,8 +63,8 @@ class DynamicEnsembleSelector:
         在 DSEL 資料集上 fit。
 
         Args:
-            pool_models: 模型列表，各模型需有 predict(X) 與 predict_proba(X) 方法，
-                         predict_proba 需回傳 shape=(n, 2) 的矩陣。
+            pool_models: 模型列表，各模型需有 predict(X) 與 predict_proba(X) 方法；
+                         predict_proba 可回傳正類一維機率或 shape=(n, 2) 矩陣。
             X_dsel:      DSEL 特徵（Historical + New Operating 合併）
             y_dsel:      DSEL 標籤（0/1）
 
@@ -91,8 +109,7 @@ class DynamicEnsembleSelector:
         # 各模型在 test 上的正類機率
         test_proba = np.zeros((n_test, n_pool))
         for i, model in enumerate(self._pool_models):
-            p = model.predict_proba(X_arr)
-            test_proba[:, i] = p[:, 1] if p.shape[1] == 2 else p.ravel()
+            test_proba[:, i] = _positive_class_probability(model, X_arr, n_test)
 
         # kNN 查詢
         _, idx = self._nn.kneighbors(X_arr)
@@ -161,14 +178,18 @@ class EnsembleCombiner:
                 combos[name] = self._avg([o, n])
 
         # 3 models type_a: 2 Old + 1 New
-        for n in self.NEW_KEYS:
-            name = f"ensemble_3a_2old_{n.split('_')[1]}"
-            combos[name] = self._avg(self.OLD_KEYS + [n])
+        for old_pair in combinations(self.OLD_KEYS, 2):
+            for n in self.NEW_KEYS:
+                old_names = "_".join(key.split("_")[1] for key in old_pair)
+                name = f"ensemble_3a_{old_names}_{n.split('_')[1]}"
+                combos[name] = self._avg([*old_pair, n])
 
         # 3 models type_b: 1 Old + 2 New
         for o in self.OLD_KEYS:
-            name = f"ensemble_3b_{o.split('_')[1]}_2new"
-            combos[name] = self._avg([o] + self.NEW_KEYS)
+            for new_pair in combinations(self.NEW_KEYS, 2):
+                new_names = "_".join(key.split("_")[1] for key in new_pair)
+                name = f"ensemble_3b_{o.split('_')[1]}_{new_names}"
+                combos[name] = self._avg([o, *new_pair])
 
         # 4 models: C(6,4) = 15 組
         all_keys = self.OLD_KEYS + self.NEW_KEYS
@@ -299,8 +320,7 @@ class DynamicClassifierSelector:
         # 各模型在 test 上的正類機率
         test_proba = np.zeros((n_test, n_pool))
         for i, model in enumerate(self._pool_models):
-            p = model.predict_proba(X_arr)
-            test_proba[:, i] = p[:, 1] if p.shape[1] == 2 else p.ravel()
+            test_proba[:, i] = _positive_class_probability(model, X_arr, n_test)
 
         # 各模型在 test 上的預測類別（供 LCA 使用）
         test_preds = np.zeros((n_test, n_pool), dtype=np.int64)
