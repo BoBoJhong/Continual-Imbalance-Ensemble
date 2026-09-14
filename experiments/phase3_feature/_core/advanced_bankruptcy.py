@@ -7,6 +7,7 @@ from __future__ import annotations
 import sys
 import warnings
 from pathlib import Path
+from datetime import datetime, timezone
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
@@ -128,14 +129,19 @@ def _apply_feature_selection(
     X_new: pd.DataFrame,
     X_test: pd.DataFrame,
     logger,
+    *,
+    X_fit: pd.DataFrame,
+    y_fit: np.ndarray,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, int, int]:
+    """Fit supervised FS on the explicitly supplied fit partition only."""
     n_before = X_old.shape[1]
     if fs_method is None:
         return X_old, X_new, X_test, n_before, n_before
 
     k = max(1, int(n_before * fs_ratio))
     fs = FeatureSelector(method=fs_method, k=k)
-    X_old_fs = fs.fit_transform(X_old, y_old)
+    fs.fit(X_fit, y_fit)
+    X_old_fs = fs.transform(X_old)
     X_new_fs = fs.transform(X_new)
     X_test_fs = fs.transform(X_test)
     n_after = X_old_fs.shape[1]
@@ -164,12 +170,25 @@ def _run_one_split_one_fs(
 ) -> List[dict]:
     rows: List[dict] = []
 
-    X_old_fs, X_new_fs, X_test_fs, n_before, n_after = _apply_feature_selection(
-        fs_tag, fs_method, fs_ratio, X_old, y_old, X_new, X_test, logger,
+    # Partition raw rows before learning either imputation or supervised FS.
+    X_old_fit, y_old_fit, X_old_val, y_old_val = _split_fit_val_by_year(X_old, y_old, year_old)
+    X_new_fit, y_new_fit, X_new_val, y_new_val = _split_fit_val_by_year(X_new, y_new, year_new)
+    # FS is an Old-fit representation shared by the pool. Its imputer has the
+    # same information budget; no New/validation/test statistics are learned.
+    imputer = DataPreprocessor().fit_missing_values(X_old_fit)
+    X_old_fit, X_old_val, X_new_fit, X_new_val, X_test = (
+        imputer.transform_missing_values(frame)
+        for frame in (X_old_fit, X_old_val, X_new_fit, X_new_val, X_test)
     )
-
-    X_old_fit, y_old_fit, X_old_val, y_old_val = _split_fit_val_by_year(X_old_fs, y_old, year_old)
-    X_new_fit, y_new_fit, X_new_val, y_new_val = _split_fit_val_by_year(X_new_fs, y_new, year_new)
+    n_old_fit, n_new_fit = len(X_old_fit), len(X_new_fit)
+    X_old_fs, X_new_fs, X_test_fs, n_before, n_after = _apply_feature_selection(
+        fs_tag, fs_method, fs_ratio,
+        pd.concat([X_old_fit, X_old_val], ignore_index=True), y_old,
+        pd.concat([X_new_fit, X_new_val], ignore_index=True), X_test, logger,
+        X_fit=X_old_fit, y_fit=y_old_fit,
+    )
+    X_old_fit, X_old_val = X_old_fs.iloc[:n_old_fit], X_old_fs.iloc[n_old_fit:]
+    X_new_fit, X_new_val = X_new_fs.iloc[:n_new_fit], X_new_fs.iloc[n_new_fit:]
 
     pre_old = DataPreprocessor()
     X_old_fit_s = pre_old.scale_features(X_old_fit, fit=True)[0]
@@ -266,7 +285,9 @@ def run_advanced(project_root: Path, results_method_subdir: str, fs_method_names
     sys.path.insert(0, str(project_root))
     logger = get_logger(f"Phase3_FS_Advanced_{results_method_subdir}", console=True, file=True)
     set_seed(42)
-    output_dir = results_method_dir(project_root, results_method_subdir)
+    # Preserve legacy results; corrected runs are intentionally separate.
+    output_dir = results_method_dir(project_root, results_method_subdir) / "fit_only_runs" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    output_dir.mkdir(parents=True, exist_ok=False)
     fs_configs = _build_fs_configs(fs_method_names)
 
     all_rows: List[dict] = []
@@ -284,7 +305,7 @@ def run_advanced(project_root: Path, results_method_subdir: str, fs_method_names
 
         try:
             X_old, y_old, X_new, y_new, X_test, y_test, year_old, year_new, year_test = (
-                get_bankruptcy_year_split(logger, old_end_year=old_end_year, return_years=True)
+                get_bankruptcy_year_split(logger, old_end_year=old_end_year, return_years=True, raw_features=True)
             )
             y_old = np.asarray(y_old)
             y_new = np.asarray(y_new)

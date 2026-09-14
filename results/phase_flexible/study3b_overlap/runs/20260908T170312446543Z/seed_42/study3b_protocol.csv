@@ -1,0 +1,3 @@
+test_feature_year,test_event_year,validation_feature_year,latest_train_feature_year,recent3_years,b_model_end_years,b_model_added_end_years,b_model_removed_end_years,b_model_union_years,b_data_old_years,b_data_new_years,pool_size,ensemble_weights,test_used_for_selection,seed,protocol_version
+2009,2010,2008,2007,"2005,2006,2007","2005,2006,2007","2005,2006,2007",,2003-2007,"2005,2006",2007,3,equal,False,42,study3b_overlap_event_target_v1_financial18_exploratory
+2010,2011,2009,2008,"2006,2007,2008","2006,2007,2008",2008,2005,2004-2008,"2006,2007",2008,3,equal,False,42,study3b_overlap_event_target_v1_financial18_exploratory

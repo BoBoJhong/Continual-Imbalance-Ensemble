@@ -1,5 +1,5 @@
 """
-Phase 2 — XGB Bankruptcy：動態 DES（KNORA / DES-KNN），年份切割。
+Phase 2 — XGB Bankruptcy：自訂固定鄰域／local-accuracy 動態集成變體，年份切割。
 輸出：results/phase2_ensemble/dynamic/des/
 """
 from __future__ import annotations
@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import sys
 from pathlib import Path
+from datetime import datetime, timezone
 
 import pandas as pd
 
@@ -27,7 +28,7 @@ def main():
     parser.add_argument(
         "--output-tag",
         type=str,
-        default="",
+        default="protocol_v2_runs",
         help="額外輸出子資料夾名稱（例如 tuned_rerun），結果會寫到 dynamic/des/<tag>/",
     )
     args = parser.parse_args()
@@ -39,7 +40,8 @@ def main():
     tag = args.output_tag.strip()
     if tag:
         out = out / tag
-    out.mkdir(parents=True, exist_ok=True)
+    out = out / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    out.mkdir(parents=True, exist_ok=False)
 
     _, des_rows = iter_bankruptcy_year_splits(logger)
     df = pd.DataFrame(des_rows)

@@ -1,0 +1,33 @@
+{
+  "status": "completed",
+  "analysis_protocol_version": "study3b_sliding_old_new_posthoc_v1",
+  "created_at_utc": "2026-09-14T23:43:37.086215+00:00",
+  "source_run": "results\\phase_flexible\\study3b_sliding_old_new\\runs\\20260914T233351370315Z",
+  "source_files": {
+    "sliding_primary_predictions.csv": {
+      "sha256": "2561640759cb20691b9667c711fb7d48eb02319c04a2ca9e0270eb63e725ed01",
+      "size_bytes": 16128316
+    },
+    "sliding_primary_by_year.csv": {
+      "sha256": "9c275347f5264050f71e8c6d47d8b3f11b0bd9cedb13b8a4383797bd687ab5f5",
+      "size_bytes": 10643
+    },
+    "frozen_model_aging_by_year.csv": {
+      "sha256": "e96d9830e542300935c9d21da65b53db7762c488e6065f61a5c44b49a54b00b1",
+      "size_bytes": 39781
+    }
+  },
+  "bootstrap": {
+    "unit": "company_name",
+    "paired": true,
+    "replicates": 1000,
+    "seed": 20260915,
+    "ci": "percentile_95",
+    "reference_minus_comparison": "SlidingFIFO3-SlidingNewestModel"
+  },
+  "interpretation_limits": [
+    "Bootstrap intervals quantify sampling uncertainty under company-cluster resampling; they do not establish universal or causal superiority.",
+    "Aging-by-age summaries are cohort-confounded because fewer, older origin models contribute at large ages.",
+    "All thresholds were frozen from each round's validation year; Test was not used for selection."
+  ]
+}

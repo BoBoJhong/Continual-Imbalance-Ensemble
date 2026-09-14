@@ -174,6 +174,11 @@ def build_selected_summary(candidates: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
+    if "--allow-test-oracle" not in sys.argv:
+        raise SystemExit(
+            "Test-derived ROSS is an oracle, not a deployable model selection rule. "
+            "Use bankruptcy_ross_validation.py; legacy reproduction requires --allow-test-oracle."
+        )
     logger = get_logger("Phase4_BK_ROSS", console=True, file=True)
     if not RAW_PATH.exists():
         raise FileNotFoundError(f"Phase 1 raw result not found: {RAW_PATH}")
@@ -183,6 +188,9 @@ def main() -> None:
     df = pd.read_csv(RAW_PATH)
     candidates = build_candidates(df, criterion="AUC")
     selected = build_selected_summary(candidates)
+    for frame in (candidates, selected):
+        frame["selection_source"] = "test_oracle"
+        frame["evidence_status"] = "exploratory_not_confirmatory"
 
     candidates_path = OUTPUT_DIR / "bk_ross_boundary_candidates.csv"
     selected_path = OUTPUT_DIR / "bk_ross_selected_boundary.csv"

@@ -251,7 +251,7 @@ def main() -> None:
     set_seed(42)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    ross_start = _read_ross_boundary()
+    ross_start = _read_ross_boundary(allow_test_oracle="--allow-test-oracle" in sys.argv)
     X_all, y_all = load_bankruptcy_with_year(logger)
     train_mask = (X_all["fyear"] >= 1999) & (X_all["fyear"] <= TRAIN_END_YEAR)
     X_train_all = X_all.loc[train_mask].reset_index(drop=True)

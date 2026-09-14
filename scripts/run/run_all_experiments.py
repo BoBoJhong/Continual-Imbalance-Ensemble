@@ -63,17 +63,7 @@ EXPERIMENTS = (
     ),
     Experiment(
         "phase4",
-        "experiments/phase4_drift/bankruptcy_ross_fs_static_ensemble.py",
-        3_600,
-    ),
-    Experiment(
-        "phase4",
         "experiments/phase4_drift/bankruptcy_multi_boundary_ross.py",
-        3_600,
-    ),
-    Experiment(
-        "phase5",
-        "experiments/phase5_weighted/bankruptcy_ross_weight_sweep.py",
         3_600,
     ),
     Experiment("phase5", "experiments/phase5_weighted/awe_comparison.py", 3_600),
@@ -81,6 +71,11 @@ EXPERIMENTS = (
         "rolling",
         "experiments/phase_flexible/rolling_bankruptcy_adaptive.py",
         7_200,
+    ),
+    Experiment(
+        "study3b",
+        "experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py",
+        3_600,
     ),
     Experiment("analysis", "scripts/analysis/fair_weighted_ablation.py", 1_800),
     Experiment("analysis", "scripts/analysis/weighted_split_validation.py", 1_800),

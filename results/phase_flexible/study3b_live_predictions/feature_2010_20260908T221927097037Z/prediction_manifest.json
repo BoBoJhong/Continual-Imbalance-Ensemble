@@ -1,0 +1,20 @@
+{
+  "runtime_version": "study3b_fifo_runtime_v1",
+  "created_at": "2026-09-08T22:19:27.160931+00:00",
+  "feature_year": 2010,
+  "predicted_event_year": 2011,
+  "n_predictions": 3625,
+  "n_positive_labels_read": null,
+  "test_label_read": false,
+  "labels_path_opened": false,
+  "raw_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+  "registry_sha256": "e277d63c70c0bc7b59631e49ad8ab95c58bf5cacdec7d72de145c957b62efbcf",
+  "predictions_sha256": "f2603135327d7b377cd255b26a9684dbcf8c115abe431ad1199b3e136848f144",
+  "active_model_ids": [
+    "seed42_M2006",
+    "seed42_M2007",
+    "seed42_M2008"
+  ],
+  "thresholds_selected_on_feature_year": 2009,
+  "research_status": "retrospective_annual_replay_not_validated_live_deployment"
+}

@@ -1,0 +1,57 @@
+{
+  "analysis": "study3b_window_ablation_v1",
+  "status": "completed",
+  "created_at": "2026-09-11T02:32:45.656332+00:00",
+  "command": [
+    "scripts/analysis/analyze_study3b_window_ablation.py",
+    "--run",
+    "1=results/phase_flexible/study3b_overlap/runs/20260911T021421728121Z",
+    "--run",
+    "3=results/phase_flexible/study3b_overlap/runs/20260911T021505744947Z",
+    "--run",
+    "5=results/phase_flexible/study3b_overlap/runs/20260911T021549740954Z"
+  ],
+  "window_widths": [
+    1,
+    3,
+    5
+  ],
+  "reference_window": 3,
+  "controlled_fields": [
+    "protocol_version",
+    "target_definition",
+    "data_sha256",
+    "feature_columns",
+    "sampling",
+    "imbalance_method",
+    "pool_size",
+    "ensemble_weighting",
+    "validation_fpr_budget",
+    "test_years"
+  ],
+  "source_runs": {
+    "1": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_overlap\\runs\\20260911T021421728121Z",
+    "3": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_overlap\\runs\\20260911T021505744947Z",
+    "5": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_overlap\\runs\\20260911T021549740954Z"
+  },
+  "source_run_manifests_sha256": {
+    "1": "c54ffa692186bd8ae42c5ba16a11b64ff5ae4d8b5cd418a932d97abe77216b1b",
+    "3": "69d5e10b739b12991563fca261e7a2275174e99f452cee45999b7c541b25b168",
+    "5": "bbcf63ad5a7257b949e977dc97bfad5ab1634c6942968743f4c404e813c8ed31"
+  },
+  "bootstrap": {
+    "unit": "company_name",
+    "paired": true,
+    "replicates": 1000,
+    "seed": 20260911,
+    "scope_note": "Captures company-cluster row uncertainty, not future-year variation."
+  },
+  "output_hashes": {
+    "window_ablation_pooled_summary.csv": "ab025c22529671746705069ebce9a71b3fb45c16bedc1b5890f0660b78cb061a",
+    "window_ablation_by_year.csv": "80ed9e4d8c15fe01bca7333849135f6822bb901a1c5750999ca0f1460583e9b7",
+    "window_ablation_deltas_vs_window1.csv": "f8b427eb59fe19950c713fe9bcd46faffda5f7599a8416c519c22c3518bfbb7a",
+    "window_ablation_company_bootstrap.csv": "aeb3fbfd46f7e48d3ac9b51da7a2b15090f38cb3b7850b6055acb285daad596c",
+    "window_ablation_training_audit.csv": "2a03f48e29ca8f727d0fe617c35e0a794a70a0bcd40a89b8944d0b4add27d7b0"
+  },
+  "figure_sha256": "e5eeeb5a15543bfb60123bdbc3fceeb71c85e876710d7e1baf30d2290d2417a6"
+}

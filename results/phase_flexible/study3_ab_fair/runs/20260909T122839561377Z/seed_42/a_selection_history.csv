@@ -1,0 +1,11 @@
+test_feature_year,validation_feature_year,latest_train_feature_year,selected_boundary,selected_old_years,selected_new_years,selection_metric,ensemble_weighting,n_candidates,test_used_for_selection,seed,protocol_version
+2009,2008,2007,2006,1999-2005,2006-2007,validation_AP_then_AUC,equal_0.5_0.5,6,False,42,study3_ab_fair_event_target_v1_financial18_exploratory
+2010,2009,2008,2007,1999-2006,2007-2008,validation_AP_then_AUC,equal_0.5_0.5,7,False,42,study3_ab_fair_event_target_v1_financial18_exploratory
+2011,2010,2009,2005,1999-2004,2005-2009,validation_AP_then_AUC,equal_0.5_0.5,8,False,42,study3_ab_fair_event_target_v1_financial18_exploratory
+2012,2011,2010,2008,1999-2007,2008-2010,validation_AP_then_AUC,equal_0.5_0.5,9,False,42,study3_ab_fair_event_target_v1_financial18_exploratory
+2013,2012,2011,2009,1999-2008,2009-2011,validation_AP_then_AUC,equal_0.5_0.5,10,False,42,study3_ab_fair_event_target_v1_financial18_exploratory
+2014,2013,2012,2012,1999-2011,2012-2012,validation_AP_then_AUC,equal_0.5_0.5,11,False,42,study3_ab_fair_event_target_v1_financial18_exploratory
+2015,2014,2013,2012,1999-2011,2012-2013,validation_AP_then_AUC,equal_0.5_0.5,12,False,42,study3_ab_fair_event_target_v1_financial18_exploratory
+2016,2015,2014,2005,1999-2004,2005-2014,validation_AP_then_AUC,equal_0.5_0.5,13,False,42,study3_ab_fair_event_target_v1_financial18_exploratory
+2017,2016,2015,2010,1999-2009,2010-2015,validation_AP_then_AUC,equal_0.5_0.5,14,False,42,study3_ab_fair_event_target_v1_financial18_exploratory
+2018,2017,2016,2015,1999-2014,2015-2016,validation_AP_then_AUC,equal_0.5_0.5,15,False,42,study3_ab_fair_event_target_v1_financial18_exploratory

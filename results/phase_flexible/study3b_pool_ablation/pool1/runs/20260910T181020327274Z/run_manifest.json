@@ -1,0 +1,99 @@
+{
+  "protocol_version": "study3b_overlap_event_target_v1_financial18_exploratory",
+  "evidence_status": "exploratory_reconstructed_event_target",
+  "target_definition": "failed company and final observed feature year; predicts event in fyear+1",
+  "label_availability": "annual_inference_supported_exact_dates_unavailable",
+  "status": "completed",
+  "started_at": "2026-09-10T18:10:20.336637+00:00",
+  "command": [
+    "experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py",
+    "--seeds",
+    "42",
+    "--imbalance-method",
+    "tomek",
+    "--pool-size",
+    "1",
+    "--output-root",
+    "results/phase_flexible/study3b_pool_ablation/pool1/runs"
+  ],
+  "git_commit": "7ca8716e256add1b503925cd6d8eb56f28e1d7a6",
+  "git_status_at_start": "M .gitignore\n M README.md\n M \"docs/\\347\\240\\224\\347\\251\\266\\346\\210\\220\\346\\236\\234\\350\\210\\207\\346\\234\\252\\344\\276\\206\\347\\240\\224\\347\\251\\266\\346\\226\\271\\345\\220\\221\\345\\240\\261\\345\\221\\212.md\"\n M \"docs/\\347\\240\\224\\347\\251\\266\\346\\226\\271\\345\\220\\221.md\"\n M experiments/_shared/common_bankruptcy.py\n M experiments/phase2_ensemble/dynamic/des/xgb_oldnew_bankruptcy_year_splits_des.py\n M experiments/phase2_ensemble/static/xgb_oldnew_bankruptcy_year_splits_static.py\n M experiments/phase2_ensemble/xgb_oldnew_ensemble_common.py\n M experiments/phase2_ensemble/xgb_year_split_shared.py\n M experiments/phase3_feature/_core/advanced_bankruptcy.py\n M experiments/phase4_drift/bankruptcy_drift_stream.py\n M experiments/phase4_drift/bankruptcy_ross.py\n M experiments/phase4_drift/bankruptcy_ross_fs_static_ensemble.py\n M experiments/phase4_drift/bankruptcy_ross_static_ensemble.py\n M experiments/phase5_weighted/bankruptcy_ross_weight_sweep.py\n M experiments/phase_flexible/rolling_bankruptcy_adaptive.py\n M results/RESULT_MANIFEST.json\n M scripts/run/run_all_experiments.py\n?? data/processed/bankruptcy_event_labels_v1.csv\n?? data/processed/bankruptcy_event_labels_v1.manifest.json\n?? \"docs/Study3_B\\350\\267\\257\\347\\267\\232_\\351\\207\\215\\347\\226\\212\\347\\252\\227\\345\\217\\243\\346\\214\\201\\347\\272\\214\\351\\233\\206\\346\\210\\220\\346\\217\\220\\346\\241\\210.md\"\n?? docs/notebooks/\n?? \"docs/\\347\\240\\224\\347\\251\\266\\346\\255\\243\\347\\242\\272\\346\\200\\247\\350\\210\\207\\347\\250\\213\\345\\274\\217\\347\\242\\274\\345\\257\\251\\346\\237\\245\\345\\240\\261\\345\\221\\212.md\"\n?? experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py\n?? experiments/phase_flexible/study3_ab_fair_comparison.py\n?? experiments/phase_flexible/study3b_continual_runtime.py\n?? results/phase_flexible/study3_ab_fair/\n?? results/phase_flexible/study3b_live_predictions/\n?? results/phase_flexible/study3b_overlap/\n?? results/phase_flexible/study3b_pool_ablation/\n?? results/phase_flexible/study3b_sampling_ablation/\n?? scripts/analysis/analyze_study3b_sampling_ablation.py\n?? scripts/analysis/plot_study3_ab_fair.py\n?? tests/test_bankruptcy_research_protocol.py",
+  "source_hashes": {
+    "experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py": "67d5db312a5ebae639a3fabf75d2859555955c2b296103788b71396322aaaf16",
+    "config/model_config.yaml": "ac67e15f7666a83a6688d22d3a16848917ecfebc77c61637d8a8cb96c61edfac",
+    "config/sampling_config.yaml": "2692f15fabceeaf0f354ecba10c94b6ce99c28af510b815e8aecc8f1701e603d"
+  },
+  "data_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+  "n_rows": 78682,
+  "n_events": 609,
+  "feature_columns": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ],
+  "excluded_metadata_features": [
+    "Division",
+    "MajorGroup"
+  ],
+  "methods": [
+    "Recent3y",
+    "B_data_equal",
+    "B_model_FIFO1_equal"
+  ],
+  "sampling": "undersampling",
+  "imbalance_method": "tomek",
+  "window_years": 3,
+  "pool_size": 1,
+  "ensemble_weighting": "equal_only_no_weight_tuning",
+  "validation_fpr_budget": 0.05,
+  "seeds": [
+    42
+  ],
+  "test_years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+  ],
+  "python": "3.14.0",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.4.0",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "imbalanced-learn": "0.14.1",
+    "xgboost": "3.2.0"
+  },
+  "uncertainty_note": "Seed variation is algorithmic, not independent temporal replication.",
+  "finished_at": "2026-09-10T18:10:50.097432+00:00",
+  "output_hashes": {
+    "seed_42/study3b_by_year.csv": "7f2f0e1d154b5865d07b37dd8a1a140add61d9981c79bd7457573044e258b58d",
+    "seed_42/study3b_pooled_summary.csv": "aef8ce1d521ea4f080af20ef56fa1e09e3d5fbb42749a0b8eae0438c7270cbf2",
+    "seed_42/study3b_predictions.csv": "f8848156a424fbb41fc72f4be0a40ffa221e9a9655d54f65eaeb68336dc14720",
+    "seed_42/study3b_protocol.csv": "f9d738f32d3b490dfb33b7d83192f3b36fe32e5d2e717bdf884ea7a653ee7787",
+    "seed_42/study3b_window_audit.csv": "8950b6c34c68558a67d6fb17cc006e3bef1968a8fc8c1c3effb1e46999eb2eb4",
+    "study3b_label_audit.csv": "0debc82b99e5198e11a31315c88ebeed3614c6414f95633ad08ab45fc8120f9f",
+    "study3b_seed_summary.csv": "1b9b111337afef025240dbd18639184658fe779162e8f08521ba2787b206ada8"
+  }
+}

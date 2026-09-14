@@ -1,0 +1,98 @@
+{
+  "protocol_version": "study3b_sliding_old2_new1_fifo3_aging_v1_exploratory",
+  "status": "completed",
+  "started_at": "2026-09-14T23:33:51.371770+00:00",
+  "evidence_status": "exploratory_reconstructed_event_target",
+  "target_definition": "failed company final observed feature year predicts event in fyear+1",
+  "label_availability": "exact filing/report dates unavailable",
+  "command": [
+    "experiments/phase_flexible/study3b_sliding_old_new_evaluation.py",
+    "--seed",
+    "42"
+  ],
+  "git_commit": "7ca8716e256add1b503925cd6d8eb56f28e1d7a6",
+  "git_status_at_start": "M .gitignore\n M README.md\n M \"docs/\\347\\240\\224\\347\\251\\266\\346\\210\\220\\346\\236\\234\\350\\210\\207\\346\\234\\252\\344\\276\\206\\347\\240\\224\\347\\251\\266\\346\\226\\271\\345\\220\\221\\345\\240\\261\\345\\221\\212.md\"\n M \"docs/\\347\\240\\224\\347\\251\\266\\346\\226\\271\\345\\220\\221.md\"\n M experiments/_shared/common_bankruptcy.py\n M experiments/phase2_ensemble/dynamic/des/xgb_oldnew_bankruptcy_year_splits_des.py\n M experiments/phase2_ensemble/static/xgb_oldnew_bankruptcy_year_splits_static.py\n M experiments/phase2_ensemble/xgb_oldnew_ensemble_common.py\n M experiments/phase2_ensemble/xgb_year_split_shared.py\n M experiments/phase3_feature/_core/advanced_bankruptcy.py\n M experiments/phase4_drift/bankruptcy_drift_stream.py\n M experiments/phase4_drift/bankruptcy_ross.py\n M experiments/phase4_drift/bankruptcy_ross_fs_static_ensemble.py\n M experiments/phase4_drift/bankruptcy_ross_static_ensemble.py\n M experiments/phase5_weighted/bankruptcy_ross_weight_sweep.py\n M experiments/phase_flexible/rolling_bankruptcy_adaptive.py\n M results/RESULT_MANIFEST.json\n M scripts/run/run_all_experiments.py\n M thesis/THESIS_FULL.md\n?? data/processed/bankruptcy_event_labels_v1.csv\n?? data/processed/bankruptcy_event_labels_v1.manifest.json\n?? \"docs/Study3_B\\350\\267\\257\\347\\267\\232_\\351\\207\\215\\347\\226\\212\\347\\252\\227\\345\\217\\243\\346\\214\\201\\347\\272\\214\\351\\233\\206\\346\\210\\220\\346\\217\\220\\346\\241\\210.md\"\n?? docs/notebooks/\n?? \"docs/\\347\\240\\224\\347\\251\\266\\346\\255\\243\\347\\242\\272\\346\\200\\247\\350\\210\\207\\347\\250\\213\\345\\274\\217\\347\\242\\274\\345\\257\\251\\346\\237\\245\\345\\240\\261\\345\\221\\212.md\"\n?? \"docs/\\350\\253\\226\\346\\226\\207\\350\\210\\207\\345\\257\\246\\344\\275\\234\\345\\256\\214\\346\\225\\264\\346\\200\\247\\345\\257\\251\\346\\237\\245_20260911.md\"\n?? experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py\n?? experiments/phase_flexible/study3_ab_fair_comparison.py\n?? experiments/phase_flexible/study3b_continual_runtime.py\n?? experiments/phase_flexible/study3b_sliding_old_new_evaluation.py\n?? results/phase_flexible/study3_ab_fair/\n?? results/phase_flexible/study3b_live_predictions/\n?? results/phase_flexible/study3b_minority_analysis/\n?? results/phase_flexible/study3b_overlap/\n?? results/phase_flexible/study3b_pool_ablation/\n?? results/phase_flexible/study3b_sampling_ablation/\n?? results/phase_flexible/study3b_window_ablation/\n?? scripts/analysis/analyze_study3b_pool_ablation.py\n?? scripts/analysis/analyze_study3b_sampling_ablation.py\n?? scripts/analysis/analyze_study3b_window_ablation.py\n?? scripts/analysis/generate_study3b_minority_report.py\n?? scripts/analysis/plot_study3_ab_fair.py\n?? tests/test_bankruptcy_research_protocol.py\n?? \"thesis/\\345\\217\\203\\350\\200\\203/\"\n?? tmp/",
+  "data_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+  "source_hashes": {
+    "experiments/phase_flexible/study3b_sliding_old_new_evaluation.py": "7ee5dd29b3350ea4922b5caf5fc829ef00d19c59c82a5f43e5a92d3f37ef9555",
+    "experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py": "7f5f1655da3617041b6fb3a06710752e39537c0660ff48ad00a5e420b5220630",
+    "config/model_config.yaml": "ac67e15f7666a83a6688d22d3a16848917ecfebc77c61637d8a8cb96c61edfac",
+    "config/sampling_config.yaml": "2692f15fabceeaf0f354ecba10c94b6ce99c28af510b815e8aecc8f1701e603d"
+  },
+  "seed": 42,
+  "window_contract": "Old=e-2,e-1; New=e; Validation=e+1; primary Test=e+2",
+  "pool_contract": "warm-up then latest three frozen models, FIFO, equal probability mean",
+  "aging_contract": "each frozen model evaluated on e+2..2018 using threshold selected only on e+1",
+  "test_used_for_selection": false,
+  "feature_columns": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ],
+  "imbalance_method": "tomek",
+  "python": "3.14.0",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.4.0",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "imbalanced-learn": "0.14.1",
+    "xgboost": "3.2.0",
+    "matplotlib": "3.10.8"
+  },
+  "chart_map": [
+    {
+      "file": "sliding_primary_performance.png",
+      "question": "Does the sliding FIFO ensemble outperform the newest rolling-window model across time?",
+      "family": "Trend / highlighted two-series line",
+      "grain": "16 primary out-of-time test feature years",
+      "metrics": [
+        "PR_AUC",
+        "Recall"
+      ],
+      "palette": "hard two-root blue/orange plus neutrals"
+    },
+    {
+      "file": "frozen_model_aging_ap_heatmap.png",
+      "question": "How does each frozen Old2+New1 model rank events as it ages?",
+      "family": "Matrix & Cohort / triangular heatmap",
+      "grain": "model window end by eligible future test feature year",
+      "metric": "PR_AUC",
+      "palette": "single-root blue plus neutrals"
+    }
+  ],
+  "n_rounds": 16,
+  "primary_test_feature_years": [
+    2003,
+    2018
+  ],
+  "n_aging_model_year_pairs": 136,
+  "finished_at": "2026-09-14T23:34:55.518355+00:00",
+  "output_hashes": {
+    "frozen_model_aging_ap_heatmap.png": "55aa205c056a75c55aa00a003caadb8d8dde75279c795db1a80c73fa5a84f96d",
+    "frozen_model_aging_by_year.csv": "e96d9830e542300935c9d21da65b53db7762c488e6065f61a5c44b49a54b00b1",
+    "frozen_model_aging_predictions.csv": "b9f42f450edbeaca0dffb60247e2b5557f61c4846e9a25ed956768f274dd0da1",
+    "label_audit.csv": "3fa72034b514c26169ae0500b04ee8cf0692b885ab8afc0ea785e4f1f1111ddd",
+    "sliding_model_audit.csv": "adeecc013663d5a2d939bf46e4f07192b9f4aa045519c640fe44c8b0d248779c",
+    "sliding_primary_by_year.csv": "9c275347f5264050f71e8c6d47d8b3f11b0bd9cedb13b8a4383797bd687ab5f5",
+    "sliding_primary_performance.png": "352a4fbe36935ed9af17b0a6a5b2a8885a8cd24cfe3eb2549a18903003b6be89",
+    "sliding_primary_pooled.csv": "8d5ca87498f6044030bd9eeadb0a5ce5dde22281ee37d48cac7f0d93b6380616",
+    "sliding_primary_predictions.csv": "2561640759cb20691b9667c711fb7d48eb02319c04a2ca9e0270eb63e725ed01",
+    "sliding_protocol.csv": "8de08593afe26afd442ca2eb94d546f11768e9a998680294d0ba5cf942672252"
+  }
+}

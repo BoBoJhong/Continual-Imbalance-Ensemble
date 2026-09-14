@@ -1,0 +1,91 @@
+{
+  "protocol_version": "study3_ab_fair_event_target_v1_financial18_exploratory",
+  "status": "completed",
+  "evidence_status": "exploratory_reconstructed_event_target",
+  "target_definition": "failed company final observed feature year; event in fyear+1",
+  "label_availability": "annual_inference_supported_exact_dates_unavailable",
+  "a_selection": "validation_AP_then_AUC_equal_weight_no_test_selection",
+  "common_sampling": "undersampling",
+  "common_features": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ],
+  "methods": [
+    "Recent3y",
+    "B_data_equal",
+    "B_model_FIFO3_equal",
+    "A_validation_boundary_equal",
+    "FullHistory",
+    "Recent1y",
+    "Recent5y"
+  ],
+  "seed": 42,
+  "test_years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+  ],
+  "bootstrap_replicates": 1000,
+  "bootstrap_unit": "company",
+  "started_at": "2026-09-09T12:28:39.569524+00:00",
+  "command": [
+    "experiments/phase_flexible/study3_ab_fair_comparison.py",
+    "--seed",
+    "42",
+    "--bootstrap-replicates",
+    "1000"
+  ],
+  "git_commit": "7ca8716e256add1b503925cd6d8eb56f28e1d7a6",
+  "git_status_at_start": "M .gitignore\n M README.md\n M \"docs/\\347\\240\\224\\347\\251\\266\\346\\210\\220\\346\\236\\234\\350\\210\\207\\346\\234\\252\\344\\276\\206\\347\\240\\224\\347\\251\\266\\346\\226\\271\\345\\220\\221\\345\\240\\261\\345\\221\\212.md\"\n M \"docs/\\347\\240\\224\\347\\251\\266\\346\\226\\271\\345\\220\\221.md\"\n M experiments/_shared/common_bankruptcy.py\n M experiments/phase2_ensemble/dynamic/des/xgb_oldnew_bankruptcy_year_splits_des.py\n M experiments/phase2_ensemble/static/xgb_oldnew_bankruptcy_year_splits_static.py\n M experiments/phase2_ensemble/xgb_oldnew_ensemble_common.py\n M experiments/phase2_ensemble/xgb_year_split_shared.py\n M experiments/phase3_feature/_core/advanced_bankruptcy.py\n M experiments/phase4_drift/bankruptcy_drift_stream.py\n M experiments/phase4_drift/bankruptcy_ross.py\n M experiments/phase4_drift/bankruptcy_ross_fs_static_ensemble.py\n M experiments/phase4_drift/bankruptcy_ross_static_ensemble.py\n M experiments/phase5_weighted/bankruptcy_ross_weight_sweep.py\n M experiments/phase_flexible/rolling_bankruptcy_adaptive.py\n M scripts/run/run_all_experiments.py\n?? data/processed/bankruptcy_event_labels_v1.csv\n?? data/processed/bankruptcy_event_labels_v1.manifest.json\n?? \"docs/Study3_B\\350\\267\\257\\347\\267\\232_\\351\\207\\215\\347\\226\\212\\347\\252\\227\\345\\217\\243\\346\\214\\201\\347\\272\\214\\351\\233\\206\\346\\210\\220\\346\\217\\220\\346\\241\\210.md\"\n?? docs/notebooks/\n?? \"docs/\\347\\240\\224\\347\\251\\266\\346\\255\\243\\347\\242\\272\\346\\200\\247\\350\\210\\207\\347\\250\\213\\345\\274\\217\\347\\242\\274\\345\\257\\251\\346\\237\\245\\345\\240\\261\\345\\221\\212.md\"\n?? experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py\n?? experiments/phase_flexible/study3_ab_fair_comparison.py\n?? experiments/phase_flexible/study3b_continual_runtime.py\n?? results/phase_flexible/study3_ab_fair/\n?? results/phase_flexible/study3b_live_predictions/\n?? results/phase_flexible/study3b_overlap/\n?? tests/test_bankruptcy_research_protocol.py",
+  "data_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+  "source_hashes": {
+    "experiments/phase_flexible/study3_ab_fair_comparison.py": "365026c1839f5de6c24c6fa72a5eeb18e71580c0f6dcdf700f500700eea811a7",
+    "experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py": "1b7257ce57c75d63a083173e23e595b00f3fc2f041176b01ddfa6038ed99161e"
+  },
+  "python": "3.14.0",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.4.0",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "imbalanced-learn": "0.14.1",
+    "xgboost": "3.2.0"
+  },
+  "interpretation_limit": "Company bootstrap captures clustered row-sampling uncertainty, not temporal process uncertainty or live label availability.",
+  "finished_at": "2026-09-09T12:38:21.690394+00:00",
+  "output_hashes": {
+    "fair_seed_summary.csv": "31c3429952851f0693d49ec7adebb7bd12efd935d0e57c392aed709f668ba834",
+    "label_audit.csv": "0debc82b99e5198e11a31315c88ebeed3614c6414f95633ad08ab45fc8120f9f",
+    "seed_42/a_boundary_candidates.csv": "04951e0a2cf1b83a92476863a60612dddf8d181cabb74e8fa17c436240f76271",
+    "seed_42/a_selection_history.csv": "d16c503b63ccda72a23151a939c6a6cb960fe0140f23c27f9b696e9d1a3e73c5",
+    "seed_42/fair_by_year.csv": "7aa966c18f9ed46054b2aec273733318c58dcc2ffc5369044fc38da9fd824a6a",
+    "seed_42/fair_pooled_summary.csv": "31c3429952851f0693d49ec7adebb7bd12efd935d0e57c392aed709f668ba834",
+    "seed_42/fair_predictions.csv": "1dfd37c047c7ca66509858d276a9ab27ccb9f69021d156974a654d48d02537a5",
+    "seed_42/fair_protocol.csv": "5792ab8bab9760f583b90aa22e4edc124e2f7d55f4229412e99909f520c2bed0",
+    "seed_42/fair_sampling_audit.csv": "c5b3017af64972e66dc549d85b955d336c8a163a1487c3ae574042bf6d2d3bf9",
+    "seed_42/paired_company_cluster_bootstrap.csv": "2991ad1803da16bbee2b5d23133ec7d5c051ee9723a43e060ae2f93cd8aaad1d"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-09-08T22:15:48.958852+00:00",
+  "raw_path": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\data\\raw\\bankruptcy\\american_bankruptcy_dataset.csv",
+  "raw_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+  "labels_path": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\data\\processed\\bankruptcy_event_labels_v1.csv",
+  "labels_sha256": "abe246e285d4f6214df8ae32d7dd245647c6c7cf89dc10e79eafc4830e44bf11",
+  "n_rows": 78682,
+  "n_positive": 609,
+  "feature_year_min": 1999,
+  "feature_year_max": 2018,
+  "target_definition": "failed company and final observed feature year",
+  "label_available_year_rule": "fyear + 1 (annual reconstruction)",
+  "label_source": "reconstructed_failed_company_final_observation",
+  "evidence_status": "annual_aggregate_verified_exact_availability_unverified",
+  "deployment_warning": "This ledger contains retrospectively reconstructed labels for the full benchmark. The runtime gate prevents future rows from entering an update, but exact filing and financial-report availability dates are not present in the source data."
+}

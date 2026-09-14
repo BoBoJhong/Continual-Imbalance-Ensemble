@@ -1,0 +1,57 @@
+{
+  "analysis": "study3b_sampling_ablation_v1",
+  "status": "completed",
+  "created_at": "2026-09-10T17:51:00.198211+00:00",
+  "command": [
+    "scripts/analysis/analyze_study3b_sampling_ablation.py",
+    "--run",
+    "none=results/phase_flexible/study3b_sampling_ablation/none/runs/20260910T174030520209Z",
+    "--run",
+    "tomek=results/phase_flexible/study3b_sampling_ablation/tomek/runs/20260910T174116003189Z",
+    "--run",
+    "scale_pos_weight=results/phase_flexible/study3b_sampling_ablation/scale_pos_weight/runs/20260910T174116709214Z",
+    "--bootstrap-replicates",
+    "1000"
+  ],
+  "treatments": [
+    "none",
+    "tomek",
+    "scale_pos_weight"
+  ],
+  "controlled_fields": [
+    "protocol_version",
+    "target_definition",
+    "data_sha256",
+    "feature_columns",
+    "window_years",
+    "pool_size",
+    "ensemble_weighting",
+    "validation_fpr_budget",
+    "test_years"
+  ],
+  "source_runs": {
+    "none": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_sampling_ablation\\none\\runs\\20260910T174030520209Z",
+    "tomek": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_sampling_ablation\\tomek\\runs\\20260910T174116003189Z",
+    "scale_pos_weight": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_sampling_ablation\\scale_pos_weight\\runs\\20260910T174116709214Z"
+  },
+  "source_run_manifests_sha256": {
+    "none": "baab5ccc1c29813e81759bad03191f3674ff0737f5dfff72cb549dafa664d971",
+    "tomek": "c834389e68300bb4f9c1f5e5b8c61cb20e1c57733dc55aadc6e72d0ee8034bea",
+    "scale_pos_weight": "3dc36bdc3c6887f35b3a731967aa4b39071978a40d8a15daed78081a9b19981f"
+  },
+  "analysis_source_sha256": "58f50712ba7766359ef0df85490d2fd3e5f6385d8c4e1bfad18b6c56bd5283ab",
+  "bootstrap": {
+    "unit": "company_name",
+    "paired": true,
+    "replicates": 1000,
+    "seed": 20260911,
+    "scope_note": "Captures company-cluster row uncertainty, not future-year variation."
+  },
+  "output_hashes": {
+    "sampling_ablation_pooled_summary.csv": "d8bb713fc182c1f479780dff50853dfdc179bc727ccb7420582d403980ed2fb8",
+    "sampling_ablation_by_year.csv": "f2b6e9c916dea6faa18672d6c7cc69135d493d6a5df0c084ba721514a6f19e9b",
+    "sampling_ablation_deltas_vs_none.csv": "6dbed803b848138361f1511ca94b2243c113dab2ea6e50ab846cd1ce5b5fdc4f",
+    "sampling_ablation_bmodel_company_bootstrap.csv": "845bffd0437865a8f780fdba98afc7607ddfce6ead0483e216c2a4b96579240d",
+    "sampling_ablation_training_audit.csv": "a80ee98f033a9f398c39afceac47e09990456d7f45c414a5ca318356618f7bd6"
+  }
+}

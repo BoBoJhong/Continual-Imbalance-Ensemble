@@ -1,0 +1,11 @@
+reference_method,comparison_method,metric,observed_reference_minus_comparison,ci95_low,ci95_high,bootstrap_probability_difference_gt_0,n_company_clusters,n_rows,replicates,bootstrap_seed,inference_scope
+Window3,Window1,AP,0.00732542303193,-0.020642791922,0.0347214493726,0.67,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+Window3,Window1,AUC,0.00400994761698,-0.0114164659062,0.0190998435769,0.684,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+Window3,Window1,F1,-0.00938607464394,-0.047717505911,0.0272806246784,0.303,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+Window3,Window1,Recall,0.0138408304498,-0.0281342762354,0.0534021955486,0.701,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+Window3,Window1,Precision,-0.028204531347,-0.0682839555632,0.00725657758877,0.072,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+Window3,Window5,AP,0.0108659519845,-0.00934451576934,0.031449191627,0.815,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+Window3,Window5,AUC,0.000451060739837,-0.012985033805,0.0140289534115,0.52,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+Window3,Window5,F1,0.0244442318762,-0.0103817210811,0.0591886226357,0.913,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+Window3,Window5,Recall,-0.0519031141869,-0.0982484900777,-0.00684873065594,0.011,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+Window3,Window5,Precision,0.0513489145039,0.020456993321,0.0836689943672,1,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap

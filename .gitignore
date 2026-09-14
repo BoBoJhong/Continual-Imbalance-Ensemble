@@ -37,6 +37,7 @@ ENV/
 # Jupyter Notebook
 .ipynb_checkpoints
 *.ipynb
+!docs/notebooks/bankruptcy_label_time_audit.ipynb
 
 # Data (keep structure but ignore large files) -> 應使用者要求全部加入版控
 # data/raw/*
@@ -58,6 +59,7 @@ logs/
 *.h5
 *.pt
 *.pth
+checkpoints/
 
 # OS
 .DS_Store
@@ -75,6 +77,7 @@ mlartifacts/
 wandb/
 
 # Temporary files
+tmp/
 *.tmp
 *.log
 *.bak

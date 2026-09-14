@@ -193,7 +193,9 @@ def _build_year_splits(train_start: int, train_end: int):
 YEAR_SPLITS = _build_year_splits(TRAIN_START_YEAR, TRAIN_END_YEAR)
 
 
-def get_bankruptcy_year_split(logger, old_end_year: int, return_years: bool = False):
+def get_bankruptcy_year_split(
+    logger, old_end_year: int, return_years: bool = False, *, raw_features: bool = False
+):
     """
     固定 test = 2015-2018，依 old_end_year 切割：
       Old  = fyear <= old_end_year
@@ -202,11 +204,10 @@ def get_bankruptcy_year_split(logger, old_end_year: int, return_years: bool = Fa
 
     回傳 (X_old, y_old, X_new, y_new, X_test, y_test)
     若 return_years=True，額外回傳 (year_old, year_new, year_test)。
+    raw_features=True leaves imputation to the caller after its fit/validation split.
     """
     import sys
     sys.path.insert(0, str(project_root))
-    from src.data import DataPreprocessor
-
     if not US_CSV.exists():
         raise FileNotFoundError(
             f"US 破產資料不存在: {US_CSV}\n"
@@ -234,10 +235,17 @@ def get_bankruptcy_year_split(logger, old_end_year: int, return_years: bool = Fa
         f"Test={len(X_test)}({y_test.mean()*100:.1f}%B)"
     )
 
-    preprocessor = DataPreprocessor()
-    X_old_c  = preprocessor.handle_missing_values(X_old)
-    X_new_c  = preprocessor.handle_missing_values(X_new)
-    X_test_c = preprocessor.handle_missing_values(X_test)
+    if raw_features:
+        X_old_c, X_new_c, X_test_c = X_old.copy(), X_new.copy(), X_test.copy()
+    else:
+        # Legacy callers have no inner-fit partition here. Do not silently learn
+        # imputation statistics on validation/test if a future data version has NaNs.
+        if any(frame.isna().any().any() for frame in (X_old, X_new, X_test)):
+            raise ValueError(
+                "Missing values require raw_features=True and fit-only imputation "
+                "after the caller's validation split."
+            )
+        X_old_c, X_new_c, X_test_c = X_old.copy(), X_new.copy(), X_test.copy()
 
     # 回傳未縮放的原始資料，讓呼叫端依各自訓練策略 fit scaler
     # （Old-only / New-only / OldNew 的 scaler fit 對象不同，不應在此統一處理）

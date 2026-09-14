@@ -1,0 +1,82 @@
+{
+  "protocol_version": "study3b_overlap_event_target_v1_exploratory",
+  "evidence_status": "exploratory_reconstructed_event_target",
+  "target_definition": "failed company and final observed feature year; predicts event in fyear+1",
+  "label_availability": "annual_inference_supported_exact_dates_unavailable",
+  "status": "completed",
+  "started_at": "2026-09-08T17:00:11.523398+00:00",
+  "command": [
+    "experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py",
+    "--seeds",
+    "42",
+    "--test-years",
+    "2009"
+  ],
+  "git_commit": "7ca8716e256add1b503925cd6d8eb56f28e1d7a6",
+  "git_status_at_start": "M .gitignore\n M README.md\n M \"docs/\\347\\240\\224\\347\\251\\266\\346\\210\\220\\346\\236\\234\\350\\210\\207\\346\\234\\252\\344\\276\\206\\347\\240\\224\\347\\251\\266\\346\\226\\271\\345\\220\\221\\345\\240\\261\\345\\221\\212.md\"\n M \"docs/\\347\\240\\224\\347\\251\\266\\346\\226\\271\\345\\220\\221.md\"\n M experiments/_shared/common_bankruptcy.py\n M experiments/phase2_ensemble/dynamic/des/xgb_oldnew_bankruptcy_year_splits_des.py\n M experiments/phase2_ensemble/static/xgb_oldnew_bankruptcy_year_splits_static.py\n M experiments/phase2_ensemble/xgb_oldnew_ensemble_common.py\n M experiments/phase2_ensemble/xgb_year_split_shared.py\n M experiments/phase3_feature/_core/advanced_bankruptcy.py\n M experiments/phase4_drift/bankruptcy_drift_stream.py\n M experiments/phase4_drift/bankruptcy_ross.py\n M experiments/phase4_drift/bankruptcy_ross_fs_static_ensemble.py\n M experiments/phase4_drift/bankruptcy_ross_static_ensemble.py\n M experiments/phase5_weighted/bankruptcy_ross_weight_sweep.py\n M experiments/phase_flexible/rolling_bankruptcy_adaptive.py\n M scripts/run/run_all_experiments.py\n?? \"docs/Study3_B\\350\\267\\257\\347\\267\\232_\\351\\207\\215\\347\\226\\212\\347\\252\\227\\345\\217\\243\\346\\214\\201\\347\\272\\214\\351\\233\\206\\346\\210\\220\\346\\217\\220\\346\\241\\210.md\"\n?? docs/notebooks/\n?? \"docs/\\347\\240\\224\\347\\251\\266\\346\\255\\243\\347\\242\\272\\346\\200\\247\\350\\210\\207\\347\\250\\213\\345\\274\\217\\347\\242\\274\\345\\257\\251\\346\\237\\245\\345\\240\\261\\345\\221\\212.md\"\n?? experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py\n?? results/phase_flexible/study3b_overlap/\n?? tests/test_bankruptcy_research_protocol.py",
+  "source_hashes": {
+    "experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py": "ffd97412d92b296c8d694c5c0928040c19e227e9722ed8dbd19c48b5a8355552",
+    "config/model_config.yaml": "ac67e15f7666a83a6688d22d3a16848917ecfebc77c61637d8a8cb96c61edfac",
+    "config/sampling_config.yaml": "2692f15fabceeaf0f354ecba10c94b6ce99c28af510b815e8aecc8f1701e603d"
+  },
+  "data_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+  "n_rows": 78682,
+  "n_events": 609,
+  "feature_columns": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18",
+    "MajorGroup"
+  ],
+  "methods": [
+    "Recent3y",
+    "B_data_equal",
+    "B_model_FIFO3_equal"
+  ],
+  "sampling": "undersampling",
+  "window_years": 3,
+  "pool_size": 3,
+  "ensemble_weighting": "equal_only_no_weight_tuning",
+  "validation_fpr_budget": 0.05,
+  "seeds": [
+    42
+  ],
+  "test_years": [
+    2009
+  ],
+  "python": "3.14.0",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.4.0",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "imbalanced-learn": "0.14.1",
+    "xgboost": "3.2.0"
+  },
+  "uncertainty_note": "Seed variation is algorithmic, not independent temporal replication.",
+  "finished_at": "2026-09-08T17:00:18.842873+00:00",
+  "output_hashes": {
+    "seed_42/study3b_by_year.csv": "f1b5e1b19cbbf5238ae1bd732a16ddc99fad8428a4fae9e76782194d41d3b5fd",
+    "seed_42/study3b_pooled_summary.csv": "28df3a36782d6b901b1fc0619fa76c7767a8fe27def874aef1e4a3ec9b9d9b14",
+    "seed_42/study3b_predictions.csv": "671dac4764e4e545540eee8e3fb103c6d4c4634a5af9be5d2d3754d54d93ad0a",
+    "seed_42/study3b_protocol.csv": "b9f69bfffaf0cae0fec6679694d7dc491f91deec405f91e515af131dec482800",
+    "seed_42/study3b_window_audit.csv": "2d2ac9244ad3e78617168cab55d1d8396102e9990a8760aa307e05f6528a3863",
+    "study3b_label_audit.csv": "0debc82b99e5198e11a31315c88ebeed3614c6414f95633ad08ab45fc8120f9f",
+    "study3b_seed_summary.csv": "0f55b4fc78692266dff4e4136a2913f354f994e6bbc27de53e24f254f207e4d9"
+  }
+}

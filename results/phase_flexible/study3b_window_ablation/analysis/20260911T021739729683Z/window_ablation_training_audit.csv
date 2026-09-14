@@ -1,0 +1,4 @@
+window_years,n_unique_fitted_models,earliest_train_start,latest_train_end,total_fit_rows_before_sampling,total_positive_before,total_negative_before
+1,12,2005,2016,44098,440,43658
+3,12,2003,2016,135671,1350,134321
+5,12,2001,2016,232014,2206,229808

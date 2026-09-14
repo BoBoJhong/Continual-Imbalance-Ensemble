@@ -5,7 +5,7 @@ Common utilities for XGB Old/New ensemble (year splits).
 
 動態集成（DES）：`dynamic_ensemble_metrics_with_threshold` — 以 New 時期 scaler 後之驗證集為 DSEL，
 在該特徵空間做 kNN；各基學習器在鄰域上的「是否預測正確」由各模型在 DSEL 上之機率與固定閾值（預設 0.5）
-決定。支援 KNORA-E、KNORA-U、DES-KNN（與 DESlib 文獻對齊之典型方法）。驗證集閾值校準使用 leave-one-out
+決定。以下是自訂的固定鄰域／局部加權變體，不是 DESlib 標準方法的等價實作。驗證集閾值校準使用 leave-one-out
 鄰居，避免樣本當作自己的近鄰造成洩漏。
 """
 
@@ -41,11 +41,11 @@ TYPE_K_SUBSET_DETAIL = "k_subset"
 # 動態 DES：六模型池（Old×3 + New×3）在長表中的 sampling_col 標記
 SAMPLING_DYNAMIC_ALL6 = "all6"
 
-# 文獻常見 DES：KNORA-E / KNORA-U（Ko et al., 2008）、DES-KNN 權重（Cruz et al., 2018; DESlib）
+# Internal keys retained for callers; exported names identify custom variants.
 DYNAMIC_DES_METHODS: Tuple[Tuple[str, str], ...] = (
-    ("KNORA_E", "Dynamic_KNORA_E"),
-    ("KNORA_U", "Dynamic_KNORA_U"),
-    ("DES_KNN", "Dynamic_DES_KNN"),
+    ("KNORA_E", "Dynamic_FixedK_AllCorrect"),
+    ("KNORA_U", "Dynamic_FixedK_AnyCorrectMean"),
+    ("DES_KNN", "Dynamic_LocalAccuracyWeighted"),
 )
 
 # 6 槽 = [Old_under, Old_over, Old_hybrid, New_under, New_over, New_hybrid]
@@ -96,7 +96,7 @@ def _ensemble_sort_key(e: str) -> Tuple[int, int]:
     dyn = {m[1]: i for i, m in enumerate(DYNAMIC_DES_METHODS)}
     if str(e) in dyn:
         return (2, dyn[str(e)])
-    order = {"New": 1, "Old": 2, "Retrain": 3}
+    order = {"New": 1, "Old": 2, "OldNewMean": 3, "Retrain": 4}
     return (1, order.get(str(e), 99))
 
 
@@ -197,13 +197,13 @@ def _normalize_sampling_col_column(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def expected_summary_wide_columns() -> List[str]:
-    """論文用寬表欄位順序：Old/New/Retrain × 採樣。"""
+    """寬表欄位順序：Old/New/OldNewMean × 採樣及自訂 DES 變體。"""
     return expected_summary_wide_columns_static_only() + expected_summary_wide_columns_des_only()
 
 
 def expected_summary_wide_columns_static_only() -> List[str]:
     cols: List[str] = []
-    for ens in ("Old", "New", "Retrain"):
+    for ens in ("Old", "New", "OldNewMean"):
         for st in ("under", "over", "hybrid"):
             cols.append(f"{ens}_{st}")
     return cols
@@ -542,7 +542,7 @@ def train_one_sampling_xgb(
     *,
     split_label: str = "",
     method_label: str = "",
-    use_tuned_params: bool = True,
+    use_tuned_params: bool = False,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """Train one XGB model under sampling strategy and return (val_proba, test_proba)."""
     X_r, y_r = sampler.apply_sampling(X_train_scaled, y_train, strategy=sampling_strategy)

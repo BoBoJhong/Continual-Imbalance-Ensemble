@@ -86,7 +86,7 @@ METRICS    = ["AUC", "F1", "G_Mean", "Recall", "Precision", "Type1_Error", "Type
 
 
 # ── 資料載入 ─────────────────────────────────────────────────────────────────
-def load_bankruptcy_with_year(logger) -> tuple[pd.DataFrame, pd.Series]:
+def load_bankruptcy_with_year(logger, *, keep_company: bool = False) -> tuple[pd.DataFrame, pd.Series]:
     """
     載入 US 破產資料，保留 fyear 欄以供年份切割用。
     回傳 (X_with_fyear, y)。
@@ -97,8 +97,11 @@ def load_bankruptcy_with_year(logger) -> tuple[pd.DataFrame, pd.Series]:
             "請下載 american_bankruptcy_dataset.csv 放到 data/raw/bankruptcy/"
         )
     df = pd.read_csv(US_CSV)
+    if df["status_label"].isna().any() or not set(df["status_label"].unique()) <= {"alive", "failed"}:
+        raise ValueError("Unexpected bankruptcy labels; expected exactly alive/failed values.")
     y = (df["status_label"] == "failed").astype(int)
-    drop_cols = [c for c in ["company_name", "status_label", "Division"] if c in df.columns]
+    excluded = ["status_label", "Division"] + ([] if keep_company else ["company_name"])
+    drop_cols = [c for c in excluded if c in df.columns]
     X = df.drop(columns=drop_cols)
     logger.info(
         f"US Bankruptcy loaded: {len(X):,} rows  "
@@ -513,7 +516,7 @@ def _save_results(all_rows: list[dict], detection_log: list[dict], logger) -> No
     logger.info(f"漂移偵測點 → {path_pts}")
 
     # 摘要（各 method 的最佳單一 F1）
-    logger.info("\n=== 摘要：各方法最佳 F1（hybrid 或 all6）===")
+    logger.info("\n=== Test oracle 摘要：不可當作 Validation-selected 方法 ===")
     pivot_rows = []
     for (method, detector, drift_yr), grp in df.groupby(["method", "detector", "drift_year"]):
         best = grp.sort_values("F1", ascending=False).iloc[0]
@@ -522,9 +525,11 @@ def _save_results(all_rows: list[dict], detection_log: list[dict], logger) -> No
             "best_sampling/combo": best["sampling/combo"],
             "AUC": best["AUC"], "F1": best["F1"],
             "Recall": best["Recall"], "Precision": best["Precision"],
+            "selection_source": "test_oracle",
+            "evidence_status": "exploratory_not_confirmatory",
         })
     df_summary = pd.DataFrame(pivot_rows).sort_values("F1", ascending=False)
-    path_sum = OUTPUT_DIR / "bk_drift_summary.csv"
+    path_sum = OUTPUT_DIR / "bk_drift_test_oracle_summary.csv"
     df_summary.to_csv(path_sum, index=False, float_format="%.4f")
     logger.info("\n" + df_summary.to_string(index=False))
     logger.info(f"\n摘要 → {path_sum}")

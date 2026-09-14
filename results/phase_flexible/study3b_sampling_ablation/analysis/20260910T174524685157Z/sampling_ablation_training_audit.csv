@@ -1,0 +1,10 @@
+imbalance_method,route,n_fitted_models,n_positive_before,n_positive_after,n_negative_before,n_negative_after,n_majority_removed,min_scale_pos_weight,max_scale_pos_weight
+none,B_data_new,10,349,349,35416,35416,0,,
+none,B_data_old,10,749,749,73506,73506,0,,
+none,B_model,12,1350,1350,134321,134321,0,,
+scale_pos_weight,B_data_new,10,349,349,35416,35416,0,65.5,161.739130435
+scale_pos_weight,B_data_old,10,749,749,73506,73506,0,66.2307692308,136.215686275
+scale_pos_weight,B_model,12,1350,1350,134321,134321,0,70.3928571429,131.683544304
+tomek,B_data_new,10,349,349,35416,35336,80,,
+tomek,B_data_old,10,749,749,73506,73325,181,,
+tomek,B_model,12,1350,1350,134321,133968,353,,

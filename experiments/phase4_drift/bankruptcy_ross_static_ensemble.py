@@ -68,7 +68,13 @@ def _old_new_split(X_all: pd.DataFrame, y_all: pd.Series, drift_start_year: int)
     return X_old, y_old, X_new, y_new
 
 
-def _read_ross_boundary() -> int:
+def _read_ross_boundary(*, allow_test_oracle: bool = False) -> int:
+    if not allow_test_oracle:
+        raise ValueError(
+            "This legacy boundary was selected on the final Test set. "
+            "Use bankruptcy_ross_validation.py or rolling_bankruptcy_adaptive.py; "
+            "pass --allow-test-oracle only to reproduce a retrospective oracle."
+        )
     if not ROSS_SELECTED_PATH.exists():
         raise FileNotFoundError(
             f"ROSS selected boundary not found: {ROSS_SELECTED_PATH}\n"
@@ -132,7 +138,7 @@ def main() -> None:
     set_seed(42)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    ross_start = _read_ross_boundary()
+    ross_start = _read_ross_boundary(allow_test_oracle="--allow-test-oracle" in sys.argv)
     X_all, y_all = load_bankruptcy_with_year(logger)
     train_mask = (X_all["fyear"] >= 1999) & (X_all["fyear"] <= TRAIN_END_YEAR)
     X_train_all = X_all.loc[train_mask].reset_index(drop=True)

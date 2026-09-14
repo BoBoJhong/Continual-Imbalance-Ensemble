@@ -1,0 +1,16 @@
+reference_method,comparison_method,metric,observed_reference_minus_comparison,ci95_low,ci95_high,bootstrap_probability_difference_gt_0,n_company_clusters,n_rows,replicates,bootstrap_seed,inference_scope
+B_model_FIFO3_equal,B_model_FIFO1_equal,AP,0.0249068797379,0.00605826677051,0.0449793116758,0.997,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO1_equal,AUC,0.0125621505563,0.000738576574983,0.0259539777669,0.98,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO1_equal,F1,0.0260223167286,-0.00946946526249,0.0612356182841,0.933,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO1_equal,Recall,0.076124567474,0.0397168991593,0.113270226537,1,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO1_equal,Precision,-0.0330012094684,-0.0785472700743,0.00805031276963,0.065,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO2_equal,AP,0.0037258706063,-0.00740529769948,0.0152659036797,0.727,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO2_equal,AUC,0.00472612457266,-0.00329605103246,0.0133445862916,0.864,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO2_equal,F1,-0.00868010310848,-0.0318422886849,0.0134611369356,0.244,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO2_equal,Recall,0.00692041522491,-0.018728646402,0.0323871166225,0.643,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO2_equal,Precision,-0.0203640295549,-0.0426957535988,0.00218924995727,0.04,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO5_equal,AP,-0.00331772407154,-0.0166525257725,0.00810642758593,0.293,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO5_equal,AUC,-0.00502330376725,-0.0134635486592,0.00334013073972,0.13,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO5_equal,F1,0.0270968246826,-0.00160044509545,0.0555089533849,0.965,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO5_equal,Recall,0.0346020761246,0.00343329692087,0.0679922397286,0.978,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap
+B_model_FIFO3_equal,B_model_FIFO5_equal,Precision,0.0215808589996,-0.00533194020185,0.0473815928339,0.942,5512,33636,1000,20260911,paired_company_cluster_percentile_bootstrap

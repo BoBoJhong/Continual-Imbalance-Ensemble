@@ -1,0 +1,64 @@
+{
+  "analysis": "study3b_pool_ablation_v1",
+  "status": "completed",
+  "created_at": "2026-09-10T18:14:08.351911+00:00",
+  "command": [
+    "scripts/analysis/analyze_study3b_pool_ablation.py",
+    "--run",
+    "1=results/phase_flexible/study3b_pool_ablation/pool1/runs/20260910T181020327274Z",
+    "--run",
+    "2=results/phase_flexible/study3b_pool_ablation/pool2/runs/20260910T181020814225Z",
+    "--run",
+    "3=results/phase_flexible/study3b_pool_ablation/pool3/runs/20260910T181102495266Z",
+    "--run",
+    "5=results/phase_flexible/study3b_pool_ablation/pool5/runs/20260910T181103072810Z",
+    "--bootstrap-replicates",
+    "1000"
+  ],
+  "pool_sizes": [
+    1,
+    2,
+    3,
+    5
+  ],
+  "reference_pool_size": 3,
+  "controlled_fields": [
+    "protocol_version",
+    "target_definition",
+    "data_sha256",
+    "feature_columns",
+    "sampling",
+    "imbalance_method",
+    "window_years",
+    "ensemble_weighting",
+    "validation_fpr_budget",
+    "test_years"
+  ],
+  "source_runs": {
+    "1": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_pool_ablation\\pool1\\runs\\20260910T181020327274Z",
+    "2": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_pool_ablation\\pool2\\runs\\20260910T181020814225Z",
+    "3": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_pool_ablation\\pool3\\runs\\20260910T181102495266Z",
+    "5": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_pool_ablation\\pool5\\runs\\20260910T181103072810Z"
+  },
+  "source_run_manifests_sha256": {
+    "1": "fc5ba66c00ce943be6ca03637fe6ad823e12c89dbd428c06910890d0b85094f5",
+    "2": "c763d0d338c32dead40622c9d0f3df4e2b3347ef20d386c27192a9a19f5696cb",
+    "3": "0bf71440d118e73a0d8e1be2a14a193877645248a27ca351b44becb11f2fca32",
+    "5": "49c03b71072116c708f114b12d99fe9d081fb24e8bfde698d94db473c10eb470"
+  },
+  "analysis_source_sha256": "444a8dff4fccdee45752370cfe2dfcb0e8e6d2bf62a687d16fbe456000b12fd1",
+  "bootstrap": {
+    "unit": "company_name",
+    "paired": true,
+    "replicates": 1000,
+    "seed": 20260911,
+    "scope_note": "Captures company-cluster row uncertainty, not future-year variation."
+  },
+  "output_hashes": {
+    "pool_ablation_pooled_summary.csv": "eeaa4ee558c68ed2e5fc951522c78415787d23d4cffafcd5eba96913a4c6d4af",
+    "pool_ablation_by_year.csv": "7ef248aa6c97e42a493997355772b562228d15b464714004e4e7a84b3b18a6e3",
+    "pool_ablation_deltas_vs_pool1.csv": "804e20827463d9555c0e211d21a767980c178077daf5e527a9b5afaaf3750418",
+    "pool_ablation_company_bootstrap.csv": "2b1c0e0821fa17d06ebfcbeaad19e690f4b56d7aca5889c4cab7669b69573eda",
+    "pool_ablation_training_audit.csv": "3f81d69f628a2ab1d09dffa2a1f3f9cd14808b2793aa76759198c4f0aae7c072"
+  }
+}

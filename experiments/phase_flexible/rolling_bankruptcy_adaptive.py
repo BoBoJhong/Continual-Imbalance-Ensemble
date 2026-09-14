@@ -1,5 +1,5 @@
 """
-Leakage-safe annual walk-forward evaluation for ROSS + DAWCE + AdaptiveChoice.
+Validation-selected annual walk-forward evaluation for ROSS + DAWCE + AdaptiveChoice.
 
 For each test year t:
     train/search history: 1999 .. t-2
@@ -8,10 +8,19 @@ For each test year t:
 
 The validation batch selects the ROSS boundary, DAWCE weight, AdaptiveChoice
 candidate, and classification threshold. The test batch is used exactly once.
+Label availability remains unverified: this is an exploratory retrospective
+protocol, not a validated prospective bankruptcy forecasting experiment.
 """
 from __future__ import annotations
 
 import sys
+import argparse
+import hashlib
+import json
+import platform
+import subprocess
+from datetime import datetime, timezone
+from importlib.metadata import version
 from pathlib import Path
 
 import numpy as np
@@ -24,11 +33,11 @@ from sklearn.preprocessing import StandardScaler
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from experiments.phase4_drift.bankruptcy_drift_stream import load_bankruptcy_with_year
+from experiments.phase4_drift.bankruptcy_drift_stream import load_bankruptcy_with_year, US_CSV
 from src.data import ImbalanceSampler
 from src.evaluation import compute_metrics
 from src.models import XGBoostWrapper
-from src.utils import get_logger, set_seed
+from src.utils import get_logger, set_seed, get_config_loader, get_seeds_from_config
 
 
 START_YEAR = 1999
@@ -37,8 +46,11 @@ LAST_TEST_YEAR = 2018
 MIN_OLD_YEARS = 3
 POOL_SAMPLING = ("undersampling", "oversampling", "hybrid")
 WEIGHT_GRID = np.round(np.arange(0.0, 1.0001, 0.05), 2)
-METRICS = ("AUC", "F1", "G_Mean", "Recall", "Precision", "Type1_Error", "Type2_Error")
-METHODS = ("Retrain_under", "New_under", "Equal6", "DAWCE_AUC", "AdaptiveChoice_AUC")
+METRICS = ("AUC", "PR_AUC", "F1", "G_Mean", "Recall", "Precision", "Balanced_Accuracy", "Type1_Error", "Type2_Error")
+RECENT_WINDOWS = (1, 3, 5)
+METHODS = ("Retrain_under", "ROSS_New_under", "Equal6", "DAWCE_AUC", "AdaptiveChoice_AUC") + tuple(
+    f"Recent{years}y_under" for years in RECENT_WINDOWS
+)
 OUTPUT_DIR = project_root / "results" / "phase_flexible" / "rolling_bankruptcy"
 ALPHA = 0.05
 
@@ -96,16 +108,24 @@ def _train_model(
     sampling: str,
     name: str,
     logger,
+    *,
+    seed: int = 42,
 ) -> XGBoostWrapper:
-    sampler = ImbalanceSampler(random_state=42)
+    sampler = ImbalanceSampler(random_state=seed)
     try:
         X_resampled, y_resampled = sampler.apply_sampling(X_train, y_train, strategy=sampling)
     except ValueError as error:
-        logger.warning(f"{sampling} failed for {name} ({error}); falling back to no sampling")
-        X_resampled, y_resampled = X_train, y_train
+        raise ValueError(f"Sampling failed for {name} ({sampling}); no silent fallback") from error
 
-    model = XGBoostWrapper(name=name, use_imbalance=False)
+    # The YAML already defines XGBoost's alias `seed`; override both aliases.
+    model = XGBoostWrapper(name=name, use_imbalance=False, random_state=seed, seed=seed)
     model.fit(X_resampled, np.asarray(y_resampled))
+    model.sampling_audit_ = {
+        "model": name, "seed": seed, "effective_sampler": type(sampler.sampler).__name__,
+        "counts_before": pd.Series(y_train).value_counts().sort_index().to_json(),
+        "counts_after": pd.Series(y_resampled).value_counts().sort_index().to_json(),
+        "resolved_model_params": json.dumps(model.params, sort_keys=True),
+    }
     return model
 
 
@@ -125,6 +145,8 @@ def _evaluate_method(
         "test_year": test_year,
         "validation_year": test_year - 1,
         "method": method,
+        "n_test": len(y_test),
+        "n_positive": int(np.sum(y_test)),
         "threshold": threshold,
         **{f"validation_{metric}": validation_metrics[metric] for metric in METRICS},
         **test_metrics,
@@ -144,7 +166,9 @@ def _evaluate_method(
     return row, predictions
 
 
-def _run_year(test_year: int, data: pd.DataFrame, feature_cols: list[str], logger):
+def _run_year(test_year: int, data: pd.DataFrame, feature_cols: list[str], logger, *, seed: int = 42, audit_rows: list | None = None):
+    if set(feature_cols) & {"company_name", "fyear", "target", "status_label"}:
+        raise ValueError("Identifiers, years and target must not be model features")
     train_end = test_year - 2
     train = data[data["fyear"].between(START_YEAR, train_end)].copy()
     validation = data[data["fyear"] == test_year - 1].copy()
@@ -174,7 +198,10 @@ def _run_year(test_year: int, data: pd.DataFrame, feature_cols: list[str], logge
                     sampling,
                     f"rolling_{test_year}_{boundary}_{key}",
                     logger,
+                    seed=seed,
                 )
+                if audit_rows is not None:
+                    audit_rows.append({"test_year": test_year, "boundary": boundary, **model.sampling_audit_})
                 pool_validation[key] = model.predict_proba(X_validation)
                 pool_test[key] = model.predict_proba(X_test)
 
@@ -247,14 +274,30 @@ def _run_year(test_year: int, data: pd.DataFrame, feature_cols: list[str], logge
     )
     adaptive_validation, adaptive_test = adaptive_candidates[adaptive_choice]
 
-    retrain = _train_model(X_train, y_train, "undersampling", f"rolling_{test_year}_retrain_under", logger)
+    retrain = _train_model(X_train, y_train, "undersampling", f"rolling_{test_year}_retrain_under", logger, seed=seed)
+    if audit_rows is not None:
+        audit_rows.append({"test_year": test_year, "boundary": None, **retrain.sampling_audit_})
     method_probas = {
         "Retrain_under": (retrain.predict_proba(X_validation), retrain.predict_proba(X_test)),
-        "New_under": (pool_validation["New_under"], pool_test["New_under"]),
+        "ROSS_New_under": (pool_validation["New_under"], pool_test["New_under"]),
         "Equal6": (equal6_validation, equal6_test),
         "DAWCE_AUC": (dawce_validation, dawce_test),
         "AdaptiveChoice_AUC": (adaptive_validation, adaptive_test),
     }
+    # Independent of the selected ROSS boundary. Each baseline learns its
+    # imputer/scaler from its own fixed-window fit data, not all history.
+    for window in RECENT_WINDOWS:
+        recent = train[train["fyear"] >= train_end - window + 1]
+        recent_X, recent_val, recent_test = _fit_transform(recent, validation, test, feature_cols)
+        recent_model = _train_model(
+            recent_X, recent["target"].to_numpy(), "undersampling",
+            f"rolling_{test_year}_recent{window}y_under", logger, seed=seed,
+        )
+        if audit_rows is not None:
+            audit_rows.append({"test_year": test_year, "boundary": None, **recent_model.sampling_audit_})
+        method_probas[f"Recent{window}y_under"] = (
+            recent_model.predict_proba(recent_val), recent_model.predict_proba(recent_test)
+        )
 
     method_rows: list[dict] = []
     prediction_rows: list[dict] = []
@@ -263,6 +306,9 @@ def _run_year(test_year: int, data: pd.DataFrame, feature_cols: list[str], logge
             method, test_year, y_validation, validation_proba, y_test, test_proba
         )
         method_rows.append(row)
+        for prediction, (source_id, sample) in zip(predictions, test.iterrows(), strict=True):
+            prediction["source_row_id"] = int(source_id)
+            prediction["company_name"] = sample.get("company_name", "")
         prediction_rows.extend(predictions)
 
     selection_row = {
@@ -328,6 +374,8 @@ def _paired_tests(by_year: pd.DataFrame) -> pd.DataFrame:
                     "baseline": method,
                     "metric": metric,
                     "n_years": len(common_years),
+                    "n_nonzero_pairs": int(np.count_nonzero(difference)),
+                    "inference_scope": "exploratory_dependent_annual_pairs",
                     "adaptive_mean": float(np.mean(a)),
                     "baseline_mean": float(np.mean(b)),
                     "mean_difference": float(np.mean(difference)),
@@ -344,8 +392,10 @@ def _validate_outputs(
     by_year: pd.DataFrame,
     predictions: pd.DataFrame,
     selections: pd.DataFrame,
+    *,
+    test_years=None,
 ) -> None:
-    expected_years = set(range(FIRST_TEST_YEAR, LAST_TEST_YEAR + 1))
+    expected_years = set(test_years if test_years is not None else range(FIRST_TEST_YEAR, LAST_TEST_YEAR + 1))
     assert set(by_year["test_year"]) == expected_years
     assert set(by_year["method"]) == set(METHODS)
     assert len(by_year) == len(expected_years) * len(METHODS)
@@ -355,26 +405,22 @@ def _validate_outputs(
     assert not by_year[list(METRICS)].isna().any().any()
     per_method_counts = predictions.groupby("method").size()
     assert per_method_counts.nunique() == 1
+    assert not predictions.duplicated(["test_year", "method", "source_row_id"]).any()
 
 
-def main() -> None:
-    set_seed(42)
-    logger = get_logger("RollingBankruptcyAdaptive", console=True, file=False)
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    X, y = load_bankruptcy_with_year(logger)
-    data = X.copy()
-    data["target"] = np.asarray(y)
-    feature_cols = [column for column in X.columns if column != "fyear"]
+def _run_seed(data: pd.DataFrame, feature_cols: list[str], logger, output_dir: Path, seed: int, test_years: list[int]) -> pd.DataFrame:
+    set_seed(seed)
+    output_dir.mkdir(parents=True, exist_ok=False)
+    audit_rows: list[dict] = []
 
     method_rows: list[dict] = []
     prediction_rows: list[dict] = []
     boundary_rows: list[dict] = []
     selection_rows: list[dict] = []
-    for test_year in range(FIRST_TEST_YEAR, LAST_TEST_YEAR + 1):
-        logger.info(f"=== Walk-forward test year {test_year} ===")
+    for test_year in test_years:
+        logger.info(f"=== Seed {seed}: Walk-forward test year {test_year} ===")
         year_methods, year_predictions, year_boundaries, year_selection = _run_year(
-            test_year, data, feature_cols, logger
+            test_year, data, feature_cols, logger, seed=seed, audit_rows=audit_rows,
         )
         method_rows.extend(year_methods)
         prediction_rows.extend(year_predictions)
@@ -385,31 +431,96 @@ def main() -> None:
     predictions = pd.DataFrame(prediction_rows)
     boundaries = pd.DataFrame(boundary_rows)
     selections = pd.DataFrame(selection_rows)
-    _validate_outputs(by_year, predictions, selections)
-
+    _validate_outputs(by_year, predictions, selections, test_years=test_years)
     pooled = _pooled_metrics(predictions)
-    tests = _paired_tests(by_year)
     outputs = {
         "rolling_by_year.csv": by_year,
         "rolling_predictions.csv": predictions,
         "rolling_boundary_candidates.csv": boundaries,
         "rolling_selection_history.csv": selections,
         "rolling_pooled_summary.csv": pooled,
-        "rolling_wilcoxon_holm.csv": tests,
+        "rolling_sampling_audit.csv": pd.DataFrame(audit_rows),
     }
+    if len(test_years) >= 2:
+        outputs["rolling_wilcoxon_holm.csv"] = _paired_tests(by_year)
     for filename, frame in outputs.items():
-        path = OUTPUT_DIR / filename
-        frame.to_csv(path, index=False, float_format="%.8f")
-        logger.info(f"Saved {path}")
+        frame["seed"] = seed
+        frame["protocol_version"] = "bankruptcy_rolling_v2_exploratory"
+        frame.to_csv(output_dir / filename, index=False, float_format="%.12g")
+    return pooled
 
-    print("\nPooled out-of-sample metrics:")
-    print(pooled.to_string(index=False, float_format=lambda value: f"{value:.4f}"))
-    print("\nAdaptive selection history:")
-    print(
-        selections[
-            ["test_year", "selected_boundary", "best_single_model", "dawce_new_weight", "adaptive_choice"]
-        ].to_string(index=False)
-    )
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main(argv=None) -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    seeds_group = parser.add_mutually_exclusive_group()
+    seeds_group.add_argument("--seeds", type=int, nargs="+", default=None)
+    seeds_group.add_argument("--configured-seeds", action="store_true", help="Run all seeds in base_config.yaml")
+    parser.add_argument("--test-years", type=int, nargs="+", default=list(range(FIRST_TEST_YEAR, LAST_TEST_YEAR + 1)))
+    parser.add_argument("--output-root", type=Path, default=OUTPUT_DIR / "runs")
+    args = parser.parse_args(argv)
+    seeds = get_seeds_from_config(get_config_loader()) if args.configured_seeds else (args.seeds or [42])
+    if len(seeds) != len(set(seeds)) or any(seed < 0 or seed >= 2**32 for seed in seeds):
+        parser.error("Seeds must be unique integers in [0, 2**32).")
+    years = sorted(args.test_years)
+    if len(years) != len(set(years)) or any(year < FIRST_TEST_YEAR or year > LAST_TEST_YEAR for year in years):
+        parser.error(f"Test years must be unique and within {FIRST_TEST_YEAR}..{LAST_TEST_YEAR}.")
+    logger = get_logger("RollingBankruptcyAdaptive", console=True, file=False)
+    logger.warning("Exploratory only: bankruptcy label availability is not verified; no labels are reconstructed.")
+    X, y = load_bankruptcy_with_year(logger, keep_company=True)
+    data = X.copy()
+    data["target"] = np.asarray(y)
+    feature_cols = [column for column in X.columns if column not in {"fyear", "company_name"}]
+    def git_output(*arguments):
+        result = subprocess.run(
+            ["git", "-c", f"safe.directory={project_root.as_posix()}", *arguments],
+            cwd=project_root, capture_output=True, text=True, encoding="utf-8", errors="replace",
+        )
+        return result.stdout.strip() if result.returncode == 0 else None
+
+    source_paths = [
+        path for folder in ("src", "experiments", "config")
+        for path in (project_root / folder).rglob("*")
+        if path.suffix in {".py", ".yaml"}
+    ] + [project_root / "requirements.txt"]
+    manifest = {
+        "protocol_version": "bankruptcy_rolling_v2_exploratory",
+        "label_availability": "unverified_no_event_dates",
+        "status": "running", "started_at": datetime.now(timezone.utc).isoformat(),
+        "command": list(sys.argv if argv is None else [__file__, *argv]),
+        "git_commit": git_output("rev-parse", "HEAD"),
+        "git_status_at_start": git_output("status", "--porcelain"),
+        "source_hashes": {path.relative_to(project_root).as_posix(): _sha256(path) for path in sorted(source_paths)},
+        "data_sha256": _sha256(US_CSV), "seeds": seeds, "test_years": years,
+        "feature_columns": feature_cols, "methods": METHODS, "weight_grid": WEIGHT_GRID.tolist(),
+        "recent_windows": RECENT_WINDOWS, "min_old_years": MIN_OLD_YEARS,
+        "python": platform.python_version(), "platform": platform.platform(),
+        "packages": {name: version(name) for name in ("numpy", "pandas", "scipy", "scikit-learn", "imbalanced-learn", "xgboost")},
+        "uncertainty_note": "Seed std is algorithmic variability, not independent temporal replication.",
+    }
+    run_dir = args.output_root / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    run_dir.mkdir(parents=True, exist_ok=False)
+    manifest_path = run_dir / "run_manifest.json"
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    try:
+        pooled_runs = [_run_seed(data, feature_cols, logger, run_dir / f"seed_{seed}", seed, years) for seed in seeds]
+        pooled_all = pd.concat(pooled_runs, ignore_index=True)
+        seed_summary = pooled_all.groupby("method")[list(METRICS)].agg(["mean", "std", "count"])
+        seed_summary.columns = [f"{metric}_{stat}" for metric, stat in seed_summary.columns]
+        seed_summary.to_csv(run_dir / "rolling_seed_summary.csv", float_format="%.12g")
+        manifest["status"] = "completed"
+    except BaseException as error:
+        manifest["status"] = "failed"
+        manifest["error"] = f"{type(error).__name__}: {error}"
+        raise
+    finally:
+        manifest["finished_at"] = datetime.now(timezone.utc).isoformat()
+        manifest["output_hashes"] = {path.relative_to(run_dir).as_posix(): _sha256(path) for path in sorted(run_dir.rglob("*.csv"))}
+        manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    logger.info(f"Saved new run without replacing legacy artifacts: {run_dir}")
 
 
 if __name__ == "__main__":

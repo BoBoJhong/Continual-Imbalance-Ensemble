@@ -1,0 +1,3 @@
+method,n_predictions,n_positive,AUC,PR_AUC,F1,G_Mean,Recall,Precision,Balanced_Accuracy,Cohen_Kappa,Type1_Error,Type2_Error,threshold,TP,FP,FN,TN,alerts,prevalence,seed,protocol_version
+SlidingFIFO3,58600,572,0.773269481432,0.085986939128,0.15214384509,0.435632595339,0.192307692308,0.12585812357,0.589570817271,0.142019924012,0.0131660577652,0.807692307692,annual_validation_selected,110,764,462,57264,874,0.00976109215017,42,study3b_sliding_old2_new1_fifo3_aging_v1_exploratory
+SlidingNewestModel,58600,572,0.77221113957,0.0729930958664,0.139055793991,0.374645078054,0.141608391608,0.136593591906,0.566392532469,0.1304146872,0.00882332666988,0.858391608392,annual_validation_selected,81,512,491,57516,593,0.00976109215017,42,study3b_sliding_old2_new1_fifo3_aging_v1_exploratory

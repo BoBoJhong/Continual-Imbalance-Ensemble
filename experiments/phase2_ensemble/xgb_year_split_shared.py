@@ -190,7 +190,7 @@ def process_one_year_split(
     ensemble_map = {
         "old_only": "Old",
         "new_only": "New",
-        "old_new_all": "Retrain",
+        "old_new_all": "OldNewMean",
     }
 
     for i, s in enumerate(SAMPLING_STRATEGIES):

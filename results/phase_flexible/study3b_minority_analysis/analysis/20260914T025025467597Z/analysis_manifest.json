@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "generated_at_utc": "2026-09-14T02:50:27.356096+00:00",
+  "generator": "scripts/analysis/generate_study3b_minority_report.py",
+  "generator_sha256": "b0e01a6e6d0dc9850591d27eb8ec955384cf8d78f24da61f681305a324c3b6a7",
+  "source_predictions": "results/phase_flexible/study3_ab_fair/runs/20260909T122839561377Z/seed_42/fair_predictions.csv",
+  "source_predictions_sha256": "1dfd37c047c7ca66509858d276a9ab27ccb9f69021d156974a654d48d02537a5",
+  "method": "B_model_FIFO3_equal",
+  "selection_note": "No model fitting or test-set configuration selection; saved predictions summarized only.",
+  "outputs": {
+    "study3b_bmodel_operating_by_year.csv": "baecf48f9c8b4e80c91857bd4ebebfbede2dedfc89f3d542372026a5b003e2b0",
+    "study3b_bmodel_operating_pooled.csv": "1dd0d79d27db2ff0e91b27ea1d41227b8dc6d7b6b562a82f41c4b8d320ba5ad9",
+    "study3b_bmodel_yearly_minority_performance.png": "18f3d0c281fa7471bf9c7809ed20d072796764e91715dee9c38800f84999e06d",
+    "study3b_bmodel_yearly_alert_burden.png": "e3d5079888afdc310ac227272cdd026205698564fe25f381d9430cf2db602c63"
+  }
+}
