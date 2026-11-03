@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "tables": [
+    {
+      "id": "fixed_no_fs_pooled",
+      "run": "results/phase2_ensemble/standard_dynamic/runs/20261004T202331745995Z",
+      "expected_protocol": "fixed_bankruptcy_standard_deslib_fit_only_fs_v1",
+      "expected_seeds": [
+        42,
+        123,
+        456,
+        789,
+        2024,
+        7,
+        21,
+        84,
+        168,
+        999
+      ],
+      "complete_pattern": "seed_{seed}/no_fs/complete.json",
+      "csv": "summary.csv",
+      "filters": {
+        "fs": "no_fs",
+        "period": "pooled"
+      },
+      "row_key": "method",
+      "caption": "固定年份 no-FS：pooled 測試指標之 seed 平均與標準差",
+      "context": "公司最終狀態 target；本表只呈現 no-FS pooled 結果。與滑動視窗事件 target 分開閱讀；seed 標準差不是獨立資料信賴區間。",
+      "metrics": [
+        {
+          "label": "AUC",
+          "mean": "AUC_mean",
+          "std": "AUC_std"
+        },
+        {
+          "label": "PR-AUC",
+          "mean": "PR_AUC_mean",
+          "std": "PR_AUC_std"
+        },
+        {
+          "label": "F1",
+          "mean": "F1_mean",
+          "std": "F1_std"
+        },
+        {
+          "label": "Recall",
+          "mean": "Recall_mean",
+          "std": "Recall_std"
+        },
+        {
+          "label": "Precision",
+          "mean": "Precision_mean",
+          "std": "Precision_std"
+        }
+      ]
+    },
+    {
+      "id": "study3b_pooled",
+      "run": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z",
+      "expected_protocol": "study3b_multiclassifier_sampling_ensemble_fs_v1_exploratory",
+      "expected_seeds": [
+        42,
+        123,
+        456,
+        789,
+        2024,
+        7,
+        21,
+        84,
+        168,
+        999
+      ],
+      "complete_pattern": "seed_{seed}/complete.json",
+      "csv": "summary.csv",
+      "filters": {},
+      "row_key": "method",
+      "caption": "滑動視窗獨立協定：pooled 測試指標之 seed 平均與標準差",
+      "context": "回溯重建事件 target，屬 exploratory 協定；本表使用 pooled 指標，不使用 annual_mean 欄位。不與固定年份 run 合併排名，也不依 Test 指標選方法。",
+      "metrics": [
+        {
+          "label": "AUC",
+          "mean": "AUC_seed_mean",
+          "std": "AUC_seed_std"
+        },
+        {
+          "label": "PR-AUC",
+          "mean": "PR_AUC_seed_mean",
+          "std": "PR_AUC_seed_std"
+        },
+        {
+          "label": "F1",
+          "mean": "F1_seed_mean",
+          "std": "F1_seed_std"
+        },
+        {
+          "label": "Recall",
+          "mean": "Recall_seed_mean",
+          "std": "Recall_seed_std"
+        },
+        {
+          "label": "Precision",
+          "mean": "Precision_seed_mean",
+          "std": "Precision_seed_std"
+        }
+      ]
+    }
+  ],
+  "analyses": [
+    {
+      "id": "fixed_company_statistics",
+      "directory": "results/statistical_tests/fixed_two_experiments/20261027T051346477136Z",
+      "manifest_sha256": "7d4efce40175420350168bb8f7fef2bd90a426b43060b57dd1626eb7f70048cf",
+      "expected_protocol": "fixed_bankruptcy_standard_deslib_fit_only_fs_v1"
+    }
+  ],
+  "method_inventory": {
+    "proof": "thesis/drafts/method_reference_revision_20261027/inventory.json",
+    "sha256": "b9db67caf1f236bf0ecef37dfecc3ebb2a58c099ea8b2f383e04e665fa5f03f2"
+  },
+  "method_clarifications": {
+    "proof": "thesis/drafts/final_method_clarifications_20261027/clarification-proof.json",
+    "sha256": "067ea469158f72031ba0b6f95277bec3c13fb5d60878014ffc61ca211fe2ebb4"
+  },
+  "chapter_results": {
+    "proof": "thesis/drafts/framework_results_revision_20261027/results-proof.json",
+    "sha256": "7f5f2b227864a6a4084d3aa912d77a4a5c5626b023320a6286b73ae0055f6887"
+  },
+  "chapter_figures": {
+    "proof": "thesis/drafts/front_four_revision_20261027/figures-proof.json",
+    "sha256": "ec9d31d7654ef3c902cfdac9af4e81622823b4ef9f1bf223db8bbc6be6ce384a"
+  },
+  "event_results": {
+    "proof": "thesis/drafts/event_label_revision_20261103/results-proof.json",
+    "sha256": "4b6e28f3383f0ee7b9e9833c235468e1f5dcc9f45754d135badb43fe93c0a2a9"
+  }
+}

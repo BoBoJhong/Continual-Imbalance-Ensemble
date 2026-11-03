@@ -1,0 +1,175 @@
+{
+  "status": "passed",
+  "pages": 78,
+  "chapter_starts": {
+    "一、緒論": 12,
+    "二、文獻探討": 15,
+    "三、研究方法": 23,
+    "四、實驗結果與討論": 47,
+    "五、結論與未來研究": 59
+  },
+  "figure_numbers": [
+    "3-1",
+    "3-2",
+    "3-3",
+    "3-4",
+    "3-5",
+    "4-1",
+    "4-2",
+    "4-3"
+  ],
+  "table_numbers": [
+    "2-1",
+    "2-2",
+    "3-1",
+    "3-2",
+    "3-3",
+    "3-4",
+    "3-5",
+    "3-6",
+    "3-7",
+    "3-8",
+    "3-9",
+    "3-10",
+    "3-11",
+    "3-12",
+    "4-1",
+    "4-2",
+    "4-3",
+    "4-4",
+    "4-5",
+    "4-6",
+    "4-7",
+    "4-8",
+    "4-9",
+    "4-10",
+    "A-1",
+    "A-2",
+    "A-3",
+    "A-4",
+    "A-5",
+    "A-6",
+    "A-7",
+    "A-8",
+    "A-9",
+    "A-10",
+    "A-11",
+    "A-12"
+  ],
+  "source_credits_parenthesized": 44,
+  "symbol_page_removed": true,
+  "primary_tuned_classifiers": [
+    "XGBoost",
+    "LightGBM",
+    "Random Forest",
+    "Logistic Regression",
+    "TabM"
+  ],
+  "baseline_scores_match_original": true,
+  "table_locations": {
+    "表3-4Baseline": [
+      10,
+      29
+    ],
+    "表3-5Baseline": [
+      10,
+      30
+    ],
+    "表3-6Baseline": [
+      10,
+      30
+    ],
+    "表3-12實驗二": [
+      10,
+      41
+    ],
+    "表4-1超參數": [
+      10,
+      47
+    ],
+    "表4-6實驗一": [
+      10,
+      52
+    ],
+    "圖4-1超參數": [
+      9,
+      48
+    ],
+    "圖4-2未進行FS": [
+      9,
+      50
+    ],
+    "圖4-3各FS": [
+      9,
+      56
+    ],
+    "表A-5實驗一": [
+      11,
+      69
+    ],
+    "表A-6實驗一": [
+      11,
+      71
+    ],
+    "表A-7實驗二": [
+      11,
+      72
+    ],
+    "表A-9實驗二": [
+      11,
+      75
+    ]
+  },
+  "rendered_pages": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    29,
+    30,
+    31,
+    41,
+    42,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    69,
+    70,
+    71,
+    72,
+    73,
+    75,
+    76
+  ],
+  "log_defects": [],
+  "pdf_sha256": "590c0e2da82a4922b8c007034c7e5e50db4b8619c2cd855b5cd3028f0c89ed36",
+  "native_warnings": [
+    "NCU NOTICE: Signed form forms/authorization.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/advisor.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/committee.pdf not inserted."
+  ]
+}

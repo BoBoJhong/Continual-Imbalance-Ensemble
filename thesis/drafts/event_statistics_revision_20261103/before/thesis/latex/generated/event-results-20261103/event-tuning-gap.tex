@@ -1,0 +1,30 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{20\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}@{}}
+\caption{集成池預設 XGBoost 與 Baseline 調參 XGBoost 之對照}\label{tab:results-tuning-gap}\\
+\toprule
+模型池位置 & XGBoost 參數 & AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{5}{c}{表~\thetable（續）}\\
+\toprule
+模型池位置 & XGBoost 參數 & AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{5}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+Old\_under & 預設（集成池） & 0.7812 & 0.0948 & 0.3277 \\
+ & 調參（候選 5） & 0.8710 & 0.1590 & 0.2748 \\
+Old\_over & 預設（集成池） & 0.6844 & 0.0227 & 0.0202 \\
+ & 調參（候選 4） & 0.7532 & 0.0755 & 0.1630 \\
+Old\_hybrid & 預設（集成池） & 0.6874 & 0.0260 & 0.0244 \\
+ & 調參（候選 4） & 0.7544 & 0.0746 & 0.1731 \\
+New\_under & 預設（集成池） & 0.8311 & 0.2004 & 0.3950 \\
+ & 調參（候選 20） & 0.7965 & 0.1595 & 0.3109 \\
+New\_over & 預設（集成池） & 0.8285 & 0.1137 & 0.3580 \\
+ & 調參（候選 13） & 0.8577 & 0.1463 & 0.3689 \\
+New\_hybrid & 預設（集成池） & 0.8314 & 0.1279 & 0.2672 \\
+ & 調參（候選 13） & 0.8577 & 0.1598 & 0.3496 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究事件標籤集成與 Baseline 實驗結果)\par 兩者使用相同資料列、標籤、擬合期間與採樣；預設列的門檻由 Calibration（2014 年半數）決定，調參列的參數與門檻由完整 2014 年驗證資料決定。各值為十個種子的合併四年 Test 平均，僅供說明參數條件的差異。}
+\endgroup

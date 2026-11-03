@@ -1,0 +1,26 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}@{}}
+\caption{實驗二各特徵條件之 pooled AUC}\label{tab:results-fs-auc}\\
+\toprule
+FS & Equal6 & V-static & OLA & LCA & KNORA-E & KNORA-U \\
+\midrule\endfirsthead
+\multicolumn{7}{c}{表~\thetable（續）}\\
+\toprule
+FS & Equal6 & V-static & OLA & LCA & KNORA-E & KNORA-U \\
+\midrule\endhead
+\midrule\multicolumn{7}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+no-FS（18） & \shortstack[l]{0.7815\\{\scriptsize(\(\pm\)0.0026)}} & \shortstack[l]{0.8152\\{\scriptsize(\(\pm\)0.0040)}} & \shortstack[l]{0.7386\\{\scriptsize(\(\pm\)0.0078)}} & \shortstack[l]{0.7369\\{\scriptsize(\(\pm\)0.0087)}} & \shortstack[l]{0.7613\\{\scriptsize(\(\pm\)0.0052)}} & \shortstack[l]{0.7481\\{\scriptsize(\(\pm\)0.0079)}} \\
+MI 50\% & \shortstack[l]{0.7644\\{\scriptsize(\(\pm\)0.0059)}} & \shortstack[l]{0.7826\\{\scriptsize(\(\pm\)0.0119)}} & \shortstack[l]{0.7129\\{\scriptsize(\(\pm\)0.0146)}} & \shortstack[l]{0.6938\\{\scriptsize(\(\pm\)0.0219)}} & \shortstack[l]{0.7339\\{\scriptsize(\(\pm\)0.0105)}} & \shortstack[l]{0.7262\\{\scriptsize(\(\pm\)0.0067)}} \\
+MI 80\% & \shortstack[l]{0.7822\\{\scriptsize(\(\pm\)0.0038)}} & \shortstack[l]{0.8145\\{\scriptsize(\(\pm\)0.0039)}} & \shortstack[l]{0.7319\\{\scriptsize(\(\pm\)0.0059)}} & \shortstack[l]{0.7185\\{\scriptsize(\(\pm\)0.0054)}} & \shortstack[l]{0.7514\\{\scriptsize(\(\pm\)0.0075)}} & \shortstack[l]{0.7558\\{\scriptsize(\(\pm\)0.0092)}} \\
+CART 50\% & \shortstack[l]{0.7511\\{\scriptsize(\(\pm\)0.0137)}} & \shortstack[l]{0.7931\\{\scriptsize(\(\pm\)0.0101)}} & \shortstack[l]{0.7087\\{\scriptsize(\(\pm\)0.0230)}} & \shortstack[l]{0.7074\\{\scriptsize(\(\pm\)0.0238)}} & \shortstack[l]{0.7178\\{\scriptsize(\(\pm\)0.0168)}} & \shortstack[l]{0.7252\\{\scriptsize(\(\pm\)0.0120)}} \\
+CART 80\% & \shortstack[l]{0.7812\\{\scriptsize(\(\pm\)0.0056)}} & \shortstack[l]{0.8140\\{\scriptsize(\(\pm\)0.0032)}} & \shortstack[l]{0.7412\\{\scriptsize(\(\pm\)0.0089)}} & \shortstack[l]{0.7372\\{\scriptsize(\(\pm\)0.0094)}} & \shortstack[l]{0.7557\\{\scriptsize(\(\pm\)0.0083)}} & \shortstack[l]{0.7494\\{\scriptsize(\(\pm\)0.0071)}} \\
+SHAP 50\% & \shortstack[l]{0.7595\\{\scriptsize(\(\pm\)0.0024)}} & \shortstack[l]{0.7971\\{\scriptsize(\(\pm\)0.0022)}} & \shortstack[l]{0.7353\\{\scriptsize(\(\pm\)0.0086)}} & \shortstack[l]{0.7261\\{\scriptsize(\(\pm\)0.0072)}} & \shortstack[l]{0.7398\\{\scriptsize(\(\pm\)0.0073)}} & \shortstack[l]{0.7341\\{\scriptsize(\(\pm\)0.0080)}} \\
+SHAP 80\% & \shortstack[l]{0.7815\\{\scriptsize(\(\pm\)0.0027)}} & \shortstack[l]{0.8117\\{\scriptsize(\(\pm\)0.0040)}} & \shortstack[l]{0.7344\\{\scriptsize(\(\pm\)0.0069)}} & \shortstack[l]{0.7279\\{\scriptsize(\(\pm\)0.0047)}} & \shortstack[l]{0.7484\\{\scriptsize(\(\pm\)0.0078)}} & \shortstack[l]{0.7468\\{\scriptsize(\(\pm\)0.0043)}} \\
+RFE 50\% & \shortstack[l]{0.7617\\{\scriptsize(\(\pm\)0.0087)}} & \shortstack[l]{0.8011\\{\scriptsize(\(\pm\)0.0105)}} & \shortstack[l]{0.7107\\{\scriptsize(\(\pm\)0.0109)}} & \shortstack[l]{0.7083\\{\scriptsize(\(\pm\)0.0125)}} & \shortstack[l]{0.7235\\{\scriptsize(\(\pm\)0.0091)}} & \shortstack[l]{0.7356\\{\scriptsize(\(\pm\)0.0126)}} \\
+RFE 80\% & \shortstack[l]{0.7837\\{\scriptsize(\(\pm\)0.0069)}} & \shortstack[l]{0.8150\\{\scriptsize(\(\pm\)0.0067)}} & \shortstack[l]{0.7500\\{\scriptsize(\(\pm\)0.0115)}} & \shortstack[l]{0.7356\\{\scriptsize(\(\pm\)0.0076)}} & \shortstack[l]{0.7600\\{\scriptsize(\(\pm\)0.0115)}} & \shortstack[l]{0.7568\\{\scriptsize(\(\pm\)0.0104)}} \\
+\end{longtable}
+\noindent{\footnotesize 資料來源：本研究實驗結果整理。\par 各格上列為十個種子的平均值，下列括號為種子標準差；50\%、80\% 分別保留 9、14 個特徵。no-FS 使用 18 個特徵，作為同方法對照。V-static 可依各條件的 Calibration 重新選成員。表內不依測試分數標記最佳條件；顯著性另依配對檢定。}
+\endgroup

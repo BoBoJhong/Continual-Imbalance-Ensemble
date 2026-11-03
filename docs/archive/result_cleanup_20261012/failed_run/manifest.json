@@ -1,0 +1,122 @@
+{
+  "protocol": "fixed_bankruptcy_standard_deslib_fit_only_fs_v1",
+  "status": "failed",
+  "created_at": "2026-10-04T20:19:41.758216+00:00",
+  "config": {
+    "seeds": [
+      42
+    ],
+    "fs_configs": [
+      [
+        "none",
+        1.0
+      ],
+      [
+        "mi",
+        0.5
+      ],
+      [
+        "mi",
+        0.8
+      ],
+      [
+        "cart",
+        0.5
+      ],
+      [
+        "cart",
+        0.8
+      ],
+      [
+        "shap",
+        0.5
+      ],
+      [
+        "shap",
+        0.8
+      ],
+      [
+        "rfe",
+        0.5
+      ],
+      [
+        "rfe",
+        0.8
+      ]
+    ],
+    "threads": 4,
+    "k": 7
+  },
+  "provenance": {
+    "raw_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+    "python": "3.14.0",
+    "versions": {
+      "deslib": "0.3.7",
+      "numpy": "2.4.2",
+      "pandas": "3.0.1",
+      "scikit-learn": "1.8.0",
+      "xgboost": "3.2.0",
+      "imbalanced-learn": "0.14.1",
+      "lightgbm": "4.6.0"
+    },
+    "sources": {
+      "experiments\\phase2_ensemble\\dynamic\\des\\bankruptcy_standard_dynamic.py": "bb445d216b6fc15065cbba6e7d836f85497b1d09e84236d59105b0b2fa48a863",
+      "src\\ensemble\\standard_dynamic.py": "509f85c030bfe7cf2f4cdb2b8333b83f4b49e08d44d78075d4161531eafcf9c0",
+      "experiments\\phase_flexible\\study3b_full_pipeline.py": "fb4e7479029210c45afd9c83c530c36e6bff909b421af6b27a960775a8aac91c",
+      "src\\data\\sampler.py": "4aeb1e488f28f9141096214156e94c2568c2f57939fc2c5277ea1f456a3b3c5a",
+      "src\\models\\xgboost_wrapper.py": "7d45444407d25551af061658f992015891e81f6bfb04202fdbea7ae38225369e",
+      "src\\evaluation\\metrics.py": "07f81f81138338e39e46d194e0aa5a39819d21c360b2968a18da0c0c4728c14e",
+      "config\\model_config.yaml": "ac67e15f7666a83a6688d22d3a16848917ecfebc77c61637d8a8cb96c61edfac",
+      "config\\sampling_config.yaml": "2692f15fabceeaf0f354ecba10c94b6ce99c28af510b815e8aecc8f1701e603d"
+    }
+  },
+  "command": [
+    "experiments/phase3_feature/bankruptcy_standard_dynamic_fs.py",
+    "--seeds",
+    "42"
+  ],
+  "features": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ],
+  "slots": [
+    "Old_under",
+    "Old_over",
+    "Old_hybrid",
+    "New_under",
+    "New_over",
+    "New_hybrid"
+  ],
+  "samplers": {
+    "none": "None",
+    "under": "TomekLinks",
+    "over": "ADASYN",
+    "hybrid": "SMOTEENN"
+  },
+  "target": "original company final status: failed=1; not verified next-year event",
+  "nominal_split": "Old 1999-2011; New 2012-2014; Test 2015-2018",
+  "actual_fit": "Old 1999-2011; New 2012-2013; 2014 reserved for validation",
+  "validation": "2014, fixed seed42 stratified 50/50 disjoint DSEL/Calibration; not CV",
+  "representation": "impute, scale and supervised FS on Old_fit only, before sampling",
+  "selection": "static AP ranking and F1 thresholds on Calibration only; Test evaluation only",
+  "limitations": "retrospective final-company-status target; repeated companies across years; within-2014 partition has no finer timestamps; held-out validation reduces New fitting data; seed SD is not independent-data uncertainty; no claim of superiority or statistical significance",
+  "last_started_at": "2026-10-04T20:19:41.890730+00:00",
+  "failed_at": "2026-10-04T20:19:58.440956+00:00",
+  "error": "Traceback (most recent call last):\n  File \"C:\\0_git workspace\\Continual-Imbalance-Ensemble\\experiments\\phase2_ensemble\\dynamic\\des\\bankruptcy_standard_dynamic.py\", line 349, in main\n    metrics = run_configuration(parts, features, seed, method, ratio,\n                                config[\"threads\"], config[\"k\"], directory)\n  File \"C:\\0_git workspace\\Continual-Imbalance-Ensemble\\experiments\\phase2_ensemble\\dynamic\\des\\bankruptcy_standard_dynamic.py\", line 208, in run_configuration\n    selector = fit_selector(method, pool, transformed[\"DSEL\"], parts[\"DSEL\"].target,\n                            k=k, seed=seed, threads=threads)\n  File \"C:\\0_git workspace\\Continual-Imbalance-Ensemble\\src\\ensemble\\standard_dynamic.py\", line 79, in fit_selector\n    return factories[method](**common, **options).fit(np.asarray(X_dsel), np.asarray(y_dsel))\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\0_git workspace\\Continual-Imbalance-Ensemble\\.venv\\Lib\\site-packages\\deslib\\base.py\", line 100, in fit\n    self._check_base_classifier_fitted()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"C:\\0_git workspace\\Continual-Imbalance-Ensemble\\.venv\\Lib\\site-packages\\deslib\\base.py\", line 726, in _check_base_classifier_fitted\n    check_is_fitted(clf, \"classes_\")\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"C:\\0_git workspace\\Continual-Imbalance-Ensemble\\.venv\\Lib\\site-packages\\sklearn\\utils\\validation.py\", line 1697, in check_is_fitted\n    raise TypeError(\"%s is not an estimator instance.\" % (estimator))\nTypeError: ProbabilityClassifier(columns=['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8',\n                               'X9', 'X10', 'X11', 'X12', 'X13', 'X14', 'X15',\n                               'X16', 'X17', 'X18'],\n                      model=<src.models.xgboost_wrapper.XGBoostWrapper object at 0x000001884D916900>) is not an estimator instance.\n"
+}

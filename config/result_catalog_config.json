@@ -1,0 +1,325 @@
+{
+  "schema_version": 1,
+  "scope": "Metadata inventory only; original artifacts stay in place. Rules are explicit research-scope decisions, not age-based invalidation.",
+  "categories": {
+    "current_core": {
+      "label": "現行核心完成 run",
+      "note": "已選定的固定年份 run 且 manifest completed；不代表全部 baseline 已完成。"
+    },
+    "current_extension": {
+      "label": "現行擴充完成 run",
+      "note": "已選定的完整滑動視窗 run，與核心 target 分開。"
+    },
+    "interim_snapshot": {
+      "label": "部分 seeds／階段快照",
+      "note": "沿用快照身份，不自動混入完成後的 seeds。"
+    },
+    "failed_run": {
+      "label": "失敗 run",
+      "note": "manifest 記錄 failed；保留診斷，不用作正式成效。"
+    },
+    "smoke": {
+      "label": "試跑／smoke",
+      "note": "有限設定或樣本；命名分類仍需核對其 metadata。"
+    },
+    "checkpoint_partial": {
+      "label": "中途／恢復檔",
+      "note": "只標記該檔，不能據此推論整個實驗失敗。"
+    },
+    "retired_scope": {
+      "label": "已退出研究範圍",
+      "note": "保留沿革；退出不代表方法無效。"
+    },
+    "oracle_exploration": {
+      "label": "Test-selected／oracle 探索",
+      "note": "Test 參與選擇或事後排名；不是無偏選擇證據。"
+    },
+    "historical_protocol": {
+      "label": "歷史協定／匯出",
+      "note": "不同切割、方法或檢定來源；按版本引用。"
+    },
+    "exploratory_extension": {
+      "label": "其他擴充／探索",
+      "note": "逐 run 核對來源；部分含已退出方法，不能整個目錄判廢。"
+    },
+    "auxiliary": {
+      "label": "輔助資料／分析",
+      "note": "跨領域與穩定性等獨立分析；適用範圍需交代。"
+    },
+    "audit_snapshot": {
+      "label": "審查／provenance 快照",
+      "note": "查核時點的證據，不代表當前所有檔案已涵蓋。"
+    },
+    "documentation": {
+      "label": "人工導航",
+      "note": "目錄使用說明。"
+    },
+    "needs_review": {
+      "label": "待確認來源",
+      "note": "缺少足夠規則或完成證據，未宣稱過時或有效。"
+    }
+  },
+  "selected_runs": [
+    {
+      "id": "fixed_study12",
+      "path": "results/phase2_ensemble/standard_dynamic/runs/20261004T202331745995Z",
+      "category": "current_core",
+      "title": "固定年份 Study I／II",
+      "target": "原始公司最終 status",
+      "source": "docs/研究方向.md C41/C43/C46"
+    },
+    {
+      "id": "full_study3b",
+      "path": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z",
+      "category": "current_extension",
+      "title": "滑動視窗完整 Study 3B",
+      "target": "回溯重建事件 target",
+      "source": "docs/研究方向.md C38/C48"
+    }
+  ],
+  "rules": [
+    {
+      "id": "snapshot-separate",
+      "category": "interim_snapshot",
+      "match": {
+        "prefix": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/separated_tables/"
+      },
+      "reason": "固定 seeds 42/123/456 分表快照",
+      "tags": [
+        "partial_seeds"
+      ],
+      "tier": "override"
+    },
+    {
+      "id": "snapshot-spreadsheets",
+      "category": "interim_snapshot",
+      "match": {
+        "prefix": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/manual_spreadsheets/"
+      },
+      "reason": "固定 seeds 42/123/456 人工試算表快照",
+      "tags": [
+        "partial_seeds"
+      ],
+      "tier": "override"
+    },
+    {
+      "id": "snapshot-readout",
+      "category": "interim_snapshot",
+      "match": {
+        "prefix": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/readout_tables/"
+      },
+      "reason": "固定 seeds 42/123/456 閱讀表快照",
+      "tags": [
+        "partial_seeds"
+      ],
+      "tier": "override"
+    },
+    {
+      "id": "snapshot-seven",
+      "category": "interim_snapshot",
+      "match": {
+        "prefix": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/analysis/static_vs_sliding_rf_under/"
+      },
+      "reason": "七 seeds 42/123/456/789/2024/7/21 分析快照",
+      "tags": [
+        "partial_seeds"
+      ],
+      "tier": "override"
+    },
+    {
+      "id": "smoke-markers",
+      "category": "smoke",
+      "match": {
+        "contains_any": [
+          "/smoke/",
+          "/_smoke",
+          "/samp_smoke_none/",
+          "/simple_kfold_smoke/",
+          "/smoke_test/",
+          "/tune_smoke12/",
+          "/smoke_2022/"
+        ]
+      },
+      "reason": "已知試跑路徑或 smoke 命名，正式使用前核對配置",
+      "tags": [
+        "limited_scope"
+      ],
+      "tier": "override"
+    },
+    {
+      "id": "partial-files",
+      "category": "checkpoint_partial",
+      "match": {
+        "name_regex": "(_checkpoint\\.json|_raw\\.partial\\.csv)$"
+      },
+      "reason": "checkpoint／partial 恢復檔；需配對 final 查核",
+      "tags": [],
+      "tier": "override"
+    },
+    {
+      "id": "retired-ratio",
+      "category": "retired_scope",
+      "match": {
+        "prefix": "results/phase_flexible/study3b_oldnew_ratio_sensitivity/"
+      },
+      "reason": "B-data／固定六年比例分支已退出主線",
+      "tags": [
+        "retired_branch"
+      ],
+      "tier": "override"
+    },
+    {
+      "id": "oracle-files",
+      "category": "oracle_exploration",
+      "match": {
+        "paths": [
+          "results/phase4_drift/bk_ross_boundary_candidates.csv",
+          "results/phase4_drift/bk_ross_selected_boundary.csv",
+          "results/phase4_drift/bk_ross_static_ensemble_comparison.csv",
+          "results/phase4_drift/bk_ross_static_ensemble_summary.csv",
+          "results/phase4_drift/bk_ross_fs_static_ensemble_comparison.csv",
+          "results/phase4_drift/bk_ross_fs_static_ensemble_summary.csv",
+          "results/phase5_weighted/bk_ross_weight_sweep.csv",
+          "results/phase5_weighted/bk_ross_weight_summary.csv",
+          "results/phase5_weighted/bk_validation_ross_weight_summary.csv"
+        ]
+      },
+      "reason": "歷史 Test-selected 候選／權重摘要，需限定探索解讀",
+      "tags": [
+        "test_selected"
+      ],
+      "tier": "override"
+    },
+    {
+      "id": "root-manual",
+      "category": "documentation",
+      "match": {
+        "paths": [
+          "results/README.md"
+        ]
+      },
+      "reason": "人工維護結果導航",
+      "tags": [],
+      "tier": "override"
+    },
+    {
+      "id": "audit-files",
+      "category": "audit_snapshot",
+      "match": {
+        "prefixes": [
+          "results/research_audit/"
+        ],
+        "paths": [
+          "results/RESULT_MANIFEST.json"
+        ]
+      },
+      "reason": "既有審查／全域 provenance 時點快照",
+      "tags": [],
+      "tier": "override"
+    },
+    {
+      "id": "independent-fs",
+      "category": "auxiliary",
+      "match": {
+        "prefixes": [
+          "results/phase3_feature/stability/",
+          "results/phase3_feature/ga/"
+        ]
+      },
+      "reason": "獨立穩定性／GA 輔助分析，不與新固定 FS 當成同協定",
+      "tags": [],
+      "tier": "fallback"
+    },
+    {
+      "id": "auxiliary-domain",
+      "category": "auxiliary",
+      "match": {
+        "contains_any": [
+          "medical",
+          "diabetic"
+        ]
+      },
+      "reason": "輔助領域結果；日期與來源適用性另核對",
+      "tags": [],
+      "tier": "fallback"
+    },
+    {
+      "id": "legacy-bankruptcy-phase2",
+      "category": "historical_protocol",
+      "match": {
+        "prefix": "results/phase2_ensemble/",
+        "name_contains": "bankruptcy"
+      },
+      "reason": "舊 bankruptcy Phase 2 協定；官方核心另有指定 run",
+      "tags": [],
+      "tier": "fallback"
+    },
+    {
+      "id": "legacy-bankruptcy-phase3",
+      "category": "historical_protocol",
+      "match": {
+        "prefix": "results/phase3_feature/",
+        "name_contains": "bankruptcy"
+      },
+      "reason": "舊 bankruptcy FS 協定；新九設定結果在固定年份 run",
+      "tags": [],
+      "tier": "fallback"
+    },
+    {
+      "id": "legacy-plots",
+      "category": "historical_protocol",
+      "match": {
+        "prefixes": [
+          "results/phase2_ensemble/plots/",
+          "results/phase3_feature/plots/"
+        ]
+      },
+      "reason": "歷史 Phase 2／3 圖表，按產生協定引用",
+      "tags": [],
+      "tier": "fallback"
+    },
+    {
+      "id": "legacy-baseline",
+      "category": "historical_protocol",
+      "match": {
+        "prefix": "results/phase1_baseline/"
+      },
+      "reason": "既有 baseline；與最新固定年份協定仍需對齊",
+      "tags": [],
+      "tier": "fallback"
+    },
+    {
+      "id": "legacy-exports",
+      "category": "historical_protocol",
+      "match": {
+        "prefixes": [
+          "results/multi_seed/",
+          "results/statistical_tests/",
+          "results/thesis_tables/",
+          "results/report_figures/"
+        ],
+        "paths": [
+          "results/summary_all_datasets.csv"
+        ]
+      },
+      "reason": "既有匯出／統計／報告；需綁定來源及選擇／檢定口徑",
+      "tags": [],
+      "tier": "fallback"
+    },
+    {
+      "id": "other-extensions",
+      "category": "exploratory_extension",
+      "match": {
+        "prefixes": [
+          "results/phase_flexible/",
+          "results/phase4_drift/",
+          "results/phase5_weighted/"
+        ]
+      },
+      "reason": "其他擴充／探索結果；逐方法核對來源與退出範圍",
+      "tags": [],
+      "tier": "fallback"
+    }
+  ],
+  "duplicate_policy": "Nonempty exact byte matches only. Repeated outputs are tagged; no artifact is deleted or reclassified as invalid."
+}

@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "tables": [
+    {
+      "id": "fixed_no_fs_pooled",
+      "run": "results/phase2_ensemble/standard_dynamic/runs/20261004T202331745995Z",
+      "expected_protocol": "fixed_bankruptcy_standard_deslib_fit_only_fs_v1",
+      "expected_seeds": [
+        42,
+        123,
+        456,
+        789,
+        2024,
+        7,
+        21,
+        84,
+        168,
+        999
+      ],
+      "complete_pattern": "seed_{seed}/no_fs/complete.json",
+      "csv": "summary.csv",
+      "filters": {
+        "fs": "no_fs",
+        "period": "pooled"
+      },
+      "row_key": "method",
+      "caption": "固定年份 no-FS：pooled 測試指標之 seed 平均與標準差",
+      "context": "公司最終狀態 target；本表只呈現 no-FS pooled 結果。與滑動視窗事件 target 分開閱讀；seed 標準差不是獨立資料信賴區間。",
+      "metrics": [
+        {
+          "label": "AUC",
+          "mean": "AUC_mean",
+          "std": "AUC_std"
+        },
+        {
+          "label": "PR-AUC",
+          "mean": "PR_AUC_mean",
+          "std": "PR_AUC_std"
+        },
+        {
+          "label": "F1",
+          "mean": "F1_mean",
+          "std": "F1_std"
+        },
+        {
+          "label": "Recall",
+          "mean": "Recall_mean",
+          "std": "Recall_std"
+        },
+        {
+          "label": "Precision",
+          "mean": "Precision_mean",
+          "std": "Precision_std"
+        }
+      ]
+    },
+    {
+      "id": "study3b_pooled",
+      "run": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z",
+      "expected_protocol": "study3b_multiclassifier_sampling_ensemble_fs_v1_exploratory",
+      "expected_seeds": [
+        42,
+        123,
+        456,
+        789,
+        2024,
+        7,
+        21,
+        84,
+        168,
+        999
+      ],
+      "complete_pattern": "seed_{seed}/complete.json",
+      "csv": "summary.csv",
+      "filters": {},
+      "row_key": "method",
+      "caption": "滑動視窗獨立協定：pooled 測試指標之 seed 平均與標準差",
+      "context": "回溯重建事件 target，屬 exploratory 協定；本表使用 pooled 指標，不使用 annual_mean 欄位。不與固定年份 run 合併排名，也不依 Test 指標選方法。",
+      "metrics": [
+        {
+          "label": "AUC",
+          "mean": "AUC_seed_mean",
+          "std": "AUC_seed_std"
+        },
+        {
+          "label": "PR-AUC",
+          "mean": "PR_AUC_seed_mean",
+          "std": "PR_AUC_seed_std"
+        },
+        {
+          "label": "F1",
+          "mean": "F1_seed_mean",
+          "std": "F1_seed_std"
+        },
+        {
+          "label": "Recall",
+          "mean": "Recall_seed_mean",
+          "std": "Recall_seed_std"
+        },
+        {
+          "label": "Precision",
+          "mean": "Precision_seed_mean",
+          "std": "Precision_seed_std"
+        }
+      ]
+    }
+  ],
+  "analyses": [
+    {
+      "id": "fixed_company_statistics",
+      "directory": "results/statistical_tests/fixed_two_experiments/20261027T051346477136Z",
+      "manifest_sha256": "7d4efce40175420350168bb8f7fef2bd90a426b43060b57dd1626eb7f70048cf",
+      "expected_protocol": "fixed_bankruptcy_standard_deslib_fit_only_fs_v1",
+      "source_snapshots": {
+        "scripts/analysis/fixed_company_statistics.py": "thesis/drafts/event_statistics_revision_20261103/fixed_company_statistics.final_status.py"
+      }
+    },
+    {
+      "id": "event_company_statistics",
+      "directory": "results/statistical_tests/fixed_two_experiments_event/20261031T120706072983Z",
+      "manifest_sha256": "32f6776b6fd6a72cf6ce2e51a883efa1ce9d76d1d8515760ba6ac7cb0e397747",
+      "expected_protocol": "fixed_bankruptcy_standard_deslib_fit_only_fs_event_target_v1"
+    }
+  ],
+  "method_inventory": {
+    "proof": "thesis/drafts/method_reference_revision_20261027/inventory.json",
+    "sha256": "5fdd79bf984a12a7a7eb3f80339ca46ee7be40bca8d8773e062c226be48ae4eb"
+  },
+  "method_clarifications": {
+    "proof": "thesis/drafts/final_method_clarifications_20261027/clarification-proof.json",
+    "sha256": "4244d782a344615a919f9687bedbc3f9278b8163045da57529325930724805de"
+  },
+  "chapter_results": {
+    "proof": "thesis/drafts/framework_results_revision_20261027/results-proof.json",
+    "sha256": "d09c723c53899c810b8a310a64bd2e9528b1066f5243e6fac616efc2cc3d99f7"
+  },
+  "chapter_figures": {
+    "proof": "thesis/drafts/front_four_revision_20261027/figures-proof.json",
+    "sha256": "39890c88f763b9bf2dba20ca8b3c319158698f892710533f00fac9d1588c8126"
+  },
+  "event_results": {
+    "proof": "thesis/drafts/event_label_revision_20261103/results-proof.json",
+    "sha256": "082ff63ba2eac41a63c8571765637f9301ae1779b75d088872b224f9bc57b308"
+  },
+  "event_statistics": {
+    "proof": "thesis/drafts/event_statistics_revision_20261103/statistics-proof.json",
+    "sha256": "53f1c4358ca4f7d6af341b6ca1fc42a773e2a032c8d00aec0b423e6a47e6e5fb"
+  }
+}

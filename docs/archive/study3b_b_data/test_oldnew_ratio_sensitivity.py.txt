@@ -1,0 +1,71 @@
+"""Fixed-history partition experiment: chronology, actual separation, leakage."""
+import logging
+
+import numpy as np
+import pandas as pd
+import pytest
+
+from experiments.phase_flexible import study3b_oldnew_ratio_sensitivity as study
+from scripts.analysis.analyze_study3b_oldnew_ratio import block_intervals
+
+
+def test_partitions_share_history_without_overlap():
+    for year in study.TEST_YEARS:
+        unions = []
+        for width in study.OLD_WIDTHS:
+            old, new = study.partition_years(year, width)
+            assert len(old) == width and len(new) == 6 - width
+            assert not set(old) & set(new)
+            assert max(old) < min(new) and max(new) < year - 1
+            unions.append(old + new)
+        assert len(set(unions)) == 1
+    assert study.partition_years(2009, 5) == ((2002, 2003, 2004, 2005, 2006), (2007,))
+    assert len(study.build_protocol()) == 50
+    with pytest.raises(ValueError):
+        study.partition_years(2009, 6)
+
+
+def test_fits_separate_groups_and_ignores_current_test_labels(monkeypatch, tmp_path):
+    fitted = []
+
+    class FakeModel:
+        def __init__(self, years, name):
+            self.years = years
+            self.audit = {"model_id": name}
+
+        def predict_proba(self, frame, features):
+            assert frame.fyear.min() > max(self.years)
+            return np.clip(frame[features[0]].to_numpy() + .01 * len(self.years), 0, 1)
+
+    def fit(data, features, years, name, logger, *, seed):
+        fitted.append(years)
+        return FakeModel(years, name)
+
+    monkeypatch.setattr(study.base, "_fit_window_model", fit)
+    data = pd.DataFrame([
+        {"fyear": year, "company_name": str(i), "target": i % 2, "X1": .1 + .2 * i}
+        for year in range(2002, 2010) for i in range(4)
+    ])
+    kwargs = {"features": ["X1"], "seed": 42, "logger": logging.getLogger(__name__), "test_years": (2009,)}
+    study.fit_evaluate_seed(data, folder=tmp_path / "first", **kwargs)
+    assert len(fitted) == 11
+    assert sum(len(years) == 6 for years in fitted) == 1
+    before = pd.read_csv(tmp_path / "first/predictions.csv.gz")
+    split = before.loc[before.method != "Recent6y"]
+    np.testing.assert_allclose(split.y_proba, (split.old_proba + split.new_proba) / 2)
+    changed = data.copy()
+    changed.loc[changed.fyear == 2009, "target"] = 1 - changed.loc[changed.fyear == 2009, "target"]
+    study.fit_evaluate_seed(changed, folder=tmp_path / "changed", **kwargs)
+    after = pd.read_csv(tmp_path / "changed/predictions.csv.gz")
+    pd.testing.assert_frame_equal(before.drop(columns="y_true"), after.drop(columns="y_true"))
+
+
+def test_blocks_resample_paired_annual_differences():
+    data = pd.DataFrame([
+        {"method": method, "test_feature_year": year, "seed": seed,
+         "PR_AUC": .1 + .01 * year + .02 * (method == "Old3_New3")}
+        for method in ("Old3_New3", "Recent6y") for year in range(10) for seed in (42, 123)
+    ])
+    result = block_intervals(data, [("Old3_New3", "Recent6y")], replicates=20)
+    assert len(result) == 2
+    np.testing.assert_allclose(result[["difference", "ci95_low", "ci95_high"]], .02)

@@ -1,0 +1,101 @@
+\chapter{實驗補充設定與統計檢定}\label{app:experimental-details}
+\begingroup
+\setlength{\emergencystretch}{2em}
+
+\section{兩項實驗之資料與紀錄規格}
+
+實驗一包含 Baseline 與 Old／New 集成比較；實驗二在集成架構中加入特徵選取。事件標籤的三部分使用相同資料列、擬合年份與 Test；本附錄另行標示的深度學習歷史結果使用舊協定。Baseline 以 2014 年整年調參與決定門檻；集成與 FS 則把 2014 年分為互斥的 DSEL 與 Calibration，池內 XGBoost 使用預設參數。
+
+實驗紀錄包含資料分區與樣本識別、標籤定義、擬合期間、隨機種子、採樣前後筆數、前處理參數、所選特徵及排列順序、分類器設定、驗證候選排序、固定門檻，以及整體與逐年預測結果。紀錄另保留資料與方法版本的識別資訊，供研究重現與來源核對，不將內部儲存名稱當作方法定義。
+
+\section{Baseline 超參數與訓練控制}
+
+Baseline 對四種分類器的每個「訓練策略 \ensuremath{\times} 採樣」組合各評估 24 組候選：候選 0 為集成池使用的預設參數，其餘 23 組依分類器固定的亂數種子，從表~\ref{tab:method-ml-search} 的候選集合抽出。Logistic Regression 的候選集合共 30 組，也只抽出 23 組，並未全部遍歷。LightGBM 的抽樣比例小於 1 時，另設定 \nolinkurl{bagging_freq=1}，使該參數實際生效。
+
+調參時以種子 42 擬合各候選，依 2014 年驗證 AUC 選出一組參數，再以十個種子重新訓練；門檻依同一驗證資料的 F1-score 決定。各組合選中的候選編號保存在執行紀錄，不同組合可能選出不同參數，因此不以單一組參數代表全部設定。TabM 與 TabICL 的事件標籤版本尚未完成；兩者先前最終狀態標籤的結果已暫列於第四章，設定與明細見第~\ref{sec:deep-reference-details}~節，不參與事件標籤的同條件比較。
+
+\section{軟體環境與隨機性控制}
+
+依本研究採用的本機設備，CPU、記憶體、作業系統及顯示卡規格列於表~\ref{tab:method-hardware}。硬體於 2026 年 10 月 27 日由系統查核；作業系統與驅動版本列為本次查核值，不推定每次歷史執行都使用相同的更新版本。
+
+\input{generated/method-clarifications-20261027/hardware.tex}
+
+固定年份集成實驗所保存的環境為 Python 3.14.0、NumPy 2.4.2、pandas 3.0.1、scikit-learn 1.8.0、XGBoost 3.2.0、imbalanced-learn 0.14.1、LightGBM 4.6.0 及 DESlib 0.3.7。各設定使用四個執行緒，整體最多三個工作程序平行執行。這些資訊描述產生該批結果時的環境，不以後續工作環境版本取代。
+
+2014 年驗證分區的種子固定為 42。模型、採樣與具隨機性的特徵選取程序，使用 42、123、456、789、2024、7、21、84、168、999 共十個種子。相同種子與方法的 FS／no-FS 比較使用相同測試樣本；種子標準差描述程序隨機變異，不等於獨立資料抽樣的信賴區間。固定年份 XGBoost 使用 hist 樹建構且未指定 CUDA，FS 的決策樹、MI 與 LightGBM 亦使用 CPU 設定；不能由本機配有 GPU 推定上述方法採 GPU 加速。其他深度模型是否使用 GPU，依其個別執行紀錄判讀。
+
+\section{實驗完成範圍與比較限制}\label{sec:method-evidence}
+
+事件標籤的集成實驗已完成十個種子與九種特徵條件，Baseline 已完成四種分類器、三種訓練策略與四種採樣。事件標籤與最終狀態標籤皆已完成公司群聚配對分析，各有 165 項檢定，分列於附錄~\ref{sec:event-stats-full} 與附錄~\ref{sec:stats-full}。兩者的重抽次數與 Holm 校正家族分開，不將對照標籤的顯著性延伸至主要標籤。
+
+目前流程測試的集成池暫用預設 XGBoost，尚未接入框架要求的最佳分類器及其驗證選定參數。第四章已對照兩者，但若要判斷集成能否優於調參後的單一分類器，仍須以調參後的成員重建模型池，並在相同驗證資料下比較。
+
+事件標籤以破產公司的最後觀測年度推定事件年份；公開檔沒有可逐筆核對的破產申請日與財報公開時間。同一公司可能跨訓練與測試年度出現，因此結果不延伸為對未見公司的驗證。
+
+\clearpage
+\section{Baseline 各採樣設定之完整結果}\label{sec:results-baseline-full}
+
+本節分列正文四種分類器在 Old／New／Retrain 與四種採樣下的事件標籤結果。各格為十個種子的描述性指標。
+
+\input{generated/event-results-20261103/event-baseline-sampling.tex}
+
+\clearpage
+\section{TabM 與 TabICL 既有設定與採樣明細（暫列）}\label{sec:deep-reference-details}
+
+本節補充第四章兩個深度學習分類器的歷史結果。原始 CSV 各有 124 筆設定：Old 與 New 各 60 筆，Retrain 四筆；欄位只保存各設定的測試指標，沒有獨立十種子結果。TabM 另保存驗證 AUC 及選定參數，TabICL 未保存相同欄位，不能將兩者寫成已完成同一搜尋預算的調參比較。
+
+依保存的年份切分入口，訓練期間為 1999--2014 年，逐年改變 Old／New 分界，測試期間均為 2015--2018 年；舊驗證程序由各訓練期間內再切分驗證資料，與目前事件協定完整保留 2014 年的設計不同。這些數字僅作既有最終狀態標籤紀錄呈現；原執行環境與套件後端未完整留存，不能由目前程式或資料夾名稱反推當時全部設定。
+
+尤其既有 TabICL wrapper 支援 TabICL 及 TabPFN 後端，結果 CSV 沒有記錄實際採用者。因此表中的 TabICL 保留既有入口名稱，不將這批分數視為已確認重現原 TabICL 論文的結果；更新時須同時保存套件、模型版本與實際後端。TabM 的單一展示情境已列於表~\ref{tab:deep-reference-settings}，其他設定仍應依各自保存的驗證參數判讀。
+
+\input{generated/deep-baseline-reference-20261103/sampling.tex}
+
+兩個分類器的事件標籤重跑與同協定比較尚待完成。完成後應同步更新本節、第四章暫列表、第三章設定及摘要的完成範圍，重新核對來源後替換數字。
+
+\clearpage
+\section{事件標籤之公司群聚配對檢定}\label{sec:event-stats-full}
+
+本節完整列出事件標籤實驗一的 21 項與實驗二的 144 項檢定。所有比較使用同一批 3,700 家測試公司與 9,999 組公司重抽權重，並共同採 Holm 校正；重抽種子為 20261027。原始預測重播、資料列配對及指標核對均通過。差值為候選方法減比較基準，區間為逐項 95\% 百分位區間，未作同時區間校正；顯著性以 \(p_H<0.05\) 判斷。
+
+最小可報 \(p\) 為 0.0001，並非零。尾端次數很少時，多重比較可能放大 Monte Carlo 誤差的影響；例如 SHAP 50\% 的 V-static AUC 僅有一次尾端超越，\(p=2/10{,}000=0.0002\)、\(p_H=0.0254\)，應保留有限重抽精度的限制。這批分析固定原有模型與驗證決策，屬事後探索性，不包含重新抽訓練資料或未來年份的不確定性。
+
+\subsection*{實驗一：各方法與 Equal6 比較}
+\input{generated/event-statistics-20261103/appendix-experiment1.tex}
+
+\Needspace{12\baselineskip}
+\subsection*{實驗二：FS 與相同方法 no-FS 比較}
+\input{generated/event-statistics-20261103/appendix-experiment2-AUC.tex}
+\input{generated/event-statistics-20261103/appendix-experiment2-F1.tex}
+\input{generated/event-statistics-20261103/appendix-experiment2-Recall.tex}
+
+\clearpage
+\section{最終狀態標籤之公司群聚配對檢定}\label{sec:stats-full}
+
+本節列出最終狀態標籤下，實驗一的 21 項檢定與實驗二的 144 項檢定；事件標籤另列於附錄~\ref{sec:event-stats-full}，不與本節合併校正。比較規則與雙尾近似檢定依第~\ref{sec:method-statistics}~節；所有表格共用 49,999 組公司重抽樣本，且 165 個 \(p\) 值共同採 Holm 校正。差值均為候選方法減對應基準，不依測試分數或顯著性排序。
+
+信賴區間為逐項 95\% 百分位區間，未作同時區間校正。\(p\) 為置中 bootstrap 的未校正值，\(p_H\) 為 Holm 校正值；附錄的 \(p\) 值顯示五位小數，指標差值與區間顯示四位小數，計算與校正使用原精度。最小可報 \(p\) 為 0.00002，並非零。有限重抽亦具有 Monte Carlo 誤差，接近顯著門檻的結論應審慎解讀；未達顯著不等同方法等效。
+
+以 CART 50\% 的 KNORA-E AUC 為例，49,999 次重抽中有 12 次置中誤差達到或超過觀察差值，因此 \(p=13/50{,}000=0.00026\)，\(p_H=0.03900\)。未校正 \(p\) 的 Monte Carlo 標準誤約為 0.000072；多重比較校正會放大此數值誤差的影響。若要將其作為關鍵顯著性結論，應增加重抽次數或以其他適切方法驗證。
+
+\subsection*{實驗一：各方法與 Equal6 比較}
+\input{generated/statistics-20261027T051346477136Z/appendix-experiment1.tex}
+
+\subsection*{實驗二：FS 與相同方法 no-FS 比較}
+\input{generated/statistics-20261027T051346477136Z/appendix-experiment2-AUC.tex}
+\input{generated/statistics-20261027T051346477136Z/appendix-experiment2-F1.tex}
+\input{generated/statistics-20261027T051346477136Z/appendix-experiment2-Recall.tex}
+
+\clearpage
+\section{年度資料分布與特徵選取明細}\label{sec:appendix-data-fs}
+
+表~\ref{tab:method-annual-data} 依實際公開檔計算各年度紀錄數與正類比例。核對作者 2022 年與 2024 年兩次公開資料，均為 78,682 筆、8,971 個識別碼；本地檔與目前公開檔的位元組也相同。原文的 8,262 公司數無法由兩次公開檔重建，本文因此報告公開識別碼數，保留說明文字與公開內容不一致的限制。\nolinkurl{status_label} 在同一公司的所有年度保持相同，表中「破產標籤紀錄數」為最終狀態標籤的計數，不是該年度新增破產事件數；事件標籤的分區計數見表~\ref{tab:method-partitions}。
+
+2022 年與更新版的公司、年度及狀態相同，但財務欄位的排列與數值不同。本文使用更新版的欄位順序，依作者公開研究附件的欄位名稱整理表~\ref{tab:method-feature-dictionary}，不將舊版的 X 編號直接套用到新資料，也未以固定倍率把兩版財務值強制轉成相同。既有模型均使用相同的本地更新版資料，本次只修正欄位說明，沒有變更模型輸入或重算測試分數。
+
+\input{generated/method-inventory-20261027/annual-data.tex}
+
+表~\ref{tab:method-fs-frequency-1} 與表~\ref{tab:method-fs-frequency-2} 統計事件標籤下，每個財務特徵在十個種子中被選取的次數。每個 FS 條件的特徵數固定為 9 或 14 個，但特徵名稱可能隨種子而異。此處只描述已完成的選取結果，不把跨種子出現頻率另組成新的特徵子集。
+
+\input{generated/event-results-20261103/event-fs-frequency-1.tex}
+\input{generated/event-results-20261103/event-fs-frequency-2.tex}
+\endgroup

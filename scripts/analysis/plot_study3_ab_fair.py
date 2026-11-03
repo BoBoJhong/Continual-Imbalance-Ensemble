@@ -10,7 +10,6 @@ import pandas as pd
 
 METHOD_LABELS = {
     "B_model_FIFO3_equal": "B-model FIFO3",
-    "B_data_equal": "B-data",
     "A_validation_boundary_equal": "A validation boundary",
     "Recent5y": "Recent 5y",
     "Recent3y": "Recent 3y",
@@ -28,6 +27,9 @@ def render(run_dir: Path) -> Path:
     seed_dir = run_dir / "seed_42"
     pooled = pd.read_csv(seed_dir / "fair_pooled_summary.csv")
     annual = pd.read_csv(seed_dir / "fair_by_year.csv")
+    # Historical runs may include retired branches; show the current method set.
+    pooled = pooled.loc[pooled.method.isin(METHOD_LABELS)].copy()
+    annual = annual.loc[annual.method.isin(METHOD_LABELS)].copy()
     pooled["label"] = pooled.method.map(METHOD_LABELS)
     pooled = pooled.sort_values("PR_AUC", ascending=True).reset_index(drop=True)
     colors = [

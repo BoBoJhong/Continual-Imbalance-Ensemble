@@ -1,0 +1,47 @@
+{
+  "job_id": "svm_none_M2014_shap_r50",
+  "seed": 84,
+  "classifier": "svm",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2012,
+    2013,
+    2014
+  ],
+  "n_train": 10473,
+  "positive_before": 87,
+  "n_after": 10473,
+  "positive_after": 87,
+  "fs": "shap",
+  "ratio": 0.5,
+  "selected_features": [
+    "X11",
+    "X15",
+    "X6",
+    "X16",
+    "X12",
+    "X10",
+    "X1",
+    "X9",
+    "X18"
+  ],
+  "n_features": 9,
+  "fit_predict_seconds": 5.843845400027931,
+  "params": {
+    "C": 1.0,
+    "kernel": "rbf",
+    "gamma": "scale",
+    "probability": true,
+    "class_weight": null,
+    "random_state": 84,
+    "max_iter": -1,
+    "cache_size": 500
+  },
+  "warnings": [],
+  "selector_seed": 84,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-10-01T04:39:38.268664+00:00",
+  "cache_sha256": "f31309fbc6a2568a0e32a6044b4fcbc81e53b510351bcdd6ff4a3fbb39fcd28e"
+}

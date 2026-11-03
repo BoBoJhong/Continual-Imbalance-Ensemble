@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "pages": 65,
+  "pdf_sha256": "0947d688c734f493d8105cdf8a0160ca7beba3423294c315e897706db7038e17",
+  "native_compile": "passed",
+  "editor_compile": "success",
+  "source_current": true,
+  "source_check": "passed",
+  "opening_pdf_page": 15,
+  "data_pdf_page": 17,
+  "time_window_pdf_page": 20,
+  "opening_has_dataset_names": false,
+  "annotation_resolution": "Replaced domain-specific motivation with generic time-ordered imbalanced classification problem; framework precedes case data",
+  "visual_review": "Actual PDF pages 15,17,20 inspected; window image and caption retained",
+  "scope": "Chapter 3 opening and ordering only; chapter 1 remains its existing placeholder; no experiment changes",
+  "handoff": "thesis/handoffs/20261027T124435386299Z",
+  "handoff_check": "passed"
+}

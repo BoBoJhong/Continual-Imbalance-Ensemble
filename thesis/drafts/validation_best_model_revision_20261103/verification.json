@@ -1,0 +1,69 @@
+{
+  "status": "passed",
+  "verified_at_utc": "2026-11-03T07:45:59.502698+00:00",
+  "user_comment": "PDF overview: change fixed XGBoost to best model; current experiments are tests",
+  "scope": "manuscript and native diagram labels only; experiment outputs and numbers unchanged",
+  "changed_files": {
+    "scripts/plots/build_thesis_method_diagrams.py": "270c763627bc7612c087ffd7c89cd1372610b88494d32455ff47be9fdc099bb9",
+    "docs/研究方向.md": "9fc40f9a332da31cb890b6ff85eb2098e419363e6396917ad6fd1f114065c219",
+    "thesis/README.md": "489743c2515aba5f410b4229b7c310dac1652ea76afa8772053e058ee7cd3b45",
+    "thesis/latex/chapters/01_introduction.tex": "c2f0da823894567898eec4706e59bcf80d0720a58bf192d4e5543f790c8a5f8e",
+    "thesis/latex/chapters/02_literature.tex": "078e03ea002bfa2e7471358875d96b1842e791a983d0e0317aa8f53049bb8346",
+    "thesis/latex/chapters/03_method.tex": "56e98c7ec9b0074ab78a394c9c0c9b4ba8b0fd4bd8503680abca666bbe1dc227",
+    "thesis/latex/chapters/04_experiments.tex": "c0bab834c633cb5a53316fbf2f52e9cb7adc13d8c28ab3a77a129adcd44f724c",
+    "thesis/latex/chapters/05_conclusion.tex": "6e2d132dc9520cf9649fc936ac65e3056874439f4a24113023d4dc003713f007",
+    "thesis/latex/chapters/appendix.tex": "f2aee8e8e2630f033003df871bda2c19055218ce38754217224b0b8ee112d3b1",
+    "thesis/latex/frontmatter/abstract_zh.tex": "91424df50aeca3be88b051dbca48d5b79d6e7cb15a41f0748ae4ee26ef965d23",
+    "thesis/latex/frontmatter/abstract_en.tex": "2bea17308bd1c3e3ac502cbf0d941cc4f192a094555ddb809a5feb78f04f0874",
+    "thesis/latex/figures/experiment1-ensemble.drawio": "510008c55d7ddd6a83688d45a307b02b36c31b633355da5f4c00a99ca30fe743",
+    "thesis/latex/figures/experiment1-ensemble.png": "0dad03450c93337634916c704e5fc3240600731ce53ff2c4218d2bfd2ecbc709",
+    "thesis/latex/figures/experiment1-ensemble.svg": "ca1a7609689115a788e6047f99faf0c36b04a05afc2c4ed2363b9bd6421941eb",
+    "thesis/latex/figures/experiment2-fs-ensemble.drawio": "0af215b21a7b94d80a5fce7afd94bc9abaa2d6dd7f685c4113e5969cab225dd2",
+    "thesis/latex/figures/experiment2-fs-ensemble.png": "f008846a0562ee0ef2e5228db0ac365685ea2093809afd1bd88ee9800bd57386",
+    "thesis/latex/figures/experiment2-fs-ensemble.svg": "60251ee12cf73e3fd4b539ce0cfa25a46cefd93a5400812c3b6bba6b7e000c21",
+    "thesis/latex/figures/thesis-flowchart-checks.json": "c5b689fbf7157c5cc79b870dfa45295d6ed29ca4bdf621ef5852db509dacfc02"
+  },
+  "source_check": "sync_results.py --check passed",
+  "diagram_check": "all three renderers passed object/connector/text-bound checks; ensemble SVGs say Best classifier",
+  "build": {
+    "status": "passed",
+    "pages": 92,
+    "pdf_sha256": "f4eb8c652f8bd92f7bcdb1b2eeed27d5f3e0d027534d4b76e7a1daf44a03d3b8",
+    "warnings": [
+      "NCU NOTICE: Signed form forms/authorization.pdf not inserted.",
+      "NCU NOTICE: Signed form forms/advisor.pdf not inserted.",
+      "NCU NOTICE: Signed form forms/committee.pdf not inserted."
+    ],
+    "unresolved_references": false,
+    "missing_characters": false,
+    "overfull_boxes": false
+  },
+  "visual_review_pages": [
+    3,
+    4,
+    15,
+    27,
+    36,
+    37,
+    39,
+    42
+  ],
+  "visual_review": "updated overview, best-model selection prose, pilot parameter table and both detailed diagrams reviewed; abstracts remain single page",
+  "pending": "complete common validation across candidate classifiers and rerun selected best-model ensemble/FS; existing XGBoost scores are pilot evidence",
+  "handoff": "thesis/handoffs/20261103T074559364331Z",
+  "handoff_files": [
+    "chapters/01_introduction.tex",
+    "chapters/02_literature.tex",
+    "chapters/03_method.tex",
+    "chapters/04_experiments.tex",
+    "chapters/05_conclusion.tex",
+    "chapters/appendix.tex",
+    "frontmatter/abstract_zh.tex",
+    "frontmatter/abstract_en.tex",
+    "figures/experiment1-ensemble.png",
+    "figures/experiment1-ensemble.svg",
+    "figures/experiment2-fs-ensemble.png",
+    "figures/experiment2-fs-ensemble.svg",
+    "figures/thesis-flowchart-checks.json"
+  ]
+}

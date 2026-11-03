@@ -26,21 +26,10 @@ EXPERIMENTS = (
     Experiment("phase1", "experiments/phase1_baseline/retrain.py", 600),
     Experiment(
         "phase2",
-        "experiments/phase2_ensemble/static/xgb_oldnew_bankruptcy_year_splits_static.py",
-        1_800,
+        "experiments/phase2_ensemble/dynamic/des/bankruptcy_standard_dynamic.py",
+        7_200,
     ),
-    Experiment(
-        "phase2",
-        "experiments/phase2_ensemble/dynamic/des/xgb_oldnew_bankruptcy_year_splits_des.py",
-        2_700,
-    ),
-    Experiment(
-        "phase2",
-        "experiments/phase2_ensemble/dynamic/dcs/xgb_oldnew_bankruptcy_year_splits_dcs.py",
-        2_700,
-    ),
-    Experiment("phase3", "experiments/phase3_feature/fs_study.py", 900),
-    Experiment("phase3", "experiments/phase3_feature/fs_sweep.py", 3_600),
+    Experiment("phase3", "experiments/phase3_feature/bankruptcy_standard_dynamic_fs.py", 14_400),
     Experiment(
         "phase3",
         "experiments/phase3_feature/feature_stability_analysis.py",

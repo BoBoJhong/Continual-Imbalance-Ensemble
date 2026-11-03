@@ -1,0 +1,49 @@
+{
+  "job_id": "rf_none_M2016_mi_r80",
+  "seed": 789,
+  "classifier": "rf",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2014,
+    2015,
+    2016
+  ],
+  "n_train": 10049,
+  "positive_before": 95,
+  "n_after": 10049,
+  "positive_after": 95,
+  "fs": "mi",
+  "ratio": 0.8,
+  "selected_features": [
+    "X11",
+    "X6",
+    "X7",
+    "X12",
+    "X8",
+    "X15",
+    "X5",
+    "X1",
+    "X10",
+    "X4",
+    "X17",
+    "X13",
+    "X14",
+    "X2"
+  ],
+  "n_features": 14,
+  "fit_predict_seconds": 5.594579400029033,
+  "params": {
+    "n_estimators": 200,
+    "class_weight": null,
+    "random_state": 789,
+    "n_jobs": 4,
+    "max_depth": null
+  },
+  "warnings": [],
+  "selector_seed": 789,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-09-29T09:01:12.654198+00:00",
+  "cache_sha256": "07027335090e1d4746a1a186834453c53044cb48308a7ba5baa2d001e082c2b0"
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Overleaf 論文同步"
+  short_description: "核對指定論文版本與線上差異，備份後同步檔案並確認保存及編譯"
+  default_prompt: "使用 $thesis-overleaf-sync 檢查指定交接包與我的 Overleaf 專案，回報差異後執行我已授權的同步。"

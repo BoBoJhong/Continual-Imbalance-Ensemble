@@ -1,0 +1,49 @@
+{
+  "job_id": "rf_none_M2007_shap_r80",
+  "seed": 84,
+  "classifier": "rf",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2005,
+    2006,
+    2007
+  ],
+  "n_train": 12342,
+  "positive_before": 150,
+  "n_after": 12342,
+  "positive_after": 150,
+  "fs": "shap",
+  "ratio": 0.8,
+  "selected_features": [
+    "X15",
+    "X1",
+    "X11",
+    "X10",
+    "X6",
+    "X13",
+    "X5",
+    "X3",
+    "X16",
+    "X12",
+    "X8",
+    "X18",
+    "X9",
+    "X14"
+  ],
+  "n_features": 14,
+  "fit_predict_seconds": 11.201365500106476,
+  "params": {
+    "n_estimators": 200,
+    "class_weight": null,
+    "random_state": 84,
+    "n_jobs": 4,
+    "max_depth": null
+  },
+  "warnings": [],
+  "selector_seed": 84,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-10-01T01:43:55.441570+00:00",
+  "cache_sha256": "7f656ef710c0cb57106bfd9f52fa8a39cf6dcc3937b8336b14927bdaad3b7027"
+}

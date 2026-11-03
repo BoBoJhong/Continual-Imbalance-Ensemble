@@ -1,0 +1,450 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "scope": "Historical plotting, export, migration, batch and statistical tools; original artifacts retained.",
+  "original_source_archive": "scripts/legacy/source_snapshots/20261012/tool_sources.zip",
+  "entries": [
+    {
+      "original_path": "scripts/plots/visualize_phase2_all_methods_complete.py",
+      "archived_path": "scripts/legacy/plots/visualize_phase2_all_methods_complete.py",
+      "original_sha256": "8d38823c5190c4c308cb8a6fdb3f097cedc398a433e7d0c8e76f7b2f0b8f64fb",
+      "archived_sha256": "05dd8c00ac6e319495874bd89c9d8fed4792270a4b63894e878ea02ee10c0c17",
+      "root_adjustments": [
+        {
+          "before": "root = Path(r\"c:\\0_git workspace\\Continual-Imbalance-Ensemble\")",
+          "after": "root = LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": true,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/plots/visualize_phase2_single_vs_ensemble.py",
+      "archived_path": "scripts/legacy/plots/visualize_phase2_single_vs_ensemble.py",
+      "original_sha256": "552da01a0c428814d135014b09100d34ab17bde7f732ce761bd27b0277ae1452",
+      "archived_sha256": "71df6664372f331746645610a809316a78c705e16471a2c9216217623c85b0af",
+      "root_adjustments": [
+        {
+          "before": "root = Path(r\"c:\\0_git workspace\\Continual-Imbalance-Ensemble\")",
+          "after": "root = LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": true,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/plots/visualize_phase2_tuned_correct.py",
+      "archived_path": "scripts/legacy/plots/visualize_phase2_tuned_correct.py",
+      "original_sha256": "b9cc0724311c4015148f47dd3af80981bfc637b16b4af984597a93f3bed779cf",
+      "archived_sha256": "b579d333cb1bab06c831b39fabcc5d824b825b38f4c8eee11d56b1b535efabf6",
+      "root_adjustments": [
+        {
+          "before": "root = Path(r\"c:\\0_git workspace\\Continual-Imbalance-Ensemble\")",
+          "after": "root = LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": true,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/plots/visualize_phase2_xgb_ensemble_families.py",
+      "archived_path": "scripts/legacy/plots/visualize_phase2_xgb_ensemble_families.py",
+      "original_sha256": "c0bbf21b87c8448805b02780fe3d751040c411e08a258e6825877bd589348726",
+      "archived_sha256": "59ee0a96d6664fde171bfdeaed7411b61f7ed536605f4523f26542174e503db3",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parent.parent.parent",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/plots/visualize_phase3_all_methods.py",
+      "archived_path": "scripts/legacy/plots/visualize_phase3_all_methods.py",
+      "original_sha256": "d6547e787c0cd5a61a3cec2a663ce03c020ad52598bba79f6d58a19096f4c821",
+      "archived_sha256": "49ad97d85202e2a1bf1160aa1514a433265dbdd04568bc5c3ffdc665090de3b6",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parents[2]",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": true,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/plots/visualize_phase3_delta_clean.py",
+      "archived_path": "scripts/legacy/plots/visualize_phase3_delta_clean.py",
+      "original_sha256": "d638c252f245779ea86025315d969328d37222a304d7911f741c101eab92ba53",
+      "archived_sha256": "c935a9904bb9cf2bd79e62f5561012c7417ec8be07a1bd034ec6e32c233b42b3",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parents[2]",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/plots/visualize_phase3_evolution.py",
+      "archived_path": "scripts/legacy/plots/visualize_phase3_evolution.py",
+      "original_sha256": "deae19c402c3dbddbff0c1a81188f3daa23e8139a69dd62012b894ec093d82fd",
+      "archived_sha256": "c867a7d73184de5df64c0604a7661a01c3236ecd001fc36fa2734d8eb502e2cd",
+      "root_adjustments": [
+        {
+          "before": "root = Path(r\"c:\\0_git workspace\\Continual-Imbalance-Ensemble\")",
+          "after": "root = LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": true,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/plots/visualize_phase3_evolution_complete.py",
+      "archived_path": "scripts/legacy/plots/visualize_phase3_evolution_complete.py",
+      "original_sha256": "4628d27db32aeb41b9aeedd34b1cd14d3d3a574fb9c6007b730493910373528f",
+      "archived_sha256": "af2d7f04799877842f2ed3fcbda969d21320ab2e65b95c68c554da0713c42356",
+      "root_adjustments": [
+        {
+          "before": "root = Path(r\"c:\\0_git workspace\\Continual-Imbalance-Ensemble\")",
+          "after": "root = LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": true,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/plots/visualize_phase3_vs_phase2_delta.py",
+      "archived_path": "scripts/legacy/plots/visualize_phase3_vs_phase2_delta.py",
+      "original_sha256": "c283cb2071abc925ad119fa0cc7f60b7b927270d5667efd749914f4ec7162271",
+      "archived_sha256": "1383aff2d6433824db76c1a4dd3cf891b0c3682105f43086fc41cd554a47b9fb",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parents[2]",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/reports/archive_bankruptcy_fs_triad.py",
+      "archived_path": "scripts/legacy/reports/archive_bankruptcy_fs_triad.py",
+      "original_sha256": "6dc2ce00860ff2e7dce101e7b43af313209c36f69f5314ae7f8300cf5278d76e",
+      "archived_sha256": "a0bc67f3940897f59202feff3a2266d46e229ad2d8ae338958069b30980b7c9f",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parent.parent.parent",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/reports/archive_fs_methods.py",
+      "archived_path": "scripts/legacy/reports/archive_fs_methods.py",
+      "original_sha256": "3e201a408a5cd5ccdf1a618aa4fa64313ebc88b86ea915455dfc454356c10024",
+      "archived_sha256": "5b461436b2e9b839c1090a7e0ca228a81fd33db9b3fa8abf06291456d9a33afa",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parent.parent.parent",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs.",
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "ba997f00ba0740ec79d4f9bb7b48512532d99e1a7c60f740b39f45e3a24667e3",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "scripts/reports/export_cart_sweep_to_thesis.py",
+      "archived_path": "scripts/legacy/reports/export_cart_sweep_to_thesis.py",
+      "original_sha256": "288e08434c4820fd8f5bacb9a1055eb0379a46d28d61f65257911e33a7307a1f",
+      "archived_sha256": "e22046994aaf45359fe5485ffb8bfc0c4f462a9c2bc3d159ea33ee1301e7f793",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parents[2]",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/reports/export_fs_method_static_dynamic.py",
+      "archived_path": "scripts/legacy/reports/export_fs_method_static_dynamic.py",
+      "original_sha256": "11db240688f759f47c8a8c97a178a47c2f0961ee4ef1072ff12e13d181bd7be2",
+      "archived_sha256": "5da5bbb51c5e0b9408c3bdb43c0b149c1a398226ed7bae430faa1fa50ebd4ed1",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parents[2]",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/reports/generate_advisor_excel.py",
+      "archived_path": "scripts/legacy/reports/generate_advisor_excel.py",
+      "original_sha256": "eada57e65bc0b97221fa11c2dded55da298a17e06f69fe8a0c8ebf3f4e8e1e45",
+      "archived_sha256": "6489d7cb6f5c2abfcff1fd98a891c4b936a0cd71556338ce820bf1ab0dcca6e9",
+      "root_adjustments": [
+        {
+          "before": "BASE = r\"c:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\"",
+          "after": "BASE = str(LEGACY_PROJECT_ROOT / \"results\")"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": true,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs.",
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "e8adc20ed64a4543f4c9935a69d4e3854e9214a3dc828cba7238d10648e53028",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "scripts/reports/migrate_phase3_results_to_method_dirs.py",
+      "archived_path": "scripts/legacy/reports/migrate_phase3_results_to_method_dirs.py",
+      "original_sha256": "a57aa83efbdba770dd8ef881ae3476227cfc3ef78a4ea5989f102daa7230fc92",
+      "archived_sha256": "339c66397fd919324b0844b451c1180089e46d03f35e2ddf94f3a01dd997db1c",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parents[2]",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs.",
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "bccd3b937e922e6471114f01d535c01e078d24fa84002bc9dc1c20619c035c47",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "scripts/reports/run_cart_full_to_thesis.py",
+      "archived_path": "scripts/legacy/reports/run_cart_full_to_thesis.py",
+      "original_sha256": "a507c2a9d0840015932e88ce962136f4ec8963a68173b21c3b029af5d3585fc0",
+      "archived_sha256": "ece376e393fca7d078f946b040865a23522be7e60a0433877ea724464a8ddb93",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parents[2]",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/reports/sync_ga_phase3_outputs.py",
+      "archived_path": "scripts/legacy/reports/sync_ga_phase3_outputs.py",
+      "original_sha256": "b3bec8a23317dcbc6ebe7b3d6920f4be2de885413536afb88e629cc1018654a0",
+      "archived_sha256": "9c6713a3e5a885ccd406f29e2ce27c22037e7c49758132b6608a0fbc7cd81daa",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parent.parent.parent",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs.",
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "633165c99758a1d306ed8aecb0eb8a39f9e51beaf6b2f667ad8a3ce99fc3371c",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "scripts/analysis/export_phase2_dcs_thesis_format.py",
+      "archived_path": "scripts/legacy/analysis/export_phase2_dcs_thesis_format.py",
+      "original_sha256": "90a23f284903d7519e86241c7f0ccc169a047d82b70b17f230539f727f7cad8d",
+      "archived_sha256": "252a9f5a0e63ea3407dddffc90bccea9848bd2c6215fa1af552b115a1e74fda8",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parent.parent.parent",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/analysis/export_phase2_thesis_format.py",
+      "archived_path": "scripts/legacy/analysis/export_phase2_thesis_format.py",
+      "original_sha256": "dab3a0b35e6d1f9a6438120dd5383b7c377ef62454336089f0eec6519c8dfe98",
+      "archived_sha256": "8181c587496168f13e3a27dfbd084dee4d862f2baa6a01db0554ec2ac977eeee",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parent.parent.parent",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/analysis/export_phase3_fs_thesis_format.py",
+      "archived_path": "scripts/legacy/analysis/export_phase3_fs_thesis_format.py",
+      "original_sha256": "ffcf3ec0274346bacb22e5118c1aab3206c24691c070e6e159d2bfaf88028ad5",
+      "archived_sha256": "564441ea411efc6fb63387f202df1e3189751da8bdaad0bc7471c673e53d4b40",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parent.parent.parent",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs."
+    },
+    {
+      "original_path": "scripts/analysis/statistical_test.py",
+      "archived_path": "scripts/legacy/analysis/statistical_test.py",
+      "original_sha256": "1b50db2e35efd38c547a590e3e58d240841fe10a12f6c7effc5e5aead2608455",
+      "archived_sha256": "5eea580100649bc9a3c34bffca650fad0270fd5cb2b34a6a8576859e6b021f5a",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parent.parent.parent",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs.",
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "38e5b7904c1b1dad59f93df8b9f46a2ac4aca31e121d4b64818d1efb8f084e55",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "scripts/run/run_multi_seed.py",
+      "archived_path": "scripts/legacy/run/run_multi_seed.py",
+      "original_sha256": "f6202e78178c02af45ba8d8efe3dd61b1c30a43b4823f1e0a313351fee2d2193",
+      "archived_sha256": "145c230ab7954748cd7916762cd86bd001c5dc70b19b4d611e778cc82df011dd",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parents[2]",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs.",
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "cd67fe9f81cea41e48ab322c0fd2f27b7463d2f3590995d2ec39c9d270695fa8",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "scripts/run/_run_both_splits.py",
+      "archived_path": "scripts/legacy/run/_run_both_splits.py",
+      "original_sha256": "429150117844cdb2591a7f148fa02cc29b5fe3940a71017f1439ccd9115a9c80",
+      "archived_sha256": "80916faf1ce754b9b96e6115cd3aa88cae19f974403abd01568bfc719da5b527",
+      "root_adjustments": [
+        {
+          "before": "Path(__file__).resolve().parent.parent.parent",
+          "after": "LEGACY_PROJECT_ROOT"
+        }
+      ],
+      "import_mkdir_gated": false,
+      "excel_execution_gated": false,
+      "status": "historical_tool",
+      "outputs": "Original data/result paths preserved; explicit execution can generate or move historical outputs.",
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "73ab8fc2904dd2aa5f4982ed33bd5e03ec5f2ce1d9d2039ae88a3a22c3722ded",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "original_source_zip_sha256": "bd4c2181a393b90ed8b0c58ebb58c9a99c40ff9e01fd4bb244a09028f19da6c5",
+    "normalized_AST_existing_functions": 105,
+    "excel_statement_order_preserved": true,
+    "import_mkdir_guards": 6,
+    "import_contract_tests": 23,
+    "source_zip_integrity_tests": 1,
+    "full_suite_passed": 142
+  },
+  "concurrent_changes_observed": [
+    {
+      "path": "scripts/plots/build_simplified_research_diagrams.py",
+      "original_sha256": "4c8a48e9592aa70923c266646332bf8be09ee3949221f3cc11b4f9df80f2f485",
+      "observed_sha256": "34546901f119fc4f440efb6e96d3c52471662e0aa21409d747dbd16a098ed71c",
+      "change": "One label changed from Old + New to Old + New\\n(Retrain); outside this round of tool migration.",
+      "handling": "Preserved without editing or reverting."
+    }
+  ]
+}

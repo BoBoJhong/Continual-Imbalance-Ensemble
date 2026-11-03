@@ -6,9 +6,8 @@ For a test feature year ``t`` (predicting bankruptcy in ``t + 1``):
 * feature year ``t - 1`` is validation-only;
 * feature year ``t`` is test-only.
 
-The experiment compares a recent three-year model, B-data (two overlapping
-years plus one incoming year), and B-model (three frozen three-year models in
-an equal-weight FIFO pool).  Raw data and previous result files are never
+The experiment compares a recent three-year model and B-model (three frozen
+three-year models in an equal-weight FIFO pool). Raw data and previous result files are never
 modified; every run is written to a new timestamped directory.
 
 The event target is a documented reconstruction: a failed company's final
@@ -54,12 +53,12 @@ VALIDATION_FPR_BUDGET = 0.05
 SAMPLING = "undersampling"  # Configured as TomekLinks; retained for fair-A compatibility.
 DEFAULT_IMBALANCE_METHOD = "tomek"
 IMBALANCE_METHODS = ("none", "tomek", "scale_pos_weight")
-METHODS = ("Recent3y", "B_data_equal", "B_model_FIFO3_equal")
+METHODS = ("Recent3y", "B_model_FIFO3_equal")
 METRICS = (
     "AUC", "PR_AUC", "F1", "G_Mean", "Recall", "Precision",
     "Balanced_Accuracy", "Type1_Error", "Type2_Error",
 )
-PROTOCOL_VERSION = "study3b_overlap_event_target_v1_financial18_exploratory"
+PROTOCOL_VERSION = "study3b_overlap_event_target_v2_model_only_financial18_exploratory"
 OUTPUT_ROOT = project_root / "results" / "phase_flexible" / "study3b_overlap" / "runs"
 
 
@@ -128,11 +127,6 @@ def model_window_ends(test_year: int, pool_size: int = POOL_SIZE) -> tuple[int, 
 
 def window_years(end_year: int, width: int = WINDOW_YEARS) -> tuple[int, ...]:
     return tuple(range(end_year - width + 1, end_year + 1))
-
-
-def data_route_years(test_year: int) -> tuple[tuple[int, ...], tuple[int, ...]]:
-    """Return B-data's overlap (Old) and incoming (New) training years."""
-    return (test_year - 4, test_year - 3), (test_year - 2,)
 
 
 @dataclass
@@ -360,33 +354,10 @@ def _run_year(
         [model.predict_proba(test, feature_cols) for model in fifo_models], axis=0
     )
 
-    old_years, new_years = data_route_years(test_year)
-    old_model = _fit_window_model(
-        data, feature_cols, old_years, f"seed{seed}_Bdata_old_{test_year}", logger,
-        seed=seed, imbalance_method=imbalance_method,
-    )
-    new_model = _fit_window_model(
-        data, feature_cols, new_years, f"seed{seed}_Bdata_new_{test_year}", logger,
-        seed=seed, imbalance_method=imbalance_method,
-    )
-    audits.extend([
-        {"test_feature_year": test_year, "route": "B_data_old", **old_model.audit},
-        {"test_feature_year": test_year, "route": "B_data_new", **new_model.audit},
-    ])
-    bdata_validation = 0.5 * (
-        old_model.predict_proba(validation, feature_cols)
-        + new_model.predict_proba(validation, feature_cols)
-    )
-    bdata_test = 0.5 * (
-        old_model.predict_proba(test, feature_cols)
-        + new_model.predict_proba(test, feature_cols)
-    )
-
     bmodel_method = f"B_model_FIFO{pool_size}_equal"
     recent_method = f"Recent{window_width}y"
     probabilities = {
         recent_method: (recent_validation, recent_test),
-        "B_data_equal": (bdata_validation, bdata_test),
         bmodel_method: (bmodel_validation, bmodel_test),
     }
     rows: list[dict] = []
@@ -412,8 +383,6 @@ def _run_year(
             f"{min(year for fitted in fifo_models for year in fitted.train_years)}-"
             f"{max(year for fitted in fifo_models for year in fitted.train_years)}"
         ),
-        "b_data_old_years": ",".join(map(str, old_years)),
-        "b_data_new_years": str(new_years[0]),
         "pool_size": pool_size,
         "ensemble_weights": "equal",
         "imbalance_method": imbalance_method,
@@ -493,7 +462,7 @@ def _run_seed(
     by_year = pd.DataFrame(rows)
     prediction_frame = pd.DataFrame(predictions)
     protocol_frame = pd.DataFrame(protocols)
-    methods = (f"Recent{window_width}y", "B_data_equal", f"B_model_FIFO{pool_size}_equal")
+    methods = (f"Recent{window_width}y", f"B_model_FIFO{pool_size}_equal")
     _validate_outputs(by_year, prediction_frame, protocol_frame, test_years, methods)
     pooled = _pooled_summary(prediction_frame)
     outputs = {
@@ -591,11 +560,10 @@ def main(argv=None) -> None:
         "n_events": int(data.target.sum()),
         "feature_columns": feature_cols,
         "excluded_metadata_features": ["Division", "MajorGroup"],
-        "methods": (f"Recent{args.window_years}y", "B_data_equal", f"B_model_FIFO{args.pool_size}_equal"),
+        "methods": (f"Recent{args.window_years}y", f"B_model_FIFO{args.pool_size}_equal"),
         "sampling": SAMPLING if args.imbalance_method == "tomek" else "none",
         "imbalance_method": args.imbalance_method,
         "window_years": args.window_years,
-        "b_data_route_years": "fixed_old2_plus_new1",
         "pool_size": args.pool_size,
         "ensemble_weighting": "equal_only_no_weight_tuning",
         "validation_fpr_budget": VALIDATION_FPR_BUDGET,

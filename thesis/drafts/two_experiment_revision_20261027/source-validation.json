@@ -1,0 +1,11 @@
+{
+  "tex_passes": 3,
+  "critical": [],
+  "no_pdf_produced": true,
+  "bibliography": "Reused unchanged bibliography data, verified references source SHA256",
+  "source_sha256": {
+    "chapters/03_method.tex": "1851c54248dd105eb1faa49df983ace0692abd2f5af90e5edd6cdefbb1017bf8",
+    "chapters/appendix.tex": "e80d1bc0d0e8c5508f39b19e24e23f85e39af2296a95442c0b8e50712a935769"
+  },
+  "editor_preview_status": "built-in compile failed: MiKTeX registry access denied"
+}

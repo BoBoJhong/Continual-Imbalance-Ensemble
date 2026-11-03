@@ -1,0 +1,6 @@
+partition,n_rows,n_positive,first_year,last_year
+Calibration,1752,71,2014,2014
+DSEL,1752,71,2014,2014
+New_fit,6969,349,2012,2013
+Old_fit,55927,4442,1999,2011
+Test,12282,287,2015,2018

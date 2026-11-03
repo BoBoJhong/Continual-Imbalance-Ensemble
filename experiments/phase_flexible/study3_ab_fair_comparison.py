@@ -55,7 +55,7 @@ ADDITIONAL_METHODS = (
     "Recent5y",
 )
 METHODS = route_b.METHODS + ADDITIONAL_METHODS
-PROTOCOL_VERSION = "study3_ab_fair_event_target_v1_financial18_exploratory"
+PROTOCOL_VERSION = "study3_ab_fair_event_target_v2_model_only_financial18_exploratory"
 OUTPUT_ROOT = project_root / "results" / "phase_flexible" / "study3_ab_fair" / "runs"
 BOOTSTRAP_METRICS = ("AP", "AUC", "F1", "Recall", "Precision")
 

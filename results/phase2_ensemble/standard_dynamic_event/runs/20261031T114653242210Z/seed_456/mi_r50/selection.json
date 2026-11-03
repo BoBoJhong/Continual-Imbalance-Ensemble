@@ -1,0 +1,267 @@
+{
+  "selected_static": "Static_Old_under+New_under",
+  "ranking": [
+    {
+      "method": "Static_Old_under+New_under",
+      "calibration_AP": 0.06555116899226593
+    },
+    {
+      "method": "Static_Old_under+New_under+New_hybrid",
+      "calibration_AP": 0.03958060324261523
+    },
+    {
+      "method": "Static_Old_under+New_under+New_over",
+      "calibration_AP": 0.03669019626747469
+    },
+    {
+      "method": "Static_Old_under+New_under+New_over+New_hybrid",
+      "calibration_AP": 0.03533969556044736
+    },
+    {
+      "method": "Static_Old_under+New_hybrid",
+      "calibration_AP": 0.03235521708713284
+    },
+    {
+      "method": "Static_Old_under+Old_hybrid+New_under+New_over+New_hybrid",
+      "calibration_AP": 0.03177026416690183
+    },
+    {
+      "method": "Static_Old_under+New_over",
+      "calibration_AP": 0.031617251423740715
+    },
+    {
+      "method": "Static_Old_hybrid+New_under+New_over+New_hybrid",
+      "calibration_AP": 0.031468701018252644
+    },
+    {
+      "method": "Static_Old_under+Old_hybrid+New_under+New_hybrid",
+      "calibration_AP": 0.031196610262880634
+    },
+    {
+      "method": "Static_Old_under+New_over+New_hybrid",
+      "calibration_AP": 0.031060393386401906
+    },
+    {
+      "method": "Static_Old_hybrid+New_under+New_hybrid",
+      "calibration_AP": 0.030725042230557907
+    },
+    {
+      "method": "Static_Old_hybrid+New_under",
+      "calibration_AP": 0.030355163940434745
+    },
+    {
+      "method": "Static_Old_under+Old_over+New_under+New_over+New_hybrid",
+      "calibration_AP": 0.030328599509742118
+    },
+    {
+      "method": "Static_Old_under+Old_over+New_under+New_hybrid",
+      "calibration_AP": 0.029631416012181448
+    },
+    {
+      "method": "Static_Old_over+New_under+New_over+New_hybrid",
+      "calibration_AP": 0.029572290517361634
+    },
+    {
+      "method": "Static_Old_under+Old_hybrid+New_under",
+      "calibration_AP": 0.02948871661154703
+    },
+    {
+      "method": "Static_Old_under+Old_hybrid+New_under+New_over",
+      "calibration_AP": 0.029444019187194356
+    },
+    {
+      "method": "Static_Old_hybrid+New_under+New_over",
+      "calibration_AP": 0.02902823359087956
+    },
+    {
+      "method": "Static_Old_under+Old_hybrid+New_over+New_hybrid",
+      "calibration_AP": 0.02900155008228406
+    },
+    {
+      "method": "Static_Old_hybrid+New_over+New_hybrid",
+      "calibration_AP": 0.028619045049087414
+    },
+    {
+      "method": "Static_Old_over+New_under+New_hybrid",
+      "calibration_AP": 0.02860134557080643
+    },
+    {
+      "method": "Static_Old_under+Old_over+Old_hybrid+New_under+New_over+New_hybrid",
+      "calibration_AP": 0.028201063541225046
+    },
+    {
+      "method": "Static_Old_under+Old_hybrid+New_hybrid",
+      "calibration_AP": 0.028111334906091575
+    },
+    {
+      "method": "Static_Old_under+Old_over+New_under+New_over",
+      "calibration_AP": 0.027997916084729062
+    },
+    {
+      "method": "Static_Old_under+Old_over+Old_hybrid+New_under+New_hybrid",
+      "calibration_AP": 0.027925043515262565
+    },
+    {
+      "method": "Static_Old_over+Old_hybrid+New_under+New_over+New_hybrid",
+      "calibration_AP": 0.027824643168981034
+    },
+    {
+      "method": "Static_Old_hybrid+New_hybrid",
+      "calibration_AP": 0.02761548654394267
+    },
+    {
+      "method": "Static_Old_under+Old_over+New_over+New_hybrid",
+      "calibration_AP": 0.02745092296602119
+    },
+    {
+      "method": "Static_Old_over+Old_hybrid+New_under+New_hybrid",
+      "calibration_AP": 0.027393703023023186
+    },
+    {
+      "method": "Static_Old_under+Old_over+Old_hybrid+New_under+New_over",
+      "calibration_AP": 0.027032842643088216
+    },
+    {
+      "method": "Static_Old_over+New_under+New_over",
+      "calibration_AP": 0.026916639981031883
+    },
+    {
+      "method": "Static_Old_under+Old_over+Old_hybrid+New_under",
+      "calibration_AP": 0.026903693453637245
+    },
+    {
+      "method": "Static_Old_over+New_over+New_hybrid",
+      "calibration_AP": 0.02660860172758615
+    },
+    {
+      "method": "Static_Old_over+Old_hybrid+New_under",
+      "calibration_AP": 0.02646146063442433
+    },
+    {
+      "method": "Static_Old_over+Old_hybrid+New_under+New_over",
+      "calibration_AP": 0.02642136991373519
+    },
+    {
+      "method": "Static_Old_under+Old_over+New_under",
+      "calibration_AP": 0.026340714456834644
+    },
+    {
+      "method": "Static_Old_under+Old_over+Old_hybrid+New_over+New_hybrid",
+      "calibration_AP": 0.02629779675102247
+    },
+    {
+      "method": "Static_Old_under+Old_over+New_hybrid",
+      "calibration_AP": 0.02623536359404864
+    },
+    {
+      "method": "Static_Old_under+Old_hybrid+New_over",
+      "calibration_AP": 0.026217490855629882
+    },
+    {
+      "method": "Static_Old_under+Old_over+Old_hybrid+New_hybrid",
+      "calibration_AP": 0.025979287065230956
+    },
+    {
+      "method": "Static_Old_over+Old_hybrid+New_over+New_hybrid",
+      "calibration_AP": 0.025887680885957144
+    },
+    {
+      "method": "Static_Old_over+Old_hybrid+New_hybrid",
+      "calibration_AP": 0.025514041883031774
+    },
+    {
+      "method": "Static_Old_hybrid+New_over",
+      "calibration_AP": 0.025397824957481465
+    },
+    {
+      "method": "Static_Old_over+New_under",
+      "calibration_AP": 0.025177249482930666
+    },
+    {
+      "method": "Static_Old_over+New_hybrid",
+      "calibration_AP": 0.025033672520198714
+    },
+    {
+      "method": "Static_Old_under+Old_over+Old_hybrid+New_over",
+      "calibration_AP": 0.02488150608901819
+    },
+    {
+      "method": "Static_Old_under+Old_over+New_over",
+      "calibration_AP": 0.024663276143372603
+    },
+    {
+      "method": "Static_Old_over+Old_hybrid+New_over",
+      "calibration_AP": 0.02434380183012875
+    },
+    {
+      "method": "Static_Old_over+New_over",
+      "calibration_AP": 0.023510887279484576
+    }
+  ],
+  "thresholds": {
+    "Old_under": 0.03,
+    "Old_over": 0.45,
+    "Old_hybrid": 0.9,
+    "New_under": 0.03,
+    "New_over": 0.05,
+    "New_hybrid": 0.51,
+    "Old3": 0.5700000000000001,
+    "New3": 0.11,
+    "Equal6": 0.060000000000000005,
+    "Static_Old_under+New_under": 0.09,
+    "Static_Old_under+New_over": 0.05,
+    "Static_Old_under+New_hybrid": 0.26,
+    "Static_Old_over+New_under": 0.17,
+    "Static_Old_over+New_over": 0.23,
+    "Static_Old_over+New_hybrid": 0.24000000000000002,
+    "Static_Old_hybrid+New_under": 0.45,
+    "Static_Old_hybrid+New_over": 0.08,
+    "Static_Old_hybrid+New_hybrid": 0.24000000000000002,
+    "Static_Old_under+Old_over+New_under": 0.16,
+    "Static_Old_under+Old_over+New_over": 0.16,
+    "Static_Old_under+Old_over+New_hybrid": 0.16,
+    "Static_Old_under+Old_hybrid+New_under": 0.05,
+    "Static_Old_under+Old_hybrid+New_over": 0.18000000000000002,
+    "Static_Old_under+Old_hybrid+New_hybrid": 0.17,
+    "Static_Old_under+New_under+New_over": 0.03,
+    "Static_Old_under+New_under+New_hybrid": 0.02,
+    "Static_Old_under+New_over+New_hybrid": 0.22,
+    "Static_Old_over+Old_hybrid+New_under": 0.44,
+    "Static_Old_over+Old_hybrid+New_over": 0.22,
+    "Static_Old_over+Old_hybrid+New_hybrid": 0.19,
+    "Static_Old_over+New_under+New_over": 0.16,
+    "Static_Old_over+New_under+New_hybrid": 0.16,
+    "Static_Old_over+New_over+New_hybrid": 0.16,
+    "Static_Old_hybrid+New_under+New_over": 0.060000000000000005,
+    "Static_Old_hybrid+New_under+New_hybrid": 0.060000000000000005,
+    "Static_Old_hybrid+New_over+New_hybrid": 0.060000000000000005,
+    "Static_Old_under+Old_over+Old_hybrid+New_under": 0.33,
+    "Static_Old_under+Old_over+Old_hybrid+New_over": 0.16,
+    "Static_Old_under+Old_over+Old_hybrid+New_hybrid": 0.12,
+    "Static_Old_under+Old_over+New_under+New_over": 0.12,
+    "Static_Old_under+Old_over+New_under+New_hybrid": 0.12,
+    "Static_Old_under+Old_over+New_over+New_hybrid": 0.15000000000000002,
+    "Static_Old_under+Old_hybrid+New_under+New_over": 0.04,
+    "Static_Old_under+Old_hybrid+New_under+New_hybrid": 0.04,
+    "Static_Old_under+Old_hybrid+New_over+New_hybrid": 0.15000000000000002,
+    "Static_Old_under+New_under+New_over+New_hybrid": 0.08,
+    "Static_Old_over+Old_hybrid+New_under+New_over": 0.06999999999999999,
+    "Static_Old_over+Old_hybrid+New_under+New_hybrid": 0.06999999999999999,
+    "Static_Old_over+Old_hybrid+New_over+New_hybrid": 0.16,
+    "Static_Old_over+New_under+New_over+New_hybrid": 0.08,
+    "Static_Old_hybrid+New_under+New_over+New_hybrid": 0.060000000000000005,
+    "Static_Old_under+Old_over+Old_hybrid+New_under+New_over": 0.060000000000000005,
+    "Static_Old_under+Old_over+Old_hybrid+New_under+New_hybrid": 0.06999999999999999,
+    "Static_Old_under+Old_over+Old_hybrid+New_over+New_hybrid": 0.060000000000000005,
+    "Static_Old_under+Old_over+New_under+New_over+New_hybrid": 0.06999999999999999,
+    "Static_Old_under+Old_hybrid+New_under+New_over+New_hybrid": 0.05,
+    "Static_Old_over+Old_hybrid+New_under+New_over+New_hybrid": 0.060000000000000005,
+    "Static_Old_under+Old_over+Old_hybrid+New_under+New_over+New_hybrid": 0.060000000000000005,
+    "KNORA_E": 0.060000000000000005,
+    "KNORA_U": 0.060000000000000005,
+    "DCS_OLA": 0.05,
+    "DCS_LCA": 0.05,
+    "ValidationSelectedStatic": 0.09
+  },
+  "test_used_for_selection": false
+}

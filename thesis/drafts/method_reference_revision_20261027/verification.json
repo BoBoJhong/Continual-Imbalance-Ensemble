@@ -1,0 +1,65 @@
+{
+  "pdf_sha256": "6af20d6587e6b26250ab0a7d43960a0c5cd07589ee42cb5b284cddba520a73cb",
+  "pdf_pages": 53,
+  "native_compile": "passed",
+  "editor_compile": "success",
+  "warnings": [
+    "NCU NOTICE: Signed form forms/authorization.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/embargo.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/advisor.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/committee.pdf not inserted."
+  ],
+  "unresolved_references": 0,
+  "obsolete_stage_titles": false,
+  "dataset_citation_present": true,
+  "fs_parameter_section_present": true,
+  "source_note_count": 31,
+  "fs_parameter_pdf_page": 30,
+  "data_source_pdf_page": 25,
+  "appendix_data_fs_pdf_page": 52,
+  "versions_observed": {
+    "scikit-learn": "1.8.0",
+    "lightgbm": "4.6.0"
+  },
+  "bookmarks": [
+    [
+      2,
+      "3-2 實驗一：Baseline 與集成分類器比較",
+      15
+    ],
+    [
+      2,
+      "3-3 實驗二：特徵選取集成分類器比較",
+      23
+    ],
+    [
+      3,
+      "3-4-1 資料來源與驗證設定",
+      25
+    ],
+    [
+      3,
+      "3-4-3 實驗二之特徵選取參數",
+      30
+    ],
+    [
+      2,
+      "4-2 實驗一：固定年份集成比較",
+      36
+    ],
+    [
+      2,
+      "4-3 實驗二：FS 集成比較",
+      38
+    ],
+    [
+      2,
+      "A-6 年度資料分布與特徵選取明細",
+      52
+    ]
+  ],
+  "visual_review": "final PDF methods, source notes, FS parameter table, yearly counts and feature-frequency tables reviewed",
+  "tests": "13 passed",
+  "handoff": "thesis/handoffs/20261027T054715149074Z",
+  "handoff_check": "passed"
+}

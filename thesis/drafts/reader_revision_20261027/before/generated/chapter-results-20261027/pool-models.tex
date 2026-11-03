@@ -1,0 +1,23 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}@{}}
+\caption{實驗一六個基礎模型之測試結果}\label{tab:results-pool-models}\\
+\toprule
+基礎模型 & AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{4}{c}{表~\thetable（續）}\\
+\toprule
+基礎模型 & AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{4}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+Old\_under & 0.7597 & 0.1497 & \textbf{0.3380} \\
+Old\_over & 0.6729 & 0.0925 & 0.2882 \\
+Old\_hybrid & 0.6803 & 0.0983 & 0.2659 \\
+New\_under & \textbf{0.8067} & \textbf{0.2332} & 0.3206 \\
+New\_over & 0.7734 & 0.1737 & 0.2557 \\
+New\_hybrid & 0.7684 & 0.1724 & 0.2101 \\
+\end{longtable}
+\noindent{\footnotesize 資料來源：本研究實驗結果整理。\par 完整 18 特徵、固定年份與相同十個種子；under、over、hybrid 分別為 TomekLinks、ADASYN、SMOTEENN。粗體為六模型中該指標最高值，不表示差異達統計顯著。各模型門檻由 Calibration 決定；本表與歷史 Baseline 分開解讀。}
+\endgroup

@@ -1,0 +1,153 @@
+{
+  "status": "passed",
+  "validation_summary": [
+    {
+      "candidate": "XGBoost�]���������^",
+      "method": "Old",
+      "rows": 60,
+      "validation_auc": 0.7689473833333333,
+      "source": "results/phase1_baseline/xgb/tuned/bankruptcy_year_splits_xgb_raw.csv"
+    },
+    {
+      "candidate": "XGBoost�]���������^",
+      "method": "New",
+      "rows": 60,
+      "validation_auc": 0.8559880833333333,
+      "source": "results/phase1_baseline/xgb/tuned/bankruptcy_year_splits_xgb_raw.csv"
+    },
+    {
+      "candidate": "XGBoost�]���������^",
+      "method": "Retrain",
+      "rows": 4,
+      "validation_auc": 0.8246530000000001,
+      "source": "results/phase1_baseline/xgb/tuned/bankruptcy_year_splits_xgb_raw.csv"
+    },
+    {
+      "candidate": "XGBoost�]�X�R�����^",
+      "method": "Old",
+      "rows": 60,
+      "validation_auc": 0.7657290333333333,
+      "source": "results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv"
+    },
+    {
+      "candidate": "XGBoost�]�X�R�����^",
+      "method": "New",
+      "rows": 60,
+      "validation_auc": 0.8557294166666665,
+      "source": "results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv"
+    },
+    {
+      "candidate": "XGBoost�]�X�R�����^",
+      "method": "Retrain",
+      "rows": 4,
+      "validation_auc": 0.81391,
+      "source": "results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv"
+    },
+    {
+      "candidate": "LightGBM",
+      "method": "Old",
+      "rows": 60,
+      "validation_auc": 0.7837130499999998,
+      "source": "results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv"
+    },
+    {
+      "candidate": "LightGBM",
+      "method": "New",
+      "rows": 60,
+      "validation_auc": 0.8682575833333332,
+      "source": "results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv"
+    },
+    {
+      "candidate": "LightGBM",
+      "method": "Retrain",
+      "rows": 4,
+      "validation_auc": 0.830723,
+      "source": "results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv"
+    },
+    {
+      "candidate": "Random Forest",
+      "method": "Old",
+      "rows": 60,
+      "validation_auc": 0.7344198166666666,
+      "source": "results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv"
+    },
+    {
+      "candidate": "Random Forest",
+      "method": "New",
+      "rows": 60,
+      "validation_auc": 0.83665355,
+      "source": "results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv"
+    },
+    {
+      "candidate": "Random Forest",
+      "method": "Retrain",
+      "rows": 4,
+      "validation_auc": 0.7886475,
+      "source": "results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv"
+    },
+    {
+      "candidate": "Logistic Regression",
+      "method": "Old",
+      "rows": 60,
+      "validation_auc": 0.5856835166666666,
+      "source": "results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv"
+    },
+    {
+      "candidate": "Logistic Regression",
+      "method": "New",
+      "rows": 60,
+      "validation_auc": 0.6506875000000001,
+      "source": "results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv"
+    },
+    {
+      "candidate": "Logistic Regression",
+      "method": "Retrain",
+      "rows": 4,
+      "validation_auc": 0.6101055,
+      "source": "results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv"
+    },
+    {
+      "candidate": "TabM",
+      "method": "Old",
+      "rows": 60,
+      "validation_auc": 0.6999765,
+      "source": "results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv"
+    },
+    {
+      "candidate": "TabM",
+      "method": "New",
+      "rows": 60,
+      "validation_auc": 0.7892796999999999,
+      "source": "results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv"
+    },
+    {
+      "candidate": "TabM",
+      "method": "Retrain",
+      "rows": 4,
+      "validation_auc": 0.7607445,
+      "source": "results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv"
+    },
+    {
+      "candidate": "TabICL �аO����",
+      "method": "Old",
+      "rows": 60,
+      "validation_auc": null,
+      "source": "results/phase1_baseline/tabicl/tabicl_gpu_20260506_setA_temp075_ctx2048/bankruptcy_year_splits_tabicl_raw.csv"
+    },
+    {
+      "candidate": "TabICL �аO����",
+      "method": "New",
+      "rows": 60,
+      "validation_auc": null,
+      "source": "results/phase1_baseline/tabicl/tabicl_gpu_20260506_setA_temp075_ctx2048/bankruptcy_year_splits_tabicl_raw.csv"
+    },
+    {
+      "candidate": "TabICL �аO����",
+      "method": "Retrain",
+      "rows": 4,
+      "validation_auc": null,
+      "source": "results/phase1_baseline/tabicl/tabicl_gpu_20260506_setA_temp075_ctx2048/bankruptcy_year_splits_tabicl_raw.csv"
+    }
+  ],
+  "generated": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\thesis\\latex\\generated\\method-clarifications-20261027"
+}

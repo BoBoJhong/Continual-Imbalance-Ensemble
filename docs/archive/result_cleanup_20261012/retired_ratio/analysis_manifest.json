@@ -1,0 +1,107 @@
+{
+  "status": "completed",
+  "source_run": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_oldnew_ratio_sensitivity\\runs\\20260921T053146649843Z",
+  "source_manifest_sha256": "e16df7deb0e736bb928124632e452e0fb74ac2f8cfbcc1e2070de6f099bedd0c",
+  "script_sha256": "a932defc578b9dc957069a6e3ca21b18e4bd54246fe55ea5672d661bb103e9d7",
+  "all_seed_predictions_identical": true,
+  "validation": [
+    {
+      "seed": 42,
+      "status": "passed",
+      "fitted_models": 110,
+      "paired_test_rows": 33636,
+      "test_events": 289,
+      "company_clusters": 5512
+    },
+    {
+      "seed": 123,
+      "status": "passed",
+      "fitted_models": 110,
+      "paired_test_rows": 33636,
+      "test_events": 289,
+      "company_clusters": 5512
+    },
+    {
+      "seed": 456,
+      "status": "passed",
+      "fitted_models": 110,
+      "paired_test_rows": 33636,
+      "test_events": 289,
+      "company_clusters": 5512
+    },
+    {
+      "seed": 789,
+      "status": "passed",
+      "fitted_models": 110,
+      "paired_test_rows": 33636,
+      "test_events": 289,
+      "company_clusters": 5512
+    },
+    {
+      "seed": 2024,
+      "status": "passed",
+      "fitted_models": 110,
+      "paired_test_rows": 33636,
+      "test_events": 289,
+      "company_clusters": 5512
+    },
+    {
+      "seed": 7,
+      "status": "passed",
+      "fitted_models": 110,
+      "paired_test_rows": 33636,
+      "test_events": 289,
+      "company_clusters": 5512
+    },
+    {
+      "seed": 21,
+      "status": "passed",
+      "fitted_models": 110,
+      "paired_test_rows": 33636,
+      "test_events": 289,
+      "company_clusters": 5512
+    },
+    {
+      "seed": 84,
+      "status": "passed",
+      "fitted_models": 110,
+      "paired_test_rows": 33636,
+      "test_events": 289,
+      "company_clusters": 5512
+    },
+    {
+      "seed": 168,
+      "status": "passed",
+      "fitted_models": 110,
+      "paired_test_rows": 33636,
+      "test_events": 289,
+      "company_clusters": 5512
+    },
+    {
+      "seed": 999,
+      "status": "passed",
+      "fitted_models": 110,
+      "paired_test_rows": 33636,
+      "test_events": 289,
+      "company_clusters": 5512
+    }
+  ],
+  "company_bootstrap_model_seed": 42,
+  "company_bootstrap_replicates": 1000,
+  "temporal_scope": "annual macro AP, circular blocks 2/3, 2000 replicates; only 10 years",
+  "limitations": "exploratory marginal intervals; no multiplicity correction, retraining, or joint company-time inference",
+  "artifacts": {
+    "annual_block_sensitivity.csv": "6ab42e70537c660184e776da87f232d4e2f53b7dd44c8da713f69c2057073db4",
+    "by_year_all_seeds.csv": "7d4ae18f7631946c3db4dd8428207dda2acaade561d4c107f8863a34f6eb7aa8",
+    "company_bootstrap.csv": "980976d5bc0cb6136defa8e3955d9c925e56057e10ec6a8e5fbc91b28d3c5594",
+    "cost_by_seed.csv": "ebacdda7c2c49b7a2094f67be959053ba45dc3548de33836ca8305ad9896a45c",
+    "group_support.csv": "a82f1cb22a107a558466d130263faf8d13a4fce21de2f1598d6dadea75f48898",
+    "oldnew_ratio_sensitivity.pdf": "c75664859eb3a1fa0269754e33d609331c4ed0370f2af2d0d8dec68adac52a41",
+    "oldnew_ratio_sensitivity.png": "e20d42caa4a1dd4a077ebd9165369c900d422e25cb60e3d245f1cc4c5e01263c",
+    "pooled_all_seeds.csv": "1b2a083cafc3702b75e8d9f8769de73ac18350b0ee7fa9f298360a5a645e52b3",
+    "summary.csv": "0998979f03b921ee85a81dd8d90e33f46f5e03ef315d0c699fee12a735c58471",
+    "thesis_tables.md": "31d044f540ae7d5d7b6475535ae912a32c8b7920f1e190f4a6eb40c4d84c345a",
+    "training_audit_all_seeds.csv": "2ce8524260ac84c671882c9e339e8756b6a32a1967e540b2933e8973f437d733",
+    "validation_checks.csv": "c2d4df6ede5a33851c0537ca7175c869224ca8ad0fad4bce1a5ce9ea7a124db9"
+  }
+}

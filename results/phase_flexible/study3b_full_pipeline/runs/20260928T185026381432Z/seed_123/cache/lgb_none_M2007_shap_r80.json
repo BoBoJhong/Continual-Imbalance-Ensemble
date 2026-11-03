@@ -1,0 +1,52 @@
+{
+  "job_id": "lgb_none_M2007_shap_r80",
+  "seed": 123,
+  "classifier": "lgb",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2005,
+    2006,
+    2007
+  ],
+  "n_train": 12342,
+  "positive_before": 150,
+  "n_after": 12342,
+  "positive_after": 150,
+  "fs": "shap",
+  "ratio": 0.8,
+  "selected_features": [
+    "X15",
+    "X1",
+    "X11",
+    "X10",
+    "X6",
+    "X13",
+    "X5",
+    "X3",
+    "X16",
+    "X12",
+    "X8",
+    "X18",
+    "X9",
+    "X14"
+  ],
+  "n_features": 14,
+  "fit_predict_seconds": 3.3394361000391655,
+  "params": {
+    "objective": "binary",
+    "metric": "auc",
+    "verbosity": -1,
+    "seed": 123,
+    "deterministic": true,
+    "force_col_wise": true,
+    "boosting_type": "gbdt",
+    "num_threads": 4
+  },
+  "warnings": [],
+  "selector_seed": 123,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-09-28T22:29:23.598758+00:00",
+  "cache_sha256": "de00151ef3846c2152ee0e148350830f17fe0f6b2c107134e232b894918f1bd9"
+}

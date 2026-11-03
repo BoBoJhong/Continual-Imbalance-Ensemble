@@ -1,0 +1,18 @@
+{
+  "name": "dataset_paper.zip",
+  "path": "dataset_paper.zip",
+  "sha": "ec511f3762d36cb5d3ddc6818c8fbb235204e437",
+  "size": 8603541,
+  "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/contents/dataset_paper.zip?ref=main",
+  "html_url": "https://github.com/sowide/bankruptcy_dataset/blob/main/dataset_paper.zip",
+  "git_url": "https://api.github.com/repos/sowide/bankruptcy_dataset/git/blobs/ec511f3762d36cb5d3ddc6818c8fbb235204e437",
+  "download_url": "https://raw.githubusercontent.com/sowide/bankruptcy_dataset/main/dataset_paper.zip",
+  "type": "file",
+  "content": "",
+  "encoding": "none",
+  "_links": {
+    "self": "https://api.github.com/repos/sowide/bankruptcy_dataset/contents/dataset_paper.zip?ref=main",
+    "git": "https://api.github.com/repos/sowide/bankruptcy_dataset/git/blobs/ec511f3762d36cb5d3ddc6818c8fbb235204e437",
+    "html": "https://github.com/sowide/bankruptcy_dataset/blob/main/dataset_paper.zip"
+  }
+}

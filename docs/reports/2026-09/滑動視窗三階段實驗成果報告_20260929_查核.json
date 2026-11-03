@@ -1,0 +1,384 @@
+{
+  "captured_at": "2026-09-29T05:33:33.058555+00:00",
+  "completed_seeds": [
+    42,
+    123,
+    456
+  ],
+  "methods": 81,
+  "years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+  ],
+  "n_test": 33636,
+  "n_positive": 289,
+  "n_companies": 5512,
+  "source_sha256": {
+    "results\\phase_flexible\\study3b_full_pipeline\\runs\\20260928T185026381432Z\\seed_42\\summary.csv": "b9a7851f20b2bfaba665715c96611256ea9bd896d153e2ad1f87b1456f205374",
+    "results\\phase_flexible\\study3b_full_pipeline\\runs\\20260928T185026381432Z\\seed_42\\by_year.csv": "57f03f5a15da6dfc9c40a1ec9332189c6def887dbab4bbe410828c753c75b620",
+    "results\\phase_flexible\\study3b_full_pipeline\\runs\\20260928T185026381432Z\\seed_42\\complete.json": "e7d26954c46738dd035b5b4b37706142799a4e08d085aeb8ff07b2faeda8c540",
+    "results\\phase_flexible\\study3b_full_pipeline\\runs\\20260928T185026381432Z\\seed_123\\summary.csv": "7c0a9705e45202079db482de28a78364795e0f3cce90fd755a71fcf200e05f8c",
+    "results\\phase_flexible\\study3b_full_pipeline\\runs\\20260928T185026381432Z\\seed_123\\by_year.csv": "6b10a5d0965079717dd88aa8fb0148d18efb9cbab2bb54398627231895ab056e",
+    "results\\phase_flexible\\study3b_full_pipeline\\runs\\20260928T185026381432Z\\seed_123\\complete.json": "1633d0124ebeafb2788c64be4977fe76f08185740e0ea7f50b16492ee7bf3940",
+    "results\\phase_flexible\\study3b_full_pipeline\\runs\\20260928T185026381432Z\\seed_456\\summary.csv": "7b3a386511efa23902ed55ff86e035d5dc728fce0bce53c9801ad0817f472013",
+    "results\\phase_flexible\\study3b_full_pipeline\\runs\\20260928T185026381432Z\\seed_456\\by_year.csv": "385dfc77f60ab90592c542a76abcf38c49a5eade22d298f316c2a782a1ac0679",
+    "results\\phase_flexible\\study3b_full_pipeline\\runs\\20260928T185026381432Z\\seed_456\\complete.json": "a81be221c4d28bfa1931c466e43fc649f921443176e78a9c2b0f4a8b2f2dde25"
+  },
+  "prediction_rechecks": [
+    {
+      "seed": 42,
+      "method": "ClassifierFIFO_none",
+      "n": 33636,
+      "AUC": 0.8587017731034775,
+      "PR_AUC": 0.15927124493601805,
+      "F1": 0.21465076660988075,
+      "Recall": 0.2179930795847751,
+      "Precision": 0.21140939597315436
+    },
+    {
+      "seed": 42,
+      "method": "FIFO_rf_under",
+      "n": 33636,
+      "AUC": 0.8649763631513155,
+      "PR_AUC": 0.1507903488623698,
+      "F1": 0.1990521327014218,
+      "Recall": 0.2179930795847751,
+      "Precision": 0.18313953488372092
+    },
+    {
+      "seed": 42,
+      "method": "Newest_rf_under",
+      "n": 33636,
+      "AUC": 0.8423504840524034,
+      "PR_AUC": 0.14532493362696705,
+      "F1": 0.19593345656192238,
+      "Recall": 0.18339100346020762,
+      "Precision": 0.21031746031746032
+    },
+    {
+      "seed": 42,
+      "method": "SelectedEnsemble_shap_r50",
+      "n": 33636,
+      "AUC": 0.8415346939588678,
+      "PR_AUC": 0.14964704106083726,
+      "F1": 0.1917808219178082,
+      "Recall": 0.19377162629757785,
+      "Precision": 0.18983050847457628
+    },
+    {
+      "seed": 42,
+      "method": "ValidationSelectedEnsemble",
+      "n": 33636,
+      "AUC": 0.8292766747640388,
+      "PR_AUC": 0.13089338418171972,
+      "F1": 0.1865671641791045,
+      "Recall": 0.17301038062283736,
+      "Precision": 0.20242914979757085
+    },
+    {
+      "seed": 42,
+      "method": "ValidationSelectedFS",
+      "n": 33636,
+      "AUC": 0.8289790286328627,
+      "PR_AUC": 0.13289064331955402,
+      "F1": 0.1865079365079365,
+      "Recall": 0.16262975778546712,
+      "Precision": 0.2186046511627907
+    },
+    {
+      "seed": 123,
+      "method": "ClassifierFIFO_none",
+      "n": 33636,
+      "AUC": 0.8583163947764115,
+      "PR_AUC": 0.15656580835717301,
+      "F1": 0.18926553672316385,
+      "Recall": 0.23183391003460208,
+      "Precision": 0.15990453460620524
+    },
+    {
+      "seed": 123,
+      "method": "FIFO_rf_under",
+      "n": 33636,
+      "AUC": 0.8657692214704082,
+      "PR_AUC": 0.1512393278756171,
+      "F1": 0.23240589198036007,
+      "Recall": 0.24567474048442905,
+      "Precision": 0.2204968944099379
+    },
+    {
+      "seed": 123,
+      "method": "Newest_rf_under",
+      "n": 33636,
+      "AUC": 0.8320358030370179,
+      "PR_AUC": 0.14094734343221924,
+      "F1": 0.20430107526881722,
+      "Recall": 0.1972318339100346,
+      "Precision": 0.21189591078066913
+    },
+    {
+      "seed": 123,
+      "method": "SelectedEnsemble_shap_r50",
+      "n": 33636,
+      "AUC": 0.8375892873541226,
+      "PR_AUC": 0.1593430033557525,
+      "F1": 0.1917808219178082,
+      "Recall": 0.2179930795847751,
+      "Precision": 0.17119565217391305
+    },
+    {
+      "seed": 123,
+      "method": "ValidationSelectedEnsemble",
+      "n": 33636,
+      "AUC": 0.8286759349082101,
+      "PR_AUC": 0.12736486759621085,
+      "F1": 0.20363636363636364,
+      "Recall": 0.19377162629757785,
+      "Precision": 0.21455938697318008
+    },
+    {
+      "seed": 123,
+      "method": "ValidationSelectedFS",
+      "n": 33636,
+      "AUC": 0.8360621971981106,
+      "PR_AUC": 0.12628812063079442,
+      "F1": 0.18907563025210083,
+      "Recall": 0.15570934256055363,
+      "Precision": 0.24064171122994651
+    },
+    {
+      "seed": 456,
+      "method": "ClassifierFIFO_none",
+      "n": 33636,
+      "AUC": 0.865163345312159,
+      "PR_AUC": 0.1473630386224904,
+      "F1": 0.1807909604519774,
+      "Recall": 0.22145328719723184,
+      "Precision": 0.15274463007159905
+    },
+    {
+      "seed": 456,
+      "method": "FIFO_rf_under",
+      "n": 33636,
+      "AUC": 0.8670278230908026,
+      "PR_AUC": 0.15767716422164246,
+      "F1": 0.20389805097451275,
+      "Recall": 0.23529411764705882,
+      "Precision": 0.17989417989417988
+    },
+    {
+      "seed": 456,
+      "method": "Newest_rf_under",
+      "n": 33636,
+      "AUC": 0.8503996925274477,
+      "PR_AUC": 0.14500185398699192,
+      "F1": 0.22088353413654618,
+      "Recall": 0.1903114186851211,
+      "Precision": 0.2631578947368421
+    },
+    {
+      "seed": 456,
+      "method": "SelectedEnsemble_shap_r50",
+      "n": 33636,
+      "AUC": 0.824189763857718,
+      "PR_AUC": 0.03655007432037307,
+      "F1": 0.17784256559766765,
+      "Recall": 0.21107266435986158,
+      "Precision": 0.15365239294710328
+    },
+    {
+      "seed": 456,
+      "method": "ValidationSelectedEnsemble",
+      "n": 33636,
+      "AUC": 0.8166815792376337,
+      "PR_AUC": 0.036358808278579006,
+      "F1": 0.1909722222222222,
+      "Recall": 0.1903114186851211,
+      "Precision": 0.1916376306620209
+    },
+    {
+      "seed": 456,
+      "method": "ValidationSelectedFS",
+      "n": 33636,
+      "AUC": 0.815670713415804,
+      "PR_AUC": 0.03657662980849562,
+      "F1": 0.1915966386554622,
+      "Recall": 0.1972318339100346,
+      "Precision": 0.18627450980392157
+    }
+  ],
+  "scale_diagnostics": [
+    {
+      "seed": 42,
+      "method": "ClassifierFIFO_none",
+      "Pooled AP": 0.15927124493601805,
+      "年內排序 pooled AP": 0.14139424046042123,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.3318784524571263,
+      "排除該年 pooled AP": 0.1703789048557384
+    },
+    {
+      "seed": 42,
+      "method": "FIFO_rf_under",
+      "Pooled AP": 0.1507903488623698,
+      "年內排序 pooled AP": 0.13747291761715058,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.335869940061213,
+      "排除該年 pooled AP": 0.16386546599975127
+    },
+    {
+      "seed": 42,
+      "method": "Newest_rf_under",
+      "Pooled AP": 0.14532493362696705,
+      "年內排序 pooled AP": 0.14050152421746073,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.6688760213917364,
+      "排除該年 pooled AP": 0.1587811506566578
+    },
+    {
+      "seed": 42,
+      "method": "SelectedEnsemble_shap_r50",
+      "Pooled AP": 0.14964704106083726,
+      "年內排序 pooled AP": 0.13932599348352867,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.5074904692455438,
+      "排除該年 pooled AP": 0.16390787195227682
+    },
+    {
+      "seed": 42,
+      "method": "ValidationSelectedEnsemble",
+      "Pooled AP": 0.13089338418171972,
+      "年內排序 pooled AP": 0.13385597215262973,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.468712992607457,
+      "排除該年 pooled AP": 0.1431938025465461
+    },
+    {
+      "seed": 42,
+      "method": "ValidationSelectedFS",
+      "Pooled AP": 0.13289064331955402,
+      "年內排序 pooled AP": 0.13741800943680907,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.5181585607314552,
+      "排除該年 pooled AP": 0.14578650850822378
+    },
+    {
+      "seed": 123,
+      "method": "ClassifierFIFO_none",
+      "Pooled AP": 0.15656580835717301,
+      "年內排序 pooled AP": 0.13941875078075608,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.3331842903862565,
+      "排除該年 pooled AP": 0.16776677431326587
+    },
+    {
+      "seed": 123,
+      "method": "FIFO_rf_under",
+      "Pooled AP": 0.1512393278756171,
+      "年內排序 pooled AP": 0.1390186537507088,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.3141810780601348,
+      "排除該年 pooled AP": 0.16439045494357998
+    },
+    {
+      "seed": 123,
+      "method": "Newest_rf_under",
+      "Pooled AP": 0.14094734343221924,
+      "年內排序 pooled AP": 0.14150007640154047,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.6607810770198057,
+      "排除該年 pooled AP": 0.15481394012596977
+    },
+    {
+      "seed": 123,
+      "method": "SelectedEnsemble_shap_r50",
+      "Pooled AP": 0.1593430033557525,
+      "年內排序 pooled AP": 0.15543527615739156,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.479751574500711,
+      "排除該年 pooled AP": 0.17526130705678922
+    },
+    {
+      "seed": 123,
+      "method": "ValidationSelectedEnsemble",
+      "Pooled AP": 0.12736486759621085,
+      "年內排序 pooled AP": 0.1318908576030317,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.470506008060352,
+      "排除該年 pooled AP": 0.13752212974967828
+    },
+    {
+      "seed": 123,
+      "method": "ValidationSelectedFS",
+      "Pooled AP": 0.12628812063079442,
+      "年內排序 pooled AP": 0.13615210872764022,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.5842874114916197,
+      "排除該年 pooled AP": 0.13944874650302214
+    },
+    {
+      "seed": 456,
+      "method": "ClassifierFIFO_none",
+      "Pooled AP": 0.1473630386224904,
+      "年內排序 pooled AP": 0.1372268493871645,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.2238746715634718,
+      "排除該年 pooled AP": 0.15755317767970584
+    },
+    {
+      "seed": 456,
+      "method": "FIFO_rf_under",
+      "Pooled AP": 0.15767716422164246,
+      "年內排序 pooled AP": 0.14163140305514774,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.3028308078506963,
+      "排除該年 pooled AP": 0.1693640640369534
+    },
+    {
+      "seed": 456,
+      "method": "Newest_rf_under",
+      "Pooled AP": 0.14500185398699192,
+      "年內排序 pooled AP": 0.1391630628440617,
+      "機率最偏高年": 2009,
+      "該年平均機率／年度中位": 1.6717343703151761,
+      "排除該年 pooled AP": 0.15984256617859355
+    },
+    {
+      "seed": 456,
+      "method": "SelectedEnsemble_shap_r50",
+      "Pooled AP": 0.03655007432037307,
+      "年內排序 pooled AP": 0.13300676568297723,
+      "機率最偏高年": 2014,
+      "該年平均機率／年度中位": 17.970599505060243,
+      "排除該年 pooled AP": 0.16926971519600334
+    },
+    {
+      "seed": 456,
+      "method": "ValidationSelectedEnsemble",
+      "Pooled AP": 0.036358808278579006,
+      "年內排序 pooled AP": 0.13309497559461936,
+      "機率最偏高年": 2014,
+      "該年平均機率／年度中位": 16.789003557803387,
+      "排除該年 pooled AP": 0.15989479728261136
+    },
+    {
+      "seed": 456,
+      "method": "ValidationSelectedFS",
+      "Pooled AP": 0.03657662980849562,
+      "年內排序 pooled AP": 0.13290473463876115,
+      "機率最偏高年": 2014,
+      "該年平均機率／年度中位": 16.789003557803387,
+      "排除該年 pooled AP": 0.1542570267692479
+    }
+  ],
+  "annual_means_reconciled": true,
+  "selected_windows_verified": true,
+  "report_sha256": "2aa13a744a2b571af983e51e6b8a82321465ce2fb66ffc5c21d8affcb62833fd"
+}

@@ -1,0 +1,22 @@
+candidate,source,method,n_rows,AUC,F1,Recall
+XGBoost（較早版本）,results/phase1_baseline/xgb/tuned/bankruptcy_year_splits_xgb_raw.csv,Old,60,0.7018021000000001,0.11364418333333333,0.33646925
+XGBoost（較早版本）,results/phase1_baseline/xgb/tuned/bankruptcy_year_splits_xgb_raw.csv,New,60,0.8525769999999999,0.24082156666666668,0.46893148333333345
+XGBoost（較早版本）,results/phase1_baseline/xgb/tuned/bankruptcy_year_splits_xgb_raw.csv,Retrain,4,0.83250625,0.21166525,0.4860625
+XGBoost（擴充版本）,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,Old,60,0.7091116833333333,0.11376849999999998,0.35156803333333336
+XGBoost（擴充版本）,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,New,60,0.8589407333333334,0.24752845,0.47125434999999993
+XGBoost（擴充版本）,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,Retrain,4,0.83861125,0.20238575,0.468641
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,Old,60,0.7211789333333332,0.12076801666666667,0.3385598333333333
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,New,60,0.86447855,0.2615624,0.47624866666666665
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,Retrain,4,0.8431325000000001,0.22064650000000002,0.444251
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,Old,60,0.7283713833333335,0.10516961666666665,0.42584203333333337
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,New,60,0.8452771666666666,0.20709743333333336,0.4668408666666667
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,Retrain,4,0.829421,0.188613,0.45121975
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,Old,60,0.6656773166666667,0.06910415,0.6304877999999999
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,New,60,0.7073791999999999,0.1493441666666667,0.3709640166666667
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,Retrain,4,0.6992389999999999,0.09620875,0.48170725
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,Old,60,0.6601061999999999,0.08464445000000001,0.3800232499999999
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,New,60,0.8008403666666667,0.18600116666666666,0.42311268333333335
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,Retrain,4,0.79404,0.149564,0.41114975
+TabICL 標記版本,results/phase1_baseline/tabicl/tabicl_gpu_20260506_setA_temp075_ctx2048/bankruptcy_year_splits_tabicl_raw.csv,Old,60,0.7062304500000001,0.09308476666666668,0.46434373333333334
+TabICL 標記版本,results/phase1_baseline/tabicl/tabicl_gpu_20260506_setA_temp075_ctx2048/bankruptcy_year_splits_tabicl_raw.csv,New,60,0.8220947499999999,0.20565918333333336,0.43995355
+TabICL 標記版本,results/phase1_baseline/tabicl/tabicl_gpu_20260506_setA_temp075_ctx2048/bankruptcy_year_splits_tabicl_raw.csv,Retrain,4,0.77074825,0.137962,0.49216025

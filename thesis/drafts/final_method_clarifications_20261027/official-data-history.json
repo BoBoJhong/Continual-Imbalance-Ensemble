@@ -1,0 +1,166 @@
+[
+  {
+    "sha": "279e4275101e5df7a39e8e6b3179b66c442557f3",
+    "node_id": "C_kwDOHt-QmdoAKDI3OWU0Mjc1MTAxZTVkZjdhMzllOGU2YjMxNzliNjZjNDQyNTU3ZjM",
+    "commit": {
+      "author": {
+        "name": "Maegorn",
+        "email": "pellegrino.mattia@gmail.com",
+        "date": "2024-04-10T08:10:05Z"
+      },
+      "committer": {
+        "name": "Maegorn",
+        "email": "pellegrino.mattia@gmail.com",
+        "date": "2024-04-10T08:10:41Z"
+      },
+      "message": "Dataset Update",
+      "tree": {
+        "sha": "f63d780fe71dc1a6ff13005dc5f2d04dcb5e7525",
+        "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/git/trees/f63d780fe71dc1a6ff13005dc5f2d04dcb5e7525"
+      },
+      "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/git/commits/279e4275101e5df7a39e8e6b3179b66c442557f3",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/commits/279e4275101e5df7a39e8e6b3179b66c442557f3",
+    "html_url": "https://github.com/sowide/bankruptcy_dataset/commit/279e4275101e5df7a39e8e6b3179b66c442557f3",
+    "comments_url": "https://api.github.com/repos/sowide/bankruptcy_dataset/commits/279e4275101e5df7a39e8e6b3179b66c442557f3/comments",
+    "author": {
+      "login": "Maegorn",
+      "id": 11771931,
+      "node_id": "MDQ6VXNlcjExNzcxOTMx",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11771931?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Maegorn",
+      "html_url": "https://github.com/Maegorn",
+      "followers_url": "https://api.github.com/users/Maegorn/followers",
+      "following_url": "https://api.github.com/users/Maegorn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Maegorn/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Maegorn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Maegorn/subscriptions",
+      "organizations_url": "https://api.github.com/users/Maegorn/orgs",
+      "repos_url": "https://api.github.com/users/Maegorn/repos",
+      "events_url": "https://api.github.com/users/Maegorn/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Maegorn/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "Maegorn",
+      "id": 11771931,
+      "node_id": "MDQ6VXNlcjExNzcxOTMx",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11771931?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Maegorn",
+      "html_url": "https://github.com/Maegorn",
+      "followers_url": "https://api.github.com/users/Maegorn/followers",
+      "following_url": "https://api.github.com/users/Maegorn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Maegorn/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Maegorn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Maegorn/subscriptions",
+      "organizations_url": "https://api.github.com/users/Maegorn/orgs",
+      "repos_url": "https://api.github.com/users/Maegorn/repos",
+      "events_url": "https://api.github.com/users/Maegorn/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Maegorn/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "6317c5a9a9acfb9bbd34efb111ca6fb9711c1e96",
+        "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/commits/6317c5a9a9acfb9bbd34efb111ca6fb9711c1e96",
+        "html_url": "https://github.com/sowide/bankruptcy_dataset/commit/6317c5a9a9acfb9bbd34efb111ca6fb9711c1e96"
+      }
+    ]
+  },
+  {
+    "sha": "7f56a80b73c2f32582fcc01d28acb6adc665ae40",
+    "node_id": "C_kwDOHt-QmdoAKDdmNTZhODBiNzNjMmYzMjU4MmZjYzAxZDI4YWNiNmFkYzY2NWFlNDA",
+    "commit": {
+      "author": {
+        "name": "sowide",
+        "email": "110017299+sowide@users.noreply.github.com",
+        "date": "2022-07-26T08:07:08Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2022-07-26T08:07:08Z"
+      },
+      "message": "Add files via upload",
+      "tree": {
+        "sha": "4fc02f87ced373830162c167664764abfe79e248",
+        "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/git/trees/4fc02f87ced373830162c167664764abfe79e248"
+      },
+      "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/git/commits/7f56a80b73c2f32582fcc01d28acb6adc665ae40",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJi36CsCRBK7hj4Ov3rIwAAJG8IAEJ/9pLop3qBQ8fyE2r9JVjD\ncTEXZHqMm71Xc2gJ1F/WUEYfW2ofE79F/3mjMqXyLzEgI/c1jxBuzWTK++9Zs8SA\ndZP4MQoiR8XM+fZ2+W2x20KVAt/qS0jk5FCaxXmxUIWuwnZrHpt0dF/AcZ7hj9W+\nJhHQU6F2c7OL2hkKSYj4gMaJwow+1Yy8tlZx66ve2SuazU5okhcQX4FV5PLCfvkl\n9ugrGZgqah9Mq0WQf5bFSpPEBDYvJuLz4tfEHwO5MAPKbTlwEUkaIi0ILIhWBT3G\n4MCTgmFPxuZY7zhItQAoOmMYn6ziPOYrVZ1VKVhzj3hF8d/m+GAQ5Zb7e1Qv5eU=\n=IIhh\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 4fc02f87ced373830162c167664764abfe79e248\nparent 4dec912c6c07cb582c2ddedbe96aa7fd2e79705d\nauthor sowide <110017299+sowide@users.noreply.github.com> 1658822828 +0200\ncommitter GitHub <noreply@github.com> 1658822828 +0200\n\nAdd files via upload",
+        "verified_at": "2024-01-16T19:59:59Z"
+      }
+    },
+    "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/commits/7f56a80b73c2f32582fcc01d28acb6adc665ae40",
+    "html_url": "https://github.com/sowide/bankruptcy_dataset/commit/7f56a80b73c2f32582fcc01d28acb6adc665ae40",
+    "comments_url": "https://api.github.com/repos/sowide/bankruptcy_dataset/commits/7f56a80b73c2f32582fcc01d28acb6adc665ae40/comments",
+    "author": {
+      "login": "sowide",
+      "id": 110017299,
+      "node_id": "U_kgDOBo67Ew",
+      "avatar_url": "https://avatars.githubusercontent.com/u/110017299?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/sowide",
+      "html_url": "https://github.com/sowide",
+      "followers_url": "https://api.github.com/users/sowide/followers",
+      "following_url": "https://api.github.com/users/sowide/following{/other_user}",
+      "gists_url": "https://api.github.com/users/sowide/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/sowide/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/sowide/subscriptions",
+      "organizations_url": "https://api.github.com/users/sowide/orgs",
+      "repos_url": "https://api.github.com/users/sowide/repos",
+      "events_url": "https://api.github.com/users/sowide/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/sowide/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "4dec912c6c07cb582c2ddedbe96aa7fd2e79705d",
+        "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/commits/4dec912c6c07cb582c2ddedbe96aa7fd2e79705d",
+        "html_url": "https://github.com/sowide/bankruptcy_dataset/commit/4dec912c6c07cb582c2ddedbe96aa7fd2e79705d"
+      }
+    ]
+  }
+]

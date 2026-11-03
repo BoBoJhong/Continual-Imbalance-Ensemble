@@ -1,0 +1,75 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Thesis: sync result tables",
+      "type": "process",
+      "command": "python",
+      "args": [
+        "scripts/thesis/sync_results.py"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Thesis: check result freshness",
+      "type": "process",
+      "command": "python",
+      "args": [
+        "scripts/thesis/sync_results.py",
+        "--check"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Thesis: build manuscript template",
+      "type": "process",
+      "command": "python",
+      "args": [
+        "scripts/thesis/thesis.py",
+        "build"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Thesis: build result preview",
+      "type": "process",
+      "command": "python",
+      "args": [
+        "scripts/thesis/thesis.py",
+        "build",
+        "--document",
+        "results"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Thesis: export Overleaf",
+      "type": "process",
+      "command": "python",
+      "args": [
+        "scripts/thesis/thesis.py",
+        "export-overleaf"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

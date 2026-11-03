@@ -1,0 +1,47 @@
+{
+  "job_id": "svm_none_M2010_cart_r50",
+  "seed": 21,
+  "classifier": "svm",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2008,
+    2009,
+    2010
+  ],
+  "n_train": 11225,
+  "positive_before": 116,
+  "n_after": 11225,
+  "positive_after": 116,
+  "fs": "cart",
+  "ratio": 0.5,
+  "selected_features": [
+    "X11",
+    "X15",
+    "X9",
+    "X12",
+    "X13",
+    "X6",
+    "X18",
+    "X10",
+    "X3"
+  ],
+  "n_features": 9,
+  "fit_predict_seconds": 4.575203399988823,
+  "params": {
+    "C": 1.0,
+    "kernel": "rbf",
+    "gamma": "scale",
+    "probability": true,
+    "class_weight": null,
+    "random_state": 21,
+    "max_iter": -1,
+    "cache_size": 500
+  },
+  "warnings": [],
+  "selector_seed": 21,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-09-30T11:24:24.848014+00:00",
+  "cache_sha256": "9b2698b8d6e505e4d5f667f1b6e440a6429d097bff806fdb7ac0e899e0737820"
+}

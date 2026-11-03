@@ -1,0 +1,149 @@
+{
+  "protocol": "fixed_bankruptcy_standard_deslib_fit_only_fs_event_target_v1",
+  "status": "completed",
+  "created_at": "2026-10-31T11:46:53.243436+00:00",
+  "config": {
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      2024,
+      7,
+      21,
+      84,
+      168,
+      999
+    ],
+    "fs_configs": [
+      [
+        "none",
+        1.0
+      ],
+      [
+        "mi",
+        0.5
+      ],
+      [
+        "mi",
+        0.8
+      ],
+      [
+        "cart",
+        0.5
+      ],
+      [
+        "cart",
+        0.8
+      ],
+      [
+        "shap",
+        0.5
+      ],
+      [
+        "shap",
+        0.8
+      ],
+      [
+        "rfe",
+        0.5
+      ],
+      [
+        "rfe",
+        0.8
+      ]
+    ],
+    "threads": 4,
+    "workers": 3,
+    "k": 7
+  },
+  "provenance": {
+    "raw_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+    "labels_sha256": "abe246e285d4f6214df8ae32d7dd245647c6c7cf89dc10e79eafc4830e44bf11",
+    "python": "3.14.0",
+    "versions": {
+      "deslib": "0.3.7",
+      "numpy": "2.4.2",
+      "pandas": "3.0.1",
+      "scikit-learn": "1.8.0",
+      "xgboost": "3.2.0",
+      "imbalanced-learn": "0.14.1",
+      "lightgbm": "4.6.0"
+    },
+    "sources": {
+      "experiments\\phase2_ensemble\\dynamic\\des\\bankruptcy_standard_dynamic_event.py": "31766dcc611dd071ca1fe01281043b03a6c74d7ea4a4151715a0b74c6680a46e",
+      "experiments\\phase2_ensemble\\dynamic\\des\\bankruptcy_standard_dynamic.py": "760540b189e2c264fa7189a216a827db5c36cd0b07e6ad1759c669a49bcd086e",
+      "src\\ensemble\\standard_dynamic.py": "a328d17d87d11859242223465ea8231ba5f2e949509f4103adfbee9bdd3d8085",
+      "experiments\\_shared\\common_artifacts.py": "f7db184a32516107902f8bae980a3527a0702196cf4c3dee2145b0ab5219b1e8",
+      "experiments\\_shared\\common_modeling.py": "210d5bb3b3cb2a53b4a1eecbdd301a5bf7149393a0d591c0450724e4c27428ec",
+      "src\\data\\sampler.py": "4aeb1e488f28f9141096214156e94c2568c2f57939fc2c5277ea1f456a3b3c5a",
+      "src\\models\\xgboost_wrapper.py": "7d45444407d25551af061658f992015891e81f6bfb04202fdbea7ae38225369e",
+      "src\\evaluation\\metrics.py": "07f81f81138338e39e46d194e0aa5a39819d21c360b2968a18da0c0c4728c14e",
+      "config\\model_config.yaml": "ac67e15f7666a83a6688d22d3a16848917ecfebc77c61637d8a8cb96c61edfac",
+      "config\\sampling_config.yaml": "2692f15fabceeaf0f354ecba10c94b6ce99c28af510b815e8aecc8f1701e603d"
+    }
+  },
+  "command": [
+    "experiments/phase2_ensemble/dynamic/des/bankruptcy_standard_dynamic_event.py"
+  ],
+  "features": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ],
+  "slots": [
+    "Old_under",
+    "Old_over",
+    "Old_hybrid",
+    "New_under",
+    "New_over",
+    "New_hybrid"
+  ],
+  "samplers": {
+    "none": "None",
+    "under": "TomekLinks",
+    "over": "ADASYN",
+    "hybrid": "SMOTEENN"
+  },
+  "reference_run": "results\\phase2_ensemble\\standard_dynamic\\runs\\20261004T202331745995Z",
+  "target": "reconstructed next-year event: failed company's final observed feature year=1; all other rows 0",
+  "label_ledger": {
+    "path": "data\\processed\\bankruptcy_event_labels_v1.csv",
+    "labels_sha256": "abe246e285d4f6214df8ae32d7dd245647c6c7cf89dc10e79eafc4830e44bf11",
+    "n_positive": 609,
+    "label_available_year_rule": "fyear + 1 (annual reconstruction)",
+    "evidence_status": "annual_aggregate_verified_exact_availability_unverified"
+  },
+  "label_available_year_max_by_partition": {
+    "Old_fit": 2012,
+    "New_fit": 2014,
+    "DSEL": 2015,
+    "Calibration": 2015,
+    "Test": 2019
+  },
+  "actual_fit": "Old 1999-2011; New 2012-2013; 2014 reserved for validation",
+  "validation": "2014, fixed seed42 stratified 50/50 disjoint DSEL/Calibration; not CV",
+  "representation": "impute, scale and supervised FS on Old_fit only, before sampling",
+  "selection": "static AP ranking and F1 thresholds on Calibration only; Test evaluation only",
+  "changed_from_reference": "target only; years, row ids, pool, selectors, FS and selection rules unchanged",
+  "limitations": "annual label availability is reconstructed, not filing-date verified; companies still repeat across years but earlier rows are negative; few events per partition (2014 validation has 33); seed SD is not independent-data uncertainty",
+  "last_started_at": "2026-10-31T11:46:53.400789+00:00",
+  "pid": 29084,
+  "completed_at": "2026-10-31T12:06:39.247693+00:00",
+  "n_metric_rows": 28350
+}

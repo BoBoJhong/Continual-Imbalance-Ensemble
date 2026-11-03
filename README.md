@@ -1,141 +1,77 @@
 # Continual Imbalance Ensemble
 
-本專案研究非平穩、類別不平衡資料中的持續式集成學習，主線以美國企業
-破產資料比較歷史模型、近期模型、重訓練、靜態集成、DES/DCS、特徵選擇、
-ROSS、DAWCE 與 rolling walk-forward 選擇流程。
+研究非平穩、類別不平衡資料中的持續式集成學習。目前以破產資料為主、醫療資料為輔助，核心為固定年份 Old／New 模型池、靜態與動態選擇，以及特徵選擇；滑動視窗 FIFO、ROSS／DAWCE 與其他資料集分別保留為擴充或輔助研究。
 
-完整的研究問題、Study 流程、實驗結果、限制與待辦收錄於
-[docs/研究方向.md](docs/研究方向.md)；供指導教授討論的成果摘要見
-[研究成果與未來研究方向報告](docs/研究成果與未來研究方向報告.md)。`data/raw/` 與 `results/` 均刻意納入
-Git，以保留來源與研究證據。
+2026-11-03 已依作者決定，從發布快照及新提交歷史排除原有 BRFSS 專用程式、資料、結果與舊說明。原件只保留在本地備份；最新 MEPS、KHP、RAND HRS 候選評估保留，詳見[停止與發布紀錄](docs/BRFSS支線停止紀錄_20261103.md)。
 
-目前僅以破產資料為主線。研究正確性審查與修正進度見
-[研究審查報告](docs/研究正確性與程式碼審查報告.md)。本地標籤可用時點尚未驗證；
-保存的研究數字屬歷史探索性結果，不是本輪修正後重新訓練的結果。
+2026-10-12 已依指示移除股票專用資料、實驗、結果、日誌與工具；目前維護破產與醫療流程。混合歷史報告及原文快照保留當時範圍，詳細清單見[股票清理紀錄](docs/股票清理紀錄_20261012.md)。
 
-## 安裝
+另已移除 238 個退出範圍、失敗、試跑及重複結果；保留正式 run 與圖表來源。程式審核與剩餘歷史項目見[結果清理審核](docs/結果清理與過時項目審核_20261012.md)。
 
-標準環境支援 64-bit CPython 3.11–3.14，建議使用 Python 3.11 或 3.12。
+## 從這裡開始
 
-Windows PowerShell：
+| 需求 | 入口 |
+|---|---|
+| 找實驗、指令與正式結果版本 | [實驗索引](docs/實驗索引.md) |
+| 確認最新研究範圍與待辦 | [研究方向](docs/研究方向.md) |
+| 找報告、流程圖與審查 | [文件導航](docs/README.md) |
+| 分辨歷史／部分快照／試跑 | [歷史與待整理項目](docs/歷史與待整理項目.md) |
+| 查結果目錄與版本規則 | [結果導航](results/README.md) |
+| 查所有結果檔、分類與重複群 | [逐檔結果清冊](results/catalog/README.md) |
+| 論文編譯、正式結果同步、Overleaf／MCP | [論文環境與數據更新](docs/thesis_environment/README.md) |
+| 查過往報告／審查 | [reports](docs/reports/README.md)／[audits](docs/audits/README.md) |
+
+## 目前可引用的 run
+
+- 固定年份 Study I／II：[20261004T202331745995Z](results/phase2_ensemble/standard_dynamic/runs/20261004T202331745995Z/)；10 seeds × 9 特徵設定，已完成並有獨立數值查核紀錄。Old-fit 1999–2011、New-fit 2012–2013、2014 DSEL／Calibration、Test 2015–2018。target 為原始公司最終狀態。
+- 滑動視窗完整 Study 3B：[20260928T185026381432Z](results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/)；六分類器 × 四採樣、集成與 FS，十 seeds 已完成。使用回溯重建事件 target，與固定年份結果分表呈現。
+
+完成 run 不代表全部研究比較完成。最新固定年份 run 仍缺同協定 Old＋New Retrain，以及 Phase 1 驗證選出分類器的完整串接紀錄；真實標籤可用時點亦未驗證。限制與證據詳見[實驗索引](docs/實驗索引.md)。
+
+## 安裝與查看入口
+
+由專案根目錄執行；標準依賴以 [requirements.txt](requirements.txt) 為準。Windows PowerShell：
 
 ```powershell
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-```
-
-Linux/macOS：
-
-```bash
-python3.11 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
-
-安裝後驗證：
-
-```bash
 python -m pip check
-python -m pytest -q
-python -m compileall -q src experiments scripts
-python scripts/run/run_all_experiments.py --list
-python scripts/analysis/validate_result_artifacts.py results --strict
-```
-
-`requirements.txt` 是唯一的標準依賴清單，涵蓋目前維護中的 CPU 主流程、
-特徵分析、統計、圖表、報表與測試。FT-Transformer、TabM、TabNet、TabR、
-TabICL/TabPFN 與 Torch MLP 是選用的深度學習基準；它們的 GPU、模型權重與
-PyTorch 需求互相不同，不納入標準環境，也不屬於一鍵主流程。
-
-## 專案結構
-
-```text
-config/       共用模型、採樣、特徵與實驗設定
-data/raw/     版本化來源資料
-experiments/  Study 1–4 與 rolling 實驗
-results/      版本化原始結果、摘要、統計與 provenance
-scripts/      執行、分析、驗證與繪圖工具
-src/          可重用資料、模型、集成與評估模組
-tests/        核心契約與資料洩漏防護測試
-docs/         研究規格、研究方向與教授報告
-thesis/       論文草稿
-```
-
-## 執行
-
-先驗證完整維護清單：
-
-```bash
 python scripts/run/run_all_experiments.py --list
 ```
 
-按階段執行，例如：
+選用的深度學習／GPU baseline 有各自額外依賴與權重需求，不在標準一鍵流程中。重現既存 run 時另核對其 manifest 的 Python、套件版本、參數與 source hashes；不要將目前安裝環境當作所有歷史 run 的環境。
 
-```bash
-python scripts/run/run_all_experiments.py --phase phase1
-python scripts/run/run_all_experiments.py --phase phase3
-python scripts/run/run_all_experiments.py --phase rolling --phase analysis
-python scripts/run/run_all_experiments.py --phase study3b
+## 執行核心實驗
+
+以下指令會新建結果 run：
+
+```powershell
+# Study I：no-FS
+python experiments/phase2_ensemble/dynamic/des/bankruptcy_standard_dynamic.py
+# Study II：no-FS + MI/CART/SHAP/RFE 50%/80%
+python experiments/phase3_feature/bankruptcy_standard_dynamic_fs.py
+# 擴充：滑動視窗完整六分類器流程
+python experiments/phase_flexible/study3b_full_pipeline.py
 ```
 
-完整執行會耗時數小時，且會更新 `results/`。結果不得手動修改，應由對應
-實驗或分析腳本重新產生。
+一鍵 runner 支援 --phase，但 phase1 是既有 baseline 協定，study3b 是基本 overlap／FIFO 入口。完整六分類器流程須使用上方直接入口。完整 runner 可能耗時數小時並更新結果；先用 --list 檢查選定流程。
 
-## 目前結論
+## 目錄分工
 
-目前保存的主要探索性證據來自 2009–2018 十個年度的 rolling walk-forward。
-`New_under`（窗口由 ROSS 選擇，並非固定窗口）pooled AUC/F1 為 0.8403/0.3287；AdaptiveChoice 為
-0.8221/0.3283。Holm 校正後，AdaptiveChoice 只在 AUC 上顯著優於 Equal6，
-尚未顯著優於 `New_under`。因此目前支持「近期資料模型是強基準」及
-「validation-guided weighting 可改善等權集成」，但不支持 DAWCE/ROSS
-普遍優於強單模型。
+| 目錄 | 放什麼 |
+|---|---|
+| [config](config/README.md) | 共用預設設定；run manifest 保存實際設定 |
+| data | 原始與衍生資料、來源版本 |
+| [experiments](experiments/README.md) | 現行實驗入口與流程協定；[_shared](experiments/_shared/) 提供共用函式 |
+| [experiments/legacy](experiments/legacy/README.md) | 封存的歷史 Phase 2／3 入口、來源快照與搬移對照 |
+| [results](results/README.md) | 原始結果、摘要、audit 與 provenance |
+| [scripts](scripts/README.md) | 現行執行、分析、報告、資料與圖表工具 |
+| [scripts/legacy](scripts/legacy/README.md) | 24 支歷史工具（原 23 支加 9 月查核）、搬移對照與來源快照 |
+| [src](src/README.md) | 共用資料、模型、集成、特徵與評估模組 |
+| tests | 核心契約、時間切割與資料洩漏防護測試 |
+| [docs](docs/README.md) | 研究規格、索引、報告與審查 |
+| [thesis](thesis/README.md) | 論文草稿與格式參考 |
 
-Study 3 B 路線已有獨立實作：以衍生的一年期事件 target 比較 Recent3y、
-B-data 等權與三模型 FIFO 等權集成，且每個模型保留自己的前處理。正式執行：
-
-```bash
-python experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py --configured-seeds
-```
-
-目前已完成 2009–2018 × 10 configured seeds；因 TomekLinks 與目前 XGBoost
-設定皆為決定性，10 seeds 的輸出完全相同，不能把零標準差解讀為真實世界
-不確定性很低。此探索性結果中 B-model 的 pooled AP/AUC 為 0.1215/0.8576，
-Recent3y 為 0.0966/0.8450。另已完成同一事件 target、特徵、sampling、模型、
-年度界線及等權設定的公平 A/B run：Validation-selected A 的 AP/AUC 為
-0.1056/0.8422；B-A 的 company-cluster bootstrap 區間仍跨 0，因此不可宣稱
-B 顯著優於 A。
-
-另已完成 B-model 的單因子消融。Tomek 相較不採樣的主要指標區間皆跨 0；
-Pool3 相較 Pool1 的 AP/AUC/Recall 區間未跨 0，但未一致優於 Pool2/Pool5；
-訓練窗口 1/3/5 年的 AP 為 0.1142/0.1215/0.1106，三年相較一年與五年的
-AP/AUC 區間仍跨 0。因此目前支持「多模型保留相較單一近期模型有價值」，
-不支持「Tomek、三年窗口、Pool3 是最佳組合」。
-
-公平比較與 1,000 次公司 cluster bootstrap：
-
-```bash
-python experiments/phase_flexible/study3_ab_fair_comparison.py --seed 42 --bootstrap-replicates 1000
-```
-
-### Study 3B 持續更新 runtime
-
-以下流程不必事先指定資料流的最終年度。`as-of-feature-year` 表示目前要處理／
-預測的財報特徵年度；模型只可使用在該時點已通過年度 maturity gate 的標籤。
-
-```bash
-python experiments/phase_flexible/study3b_continual_runtime.py prepare-labels
-python experiments/phase_flexible/study3b_continual_runtime.py initialize --as-of-feature-year 2009
-python experiments/phase_flexible/study3b_continual_runtime.py predict --feature-year 2009
-python experiments/phase_flexible/study3b_continual_runtime.py update --as-of-feature-year 2010
-python experiments/phase_flexible/study3b_continual_runtime.py predict --feature-year 2010
-```
-
-模型與 registry 預設保存在本機 `checkpoints/`，不加入 Git；不含真實標籤的
-逐批 predictions 與 manifest 保存在 `results/phase_flexible/study3b_live_predictions/`。
-內建 label ledger 是由公開資料回溯重建的年度研究標籤，不等於已有真實
-filing/report timestamp，因此 runtime 目前仍屬研究 replay，而非正式部署。
-
-詳見 [研究成果與未來研究方向報告](docs/研究成果與未來研究方向報告.md)。
+原始資料與研究結果保留版本追溯。結果由 owning script 產生，避免手動修數字。25 支舊 Phase 2／3 程式已封存至 legacy；結果與報告位置保留。整理範圍與驗證見[整理紀錄](docs/整理紀錄_20261012.md)。

@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "unchanged_inference_functions": {
+    "sha": true,
+    "holm": true,
+    "sort_inputs": true,
+    "weighted_scores": true,
+    "probability_for": true
+  },
+  "unchanged_generated_tex_csv": true,
+  "analyses": {
+    "fixed_company_statistics": {
+      "sources_verified": 454,
+      "outputs_verified": 5,
+      "replicates": 49999,
+      "manifest_sha256": "7d4efce40175420350168bb8f7fef2bd90a426b43060b57dd1626eb7f70048cf"
+    },
+    "event_company_statistics": {
+      "sources_verified": 454,
+      "outputs_verified": 5,
+      "replicates": 9999,
+      "manifest_sha256": "32f6776b6fd6a72cf6ce2e51a883efa1ce9d76d1d8515760ba6ac7cb0e397747"
+    }
+  },
+  "historical_code_origin": "git HEAD:scripts/analysis/fixed_company_statistics.py; exact original manifest hash, not a new hash substituted into the manifest"
+}

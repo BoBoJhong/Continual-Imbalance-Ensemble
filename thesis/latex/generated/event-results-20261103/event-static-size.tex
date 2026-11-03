@@ -1,0 +1,23 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{13\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}@{}}
+\caption{事件標籤下不同靜態成員數之候選平均結果}\label{tab:results-static-size}\\
+\toprule
+模型數 & 候選數 & AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{5}{c}{表~\thetable（續）}\\
+\toprule
+模型數 & 候選數 & AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{5}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+2 & 9 & 0.7846 & \textbf{0.1071} & 0.1898 \\
+3 & 18 & 0.7850 & 0.0973 & \textbf{0.2265} \\
+4 & 15 & 0.7859 & 0.0964 & 0.2222 \\
+5 & 6 & 0.7866 & 0.1053 & 0.1763 \\
+6 & 1 & \textbf{0.7881} & 0.1041 & 0.1941 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究事件標籤集成實驗結果)\par 每個種子先平均同一成員數全部候選的 Test 分數，再取十個種子平均。粗體僅供比較，不依此選成員數，也不表示顯著差異。}
+\endgroup

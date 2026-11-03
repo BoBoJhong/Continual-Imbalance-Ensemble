@@ -1,0 +1,226 @@
+"""Audit and analyze fixed-six-year Old/New partition sensitivity.
+
+Chart contract: six fixed-history configurations, categorical AP comparison;
+two static grouped-bar panels for annual macro/pooled AP, shared zero scale,
+blue partition bars and neutral combined baseline, explicit numerical labels.
+The adjacent tables retain annual variation, class counts and paired intervals.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+
+from experiments.phase_flexible import rolling_bankruptcy_overlap_ensemble as base  # noqa: E402
+from experiments.phase_flexible.study3_ab_fair_comparison import (  # noqa: E402
+    paired_company_cluster_bootstrap,
+)
+from experiments.phase_flexible.study3b_oldnew_ratio_sensitivity import (  # noqa: E402
+    METHODS,
+    OLD_WIDTHS,
+)
+from experiments.phase_flexible.study3b_window_sensitivity import sha256  # noqa: E402
+from src.evaluation import compute_metrics  # noqa: E402
+
+METRICS = ["PR_AUC", "AUC", "F1", "Recall", "Precision", "G_Mean", "Type1_Error",
+           "Recall_at_5pctFPR", "Realized_FPR_at_5pctFPR"]
+LABELS = {"Recent6y": "合併六年", **{f"Old{o}_New{6-o}": f"{o}＋{6-o}" for o in OLD_WIDTHS}}
+
+
+def block_intervals(yearly, contrasts, replicates=2000):
+    annual = yearly.groupby(["method", "test_feature_year"]).PR_AUC.mean()
+    n = yearly.test_feature_year.nunique()
+    rows = []
+    for length in (2, 3):
+        rng = np.random.default_rng(20260921)
+        starts = rng.integers(0, n, (replicates, int(np.ceil(n / length))))
+        indices = ((starts[:, :, None] + np.arange(length)) % n).reshape(replicates, -1)[:, :n]
+        for reference, comparison in contrasts:
+            diff = (annual.loc[reference] - annual.loc[comparison]).to_numpy()
+            values = diff[indices].mean(axis=1)
+            rows.append({"reference_method": reference, "comparison_method": comparison,
+                         "metric": "annual_macro_AP", "block_length": length,
+                         "difference": diff.mean(), "ci95_low": np.quantile(values, .025),
+                         "ci95_high": np.quantile(values, .975), "replicates": replicates,
+                         "n_years": n, "bootstrap_seed": 20260921})
+    return pd.DataFrame(rows)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("run_dir", type=Path)
+    parser.add_argument("--bootstrap-replicates", type=int, default=1000)
+    args = parser.parse_args()
+    run = args.run_dir.resolve()
+    manifest = json.loads((run / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["status"] == "completed" and 42 in manifest["seeds"]
+    for relative, expected_hash in manifest["source_hashes"].items():
+        assert sha256(ROOT / relative) == expected_hash, relative
+    assert sha256(base.US_CSV) == manifest["data_sha256"]
+    frames, pools, audits, validations = [], [], [], []
+    canonical = pd.read_csv(run / "seed_42/predictions.csv.gz").sort_values(
+        ["method", "test_feature_year", "source_row_id"]).reset_index(drop=True)
+    identical = True
+    for seed in manifest["seeds"]:
+        folder = run / f"seed_{seed}"
+        yearly = pd.read_csv(folder / "by_year.csv")
+        pooled = pd.read_csv(folder / "pooled.csv")
+        audit = pd.read_csv(folder / "training_audit.csv")
+        pred = pd.read_csv(folder / "predictions.csv.gz").sort_values(
+            ["method", "test_feature_year", "source_row_id"]).reset_index(drop=True)
+        assert set(pred.method) == set(METHODS) and set(pred.seed) == {seed}
+        assert len(yearly) == 6 * len(manifest["test_years"])
+        expected = {(m, y) for m in METHODS for y in manifest["test_years"]}
+        assert set(map(tuple, yearly[["method", "test_feature_year"]].to_numpy())) == expected
+        assert not pred.duplicated(["method", "test_feature_year", "source_row_id"]).any()
+        assert np.isfinite(pred.y_proba).all() and pred.y_proba.between(0, 1).all()
+        assert np.array_equal(pred.y_pred_f1, (pred.y_proba >= pred.f1_threshold).astype(int))
+        assert np.array_equal(pred.y_pred_fpr5, (pred.y_proba >= pred.fpr5_threshold).astype(int))
+        split = pred.loc[pred.method != "Recent6y"]
+        np.testing.assert_allclose(split.y_proba, (split.old_proba + split.new_proba) / 2, atol=1e-7)
+        assert pred.loc[pred.method == "Recent6y", ["old_proba", "new_proba"]].isna().all().all()
+        assert len(audit) == 11 * len(manifest["test_years"])
+        assert (audit.train_end < audit.test_feature_year - 1).all()
+        for _year, group in audit.groupby("test_feature_year"):
+            full = group.loc[group.method == "Recent6y"].iloc[0]
+            for old_width in OLD_WIDTHS:
+                parts = group.loc[group.method == f"Old{old_width}_New{6-old_width}"].set_index("side")
+                old, new = parts.loc["old"], parts.loc["new"]
+                assert old.train_start == full.train_start and new.train_end == full.train_end
+                assert old.train_end + 1 == new.train_start
+                assert old.train_end - old.train_start + 1 == old_width
+                assert old.n_train + new.n_train == full.n_train
+                assert old.n_positive_before + new.n_positive_before == full.n_positive_before
+        keys = ["test_feature_year", "source_row_id", "company_name", "y_true"]
+        identity = None
+        for method, group in pred.groupby("method"):
+            paired = group[keys].reset_index(drop=True)
+            if identity is not None:
+                pd.testing.assert_frame_equal(identity, paired)
+            identity = paired
+            recalculated = base._pooled_summary(group).iloc[0]
+            saved = pooled.loc[pooled.method == method].iloc[0]
+            np.testing.assert_allclose(recalculated[METRICS].astype(float), saved[METRICS].astype(float), atol=1e-12)
+            if seed == 42:
+                for year, yearly_pred in group.groupby("test_feature_year"):
+                    actual = compute_metrics(yearly_pred.y_true, yearly_pred.y_proba, y_pred=yearly_pred.y_pred_f1)
+                    saved_year = yearly.loc[(yearly.method == method) & (yearly.test_feature_year == year)].iloc[0]
+                    for metric, value in actual.items():
+                        np.testing.assert_allclose(value, saved_year[metric], atol=1e-12)
+        identical &= canonical.drop(columns="seed").equals(pred.drop(columns="seed"))
+        validations.append({"seed": seed, "status": "passed", "fitted_models": len(audit),
+                            "paired_test_rows": len(identity), "test_events": int(identity.y_true.sum()),
+                            "company_clusters": identity.company_name.nunique()})
+        frames.append(yearly)
+        pools.append(pooled)
+        audits.append(audit)
+    yearly, pooled, audit = pd.concat(frames), pd.concat(pools), pd.concat(audits)
+    rows = []
+    for method in METHODS:
+        y, p = yearly.loc[yearly.method == method], pooled.loc[pooled.method == method]
+        annual = y.groupby("test_feature_year").PR_AUC.mean()
+        row = {"method": method, "label": LABELS[method], "n_seeds": len(manifest["seeds"]),
+               "annual_AP_sd": annual.std(ddof=1)}
+        for metric in METRICS:
+            macros = y.groupby("seed")[metric].mean()
+            row[f"macro_{metric}"] = macros.mean()
+            row[f"macro_{metric}_seed_sd"] = macros.std(ddof=1)
+            row[f"pooled_{metric}"] = p[metric].mean()
+            row[f"pooled_{metric}_seed_sd"] = p[metric].std(ddof=1)
+        rows.append(row)
+    summary = pd.DataFrame(rows)
+    output = run / "analysis" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    output.mkdir(parents=True, exist_ok=False)
+    print(f"ANALYSIS_DIR={output}", flush=True)
+    for name, frame in [("summary.csv", summary), ("by_year_all_seeds.csv", yearly),
+                        ("pooled_all_seeds.csv", pooled), ("training_audit_all_seeds.csv", audit),
+                        ("validation_checks.csv", pd.DataFrame(validations))]:
+        frame.to_csv(output / name, index=False)
+    cost = audit.groupby(["method", "seed"], as_index=False).agg(
+        fitted_models=("model_id", "size"), total_fit_rows=("n_train", "sum"),
+        fit_seconds=("fit_seconds", "sum"))
+    cost.to_csv(output / "cost_by_seed.csv", index=False)
+    support = audit.groupby(["method", "side"], as_index=False).agg(
+        min_rows=("n_train", "min"), max_rows=("n_train", "max"),
+        min_events=("n_positive_before", "min"), max_events=("n_positive_before", "max"))
+    support.to_csv(output / "group_support.csv", index=False)
+    print("Company bootstrap: five partitions against Recent6y", flush=True)
+    first = paired_company_cluster_bootstrap(canonical, reference_method="Recent6y",
+                                             replicates=args.bootstrap_replicates, seed=20260921)
+    # Orient as split minus combined baseline, matching the narrative.
+    first["reference_method"], first["comparison_method"] = first.comparison_method.copy(), first.reference_method.copy()
+    first["observed_reference_minus_comparison"] *= -1
+    first["ci95_low"], first["ci95_high"] = -first.ci95_high.copy(), -first.ci95_low.copy()
+    # Remove the directional probability rather than mishandle bootstrap ties.
+    first = first.drop(columns="bootstrap_probability_difference_gt_0")
+    print("Company bootstrap: balanced 3+3 against other four partitions", flush=True)
+    second = paired_company_cluster_bootstrap(canonical.loc[canonical.method != "Recent6y"],
+                                              reference_method="Old3_New3", replicates=args.bootstrap_replicates,
+                                              seed=20260921).drop(columns="bootstrap_probability_difference_gt_0")
+    company = pd.concat([first, second]).assign(model_seed=42)
+    company.to_csv(output / "company_bootstrap.csv", index=False)
+    contrasts = list(dict.fromkeys(zip(company.reference_method, company.comparison_method, strict=True)))
+    temporal = block_intervals(yearly, contrasts)
+    temporal.to_csv(output / "annual_block_sensitivity.csv", index=False)
+    tables = ["| OLD＋NEW | 年度平均 AP | 年度 AP SD | pooled AP | AUC | F1 | Recall | Precision |",
+              "|---|---:|---:|---:|---:|---:|---:|---:|"]
+    for row in summary.itertuples(index=False):
+        tables.append(f"| {row.label} | {row.macro_PR_AUC:.4f} | {row.annual_AP_sd:.4f} | {row.pooled_PR_AUC:.4f} | "
+                      f"{row.pooled_AUC:.4f} | {row.pooled_F1:.4f} | {row.pooled_Recall:.4f} | {row.pooled_Precision:.4f} |")
+    tables.extend(["", "| 差值方向 | pooled AP 差 | 公司群聚 95% CI | 年度平均 AP 差 | 年度區塊 2 年 CI | 年度區塊 3 年 CI |",
+                   "|---|---:|---|---:|---|---|"])
+    for row in company.loc[company.metric == "AP"].itertuples(index=False):
+        blocks = temporal.loc[(temporal.reference_method == row.reference_method) &
+                              (temporal.comparison_method == row.comparison_method)].set_index("block_length")
+        b2, b3 = blocks.loc[2], blocks.loc[3]
+        tables.append(f"| {LABELS[row.reference_method]} − {LABELS[row.comparison_method]} | "
+                      f"{row.observed_reference_minus_comparison:.4f} | [{row.ci95_low:.4f}, {row.ci95_high:.4f}] | "
+                      f"{b2.difference:.4f} | [{b2.ci95_low:.4f}, {b2.ci95_high:.4f}] | [{b3.ci95_low:.4f}, {b3.ci95_high:.4f}] |")
+    (output / "thesis_tables.md").write_text("\n".join(tables) + "\n", encoding="utf-8")
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.6), sharey=True)
+    limit = summary[["macro_PR_AUC", "pooled_PR_AUC"]].to_numpy().max() * 1.23
+    labels = ["Combined\n6 years", "Old5\nNew1", "Old4\nNew2", "Old3\nNew3", "Old2\nNew4", "Old1\nNew5"]
+    for ax, metric, title in zip(axes, ["macro_PR_AUC", "pooled_PR_AUC"],
+                                ["Annual macro average precision", "Pooled average precision"], strict=True):
+        bars = ax.bar(np.arange(6), summary[metric], color=["#8A949E"] + ["#2F6B9A"] * 5, width=.7)
+        ax.bar_label(bars, fmt="%.3f", fontsize=8, padding=3)
+        ax.set_xticks(np.arange(6), labels, fontsize=9)
+        ax.set_ylim(0, limit)
+        ax.set_title(title, fontsize=11)
+        ax.set_axisbelow(True)
+        ax.grid(axis="y", color="#E5E7EB")
+        ax.spines[["top", "right"]].set_visible(False)
+    axes[0].set_ylabel("Average precision (AP)")
+    fig.suptitle("Old/New partition sensitivity | fixed six-year training history", fontsize=13)
+    fig.text(.5, .015, "2009-2018 Test; 10 seeds; Old/New probabilities averaged 50:50.\n"
+             "Point estimates only; paired company and annual-block intervals are reported separately.",
+             ha="center", fontsize=8, color="#4B5563")
+    fig.tight_layout(rect=(0, .09, 1, .94))
+    for extension in ("png", "pdf"):
+        fig.savefig(output / f"oldnew_ratio_sensitivity.{extension}", dpi=220, bbox_inches="tight")
+    plt.close(fig)
+    metadata = {"status": "completed", "source_run": str(run), "source_manifest_sha256": sha256(run / "manifest.json"),
+                "script_sha256": sha256(Path(__file__)), "all_seed_predictions_identical": bool(identical),
+                "validation": validations, "company_bootstrap_model_seed": 42,
+                "company_bootstrap_replicates": args.bootstrap_replicates,
+                "temporal_scope": "annual macro AP, circular blocks 2/3, 2000 replicates; only 10 years",
+                "limitations": "exploratory marginal intervals; no multiplicity correction, retraining, or joint company-time inference",
+                "artifacts": {p.name: sha256(p) for p in output.iterdir() if p.is_file()}}
+    (output / "analysis_manifest.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+    print(summary[["method", "macro_PR_AUC", "pooled_PR_AUC", "pooled_Recall", "pooled_Precision"]].to_string(index=False))
+
+
+if __name__ == "__main__":
+    main()

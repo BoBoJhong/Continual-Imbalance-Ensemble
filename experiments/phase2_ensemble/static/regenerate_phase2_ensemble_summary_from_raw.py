@@ -33,7 +33,8 @@ def main() -> None:
     p.add_argument(
         "suffix",
         type=str,
-        help="檔名後綴，與實驗腳本一致：bankruptcy / medical / stock_spx",
+        choices=["bankruptcy", "medical"],
+        help="檔名後綴，與實驗腳本一致：bankruptcy / medical",
     )
     p.add_argument(
         "--out-dir",

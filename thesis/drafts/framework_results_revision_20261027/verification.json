@@ -1,0 +1,55 @@
+{
+  "status": "passed",
+  "pdf_sha256": "e706457829c9af8db0f9de2917f6dfb6663a7ac526b66939dc9a14365e1b7137",
+  "pages": 65,
+  "native_compile": "passed",
+  "source_current": true,
+  "render_issues": [],
+  "tests_passed": 22,
+  "source_checks": [
+    "sync",
+    "chapter_results",
+    "fixed_statistics",
+    "method_inventory",
+    "method_clarifications"
+  ],
+  "locations": {
+    "研究資料": [
+      6,
+      15
+    ],
+    "通用研究架構": [
+      6,
+      18
+    ],
+    "通用滑動視窗概念與本研究固定年份配置": [
+      9,
+      20
+    ],
+    "Baseline 傳統分類器之超參數候選集合": [
+      10,
+      22
+    ],
+    "實驗一 Baseline 各分類器與訓練策略之測試結果": [
+      10,
+      41
+    ],
+    "實驗二各特徵條件之 pooled AUC": [
+      10,
+      46
+    ],
+    "實驗二各特徵條件之 pooled F1-score": [
+      10,
+      46
+    ],
+    "實驗二各特徵條件之 pooled Recall": [
+      10,
+      47
+    ]
+  },
+  "scope": "data first, generic method, conceptual sliding illustration, actual fixed-year results; no new training",
+  "editor_compile": "success",
+  "visual_review": "All pages reviewed in contact sheets; data, generic flow, window diagram, parameters and full result tables reviewed at larger size. Final paragraph pagination checked again.",
+  "handoff": "thesis/handoffs/20261027T075428984613Z",
+  "handoff_check": "passed"
+}

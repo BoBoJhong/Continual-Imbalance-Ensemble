@@ -1,0 +1,29 @@
+{
+  "status": "numeric_and_layout_checks_passed",
+  "checks": {
+    "baseline_rows_all_sampling": 744,
+    "baseline_rows_hybrid": 186,
+    "baseline_provenance_limit": "Artifact hashes and coverage checked; historical models not retrained; six files have different tuning provenance.",
+    "standard_configurations": 90,
+    "standard_metric_rows": 28350,
+    "standard_seeds": 10,
+    "standard_per_config_checksums": true,
+    "aggregate_reproduced_from_configuration_metrics": true,
+    "source_audit_at": "2026-10-06T07:17:57.768340+00:00",
+    "static_subsets_per_seed": {
+      "2": 9,
+      "3": 18,
+      "4": 15,
+      "5": 6,
+      "6": 1
+    },
+    "annual_temporal_points": 4,
+    "fs_paired_rows": 400,
+    "fs_delta_cells_per_metric": 40,
+    "fs_differences_match_official": true,
+    "fs_heatmap_shared_absolute_limit": 0.19
+  },
+  "chart_count": 10,
+  "export_count": 20,
+  "visual_review": "passed_for_matching_png_exports"
+}

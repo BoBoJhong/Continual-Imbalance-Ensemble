@@ -1,0 +1,27 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{26\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}@{}}
+\caption{實驗二各特徵條件之 pooled Recall}\label{tab:results-fs-recall}\\
+\toprule
+FS & Equal6 & V-static & OLA & LCA & KNORA-E & KNORA-U \\
+\midrule\endfirsthead
+\multicolumn{7}{c}{表~\thetable（續）}\\
+\toprule
+FS & Equal6 & V-static & OLA & LCA & KNORA-E & KNORA-U \\
+\midrule\endhead
+\midrule\multicolumn{7}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+no-FS（18） & \shortstack[l]{0.2690\\{\scriptsize(\(\pm\)0.0414)}} & \shortstack[l]{0.2481\\{\scriptsize(\(\pm\)0.0233)}} & \shortstack[l]{0.2909\\{\scriptsize(\(\pm\)0.0607)}} & \shortstack[l]{\textbf{0.3195}\\{\scriptsize(\(\pm\)0.0354)}} & \shortstack[l]{0.2714\\{\scriptsize(\(\pm\)0.0345)}} & \shortstack[l]{0.2620\\{\scriptsize(\(\pm\)0.0428)}} \\
+MI 50\% & \shortstack[l]{\textbf{0.3530}\\{\scriptsize(\(\pm\)0.0546)}} & \shortstack[l]{0.2763\\{\scriptsize(\(\pm\)0.0667)}} & \shortstack[l]{0.2902\\{\scriptsize(\(\pm\)0.0914)}} & \shortstack[l]{0.2376\\{\scriptsize(\(\pm\)0.0994)}} & \shortstack[l]{\textbf{0.2895}\\{\scriptsize(\(\pm\)0.0547)}} & \shortstack[l]{\textbf{0.2812}\\{\scriptsize(\(\pm\)0.0405)}} \\
+MI 80\% & \shortstack[l]{0.2509\\{\scriptsize(\(\pm\)0.0665)}} & \shortstack[l]{0.3300\\{\scriptsize(\(\pm\)0.0353)}} & \shortstack[l]{0.2533\\{\scriptsize(\(\pm\)0.0866)}} & \shortstack[l]{0.2098\\{\scriptsize(\(\pm\)0.0793)}} & \shortstack[l]{0.2634\\{\scriptsize(\(\pm\)0.0614)}} & \shortstack[l]{0.2679\\{\scriptsize(\(\pm\)0.0577)}} \\
+CART 50\% & \shortstack[l]{0.2425\\{\scriptsize(\(\pm\)0.0628)}} & \shortstack[l]{0.2878\\{\scriptsize(\(\pm\)0.0632)}} & \shortstack[l]{0.2613\\{\scriptsize(\(\pm\)0.1378)}} & \shortstack[l]{0.1348\\{\scriptsize(\(\pm\)0.0285)}} & \shortstack[l]{0.2470\\{\scriptsize(\(\pm\)0.0406)}} & \shortstack[l]{0.2101\\{\scriptsize(\(\pm\)0.0609)}} \\
+CART 80\% & \shortstack[l]{0.2240\\{\scriptsize(\(\pm\)0.0523)}} & \shortstack[l]{0.2819\\{\scriptsize(\(\pm\)0.0334)}} & \shortstack[l]{0.2115\\{\scriptsize(\(\pm\)0.0790)}} & \shortstack[l]{0.2429\\{\scriptsize(\(\pm\)0.0692)}} & \shortstack[l]{0.2638\\{\scriptsize(\(\pm\)0.0437)}} & \shortstack[l]{0.2578\\{\scriptsize(\(\pm\)0.0596)}} \\
+SHAP 50\% & \shortstack[l]{0.2624\\{\scriptsize(\(\pm\)0.0716)}} & \shortstack[l]{\textbf{0.3502}\\{\scriptsize(\(\pm\)0.0602)}} & \shortstack[l]{0.2178\\{\scriptsize(\(\pm\)0.0530)}} & \shortstack[l]{0.2418\\{\scriptsize(\(\pm\)0.1389)}} & \shortstack[l]{0.2401\\{\scriptsize(\(\pm\)0.0462)}} & \shortstack[l]{0.2732\\{\scriptsize(\(\pm\)0.0585)}} \\
+SHAP 80\% & \shortstack[l]{0.2672\\{\scriptsize(\(\pm\)0.0427)}} & \shortstack[l]{0.3171\\{\scriptsize(\(\pm\)0.0402)}} & \shortstack[l]{\textbf{0.3540}\\{\scriptsize(\(\pm\)0.0995)}} & \shortstack[l]{0.2279\\{\scriptsize(\(\pm\)0.1395)}} & \shortstack[l]{0.2533\\{\scriptsize(\(\pm\)0.0292)}} & \shortstack[l]{0.2756\\{\scriptsize(\(\pm\)0.0235)}} \\
+RFE 50\% & \shortstack[l]{0.2732\\{\scriptsize(\(\pm\)0.0908)}} & \shortstack[l]{0.2805\\{\scriptsize(\(\pm\)0.0626)}} & \shortstack[l]{0.2394\\{\scriptsize(\(\pm\)0.0924)}} & \shortstack[l]{0.2927\\{\scriptsize(\(\pm\)0.0359)}} & \shortstack[l]{0.2631\\{\scriptsize(\(\pm\)0.0621)}} & \shortstack[l]{0.2188\\{\scriptsize(\(\pm\)0.0725)}} \\
+RFE 80\% & \shortstack[l]{0.2425\\{\scriptsize(\(\pm\)0.0450)}} & \shortstack[l]{0.2997\\{\scriptsize(\(\pm\)0.0517)}} & \shortstack[l]{0.2655\\{\scriptsize(\(\pm\)0.1069)}} & \shortstack[l]{0.2829\\{\scriptsize(\(\pm\)0.0745)}} & \shortstack[l]{0.2596\\{\scriptsize(\(\pm\)0.0557)}} & \shortstack[l]{0.2564\\{\scriptsize(\(\pm\)0.0412)}} \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究實驗結果整理)\par 各格上列為十個種子的平均值，下列為種子標準差。粗體表示同一方法（同一欄）九種特徵條件中最高的平均分數，四位小數相同者並列；不代表已選定最佳設定或差異達統計顯著。50\%、80\% 分別保留 9、14 個特徵，no-FS 為 18 個；V-static 可依各條件的 Calibration 重新選成員。}
+\endgroup

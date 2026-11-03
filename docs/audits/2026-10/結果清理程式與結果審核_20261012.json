@@ -1,0 +1,225 @@
+{
+  "generated_at_utc": "2026-10-12T09:39:06.293619+00:00",
+  "scope": "Maintenance audit; no training, numerical-result edits, or thesis edits",
+  "ledger": "docs/REMOVED_RESULTS_20261012.json",
+  "generator_sha256": "8d326f0585e7240fc69683f24e105dabf85ea7a12f35b5a287a969d44cdb0de3",
+  "code": {
+    "python_files_by_scope": {
+      "experiments": 82,
+      "historical": 64,
+      "scripts": 55,
+      "src": 32,
+      "tests": 17,
+      "examples": 2
+    },
+    "syntax_issues": [],
+    "missing_local_absolute_imports": [],
+    "top_level_data_io_candidates": [
+      {
+        "path": "scripts/analysis/export_thesis_tables.py",
+        "line": 15,
+        "call": "OUT.mkdir"
+      },
+      {
+        "path": "scripts/data/_audit_mover.py",
+        "line": 4,
+        "call": "pd.read_csv"
+      },
+      {
+        "path": "scripts/data/_audit_mover.py",
+        "line": 43,
+        "call": "pd.read_csv"
+      },
+      {
+        "path": "scripts/data/_fix_mover_labeled.py",
+        "line": 22,
+        "call": "pd.read_csv"
+      },
+      {
+        "path": "scripts/data/_fix_mover_labeled.py",
+        "line": 29,
+        "call": "pd.read_csv"
+      },
+      {
+        "path": "scripts/data/_fix_mover_labeled.py",
+        "line": 121,
+        "call": "df.to_csv"
+      },
+      {
+        "path": "scripts/data/_qa_mover_labeled.py",
+        "line": 17,
+        "call": "pd.read_csv"
+      },
+      {
+        "path": "scripts/data/download_us_bankruptcy.py",
+        "line": 11,
+        "call": "out_dir.mkdir"
+      }
+    ],
+    "limitations": "Import targets checked statically; optional packages, relative imports, CLI execution and output validity require separate checks."
+  },
+  "results": {
+    "preserved_result_files": 14440,
+    "changed_or_missing_retained_results": [],
+    "removed_paths_reappeared": [],
+    "protected_hash_changes": [],
+    "duplicate_replacements": [
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023244687450Z/window_ablation_training_audit.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_training_audit.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023513465061Z/window_ablation_training_audit.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_training_audit.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023733640604Z/window_ablation_training_audit.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_training_audit.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T174524685157Z/sampling_ablation_training_audit.csv",
+        "retained": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T175100152579Z/sampling_ablation_training_audit.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023244687450Z/window_ablation_pooled_summary.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_pooled_summary.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023513465061Z/window_ablation_pooled_summary.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_pooled_summary.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023733640604Z/window_ablation_pooled_summary.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_pooled_summary.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023244687450Z/window_ablation_deltas_vs_window1.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_deltas_vs_window1.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023513465061Z/window_ablation_deltas_vs_window1.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_deltas_vs_window1.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023733640604Z/window_ablation_deltas_vs_window1.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_deltas_vs_window1.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023244687450Z/window_ablation_company_bootstrap.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_company_bootstrap.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023513465061Z/window_ablation_company_bootstrap.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_company_bootstrap.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023733640604Z/window_ablation_company_bootstrap.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_company_bootstrap.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T174524685157Z/sampling_ablation_bmodel_company_bootstrap.csv",
+        "retained": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T175100152579Z/sampling_ablation_bmodel_company_bootstrap.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T174524685157Z/sampling_ablation_pooled_summary.csv",
+        "retained": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T175100152579Z/sampling_ablation_pooled_summary.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T174524685157Z/sampling_ablation_deltas_vs_none.csv",
+        "retained": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T175100152579Z/sampling_ablation_deltas_vs_none.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023244687450Z/window_ablation_by_year.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_by_year.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023513465061Z/window_ablation_by_year.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_by_year.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_window_ablation/analysis/20260911T023733640604Z/window_ablation_by_year.csv",
+        "retained": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/window_ablation_by_year.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T174524685157Z/sampling_ablation_by_year.csv",
+        "retained": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T175100152579Z/sampling_ablation_by_year.csv",
+        "matching_sha256": true
+      },
+      {
+        "removed": "results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.partial.csv",
+        "retained": "results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv",
+        "matching_sha256": true
+      }
+    ],
+    "limitations": "Preservation checks do not recompute scientific metrics or validate all past research protocols."
+  },
+  "current_chart_baseline_sources": [
+    {
+      "path": "results/phase1_baseline/xgb/tuned/bankruptcy_year_splits_xgb_raw.csv",
+      "exists": true,
+      "rows": 184,
+      "splits": 15,
+      "sha256": "6d577f3703f7166dfe1c16e59704e67e4b656398ac8ed6af15b2b17594596356",
+      "status": "historical protocol, currently referenced by result figures"
+    },
+    {
+      "path": "results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv",
+      "exists": true,
+      "rows": 124,
+      "splits": 15,
+      "sha256": "987a0d8fca8723e3279223d2ed0993e6726e8c02f5a832b6c2fa65caa8ad12d5",
+      "status": "historical protocol, currently referenced by result figures"
+    },
+    {
+      "path": "results/phase1_baseline/random_forest/bankruptcy_year_splits_rf_raw.csv",
+      "exists": true,
+      "rows": 184,
+      "splits": 15,
+      "sha256": "dcccb6d546483c4bad469f6aa0be22d648c03ed001c0061caf710b7ccaf04692",
+      "status": "historical protocol, currently referenced by result figures"
+    },
+    {
+      "path": "results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv",
+      "exists": true,
+      "rows": 124,
+      "splits": 15,
+      "sha256": "eee97abd27078b0b60bce9e228977d287d3810e45e9af600b0be5f630184868e",
+      "status": "historical protocol, currently referenced by result figures"
+    },
+    {
+      "path": "results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv",
+      "exists": true,
+      "rows": 124,
+      "splits": 15,
+      "sha256": "3d8454dd425d1e45667ac5e88b995b3dc53a473b88d7250a2319dcb5e985a138",
+      "status": "historical protocol, currently referenced by result figures"
+    },
+    {
+      "path": "results/phase1_baseline/tabicl/tabicl_gpu_20260506_setA_temp075_ctx2048/bankruptcy_year_splits_tabicl_raw.csv",
+      "exists": true,
+      "rows": 124,
+      "splits": 15,
+      "sha256": "be8af5bcb38023e9e455448c89ac1d2b1121a517e2291857ef7ab3916db0ef77",
+      "status": "historical protocol, currently referenced by result figures"
+    }
+  ]
+}

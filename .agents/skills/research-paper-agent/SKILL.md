@@ -16,6 +16,9 @@ Act as an evidence-grounded research partner for this repository. Default to Tra
 
 ## Select the workflow
 
+- **Local thesis editing and compilation**: use [thesis-local-edit](../thesis-local-edit/SKILL.md) for manuscript/source selection, result binding, PDF verification and a versioned handoff; keep these research integrity rules.
+- **Overleaf comparison or requested synchronization**: use [thesis-overleaf-sync](../thesis-overleaf-sync/SKILL.md) for the configured target, full backups, conflict checks and saved-content verification. A local edit request alone does not trigger upload.
+
 - **Literature discovery or review**: follow `references/evidence-and-citation.md`, build a search log and evidence matrix, then synthesize themes and gaps.
 - **Research design or methodology**: follow the validity checks in `references/project-context.md`; distinguish confirmatory, exploratory, and post-hoc analyses.
 - **Results or discussion writing**: bind every numeric statement to a repository artifact and every external claim to a verified source.

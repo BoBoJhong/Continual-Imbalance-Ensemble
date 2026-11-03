@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "source_sha256": {
+    "scripts/thesis/export_deep_baseline_reference.py": "7d2766bcc8fc3988aba541e5832533c4449ee5e91f17ec4531755ec9c5b5a9e8",
+    "scripts/thesis/export_fixed_statistics.py": "8e72ad11477b85aa29266af63405352afff11bea976f2d97a56c7d314b469fe1",
+    "scripts/thesis/export_chapter_results.py": "7f669240aed9c87fb873ed4c6f55198245265e5347a51ddf5e90a829e965a595",
+    "experiments/phase1_baseline/bankruptcy_year_splits_tabm.py": "7299ffec1e2aca743fe88904af3979e2b41704efeba894503b6426d32886c1d2",
+    "experiments/phase1_baseline/bankruptcy_year_splits_tabicl.py": "7e3e55b0c71a0cd7872e10ba43432cb1f9578776ce05e71a2eecd6d0517b4435",
+    "experiments/_shared/common_bankruptcy.py": "7ac88b8fb2d9e98eb529614dca610370cc54c8aa268c54794ebdc767b7e9aae3",
+    "src/models/tabicl_wrapper.py": "484bc3b8b861490eb007522ccc0bcc29119c698b60ec0fb76d63f45cccdb718f",
+    "results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv": "3d8454dd425d1e45667ac5e88b995b3dc53a473b88d7250a2319dcb5e985a138",
+    "results/phase1_baseline/tabicl/tabicl_gpu_20260506_temp075_ctx2048/bankruptcy_year_splits_tabicl_raw.csv": "be8af5bcb38023e9e455448c89ac1d2b1121a517e2291857ef7ab3916db0ef77"
+  },
+  "generated_sha256": {
+    "thesis/latex/generated/deep-baseline-reference-20261103/sampling.csv": "6277e3fa4d56d7393132da21cdb62cc4d52e01b8cb6e0f53a44a9389f08cb74a",
+    "thesis/latex/generated/deep-baseline-reference-20261103/sampling.tex": "8abba4e828f6c5297dece876a14d498944730b35fed565e421dea8b6ee1e86e3",
+    "thesis/latex/generated/deep-baseline-reference-20261103/settings.tex": "9af31db131657839c483182c191f7f3525397c53a2892a8fe8856f6770045c80",
+    "thesis/latex/generated/deep-baseline-reference-20261103/summary.csv": "ddfc507586527ad344a866b7a8c812b6894d845a40a43bd3a98477a930f8cd95",
+    "thesis/latex/generated/deep-baseline-reference-20261103/summary.tex": "fb7d29054b43e863ac0a636326f8bc83a90b961f403aa968092429260ca9844a"
+  },
+  "classifier_sources": {
+    "TabM": "results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv",
+    "TabICL": "results/phase1_baseline/tabicl/tabicl_gpu_20260506_temp075_ctx2048/bankruptcy_year_splits_tabicl_raw.csv"
+  },
+  "target": "company final status; historical reference only",
+  "event_results_pending": true,
+  "n_raw_rows_per_classifier": 124,
+  "aggregation": "four sampling means per boundary, then 15 boundary means; Retrain four rows only",
+  "seed_scope": "CSV does not record independent multi-seed repeats; no seed SD inferred",
+  "selection": "explicitly pinned existing archives; no comparison of Test scores across variants to choose a source",
+  "historical_backend": "TabICL entry supports tabicl or tabpfn; historical backend not confirmed from CSV"
+}

@@ -1,0 +1,34 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{24\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}@{}}
+\caption{兩種標籤定義下未進行 FS 之集成結果}\label{tab:results-label-comparison}\\
+\toprule
+方法 & 標籤 & AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{5}{c}{表~\thetable（續）}\\
+\toprule
+方法 & 標籤 & AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{5}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+Old3 & 最終狀態 & 0.7134 & 0.1168 & 0.2383 \\
+ & 事件 & 0.7198 & 0.0199 & 0.0168 \\
+New3 & 最終狀態 & 0.7959 & 0.2007 & 0.2268 \\
+ & 事件 & 0.8601 & 0.1289 & 0.4319 \\
+Equal6 & 最終狀態 & 0.7815 & 0.1815 & 0.2690 \\
+ & 事件 & 0.7881 & 0.1041 & 0.1941 \\
+V-static & 最終狀態 & 0.8152 & 0.2355 & 0.2481 \\
+ & 事件 & 0.8472 & 0.1795 & 0.2353 \\
+DCS-OLA & 最終狀態 & 0.7386 & 0.1542 & 0.2909 \\
+ & 事件 & 0.7450 & 0.0411 & 0.3857 \\
+DCS-LCA & 最終狀態 & 0.7369 & 0.1631 & 0.3195 \\
+ & 事件 & 0.7450 & 0.0404 & 0.3849 \\
+KNORA-E & 最終狀態 & 0.7613 & 0.1837 & 0.2714 \\
+ & 事件 & 0.7859 & 0.1017 & 0.2739 \\
+KNORA-U & 最終狀態 & 0.7481 & 0.1817 & 0.2620 \\
+ & 事件 & 0.7771 & 0.0686 & 0.4824 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究固定年份集成實驗結果)\par 兩種標籤使用相同資料列、分區、模型池、十個種子與選擇規則；Test 正類分別為 287 筆（最終狀態）與 119 筆（事件）。正類比例不同，原始分數只比較方向，不比較高低。}
+\endgroup

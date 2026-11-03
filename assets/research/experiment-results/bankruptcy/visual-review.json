@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "reviewed_date_local": "2026-10-12",
+  "scope": "All ten final PNG exports inspected; SVG XML and retained text verified.",
+  "checks": [
+    "Titles, legends, axes and footnotes are readable",
+    "Annual denominator labels do not overlap",
+    "Line markers and reference line styles distinguish series",
+    "Paired heatmaps retain signed values and a shared zero-centred scale",
+    "No algorithm names appear in chart panels; code key supplied"
+  ],
+  "png_sha256": {
+    "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-auc.png": "70e016251a8e4f2a9394d6cdaf0ba78989306038c824c9084c7daa3d063e6946",
+    "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-f1.png": "d4ca550f4e9f2c9d7112791a7d895c6f5858115b8b9e8ed4c84bbc4a9c582882",
+    "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-recall.png": "d26c581908c7a5e8d847689bfab3794fd06f1fc280cb4ce4b88a6c4f48cfd34d",
+    "assets/research/experiment-results/bankruptcy/phase2/phase2-pooled-ensemble-comparison.png": "e2fe7ad4a0ac864f780d36a43450e9047ab461a517ae78bfc2662c7e72822edd",
+    "assets/research/experiment-results/bankruptcy/phase2/phase2-static-subset-size.png": "9486fa5210671465826468d850c2f6d91f0dbd7021a54f85ded2c3b95ef8a75e",
+    "assets/research/experiment-results/bankruptcy/phase2/phase2-annual-test-comparison.png": "e1b71a12be3ba8ac2e076e5e34241ce5e02e0afad8b1b915c8aad09b3c4dab33",
+    "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-auc.png": "219082adf46178220b6e492fdcb6b59db1440664d120a3e9c6182f5231857b8a",
+    "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-f1.png": "93d6957cbc7f63a0bee3aecac7be603c3a86946ab20f198979df0541dbb19545",
+    "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-recall.png": "e2231569b4f4f0f578666566bb3176334a3f08b8ba9d92b1553d7c70ec15d5f5",
+    "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-selected-static-policy.png": "2c836eea1ceca2c4a581fc6225176f496aa0e76e2c8025fb6c4ea0ca1fb09fd6"
+  }
+}

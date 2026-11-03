@@ -1,0 +1,52 @@
+{
+  "pdf_pages": 49,
+  "sha256": "5861785d7d2cd721e6c8dda2c9445079fed4924ffd93edb456755c891e1c1d87",
+  "headings": [
+    [
+      "3-2 實驗一：Baseline 與集成分類器比較",
+      15
+    ],
+    [
+      "3-3 實驗二：特徵選取集成分類器比較",
+      23
+    ],
+    [
+      "3-5-4 公司群聚配對統計檢定",
+      31
+    ],
+    [
+      "4-1 統計分析資料與比較範圍",
+      34
+    ],
+    [
+      "4-2 實驗一：固定年份集成比較",
+      34
+    ],
+    [
+      "4-3 實驗二：FS 集成比較",
+      36
+    ],
+    [
+      "4-4 統計推論範圍與限制",
+      37
+    ],
+    [
+      "A 實驗補充設定與統計檢定",
+      41
+    ],
+    [
+      "A-5 公司群聚配對檢定完整結果",
+      44
+    ]
+  ],
+  "old_stage_titles_present": false,
+  "unresolved_references": 0,
+  "editor_compile": "success",
+  "native_compile": "passed",
+  "tests": "10 passed",
+  "statistics": "165 tests; 49999 paired company cluster bootstrap replicates; Holm across all tests",
+  "analysis": "results/statistical_tests/fixed_two_experiments/20261027T051346477136Z",
+  "handoff": "thesis/handoffs/20261027T052847012537Z",
+  "handoff_check": "passed",
+  "visual_review": "final PDF flowcharts, results, cross-page appendix tables and bibliography checked"
+}

@@ -1,0 +1,98 @@
+{
+  "status": "completed",
+  "started_at": "2026-09-21T05:31:46.651223+00:00",
+  "protocol": "oldnew_ratio_fixed6_equal_v1_exploratory",
+  "seeds": [
+    42,
+    123,
+    456,
+    789,
+    2024,
+    7,
+    21,
+    84,
+    168,
+    999
+  ],
+  "test_years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+  ],
+  "total_train_years": 6,
+  "old_widths": [
+    5,
+    4,
+    3,
+    2,
+    1
+  ],
+  "methods": [
+    "Recent6y",
+    "Old5_New1",
+    "Old4_New2",
+    "Old3_New3",
+    "Old2_New4",
+    "Old1_New5"
+  ],
+  "workers": 2,
+  "ensemble_weights": [
+    0.5,
+    0.5
+  ],
+  "test_used_for_selection": false,
+  "target_definition": "failed company final observed fyear; event=fyear+1",
+  "limitations": "retrospective reconstructed target; unverified filing/label dates; post-hoc exploratory",
+  "model_lifecycle": "two disjoint chronological groups, independently refit each year; no frozen FIFO",
+  "thresholds": "shared t-1 Validation; F1 grid and validation FPR<=0.05; per method/year",
+  "features": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ],
+  "sampling": "TomekLinks separately fitted to each training group",
+  "command": [
+    "experiments/phase_flexible/study3b_oldnew_ratio_sensitivity.py"
+  ],
+  "data_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+  "source_hashes": {
+    "experiments/phase_flexible/study3b_oldnew_ratio_sensitivity.py": "5cf35f64ceb8c5fdadf7fd1a30c4faef07a54c66c0a69c9254a2d14d8e4b5938",
+    "experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py": "7f5f1655da3617041b6fb3a06710752e39537c0660ff48ad00a5e420b5220630",
+    "experiments/phase_flexible/study3b_window_sensitivity.py": "32c92f89aef4d1806ecc5c7a212e19077010959da0d7c8b5762b90b540ae7175",
+    "src/models/xgboost_wrapper.py": "7d45444407d25551af061658f992015891e81f6bfb04202fdbea7ae38225369e",
+    "src/evaluation/metrics.py": "07f81f81138338e39e46d194e0aa5a39819d21c360b2968a18da0c0c4728c14e",
+    "config/model_config.yaml": "ac67e15f7666a83a6688d22d3a16848917ecfebc77c61637d8a8cb96c61edfac",
+    "config/sampling_config.yaml": "2692f15fabceeaf0f354ecba10c94b6ce99c28af510b815e8aecc8f1701e603d"
+  },
+  "python": "3.14.0",
+  "packages": {
+    "numpy": "2.4.2",
+    "pandas": "3.0.1",
+    "scikit-learn": "1.8.0",
+    "imbalanced-learn": "0.14.1",
+    "xgboost": "3.2.0"
+  },
+  "finished_at": "2026-09-21T05:42:41.183601+00:00"
+}

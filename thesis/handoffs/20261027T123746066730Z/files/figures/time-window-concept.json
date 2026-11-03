@@ -1,0 +1,23 @@
+{
+  "scope": "generic sliding concept plus actual fixed-year application; no rolling evaluation claimed",
+  "actual": {
+    "old": [
+      1999,
+      2011
+    ],
+    "new": [
+      2012,
+      2013
+    ],
+    "validation": [
+      2014,
+      2014
+    ],
+    "test": [
+      2015,
+      2018
+    ]
+  },
+  "source_sha256": "c7b8c48b8d1713218e636bac77cb0f45bd165e20c2e862efcc692ad3ec09a1a4",
+  "png_sha256": "df84a62e9217be43fbfdc5eaf19f44e24245f0d74f69867b08e84ad72e26ba95"
+}

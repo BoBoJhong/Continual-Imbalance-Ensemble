@@ -1,0 +1,15 @@
+{
+  "config/thesis_sources.json": "b70ca0adb10d1972f88e0c3de707a449feb1d59ff8cb656214d271da0177c073",
+  "scripts/thesis/sync_results.py": "1d5bb73e04289014cc3a30fd7a02b98fb61e69fe2f7bcdf58d34b40a37dce247",
+  "tests/test_thesis_sync.py": "5215ddea423340742f14e16243036f481050b33729903c4eedf4649ee471c8aa",
+  "docs/研究方向.md": "98fbf6722dac089aeb739ed13e1b8e95e935c762de0b793bbf348a373c2bc393",
+  "thesis/README.md": "03429c2d16a39c52900979d778a448141f2ea2fe584cce850bc88b78feece5ea",
+  "thesis/latex/chapters/01_introduction.tex": "918f80a342d5fa79802e39913a44abf56f457504abfa1dc91c79a51bf3bc7204",
+  "thesis/latex/chapters/02_literature.tex": "1e108fea5f9a1359974e2c3a00f70f4980526fb1b7caf5e96ff6c0989c72da6e",
+  "thesis/latex/chapters/03_method.tex": "c70f361e0c593a54ee36b18ddbb49ca5004ed3267de645f1ebb6328ee81b1aca",
+  "thesis/latex/chapters/04_experiments.tex": "dc599721e47e9cb3bb15fa9b84e001131127f0716432e3da5f02ec023db7052f",
+  "thesis/latex/chapters/05_conclusion.tex": "c456cc2c3206f8a33fe7744f8b7a4c8b15c04dfffa2d118652d4f4a4b0262fcd",
+  "thesis/latex/chapters/appendix.tex": "56fe7f1dba714eaeb314296a98b70a2a490ce443cdb26a0aff14fe043c073935",
+  "thesis/latex/frontmatter/abstract_zh.tex": "259d1cbea2a51e2da06d15171a9b801216536ea80a482615cc04704309933329",
+  "thesis/latex/frontmatter/abstract_en.tex": "7bb8e38edb72455ef5b95d9783cefb6cf528715f26ed7bce52f6396beb3a85f0"
+}

@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "at": "2026-10-31T20:58:14.737798+00:00",
+  "chosen_params": {
+    "C": 1.0,
+    "solver": "saga",
+    "max_iter": 2000
+  },
+  "chosen_candidate": 14,
+  "default_validation_AUC": 0.8584025213238696,
+  "chosen_tuning_validation_AUC": 0.8585771282400496,
+  "test_used_for_selection": false,
+  "duration_seconds": 2305.5269501000002,
+  "metrics_sha256": "1f169669d520467061dfdac1521017220f538188b8f68fc8069ade562df11b5c",
+  "predictions_sha256": "6dd781338a7a6c521f9cb53e4bef0cc04168726ccad6be87182d9c55456553d2"
+}

@@ -1,0 +1,46 @@
+{
+  "job_id": "xgb_none_M2011_shap_r50",
+  "seed": 168,
+  "classifier": "xgb",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2009,
+    2010,
+    2011
+  ],
+  "n_train": 10881,
+  "positive_before": 83,
+  "n_after": 10881,
+  "positive_after": 83,
+  "fs": "shap",
+  "ratio": 0.5,
+  "selected_features": [
+    "X11",
+    "X12",
+    "X16",
+    "X15",
+    "X10",
+    "X3",
+    "X1",
+    "X13",
+    "X7"
+  ],
+  "n_features": 9,
+  "fit_predict_seconds": 4.743456399999559,
+  "params": {
+    "objective": "binary:logistic",
+    "eval_metric": "auc",
+    "seed": 168,
+    "tree_method": "hist",
+    "verbosity": 0,
+    "random_state": 168,
+    "n_jobs": 4
+  },
+  "warnings": [],
+  "selector_seed": 168,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-10-01T13:42:19.547172+00:00",
+  "cache_sha256": "98db1f5bddb9af754118f025b08b4b707d2600e85e87491b00ad68fe40067a47"
+}

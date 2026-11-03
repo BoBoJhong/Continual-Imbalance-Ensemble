@@ -1,0 +1,24 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{14\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}@{}}
+\caption{事件標籤下六個基礎模型之測試結果}\label{tab:results-pool-models}\\
+\toprule
+基礎模型 & AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{4}{c}{表~\thetable（續）}\\
+\toprule
+基礎模型 & AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{4}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+Old\_under & 0.7812 & 0.0948 & 0.3277 \\
+Old\_over & 0.6844 & 0.0227 & 0.0202 \\
+Old\_hybrid & 0.6874 & 0.0260 & 0.0244 \\
+New\_under & 0.8311 & \textbf{0.2004} & \textbf{0.3950} \\
+New\_over & 0.8285 & 0.1137 & 0.3580 \\
+New\_hybrid & \textbf{0.8314} & 0.1279 & 0.2672 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究事件標籤集成實驗結果)\par 完整 18 特徵、十個種子平均；under、over、hybrid 分別為 TomekLinks、ADASYN、SMOTEENN。粗體為六模型中該指標最高值，不表示差異達統計顯著；門檻由 Calibration 決定。}
+\endgroup

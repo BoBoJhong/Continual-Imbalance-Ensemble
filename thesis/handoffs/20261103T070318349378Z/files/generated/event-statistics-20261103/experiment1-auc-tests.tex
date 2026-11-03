@@ -1,0 +1,25 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{15\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.17\linewidth}@{}}
+\caption{事件標籤下各集成方法相對 Equal6 之 AUC 配對檢定}\label{tab:event-stats-exp1-auc}\\
+\toprule
+方法 & \(\Delta\mathrm{AUC}\) & 95\% 信賴區間 & \(p_H\) \\
+\midrule\endfirsthead
+\multicolumn{4}{c}{表~\thetable（續）}\\
+\toprule
+方法 & \(\Delta\mathrm{AUC}\) & 95\% 信賴區間 & \(p_H\) \\
+\midrule\endhead
+\midrule\multicolumn{4}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+Old3 & -0.0684 & [-0.0911, -0.0481] & 0.0165\(^{*}\) \\
+New3 & +0.0719 & [+0.0381, +0.1054] & 0.0165\(^{*}\) \\
+V-static & +0.0591 & [+0.0292, +0.0885] & 0.0165\(^{*}\) \\
+DCS-OLA & -0.0431 & [-0.0667, -0.0210] & 0.0952 \\
+DCS-LCA & -0.0431 & [-0.0671, -0.0208] & 0.0952 \\
+KNORA-E & -0.0023 & [-0.0129, +0.0052] & 1.0000 \\
+KNORA-U & -0.0110 & [-0.0197, -0.0028] & 1.0000 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究事件標籤公司群聚配對分析)\par 差值為候選方法減比較基準；區間為逐項 95\% 百分位區間，非同時區間。9,999 次公司重抽；\(p_H\) 為本標籤兩項實驗共 165 項雙尾近似檢定的 Holm 校正值。星號表示 \(p_H<0.05\)，未達顯著不表示等效；模型、種子及驗證決策固定。}
+\endgroup

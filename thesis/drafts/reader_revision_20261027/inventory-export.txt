@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "records": {
+    "rows": 78682,
+    "companies": 8971,
+    "positive_rows": 5220,
+    "negative_rows": 73462,
+    "positive_percent": 6.634300094049466,
+    "imbalance_ratio": 14.073180076628352,
+    "first_year": 1999,
+    "last_year": 2018,
+    "n_features": 18,
+    "missing_features": 0,
+    "nonfinite_features": 0,
+    "duplicate_company_years": 0
+  },
+  "method_matches": {
+    "load_data": true,
+    "partition_data": true,
+    "fit_representation": true,
+    "select_threshold": true,
+    "static_candidates": true,
+    "evaluate_predictions": true,
+    "make_model": true,
+    "feature_columns": true
+  }
+}

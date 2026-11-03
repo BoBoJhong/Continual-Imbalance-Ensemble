@@ -1,0 +1,47 @@
+{
+  "job_id": "lgb_none_M2009_rfe_r50",
+  "seed": 21,
+  "classifier": "lgb",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2007,
+    2008,
+    2009
+  ],
+  "n_train": 11609,
+  "positive_before": 140,
+  "n_after": 11609,
+  "positive_after": 140,
+  "fs": "rfe",
+  "ratio": 0.5,
+  "selected_features": [
+    "X1",
+    "X3",
+    "X6",
+    "X8",
+    "X10",
+    "X11",
+    "X12",
+    "X15",
+    "X17"
+  ],
+  "n_features": 9,
+  "fit_predict_seconds": 2.298753699986264,
+  "params": {
+    "objective": "binary",
+    "metric": "auc",
+    "verbosity": -1,
+    "seed": 21,
+    "deterministic": true,
+    "force_col_wise": true,
+    "boosting_type": "gbdt",
+    "num_threads": 4
+  },
+  "warnings": [],
+  "selector_seed": 21,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-09-30T11:34:59.023623+00:00",
+  "cache_sha256": "e75ecf9f22928ab57bf9b55b37f0ad3ba133dcb417e86331be2fc02c66ab5f59"
+}

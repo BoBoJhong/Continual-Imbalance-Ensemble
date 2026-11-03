@@ -1,0 +1,106 @@
+{
+  "status": "completed",
+  "source_run": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_window_sensitivity\\runs\\20260916T151731817838Z",
+  "source_manifest_sha256": "5fecc32809cffe0d0ab630923cdc91222cefb0a134c2036af7bee72e4ca302a2",
+  "script_sha256": "45cc7763eda13b1dc23804ec10a03130b3f23ca0c718d91844047afbd2c1421d",
+  "all_seed_predictions_identical": true,
+  "company_bootstrap_model_seed": 42,
+  "company_bootstrap_replicates": 1000,
+  "company_bootstrap_scope": "fixed predictions, company clusters, pooled metric differences",
+  "temporal_scope": "annual macro AP differences; circular blocks 2/3; 2000 replicates; 10 years only",
+  "multiple_comparisons": "descriptive marginal intervals, no confirmatory significance claims",
+  "validation": [
+    {
+      "seed": 42,
+      "status": "passed",
+      "prediction_rows": 269088,
+      "fitted_models": 48,
+      "paired_test_rows": 33636,
+      "test_events": 289
+    },
+    {
+      "seed": 123,
+      "status": "passed",
+      "prediction_rows": 269088,
+      "fitted_models": 48,
+      "paired_test_rows": 33636,
+      "test_events": 289
+    },
+    {
+      "seed": 456,
+      "status": "passed",
+      "prediction_rows": 269088,
+      "fitted_models": 48,
+      "paired_test_rows": 33636,
+      "test_events": 289
+    },
+    {
+      "seed": 789,
+      "status": "passed",
+      "prediction_rows": 269088,
+      "fitted_models": 48,
+      "paired_test_rows": 33636,
+      "test_events": 289
+    },
+    {
+      "seed": 2024,
+      "status": "passed",
+      "prediction_rows": 269088,
+      "fitted_models": 48,
+      "paired_test_rows": 33636,
+      "test_events": 289
+    },
+    {
+      "seed": 7,
+      "status": "passed",
+      "prediction_rows": 269088,
+      "fitted_models": 48,
+      "paired_test_rows": 33636,
+      "test_events": 289
+    },
+    {
+      "seed": 21,
+      "status": "passed",
+      "prediction_rows": 269088,
+      "fitted_models": 48,
+      "paired_test_rows": 33636,
+      "test_events": 289
+    },
+    {
+      "seed": 84,
+      "status": "passed",
+      "prediction_rows": 269088,
+      "fitted_models": 48,
+      "paired_test_rows": 33636,
+      "test_events": 289
+    },
+    {
+      "seed": 168,
+      "status": "passed",
+      "prediction_rows": 269088,
+      "fitted_models": 48,
+      "paired_test_rows": 33636,
+      "test_events": 289
+    },
+    {
+      "seed": 999,
+      "status": "passed",
+      "prediction_rows": 269088,
+      "fitted_models": 48,
+      "paired_test_rows": 33636,
+      "test_events": 289
+    }
+  ],
+  "artifacts": {
+    "annual_block_sensitivity.csv": "5792aabca99c1ab7f54c2d0f07ddf9fdbbf722c1866a2099ab9d9b45aebc8f10",
+    "by_year_all_seeds.csv": "54ab98fb587d49869fe52ebc8532d08243d2aaa586092851a0fb27aae20b6acf",
+    "company_bootstrap.csv": "d05d02ca6090a2e481bca1c4c196814d2bdbf56cf2ef8a651efd95d25f7aaae9",
+    "cost_by_seed.csv": "ab97141e711b0f8a03fdb1a8c8f0e0376dbd0d618005d538b8843bb304f804ad",
+    "pooled_all_seeds.csv": "3b4ea3212a042fa68162942f9fbc58c5a1643de47b998958678ef2d1a6b608a2",
+    "summary.csv": "c07526db88ea8e6dc5f1ab63e8bb4792868faa44e5f12260b1fa4bbcd4871b2c",
+    "thesis_tables.md": "01a976101f49dd4379a08f1158a5bf014fb33c35bc87a804668dbbba49b8a7c7",
+    "validation_checks.csv": "7aa1a1801fc34999f1179b14b3a9f0efbbc36b80b6044306b1e0f7ef8eebd3c3",
+    "window_sensitivity.pdf": "3ae49ece14738eef3cafc55ec651df989e12e43ce521ef872976bb173827afad",
+    "window_sensitivity.png": "fb19af26d862fc1f17f374b6844b8e531cd1c916839947b618431e017f5e1f5d"
+  }
+}

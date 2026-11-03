@@ -1,0 +1,23 @@
+{
+  "status": "completed",
+  "at": "2026-10-31T18:15:04.121891+00:00",
+  "chosen_params": {
+    "num_leaves": 31,
+    "max_depth": 15,
+    "learning_rate": 0.01,
+    "n_estimators": 1000,
+    "min_child_samples": 50,
+    "subsample": 0.85,
+    "colsample_bytree": 1.0,
+    "reg_alpha": 0.0,
+    "reg_lambda": 0.0,
+    "bagging_freq": 1
+  },
+  "chosen_candidate": 12,
+  "default_validation_AUC": 0.804998996010232,
+  "chosen_tuning_validation_AUC": 0.8463284530700261,
+  "test_used_for_selection": false,
+  "duration_seconds": 63.60799690001295,
+  "metrics_sha256": "28dc94f33b9bd0221a673debb8763bfaaf7e83c9ee91fd6a3ebde11d4091c0ff",
+  "predictions_sha256": "16e3be9ffdd484c92414db0f3dbdb70d552c5e155def6b1dbff480e4a37e8166"
+}

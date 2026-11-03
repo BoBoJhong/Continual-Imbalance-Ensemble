@@ -1,0 +1,179 @@
+\chapter{文獻探討}\label{chap:literature}
+\begingroup
+\setlength{\emergencystretch}{2em}
+\clubpenalty=10000
+\widowpenalty=10000
+
+本章依研究問題整理相關方法。先說明具有時間資訊的分類與類別不平衡，再介紹本研究使用的分類器、集成方式及特徵選取，最後討論評估與統計比較。文獻用來交代方法的出發點與適用條件；本研究實際採用的資料分區、參數與操作順序另於第三章列明。
+
+\section{時間資訊與分類資料的變化}
+
+\subsection{歷史資料與近期資料的取捨}
+
+Gama 等人\autocite{gama2014drift}將概念漂移的討論放在資料持續到達、輸入與目標關係可能隨時間改變的情境。這項觀點提醒研究者，增加歷史資料雖可能增加樣本量，卻不能直接保證模型更適合目前的資料。對本研究而言，Old 與 New 的區分提供一種觀察方式：分別建立模型，再比較保留歷史規則、使用近期規則或整合兩者的結果。
+
+不過，年份不同不等於已證實概念漂移。某年度分數下降，可能與正類比例、樣本組成、門檻或可用紀錄數改變有關。若沒有額外的分布或漂移檢測，就無法由分數變化判定是哪一種原因。本研究因此使用「不同期間資料」描述實驗條件，將年度結果視為補充分析，不把所有差異歸因於景氣、制度或特定漂移機制。
+
+\subsection{固定時間切分與滑動視窗}
+
+具有時間資訊的實驗，至少需要說清楚訓練、驗證與測試資料各自來自何時。固定時間切分在選定期間建立模型，再評估保留的較晚資料；滑動視窗則會隨評估時間向前移動可使用的資料區間。兩者對應不同問題：前者觀察固定模型在後續期間的表現，後者還包含更新時間與視窗長度的影響。若使用同一組測試年份，兩者仍不能視為相同實驗。
+
+本研究主要事件標籤的 Baseline、集成與 FS 都固定一組年份配置，測試期間內沒有線上更新。第三章另以概念圖區分滑動配置與目前固定配置，目的在於讓讀者看清楚時間角色，而非將未執行的更新機制寫成成果。
+
+在資料定義上，也要區分觀測年度與事件時間。Lombardo 等人\autocite{lombardo2022bankruptcy}提供美國企業破產研究的公開資料與基準。本研究沿用其公開資料作為案例，但是否能回答提前預測問題，仍須依實際版本的標籤與可用日期判斷。本研究的公開資料只記錄公司最終狀態，第三章因此依最後觀測年度重建事件標籤，並保留最終狀態標籤作為對照。
+
+\section{類別不平衡與採樣方法}
+
+\subsection{不平衡問題的觀察方式}
+
+不平衡資料的困難不只取決於正負類數量。Batista 等人\autocite{batista2004balancing}比較多種平衡方法，指出少數類樣本不足與類別重疊等因素也會影響學習。因此，調整類別比例並不是唯一目的；採樣可能同時改變類別邊界附近的資料與模型接觸到的樣本資訊。
+
+本研究依此將不採樣、低採樣、過採樣與混合採樣列為不同比較條件。不採樣保留原始分布，讓其他設定具有共同基準。採樣只作用於允許的訓練資料，驗證與測試仍保留原有比例，才能觀察模型在未經人為平衡的資料上有何表現。
+
+\subsection{低採樣與 Tomek links}
+
+低採樣藉由移除部分樣本改變訓練資料，但不同方法的移除規則並不相同。Tomek links 關注彼此接近、卻屬於不同類別的樣本配對，依設定移除其中指定類別的樣本。相較於隨機刪除大量多數類，這類方法具有清理類別邊界的用意。官方實作也明確指出，移除 Tomek links 後不保證各類樣本數相同\autocite{imblearn-tomek-docs}。
+
+因此，本研究表中的 Under 代表具體演算法 TomekLinks，不能解讀為每次都將正負類調成一比一。此點也影響 Old／New 模型池的理解：三種採樣來源提供的是不同資料處理方式，不只是三種固定類別比例。
+
+\subsection{過採樣：SMOTE 與 ADASYN}
+
+Chawla 等人\autocite{chawla2002smote}提出 SMOTE，利用少數類樣本與其鄰近樣本之間的資訊建立合成樣本，擴充少數類的訓練表示。它與單純複製既有樣本不同，但合成資料仍由原訓練樣本推得，不能當成額外蒐集的獨立觀測。
+
+He 等人\autocite{he2008adasyn}提出 ADASYN，依少數類樣本周邊的學習困難程度分配合成數量，使較難處理的區域獲得較多合成樣本。本研究的 Over 使用 ADASYN。這項設計使過採樣不只增加正類數量，也會依原資料的鄰近關係改變合成樣本的分布。
+
+由於這些方法依賴距離或鄰近樣本，特徵尺度與選取結果都可能影響採樣。若先在全部資料上採樣再切分，合成程序便可能間接使用評估資料的資訊。前處理與採樣皆限制於允許的擬合分區；FS 實驗則先選定特徵，再合成樣本。
+
+\subsection{混合採樣與 SMOTEENN}
+
+混合採樣將增加樣本與清理樣本結合。Batista 等人\autocite{batista2004balancing}討論 SMOTE 搭配 Tomek links 或 Edited Nearest Neighbours（ENN）的做法，嘗試在擴充少數類之後整理重疊區域。本研究使用 SMOTEENN 作為 Hybrid：先由 SMOTE 合成樣本，再依 ENN 規則清理。
+
+表~\ref{tab:lit-sampling}整理本研究採樣設定的作用差異。三種方法的目的不同，本文不預設某一方法普遍最佳，而是讓它們分別形成基礎模型，進一步比較模型整合後的結果。
+
+\begin{table}[htbp]
+\centering\small
+\setstretch{1.15}\setlength{\tabcolsep}{4pt}
+\caption{本研究採樣設定與方法作用}\label{tab:lit-sampling}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.26\linewidth}>{\raggedright\arraybackslash}p{0.48\linewidth}@{}}
+\toprule
+設定 & 代表方法 & 主要作用與解讀注意事項 \\
+\midrule
+None & 不採樣 & 保留訓練分布，作為採樣比較的基準。 \\[4pt]
+Under & TomekLinks & 清理跨類別鄰近配對；不保證類別數相等。 \\[4pt]
+Over & ADASYN & 依少數類周邊的困難程度分配合成樣本。 \\[4pt]
+Hybrid & SMOTEENN & 結合少數類合成與鄰近規則清理。 \\
+\bottomrule
+\end{tabular}
+\par\smallskip{\footnotesize (資料來源：本研究依 SMOTE、ADASYN、混合採樣文獻與 TomekLinks 文件整理\autocite{chawla2002smote,he2008adasyn,batista2004balancing,imblearn-tomek-docs})\par}
+\end{table}
+
+\section{表格資料分類器}
+
+\subsection{線性模型與樹模型}
+
+本研究的 Baseline 包含不同模型家族。Logistic Regression 以線性分數連結二元類別機率，適合提供結構較簡單的比較基準；Random Forest 及梯度提升樹則可以透過樹的分割表示較複雜的關係。比較這些模型，有助於觀察資料期間與採樣的差異是否只出現在某一種架構。
+
+Breiman\autocite{breiman2001rf}提出的 Random Forest 結合多棵樹，並在建立樹時引入隨機性；其表現與個別樹的能力及樹之間的相關程度有關。XGBoost 則是梯度提升樹的系統實作，Chen 與 Guestrin\autocite{chen2016xgboost}將正則化目標與可擴充的樹學習設計結合。Ke 等人\autocite{ke2017lightgbm}提出 LightGBM，著重提升梯度提升樹處理資料的效率。這些方法雖都包含多棵樹，其訓練方式與超參數作用並不相同。
+
+本研究在用語上區分兩個層次：Random Forest、XGBoost 或 LightGBM 本身可由多棵樹構成；第三章的 Old／New 集成則整合多個分別訓練的分類器。後者的成員差異來自資料期間與採樣方式，不能直接與模型內部的樹數混為一談。固定年份實驗使用 XGBoost 作為共同基底，是為了讓後續比較集中於整合規則，並非宣稱其他分類器不適用。
+
+\subsection{表格深度學習與情境學習}
+
+在表格深度學習方面，Gorishniy 等人\autocite{gorishniy2025tabm}提出 TabM，藉由共享大部分參數，在單一模型內產生多個預測，結合多層感知器與有效率的集成設計。TabM 的模型內部集成與本研究 Old／New 模型池的整合屬於不同層次。本文將 TabM 保留為深度學習 Baseline，第三章補列已保存設定，第四章先呈現既有最終狀態標籤結果；事件標籤分數待重跑後更新。
+
+Qu 等人\autocite{qu2025tabicl}提出 TabICL，採用情境學習（in-context learning），以提供的資料作為預測情境，而非必須針對每份目標資料更新全部模型參數。該文介紹的是原方法的架構與基準結果，不能直接替本研究歷史執行紀錄背書。
+
+本研究已完成事件標籤實驗的四種傳統分類器，在每個訓練策略與採樣組合下均評估 24 組候選參數；候選數相同，但搜尋空間與計算成本不同，不能解釋為各模型均已充分調參。TabM 與 TabICL 的既有紀錄另列於第四章的暫列結果表，並保留為六分類器架構的兩個深度學習分支。由於其標籤與驗證方式不同，暫列數值不參與事件標籤的同條件排名；後端及執行範圍的限制於附錄說明。
+
+\section{靜態集成與動態選擇}
+
+\subsection{靜態成員與機率整合}
+
+靜態集成在推論前固定參與的分類器與整合規則。若各成員輸出正類機率，可以用等權平均形成集成分數。此作法容易說明，但並不保證加入越多模型越好：若某些成員在相同樣本上給出不合適的分數，平均也可能降低區辨能力。
+
+本研究從相同六模型池比較數種靜態安排。Old3 與 New3 各整合同一期間的模型，Equal6 使用全部成員；V-static 則由驗證資料選擇同時含 Old 與 New 的混合子集。這些控制組對應不同問題：是否需要跨期間、是否應納入全部成員，以及驗證選擇子集是否有幫助。選模資料與測試資料必須分開，否則將測試分數最高的子集當成可使用的方法，會高估實際選擇程序的能力。
+
+\subsection{動態分類器選擇}
+
+動態分類器選擇（Dynamic Classifier Selection, DCS）依待預測樣本的局部區域選擇分類器。Woods 等人\autocite{woods1997local}以局部分類正確程度研究模型組合，使選擇與樣本周邊的表現連結。本研究比較 Overall Local Accuracy（OLA）與 Local Class Accuracy（LCA）。OLA 使用鄰近區域的整體正確程度；LCA 則依分類器對查詢樣本所預測的類別，查看相應鄰近樣本的表現\autocite{deslib-ola-docs,deslib-lca-docs}。
+
+局部能力並不是在測試標籤上計算，而是由另行保留的 Dynamic Selection Dataset（DSEL）估計。DSEL 因而是動態選擇規則的參考資料，不是可再併回基礎模型訓練的閒置資料。若這個區域不足以代表待預測樣本，選出的模型也未必適合，因此 DCS 的效果仍須透過保留測試資料確認。
+
+\subsection{動態集成選擇}
+
+動態集成選擇（Dynamic Ensemble Selection, DES）將選擇對象由單一分類器擴大為一組分類器。Ko 等人\autocite{ko2008dynamic}討論由動態分類器選擇延伸至動態集成選擇的方式。本研究比較 KNORA-E 與 KNORA-U：前者找出能正確處理局部鄰近樣本的成員，必要時縮小區域；後者利用能正確處理部分鄰近樣本的成員及其局部表現進行整合\autocite{deslib-knorae-docs,deslib-knorau-docs}。
+
+DESlib 提供靜態、DCS 與 DES 的實作與共同介面\autocite{cruz2020deslib}。本研究依固定版本設定使用該套件，讓動態方法共用相同模型池、DSEL 與近鄰數，並在第三章交代機率整合方式。此處只保留理解選擇機制所需的原理；具體選擇、權重與例外處理由實際使用的演算法決定。
+
+局部區域依特徵距離建立，因此不同尺度或特徵子集可能改變鄰居，即使分類器種類不變，動態選擇結果也可能不同。這是本研究將 FS 與集成共同評估的理由之一。若 FS 後分數改變，應考慮基礎模型與局部區域同時改變，而非只用「移除雜訊」解釋所有結果。
+
+\section{特徵選取與可解釋方法}
+
+\subsection{Filter、Wrapper 與 Embedded}
+
+Guyon 與 Elisseeff\autocite{guyon2003selection}整理特徵選取的多種問題，包括預測能力、計算成本及資料理解。依特徵評估與模型訓練的關係，常區分為過濾式（Filter）、包裝式（Wrapper）及嵌入式（Embedded）方法。這項分類說明方法如何產生特徵子集，並不直接表示哪一類在所有資料上較佳。
+
+本研究以互資訊（Mutual Information, MI）作為 Filter 代表，依個別特徵與標籤的關聯排序；以遞迴特徵刪除（Recursive Feature Elimination, RFE）作為 Wrapper 代表，反覆依估計器的特徵重要性移除特徵；另以決策樹（CART）訓練後的重要性作為 Embedded 代表。各方法在特徵間關係、模型依賴與搜尋成本上有所不同，實際操作可由所用套件的特徵選取介面確認\autocite{sklearn-fs-docs}。
+
+三類方法在本研究是平行條件，並未串接成先 Filter、再 Wrapper、最後 Embedded 的程序。各方法分別產生固定特徵集合，再重新建立模型池。保留 50\% 與 80\% 是事先設定的兩種精簡程度，用來比較刪減較多與保留較多資訊的差別，不稱為文獻認定或本資料搜尋得到的最佳比例。
+
+\subsection{SHAP 的角色與特徵排序}
+
+可解釋人工智慧（Explainable Artificial Intelligence, XAI）關心如何說明模型的判斷；特徵選取則決定模型之後使用哪些輸入，兩者目的不同。Lundberg 與 Lee\autocite{lundberg2017shap}提出 SHAP，以特徵貢獻值說明個別預測。將多筆樣本的貢獻取絕對值後平均，可以形成整體重要性排序，再依保留數篩選特徵。
+
+Hancock 等人\autocite{hancock2025shapfs}研究利用 SHAP 進行特徵選取與分析，提供將解釋資訊用於篩選的例子。本研究將 SHAP 視為另一種特徵排序方式，與 MI、CART 及 RFE 比較，並未將它稱為最新 FS，也未直接重現該文的完整選取程序。實作使用 LightGBM 的樹模型貢獻輸出，排除偏置項後計算平均絕對貢獻；模型、樣本及保留數均在第三章說明。
+
+SHAP 值說明的是特定模型如何使用特徵，並不證明特徵對公司狀態具有因果影響。若兩個財務欄位高度相關，重要性也可能分配在不同欄位，不能只依一次排序認定其中之一沒有資訊。Goldwasser 與 Hooker\autocite{goldwasser2025rankings}進一步研究特徵重要性排名的統計顯著性，提醒排名亦有不確定性。本研究附錄只整理十個種子中的入選次數，屬於描述性紀錄，沒有執行該文的排名檢定。
+
+\subsection{特徵選取的驗證界線}
+
+只要選取程序使用了標籤或資料分布，它就屬於模型建立的一部分。如果先用測試資料選出特徵，再評估模型，分數便包含了測試資訊。本研究讓各 FS 只在 Old 擬合資料上執行，將同一組欄位及順序套用至 New、DSEL、Calibration 與 Test。如此可比較固定歷史選取規則在後續資料的表現，也同時限制了模型無法使用近期資料重新挑選特徵。
+
+另外，FS 在採樣之前執行，讓選取依據維持原擬合資料的比例。這是一項固定流程的設計選擇，而非宣稱所有資料都應依此順序處理。不同順序可能得到不同子集，本研究並未另做先採樣再選取的對照，因此結論限於目前程序。
+
+\section{分類評估與統計比較}
+
+\subsection{排序能力與指定門檻的結果}
+
+AUC 衡量模型將正類分數排在負類之前的能力，不依賴單一分類門檻。F1-score 與 Recall 則需要先把分數轉成類別。兩者回答的問題不同：分數排序改善時，固定門檻下仍可能漏掉部分正類；提高 Recall 也可能伴隨更多誤報。因此，本研究以 AUC 為主要報告指標，並同時列出 F1-score 與 Recall。
+
+Precision--Recall 關係較直接呈現正類預測的精確程度\autocite{saito2015pr}。本研究另以 Average Precision（AP）比較驗證資料中的靜態候選。AP 依召回增量加權精確率，與以梯形積分計算的 PR 曲線面積不應直接視為相同數值\autocite{sklearn-ap-docs}。本文選成員使用 Calibration AP，選分類門檻使用 Calibration F1-score，最終 Test 的三項指標各自保留，不用測試結果回頭調整上述規則。
+
+\subsection{重複紀錄、不確定性與多重比較}
+
+Efron 與 Tibshirani\autocite{efron1986bootstrap}說明以重抽樣估計統計量變異的基本原理；但重抽樣單位必須符合資料結構。Obuchowski\autocite{obuchowski1997clustered}討論群聚 ROC 資料的相關性問題。對本研究而言，同一公司可能有數年紀錄，若逐列當成獨立樣本重抽，便忽略公司內部的關聯。因此，第四章補充分析以公司為單位，讓同公司年度紀錄一起被抽入，兩方法也使用相同抽樣公司，形成配對差值。
+
+隨機種子的標準差與公司重抽樣信賴區間也有不同用途。前者表示既定資料下執行隨機程序的分數變化；後者表示已保存模型在重抽測試公司下的差值變化。兩者都不能完整代表重新取得訓練資料、變更年份或換到另一市場時的不確定性。
+
+當同時比較多種方法與指標，單獨對每項使用 0.05 門檻會累積誤判機會。Holm\autocite{holm1979multiple}提出逐步多重檢定校正。本研究對事件標籤與最終狀態標籤分別進行事後分析，各將兩項實驗的 165 項比較放在同一校正範圍；兩種標籤的校正家族分開，完整保留增加、下降及未顯著的結果；逐項信賴區間與校正後的顯著判斷分別呈現，不把未顯著解釋為兩方法已證實相同。
+
+\section{相關研究整理與本研究定位}
+
+表~\ref{tab:lit-position}依方法角色整理代表性研究。本表比較的是研究內容與本研究使用方式，不是把不同資料集、切分與指標下的分數放在一起排名。
+
+\begingroup\small\setstretch{1.12}\setlength{\tabcolsep}{4pt}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}@{}}
+\caption{相關研究主題與本研究的銜接}\label{tab:lit-position}\\
+\toprule
+研究 & 討論重點 & 本研究的使用方式與界線 \\
+\midrule\endfirsthead
+\multicolumn{3}{c}{表~\thetable（續）}\\\toprule
+研究 & 討論重點 & 本研究的使用方式與界線 \\
+\midrule\endhead
+\midrule\multicolumn{3}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+Chawla 等人（2002）\autocite{chawla2002smote} & 少數類合成樣本 & 作為混合採樣中 SMOTE 的原理依據；合成資料不是獨立新觀測。 \\[4pt]
+He 等人（2008）\autocite{he2008adasyn} & 依困難程度分配合成數量 & Over 採 ADASYN；實際影響依本資料比較，不沿用原文成效。 \\[4pt]
+Gama 等人（2014）\autocite{gama2014drift} & 時間變化與適應問題 & 說明歷史／近期資料取捨；本研究未執行線上漂移偵測。 \\[4pt]
+Woods 等人（1997）與 Ko 等人（2008）\autocite{woods1997local,ko2008dynamic} & 局部能力與動態模型選擇 & 比較 DCS／DES，使用獨立 DSEL；不假設一定優於靜態方法。 \\[4pt]
+Lombardo 等人（2022）\autocite{lombardo2022bankruptcy} & 企業資料與分類基準 & 提供資料研究背景；依實際公開版另核對標籤與識別碼數。 \\[4pt]
+Hancock 等人（2025）\autocite{hancock2025shapfs} & SHAP 用於特徵選取與分析 & 將 SHAP 排序列為 FS 對照，未重現其全部程序。 \\[4pt]
+Goldwasser 與 Hooker（2025）\autocite{goldwasser2025rankings} & 特徵重要性排名的不確定性 & 入選次數僅作描述，不冒稱已完成排名顯著性檢定。 \\*
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究依表列原始文獻整理)}
+\endgroup
+
+上述文獻分別說明採樣、時間變化、動態選擇與 FS 的原理，但這些原理本身不能回答本資料中的歷史模型是否仍有互補資訊，也不能保證縮減特徵後的局部選擇更可靠。本研究將待回答的實證問題具體化為三項對照：以 Old、New 與 Retrain 觀察資料期間的差異；讓靜態與動態方法共用六模型池、DSEL 及驗證決策規則；再於相同測試公司上比較 FS 與 no-FS。事件標籤與最終狀態標籤另行對照，以檢查方法排序是否依賴目標定義。
+
+本研究的補充價值在於將這些問題置於可追溯的共同流程，並以公司層級的配對不確定性限制結論。此定位不代表既有文獻從未結合上述方法，也不主張新的演算法或跨資料集的普遍優越性；其證據範圍是本次固定年份、固定 XGBoost 模型池及單一公開資料下的實證比較。
+\endgroup

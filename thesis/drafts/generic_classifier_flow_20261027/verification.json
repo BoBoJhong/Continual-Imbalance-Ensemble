@@ -1,0 +1,17 @@
+{
+  "pages": 79,
+  "updated_figure_pdf_pages": [
+    25
+  ],
+  "pdf_sha256": "23a620030f350cfadc085233cc79fa06cf1509efcb5b7deb4a6a6eac0d59011b",
+  "source_sha256": "375e6d2e702db4bb0f45ca912c56ba16f6103a2d25d7bb73b4cb53658f13acf5",
+  "log_defects": [],
+  "editor_compile": "success",
+  "native_compile": "passed",
+  "visual_review": "passed",
+  "source_check": "passed",
+  "handoff": "thesis/handoffs/20261027T132844610162Z",
+  "scope": "Overview phrase and accompanying description; no classifier/result changes",
+  "wording": "以選定分類器建立 Old 三模型與 New 三模型",
+  "qualification": "Not called best: historical Baseline tuning budgets and validation conditions differ"
+}

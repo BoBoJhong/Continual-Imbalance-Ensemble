@@ -1,0 +1,148 @@
+\chapter{實驗補充設定與統計檢定}\label{app:experimental-details}
+\begingroup
+\renewcommand{\thesection}{\thechapter-\arabic{section}}
+\setlength{\emergencystretch}{2em}
+
+\section{兩項實驗之資料與紀錄規格}
+
+實驗一包含 Baseline 與 Old／New 集成比較；實驗二在集成架構中加入特徵選取。Baseline 的訓練期間敏感度比較使用 15 組年份邊界與年內驗證；兩項集成比較則採固定年份分區，並將 2014 年分為互斥的 DSEL 與 Calibration。兩種驗證制度分別解釋，不因同屬實驗一就視為完全相同的調參條件。
+
+實驗紀錄包含資料分區與樣本識別、標籤定義、擬合期間、隨機種子、採樣前後筆數、前處理參數、所選特徵及排列順序、分類器設定、驗證候選排序、固定門檻，以及整體與逐年預測結果。紀錄另保留資料與方法版本的識別資訊，供研究重現與來源核對，不將內部儲存名稱當作方法定義。
+
+\section{Baseline 超參數與訓練控制}
+
+Baseline 的 XGBoost、LightGBM、Random Forest、Logistic Regression 與 TabM 均已有驗證選參的保存紀錄。不同年份邊界、訓練策略及採樣方式可選出不同參數，因此不指定單一組參數代表所有設定。正文候選表整理目前的實驗設定，不能直接回推全部歷史版本的完整搜尋範圍。
+
+較早的 XGBoost 結果保存樹數、學習率、樹深度與最小子節點權重四項選定參數；擴充版本另納入抽樣比例及正則化等設定。搜尋候選集合、單次預算與最終選定值應分別保存，不能僅由選定值推定曾搜尋的所有組合。四種傳統分類器的預設搜尋預算為 48 組，實際執行可覆寫；Logistic Regression 的候選集合共有 30 組，預算足夠時遍歷全部候選。
+
+TabM 的 standard 與 light 訓練控制整理於表~\ref{tab:method-tabm-runtime}。最大訓練輪次與早停耐心值屬訓練控制，與網路架構及優化器候選分別設定。各次實驗的實際值依執行紀錄確認，不由設定名稱推定。
+
+\begingroup
+\footnotesize
+\setstretch{1.1}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{0pt plus 1fill}
+\setlength{\LTright}{0pt plus 1fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr 0.4600\linewidth-1.8400\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2700\linewidth-1.0800\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2700\linewidth-1.0800\tabcolsep\relax}@{}}
+\caption{TabM 補充搜尋預算與訓練控制}\label{tab:method-tabm-runtime}\\
+\toprule
+\textbf{參數項目} & \textbf{standard} & \textbf{light} \\
+\midrule
+\endfirsthead
+\multicolumn{3}{c}{表~\thetable（續）}\\
+\toprule
+\textbf{參數項目} & \textbf{standard} & \textbf{light} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{續下頁}\\
+\endfoot
+\bottomrule
+\endlastfoot
+搜尋候選數 & 24 & 8 \\*
+\addlinespace[1pt]
+搜尋模型 max\_\allowbreak{}epochs & 200 & 48 \\*
+\addlinespace[1pt]
+搜尋模型 patience & 20 & 6 \\*
+\addlinespace[1pt]
+最終模型 max\_\allowbreak{}epochs & 200 & 120 \\*
+\addlinespace[1pt]
+最終模型 patience & 20 & 12 \\*
+\addlinespace[1pt]
+batch\_\allowbreak{}size & 256 & 512 \\*
+\addlinespace[1pt]
+predict\_\allowbreak{}batch\_\allowbreak{}size & 4096 & 8192 \\*
+\addlinespace[1pt]
+val\_\allowbreak{}batch\_\allowbreak{}size & 8192 & 16384 \\*
+\end{longtable}
+\endgroup
+
+TabICL 的補充固定設定整理於表~\ref{tab:method-tabicl-params}。該設定提供 context 抽樣與推論控制，未納入前述以驗證 AUC 進行的隨機參數搜尋。實際執行可覆寫預設值；不同後端對參數的支援亦須分別核對。本研究使用的包裝方式優先載入 TabICL，另提供 TabPFN 後端，因此方法解讀應以實際模型後端與版本為準。
+
+\begingroup
+\footnotesize
+\setstretch{1.1}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\LTleft}{0pt plus 1fill}
+\setlength{\LTright}{0pt plus 1fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr 0.3200\linewidth-1.2800\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2800\linewidth-1.1200\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.4000\linewidth-1.6000\tabcolsep\relax}@{}}
+\caption{TabICL 補充固定參數預設值}\label{tab:method-tabicl-params}\\
+\toprule
+\textbf{參數項目} & \textbf{預設值} & \textbf{說明} \\
+\midrule
+\endfirsthead
+\multicolumn{3}{c}{表~\thetable（續）}\\
+\toprule
+\textbf{參數項目} & \textbf{預設值} & \textbf{說明} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{續下頁}\\
+\endfoot
+\bottomrule
+\endlastfoot
+n\_\allowbreak{}estimators & 32 & 內部集成成員數 \\*
+\addlinespace[1pt]
+max\_\allowbreak{}train\_\allowbreak{}samples & 1024 & 訓練 context 筆數上限 \\*
+\addlinespace[1pt]
+subsample & stratified & 超過上限時採分層抽樣；另提供 random 選項 \\*
+\addlinespace[1pt]
+norm\_\allowbreak{}methods & none、power & 提供給模型的正規化設定 \\*
+\addlinespace[1pt]
+feat\_\allowbreak{}shuffle\_\allowbreak{}method & latin & 特徵排列設定 \\*
+\addlinespace[1pt]
+class\_\allowbreak{}shift & True & 可由 no-class-shift 關閉 \\*
+\addlinespace[1pt]
+outlier\_\allowbreak{}threshold & 4.0 & 離群值處理設定 \\*
+\addlinespace[1pt]
+softmax\_\allowbreak{}temperature & 0.9 & 輸出溫度設定 \\*
+\addlinespace[1pt]
+average\_\allowbreak{}logits & True & 可由 no-average-logits 關閉 \\*
+\addlinespace[1pt]
+use\_\allowbreak{}hierarchical & True & 可由 no-use-hierarchical 關閉 \\*
+\addlinespace[1pt]
+batch\_\allowbreak{}size & 8 & 推論批次大小 \\*
+\addlinespace[1pt]
+use\_\allowbreak{}amp & True & 可由 no-amp 關閉 \\*
+\addlinespace[1pt]
+checkpoint\_\allowbreak{}version & TabICL v1.1（0506） & 執行時可覆寫的模型版本字串 \\*
+\addlinespace[1pt]
+device & auto & 可指定 cpu 或 cuda \\*
+\end{longtable}
+\endgroup
+
+\section{軟體環境與隨機性控制}
+
+固定年份集成實驗所保存的環境為 Python 3.14.0、NumPy 2.4.2、pandas 3.0.1、scikit-learn 1.8.0、XGBoost 3.2.0、imbalanced-learn 0.14.1、LightGBM 4.6.0 及 DESlib 0.3.7。各設定使用四個執行緒，整體最多三個工作程序平行執行。這些資訊描述產生該批結果時的環境，不以後續工作環境版本取代。
+
+2014 年驗證分區的種子固定為 42。模型、採樣與具隨機性的特徵選取程序，使用 42、123、456、789、2024、7、21、84、168、999 共十個種子。相同種子與方法的 FS／no-FS 比較使用相同測試樣本；種子標準差描述程序隨機變異，不等於獨立資料抽樣的信賴區間。硬體規格尚未完整保存，故本研究不據此進行不同設備的運算效率比較。
+
+\section{實驗完成範圍與比較限制}\label{sec:method-evidence}
+
+固定年份集成實驗已完成十個種子與九種特徵條件，包含一種 no-FS 與八種 FS 設定。Baseline 各設定內的超參數選擇已有保存紀錄，但跨分類器種類的驗證彙整與集成比較中 XGBoost 固定設定之間，尚缺完整的選擇銜接。因此，使用 XGBoost 不能直接解讀為已證明其為所有候選中的最佳分類器。
+
+兩項集成比較使用固定的 XGBoost 基礎設定，未讀入 Baseline 各設定保存的選定參數，也未重新搜尋。若要將 Baseline 與集成的分數差歸因於模型整合，仍須對齊資料可用範圍、驗證制度、超參數與訓練預算。
+
+Baseline 中的 Retrain 使用 Old 與 New 擬合資料合併訓練，屬獨立基準，不加入六模型池。固定年份集成實驗尚缺同協定 Retrain 對照，故不以其他驗證制度的歷史分數替代。同樣地，New 僅表示新資料模型分支；若某版本採用權重延續的 Fine-tune，須依其實際程序獨立解釋。
+
+原始標籤為公司最終狀態，同一公司可有多年度紀錄，且可能跨訓練與測試年度出現。本研究未驗證破產事件日與財報可得時間，因此結果以回溯性公司狀態分類解讀，不延伸為已確認的提前一年事件預測能力。
+
+\clearpage
+\section{公司群聚配對檢定完整結果}\label{sec:stats-full}
+
+本節完整列出實驗一的 21 項檢定與實驗二的 144 項檢定。比較規則與雙尾近似檢定依第~\ref{sec:method-statistics}~節；所有表格共用 49,999 組公司重抽樣本，且 165 個 \(p\) 值共同採 Holm 校正。差值均為候選方法減對應基準，不依測試分數或顯著性排序。
+
+信賴區間為逐項 95\% 百分位區間，未作同時區間校正。\(p\) 為置中 bootstrap 的未校正值，\(p_H\) 為 Holm 校正值；附錄的 \(p\) 值顯示五位小數，指標差值與區間顯示四位小數，計算與校正使用原精度。最小可報 \(p\) 為 0.00002，並非零。有限重抽亦具有 Monte Carlo 誤差，接近顯著門檻的結論應審慎解讀；未達顯著不等同方法等效。
+
+以 CART 50\% 的 KNORA-E AUC 為例，49,999 次重抽中有 12 次置中誤差達到或超過觀察差值，因此 \(p=13/50{,}000=0.00026\)，\(p_H=0.03900\)。未校正 \(p\) 的 Monte Carlo 標準誤約為 0.000072；多重比較校正會放大此數值誤差的影響。若要將其作為關鍵顯著性結論，應增加重抽次數或以其他適切方法驗證。
+
+\subsection*{實驗一：各方法與 Equal6 比較}
+\input{generated/statistics-20261027T051346477136Z/appendix-experiment1.tex}
+
+\subsection*{實驗二：FS 與相同方法 no-FS 比較}
+\input{generated/statistics-20261027T051346477136Z/appendix-experiment2-AUC.tex}
+\input{generated/statistics-20261027T051346477136Z/appendix-experiment2-F1.tex}
+\input{generated/statistics-20261027T051346477136Z/appendix-experiment2-Recall.tex}
+\endgroup

@@ -1,81 +1,31 @@
-# Scripts 目錄說明
+# 工具導航
 
-所有腳本皆假設在**專案根目錄**下執行（`Continual-Imbalance-Ensemble/`）。
+由專案根目錄執行。先看[實驗索引](../docs/實驗索引.md)確認 target、協定與結果版本；維護清單不等於同協定論文比較集。
 
-## 目錄一覽
+| 工作 | 工具目錄 | 入口與行為 |
+|---|---|---|
+| 查看維護實驗 | [run](run/README.md) | run_all_experiments.py --list；省略 --list 會執行並寫入結果 |
+| 結果清冊與查核 | [analysis](analysis/README.md) | 逐檔分類、完成狀態、數值重播、切割、消融、統計與匯出；各自來源不同 |
+| 研究圖／Phase 1 圖 | [plots](plots/README.md) | 現行流程圖與保留的 baseline 圖；9 支舊 Phase 2／3 圖已封存 |
+| 進度報告 | [reports](reports/README.md) | Study 3B 快照報告與分析；新建時間戳版本 |
+| 資料準備 | [data](data/README.md) | 原始來源、衍生資料與 MOVER 工具；各自讀／下載／寫入資料 |
+| 歷史追溯 | [legacy](legacy/README.md) | 23 支舊圖表、匯出、遷移、批次與統計工具；不在維護 runner |
 
-| 子資料夾 | 用途 |
-|----------|------|
-| **`data/`** | 資料下載、合成資料產生 |
-| **`run/`** | 一鍵跑實驗、多 seed、批次切割輔助 |
-| **`analysis/`** | 結果彙總、baseline 比較、統計檢定 |
-| **`plots/`** | 圖表與 Phase1 baseline 視覺化 |
-| **`reports/`** | 報表匯出（如指導教授 Excel） |
+## 常用查看指令
 
-## 常用指令（由根目錄執行）
-
-```text
-# 依序執行各 phase 實驗
-python scripts/run/run_all_experiments.py
-
-# 三資料集結果彙總 → results/summary_all_datasets.csv
-python scripts/analysis/compare_all_results.py
-
-# 多 seed（Bankruptcy baseline）
-python scripts/run/run_multi_seed.py
-
-# Phase1 XGB / Torch MLP 圖表
-python scripts/plots/visualize_phase1_xgb_baseline.py
-python scripts/plots/visualize_phase1_torch_mlp_baseline.py
-
-# 真實醫療資料下載
-python scripts/data/download_real_medical_data.py
+```powershell
+python scripts/run/run_all_experiments.py --list
+python scripts/analysis/study3b_pipeline_status.py results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z
 ```
 
-## 檔案索引
+清冊重建會另建 metadata 快照：
 
-### `data/`
+```powershell
+python scripts/analysis/build_result_catalog.py
+```
 
-| 檔案 | 說明 |
-|------|------|
-| `download_us_bankruptcy.py` | US 破產資料 |
-| `download_medical_data.py` | UCI 醫療（可選／合成） |
-| `download_real_medical_data.py` | 真實醫療資料 |
-| `download_stock_data.py` | 股價（可選／合成） |
-| `download_real_stock_data.py` | 真實股價 |
-| `generate_synthetic_data.py` | 合成資料 |
+## 保存與歷史工具
 
-### `run/`
+23 支工具的原／新路徑、來源 hash 與原文 ZIP 見 [legacy](legacy/README.md)。原計算函式保留；六支舊圖表的 mkdir 與舊 Excel 輸出改為明確執行才啟動，import 不再讀寫研究表或搬移成果。明確執行舊工具仍可能訓練或寫入／搬移歷史輸出；本輪未執行這些動作。
 
-| 檔案 | 說明 |
-|------|------|
-| `run_all_experiments.py` | 依序執行 experiments/ 各 phase |
-| `run_multi_seed.py` | 多 seed baseline |
-| `_run_both_splits.py` | 多資料集 × chronological / block_cv |
-| `_gen_exps.py` | 產生實驗檔輔助（開發用） |
-| `_write_common_dcs.py` | 寫入 `common_dcs` 模板（開發用） |
-
-### `analysis/`
-
-| 檔案 | 說明 |
-|------|------|
-| `compare_all_results.py` | 全資料集彙總 CSV |
-| `compare_baseline_ensemble.py` | Bankruptcy baseline + ensemble |
-| `statistical_test.py` | Wilcoxon 等顯著性檢定 |
-
-### `plots/`
-
-| 檔案 | 說明 |
-|------|------|
-| `visualize_results.py` | 通用結果視覺化 |
-| `phase1_baseline_plotting.py` | Phase1 共用繪圖函式（被其他腳本 import） |
-| `visualize_phase1_xgb_baseline.py` | Phase1 XGB 圖 |
-| `visualize_phase1_torch_mlp_baseline.py` | Phase1 Torch MLP 圖 |
-
-### `reports/`
-
-| 檔案 | 說明 |
-|------|------|
-| `generate_advisor_excel.py` | 指導教授報告 Excel |
-
-單一實驗請直接執行 `experiments/` 下對應腳本；流程與結果見 **docs/研究方向.md**。
+Phase 1 圖表 helper、資料準備、MOVER 修正與 TabNet 診斷保留；不僅因未列入 runner 就判定過時。完整範圍見[第四輪紀錄](../docs/第四輪整理紀錄_20261012.md)。

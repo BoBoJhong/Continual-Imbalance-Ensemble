@@ -1,0 +1,4 @@
+interface:
+  display_name: "本地論文修改"
+  short_description: "修改本地章節、核對研究來源與數據、編譯 PDF 並準備版本交接"
+  default_prompt: "使用 $thesis-local-edit 修改我指定的論文章節，核對數據與文獻，完成本地驗證並回報差異。"

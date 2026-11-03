@@ -244,7 +244,6 @@ def test_study3b_window_contract_and_fifo_shift():
     assert study3b.window_years(2012) == (2010, 2011, 2012)
     assert study3b.window_years(2012, width=1) == (2012,)
     assert study3b.window_years(2012, width=5) == (2008, 2009, 2010, 2011, 2012)
-    assert study3b.data_route_years(2014) == ((2010, 2011), (2012,))
 
 
 def test_sliding_old_new_moves_old_new_validation_and_test_together():
@@ -312,11 +311,28 @@ def test_study3b_test_labels_cannot_change_thresholds_or_protocol(monkeypatch):
 
 def test_study3b_fifo_reuses_overlap_and_fits_one_new_window(monkeypatch):
     _mock_study3b_models(monkeypatch)
+    fitted_years = []
+    original_fit = study3b._fit_window_model
+
+    def record_fit(data, features, years, *args, **kwargs):
+        fitted_years.append(years)
+        return original_fit(data, features, years, *args, **kwargs)
+
+    monkeypatch.setattr(study3b, "_fit_window_model", record_fit)
     data = _synthetic_event_history()
     pool = {}
     first = study3b._run_year(2008, data, ["x"], LOGGER, seed=7, model_pool=pool)
+    assert fitted_years == [(2002, 2003, 2004), (2003, 2004, 2005), (2004, 2005, 2006)]
     first_models = dict(pool)
     second = study3b._run_year(2009, data, ["x"], LOGGER, seed=7, model_pool=pool)
+    assert len(fitted_years) == 4
+    assert fitted_years[-1] == (2005, 2006, 2007)
+    for rows, predictions, audits, protocol in (first, second):
+        assert {row["method"] for row in rows} == {"Recent3y", "B_model_FIFO3_equal"}
+        assert {row["method"] for row in predictions} == {"Recent3y", "B_model_FIFO3_equal"}
+        assert len(audits) == 3
+        assert {row["route"] for row in audits} == {"B_model"}
+        assert not any(key.startswith("b_data") for key in protocol)
     assert set(first_models) == {2004, 2005, 2006}
     assert set(pool) == {2005, 2006, 2007}
     assert pool[2005] is first_models[2005]

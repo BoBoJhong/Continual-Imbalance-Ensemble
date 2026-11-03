@@ -1,0 +1,15 @@
+{
+  "name": "ncu-im-thesis-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Private NCU IM thesis browser bridge",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@playwright/mcp": "0.0.83"
+  },
+  "scripts": {
+    "mcp": "node scripts/start-playwright.mjs"
+  }
+}

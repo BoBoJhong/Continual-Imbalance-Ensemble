@@ -1,0 +1,54 @@
+{
+  "scope": [
+    "chapters/03_method.tex",
+    "chapters/appendix.tex",
+    "figures/experiment1-baseline.png",
+    "figures/experiment1-ensemble.png",
+    "figures/experiment2-fs-ensemble.png"
+  ],
+  "experiments": {
+    "實驗一": [
+      "Baseline",
+      "Old/New ensemble"
+    ],
+    "實驗二": [
+      "FS ensemble"
+    ]
+  },
+  "chapter_tables": 9,
+  "appendix_tables": 2,
+  "figures": 4,
+  "chapter_sha256": "1851c54248dd105eb1faa49df983ace0692abd2f5af90e5edd6cdefbb1017bf8",
+  "appendix_sha256": "e80d1bc0d0e8c5508f39b19e24e23f85e39af2296a95442c0b8e50712a935769",
+  "compile": "passed: desktop editor built-in compiler, after bibliography backend compatibility fix",
+  "static_validation": "passed",
+  "source_layout_validation": "passed; three XeLaTeX passes in no-PDF mode",
+  "figures_verified": [
+    {
+      "image": "figures/experiment1-baseline.png",
+      "size": [
+        2720,
+        1640
+      ],
+      "sha256": "941309b1cb66b47e75939bf965a0816b0ae4cc0e5cba36e8b342518a9f28f4b0"
+    },
+    {
+      "image": "figures/experiment1-ensemble.png",
+      "size": [
+        2720,
+        1640
+      ],
+      "sha256": "53399102fc93e588d0d6b55153a237743515860d71d2c8aa3398983b34d4ad7d"
+    },
+    {
+      "image": "figures/experiment2-fs-ensemble.png",
+      "size": [
+        2720,
+        1640
+      ],
+      "sha256": "9ff12a9a25c1d0464857e129a6ed03eb868556ca1965d109154af7d9b5139e0c"
+    }
+  ],
+  "no_visible_internal_filenames": true,
+  "compile_repair": "thesis/drafts/latex_preview_repair_20261027/repair.json"
+}

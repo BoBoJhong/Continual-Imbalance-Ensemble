@@ -1,0 +1,22 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{12\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.20\linewidth}@{}}
+\caption{六個模型池位置之分類器驗證結果}\label{tab:results-classifier-validation}\\
+\toprule
+驗證排名 & 分類器 & 驗證 AUC & 驗證 PR-AUC \\
+\midrule\endfirsthead
+\multicolumn{4}{c}{表~\thetable（續）}\\
+\toprule
+驗證排名 & 分類器 & 驗證 AUC & 驗證 PR-AUC \\
+\midrule\endhead
+\midrule\multicolumn{4}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+1 & Random Forest & 0.8538 & 0.0627 \\
+2 & Logistic Regression & 0.8330 & 0.0677 \\
+3 & XGBoost & 0.8314 & 0.0511 \\
+4 & LightGBM & 0.8260 & 0.0451 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究事件標籤 Baseline 實驗結果)\par 各值為 Old／New 與 Under、Over、Hybrid 共六個模型池位置、十個種子的 2014 年驗證平均，依驗證 AUC 排序；本表不使用 Test 分數。2014 年驗證資料只有 33 筆正類，排名差距須審慎解讀。}
+\endgroup

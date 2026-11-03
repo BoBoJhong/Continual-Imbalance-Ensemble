@@ -6,11 +6,6 @@ from ..utils import get_logger
 
 
 DEFAULT_DATA_DIR = Path(__file__).resolve().parents[2] / "data" / "raw"
-STOCK_COLUMNS = [
-    "Date", "Close", "High", "Low", "Open", "Volume", "Returns",
-    "Log_Returns", "SMA_5", "SMA_20", "SMA_60", "Volatility_20",
-    "RSI", "Future_Returns_20", "Crash_Event",
-]
 
 
 class DataLoader:
@@ -101,36 +96,6 @@ class DataLoader:
         
         return X, y
     
-    def load_stock(
-        self, 
-        file_path: Optional[str] = None
-    ) -> Tuple[pd.DataFrame, pd.Series]:
-        """
-        Load stock market crash prediction dataset.
-        
-        Args:
-            file_path: Path to stock data file
-            
-        Returns:
-            Tuple of (features DataFrame, target Series)
-        """
-        if file_path is None:
-            file_path = self.data_dir / "stock" / "stock_spx.csv"
-        
-        self.logger.info(f"Loading stock data from {file_path}")
-        
-        df = pd.read_csv(file_path, skiprows=2, names=STOCK_COLUMNS, header=None)
-        df = df.dropna(subset=["Crash_Event"])
-        y = pd.to_numeric(df["Crash_Event"], errors="raise").astype(int)
-        X = df.drop(columns=["Crash_Event", "Future_Returns_20"]).copy()
-        X["Year"] = pd.to_datetime(X.pop("Date"), errors="coerce").dt.year
-        for column in X.columns:
-            X[column] = pd.to_numeric(X[column], errors="coerce")
-        
-        self.logger.info(f"Loaded {len(df)} samples with {X.shape[1]} features")
-        self.logger.info(f"Class distribution: {y.value_counts().to_dict()}")
-        
-        return X, y
     
     def load_dataset(
         self, 
@@ -141,7 +106,7 @@ class DataLoader:
         Load dataset by name.
         
         Args:
-            dataset_name: Name of dataset ('bankruptcy', 'medical', 'stock')
+            dataset_name: Name of dataset ('bankruptcy', 'medical')
             file_path: Optional custom file path
             
         Returns:
@@ -149,8 +114,7 @@ class DataLoader:
         """
         loaders = {
             'bankruptcy': self.load_bankruptcy,
-            'medical': self.load_medical,
-            'stock': self.load_stock
+            'medical': self.load_medical
         }
         
         if dataset_name not in loaders:

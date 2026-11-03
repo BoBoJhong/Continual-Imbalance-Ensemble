@@ -613,6 +613,7 @@ def _run_one_output_dir(
     predict_batch_size: int,
     val_batch_size: int,
     logger,
+    split_labels_filter: list[str] | None = None,
 ) -> None:
     global OUTPUT_DIR, CHECKPOINT_PATH, PARTIAL_RAW_PATH
     OUTPUT_DIR = output_dir
@@ -698,8 +699,7 @@ def _run_one_output_dir(
         )
 
     logger.info("\n產出指標 pivot 表格...")
-    filter_labels = [lab for lab, _ in split_iter] if args.splits else None
-    format_tables(df_raw, logger, split_labels_filter=filter_labels)
+    format_tables(df_raw, logger, split_labels_filter=split_labels_filter)
 
     logger.info("\n產出精簡摘要（跨各 split 平均）...")
     export_compact_report(df_raw, logger)
@@ -851,6 +851,7 @@ def main():
         _run_one_output_dir(
             out_dir,
             split_iter=split_iter,
+            split_labels_filter=[lab for lab, _ in split_iter] if args.splits else None,
             use_tuning=use_tune,
             n_tune_iter=runtime["tune_n_iter"],
             device=args.device,

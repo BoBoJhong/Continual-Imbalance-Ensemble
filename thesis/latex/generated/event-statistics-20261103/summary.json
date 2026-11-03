@@ -1,0 +1,13 @@
+{
+  "analysis_directory": "results/statistical_tests/fixed_two_experiments_event/20261031T120706072983Z",
+  "replicates": 9999,
+  "n_tests": 165,
+  "rejected_by_experiment_metric": {
+    "experiment1/AUC": 3,
+    "experiment1/F1": 3,
+    "experiment1/Recall": 6,
+    "experiment2/AUC": 1,
+    "experiment2/F1": 0,
+    "experiment2/Recall": 32
+  }
+}

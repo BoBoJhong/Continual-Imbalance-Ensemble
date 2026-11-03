@@ -1,0 +1,452 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "scope": "11 reports/audits relocated; Markdown link targets rebased; numerical text and JSON contents preserved.",
+  "entries": [
+    {
+      "original_path": "docs/每週研究成果_20260921-20260927.md",
+      "new_path": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_sha256": "16bc1917d43bbe9da3cb72bc942648a105fe158d37061ebf4ce234d260b60935",
+      "new_sha256": "d63c529cb24d78b60bff1b69ddfe249de5ebff539a58ca9022a7bbbecec3af62",
+      "change": "Markdown link targets only",
+      "report_text_preserved": true
+    },
+    {
+      "original_path": "docs/滑動視窗三階段實驗_週報簡版_20260929.md",
+      "new_path": "docs/reports/2026-09/滑動視窗三階段實驗_週報簡版_20260929.md",
+      "original_sha256": "a1c011c9d401690b4645765e9e402f5b3417909305d7edaf9b3fbb0db053ca4a",
+      "new_sha256": "a1c011c9d401690b4645765e9e402f5b3417909305d7edaf9b3fbb0db053ca4a",
+      "change": "Markdown link targets only",
+      "report_text_preserved": true
+    },
+    {
+      "original_path": "docs/滑動視窗三階段實驗成果報告_20260929.md",
+      "new_path": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_sha256": "2aa13a744a2b571af983e51e6b8a82321465ce2fb66ffc5c21d8affcb62833fd",
+      "new_sha256": "d7a90fdfd9fa4045e6511e12ecf27a3cfd31c5ce1a300b97d81a364ce5a54271",
+      "change": "Markdown link targets only",
+      "report_text_preserved": true
+    },
+    {
+      "original_path": "docs/滑動視窗三階段實驗成果報告_20260929_查核.json",
+      "new_path": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929_查核.json",
+      "original_sha256": "4960437d54edb66407e139675d107826f074fe092b42ce5b57d9b3235ba42087",
+      "new_sha256": "4960437d54edb66407e139675d107826f074fe092b42ce5b57d9b3235ba42087",
+      "change": "byte-identical JSON",
+      "report_text_preserved": true
+    },
+    {
+      "original_path": "docs/實驗總整理_資料分析報告_20261001.md",
+      "new_path": "docs/reports/2026-10/實驗總整理_資料分析報告_20261001.md",
+      "original_sha256": "708b5c41929691352a21aa3de3f75653e71222c11bded75397d83488802df5f2",
+      "new_sha256": "708b5c41929691352a21aa3de3f75653e71222c11bded75397d83488802df5f2",
+      "change": "Markdown link targets only",
+      "report_text_preserved": true
+    },
+    {
+      "original_path": "docs/研究正確性與程式碼審查報告.md",
+      "new_path": "docs/audits/2026-09/研究正確性與程式碼審查報告.md",
+      "original_sha256": "e25c2052202de7dd83f6f464cff427ededbf5de7dcf52f3062794d66b9d8d7c1",
+      "new_sha256": "699c50c0c7e421bcdb7b68bd9208636058aee4e3901ce3962a0337d677ddaa49",
+      "change": "Markdown link targets only",
+      "report_text_preserved": true
+    },
+    {
+      "original_path": "docs/論文與實作完整性審查_20260911.md",
+      "new_path": "docs/audits/2026-09/論文與實作完整性審查_20260911.md",
+      "original_sha256": "ebc291a473c312ca8c929e91f279d173e291125b88a3eb12c7a6222f46a1f91d",
+      "new_sha256": "b359ec854d4b3eca71a7dfe60db353efa279f2ce306c89ef1b960d3b1802507a",
+      "change": "Markdown link targets only",
+      "report_text_preserved": true
+    },
+    {
+      "original_path": "docs/論文收斂深度審查_20260921.md",
+      "new_path": "docs/audits/2026-09/論文收斂深度審查_20260921.md",
+      "original_sha256": "173b9641615245b6a66cf4e8e6f0cedd7e4032d21eeddadb771e4641658d12a6",
+      "new_sha256": "81132cd60b6b3b6e3bd3c8db2981fdd0c5281562d8451f79136ad8a704ea2b5a",
+      "change": "Markdown link targets only",
+      "report_text_preserved": true
+    },
+    {
+      "original_path": "docs/原始實驗方向符合性核對_20261005.md",
+      "new_path": "docs/audits/2026-10/原始實驗方向符合性核對_20261005.md",
+      "original_sha256": "f0e9efcfac3aa05f120ac4c3de7e2f4c8ab5a97847c683def462dd6d3b6c4df6",
+      "new_sha256": "a3b7cf705fc07e06854eea73e8441de9db17eceac4efa4bda057e8c9ad928326",
+      "change": "Markdown link targets only",
+      "report_text_preserved": true
+    },
+    {
+      "original_path": "docs/三階段實驗切割與有效性審查_20261006.md",
+      "new_path": "docs/audits/2026-10/三階段實驗切割與有效性審查_20261006.md",
+      "original_sha256": "fad0f212bdeb44fea62d9f623f29d7810827d65717b04f7cc142af9d9e827140",
+      "new_sha256": "fad0f212bdeb44fea62d9f623f29d7810827d65717b04f7cc142af9d9e827140",
+      "change": "Markdown link targets only",
+      "report_text_preserved": true
+    },
+    {
+      "original_path": "docs/phase123_split_audit_20261006.json",
+      "new_path": "docs/audits/2026-10/phase123_split_audit_20261006.json",
+      "original_sha256": "575f221954272122266d7e592baa4789670757a5b9bc35f8e2e76c2e3eb56d34",
+      "new_sha256": "575f221954272122266d7e592baa4789670757a5b9bc35f8e2e76c2e3eb56d34",
+      "change": "byte-identical JSON",
+      "report_text_preserved": true
+    }
+  ],
+  "link_changes": [
+    {
+      "document": "thesis/README.md",
+      "original_target": "docs/論文收斂深度審查_20260921.md",
+      "new_target": "docs/audits/2026-09/論文收斂深度審查_20260921.md"
+    },
+    {
+      "document": "thesis/README.md",
+      "original_target": "docs/三階段實驗切割與有效性審查_20261006.md",
+      "new_target": "docs/audits/2026-10/三階段實驗切割與有效性審查_20261006.md"
+    },
+    {
+      "document": "docs/README.md",
+      "original_target": "docs/三階段實驗切割與有效性審查_20261006.md",
+      "new_target": "docs/audits/2026-10/三階段實驗切割與有效性審查_20261006.md"
+    },
+    {
+      "document": "docs/README.md",
+      "original_target": "docs/論文收斂深度審查_20260921.md",
+      "new_target": "docs/audits/2026-09/論文收斂深度審查_20260921.md"
+    },
+    {
+      "document": "docs/README.md",
+      "original_target": "docs/滑動視窗三階段實驗成果報告_20260929.md",
+      "new_target": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md"
+    },
+    {
+      "document": "docs/README.md",
+      "original_target": "docs/滑動視窗三階段實驗_週報簡版_20260929.md",
+      "new_target": "docs/reports/2026-09/滑動視窗三階段實驗_週報簡版_20260929.md"
+    },
+    {
+      "document": "docs/README.md",
+      "original_target": "docs/實驗總整理_資料分析報告_20261001.md",
+      "new_target": "docs/reports/2026-10/實驗總整理_資料分析報告_20261001.md"
+    },
+    {
+      "document": "docs/README.md",
+      "original_target": "docs/每週研究成果_20260921-20260927.md",
+      "new_target": "docs/reports/2026-09/每週研究成果_20260921-20260927.md"
+    },
+    {
+      "document": "docs/README.md",
+      "original_target": "docs/原始實驗方向符合性核對_20261005.md",
+      "new_target": "docs/audits/2026-10/原始實驗方向符合性核對_20261005.md"
+    },
+    {
+      "document": "docs/README.md",
+      "original_target": "docs/研究正確性與程式碼審查報告.md",
+      "new_target": "docs/audits/2026-09/研究正確性與程式碼審查報告.md"
+    },
+    {
+      "document": "docs/README.md",
+      "original_target": "docs/論文與實作完整性審查_20260911.md",
+      "new_target": "docs/audits/2026-09/論文與實作完整性審查_20260911.md"
+    },
+    {
+      "document": "docs/Study3_B路線_重疊窗口持續集成提案.md",
+      "original_target": "docs/研究正確性與程式碼審查報告.md",
+      "new_target": "docs/audits/2026-09/研究正確性與程式碼審查報告.md"
+    },
+    {
+      "document": "docs/audits/2026-10/三階段實驗切割與有效性審查_20261006.md",
+      "original_target": "docs/phase123_split_audit_20261006.json",
+      "new_target": "docs/audits/2026-10/phase123_split_audit_20261006.json"
+    },
+    {
+      "document": "docs/三階段流程圖圖說.md",
+      "original_target": "docs/三階段實驗切割與有效性審查_20261006.md",
+      "new_target": "docs/audits/2026-10/三階段實驗切割與有效性審查_20261006.md"
+    },
+    {
+      "document": "docs/audits/2026-10/原始實驗方向符合性核對_20261005.md",
+      "original_target": "docs/固定年份標準動態集成與FS修正_20261005.md",
+      "new_target": "docs/固定年份標準動態集成與FS修正_20261005.md"
+    },
+    {
+      "document": "docs/實驗索引.md",
+      "original_target": "docs/三階段實驗切割與有效性審查_20261006.md",
+      "new_target": "docs/audits/2026-10/三階段實驗切割與有效性審查_20261006.md"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/seed_42/by_year.csv",
+      "new_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/seed_42/by_year.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/seed_42/pooled.csv",
+      "new_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/seed_42/pooled.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/analysis/20260920T194618884788Z/analysis_manifest.json",
+      "new_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/analysis/20260920T194618884788Z/analysis_manifest.json"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/protocol.csv",
+      "new_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/protocol.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "results/phase_flexible/study3b_oldnew_ratio_sensitivity/runs/20260921T053146649843Z/seed_42/pooled.csv",
+      "new_target": "results/phase_flexible/study3b_oldnew_ratio_sensitivity/runs/20260921T053146649843Z/seed_42/pooled.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "results/phase_flexible/study3b_oldnew_ratio_sensitivity/runs/20260921T053146649843Z/analysis/20260921T054300697290Z/analysis_manifest.json",
+      "new_target": "results/phase_flexible/study3b_oldnew_ratio_sensitivity/runs/20260921T053146649843Z/analysis/20260921T054300697290Z/analysis_manifest.json"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "results/research_audit/20260921T152159934045Z/audit.json",
+      "new_target": "results/research_audit/20260921T152159934045Z/audit.json"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "results/research_audit/20260921T152159934045Z/independent_metrics.csv",
+      "new_target": "results/research_audit/20260921T152159934045Z/independent_metrics.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "thesis/THESIS_FULL.md",
+      "new_target": "thesis/THESIS_FULL.md"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "docs/論文收斂深度審查_20260921.md",
+      "new_target": "docs/audits/2026-09/論文收斂深度審查_20260921.md"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "docs/研究方向.md",
+      "new_target": "docs/研究方向.md"
+    },
+    {
+      "document": "docs/reports/2026-09/每週研究成果_20260921-20260927.md",
+      "original_target": "docs/研究成果與未來研究方向報告.md",
+      "new_target": "docs/研究成果與未來研究方向報告.md"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/manifest.json",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/manifest.json"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_42/summary.csv",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_42/summary.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_42/by_year.csv",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_42/by_year.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_42/predictions.csv.gz",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_42/predictions.csv.gz"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_42/training_audit.csv",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_42/training_audit.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_123/summary.csv",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_123/summary.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_123/by_year.csv",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_123/by_year.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_123/predictions.csv.gz",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_123/predictions.csv.gz"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_123/training_audit.csv",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_123/training_audit.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_456/summary.csv",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_456/summary.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_456/by_year.csv",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_456/by_year.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_456/predictions.csv.gz",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_456/predictions.csv.gz"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_456/training_audit.csv",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/seed_456/training_audit.csv"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "experiments/phase_flexible/study3b_full_pipeline.py",
+      "new_target": "experiments/phase_flexible/study3b_full_pipeline.py"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "scripts/reports/build_study3b_advisor_report.py",
+      "new_target": "scripts/reports/build_study3b_advisor_report.py"
+    },
+    {
+      "document": "docs/reports/2026-09/滑動視窗三階段實驗成果報告_20260929.md",
+      "original_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/manual_spreadsheets/20260929T044459350115Z.zip",
+      "new_target": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/manual_spreadsheets/20260929T044459350115Z.zip"
+    },
+    {
+      "document": "docs/研究成果與未來研究方向報告.md",
+      "original_target": "docs/每週研究成果_20260921-20260927.md",
+      "new_target": "docs/reports/2026-09/每週研究成果_20260921-20260927.md"
+    },
+    {
+      "document": "docs/研究成果與未來研究方向報告.md",
+      "original_target": "docs/論文收斂深度審查_20260921.md",
+      "new_target": "docs/audits/2026-09/論文收斂深度審查_20260921.md"
+    },
+    {
+      "document": "docs/研究成果與未來研究方向報告.md",
+      "original_target": "docs/論文與實作完整性審查_20260911.md",
+      "new_target": "docs/audits/2026-09/論文與實作完整性審查_20260911.md"
+    },
+    {
+      "document": "docs/研究方向.md",
+      "original_target": "docs/三階段實驗切割與有效性審查_20261006.md",
+      "new_target": "docs/audits/2026-10/三階段實驗切割與有效性審查_20261006.md"
+    },
+    {
+      "document": "docs/研究方向.md",
+      "original_target": "docs/phase123_split_audit_20261006.json",
+      "new_target": "docs/audits/2026-10/phase123_split_audit_20261006.json"
+    },
+    {
+      "document": "docs/研究方向.md",
+      "original_target": "docs/原始實驗方向符合性核對_20261005.md",
+      "new_target": "docs/audits/2026-10/原始實驗方向符合性核對_20261005.md"
+    },
+    {
+      "document": "docs/研究方向.md",
+      "original_target": "docs/每週研究成果_20260921-20260927.md",
+      "new_target": "docs/reports/2026-09/每週研究成果_20260921-20260927.md"
+    },
+    {
+      "document": "docs/研究方向.md",
+      "original_target": "docs/論文收斂深度審查_20260921.md",
+      "new_target": "docs/audits/2026-09/論文收斂深度審查_20260921.md"
+    },
+    {
+      "document": "docs/研究方向.md",
+      "original_target": "docs/研究正確性與程式碼審查報告.md",
+      "new_target": "docs/audits/2026-09/研究正確性與程式碼審查報告.md"
+    },
+    {
+      "document": "docs/研究方向.md",
+      "original_target": "docs/論文與實作完整性審查_20260911.md",
+      "new_target": "docs/audits/2026-09/論文與實作完整性審查_20260911.md"
+    },
+    {
+      "document": "docs/audits/2026-09/研究正確性與程式碼審查報告.md",
+      "original_target": "docs/Study3_B路線_重疊窗口持續集成提案.md",
+      "new_target": "docs/Study3_B路線_重疊窗口持續集成提案.md"
+    },
+    {
+      "document": "docs/audits/2026-09/論文收斂深度審查_20260921.md",
+      "original_target": "scripts/analysis/audit_thesis_convergence.py",
+      "new_target": "scripts/analysis/audit_thesis_convergence.py"
+    },
+    {
+      "document": "docs/audits/2026-09/論文收斂深度審查_20260921.md",
+      "original_target": "results/research_audit/20260921T152159934045Z/audit.json",
+      "new_target": "results/research_audit/20260921T152159934045Z/audit.json"
+    },
+    {
+      "document": "docs/audits/2026-09/論文收斂深度審查_20260921.md",
+      "original_target": "results/research_audit/20260921T152159934045Z/independent_metrics.csv",
+      "new_target": "results/research_audit/20260921T152159934045Z/independent_metrics.csv"
+    },
+    {
+      "document": "docs/audits/2026-09/論文收斂深度審查_20260921.md",
+      "original_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/manifest.json",
+      "new_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/manifest.json"
+    },
+    {
+      "document": "docs/audits/2026-09/論文收斂深度審查_20260921.md",
+      "original_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/analysis/20260920T194618884788Z/analysis_manifest.json",
+      "new_target": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/analysis/20260920T194618884788Z/analysis_manifest.json"
+    },
+    {
+      "document": "docs/audits/2026-09/論文收斂深度審查_20260921.md",
+      "original_target": "results/phase_flexible/study3b_oldnew_ratio_sensitivity/runs/20260921T053146649843Z/manifest.json",
+      "new_target": "results/phase_flexible/study3b_oldnew_ratio_sensitivity/runs/20260921T053146649843Z/manifest.json"
+    },
+    {
+      "document": "docs/audits/2026-09/論文收斂深度審查_20260921.md",
+      "original_target": "results/phase_flexible/study3b_oldnew_ratio_sensitivity/runs/20260921T053146649843Z/analysis/20260921T054300697290Z/analysis_manifest.json",
+      "new_target": "results/phase_flexible/study3b_oldnew_ratio_sensitivity/runs/20260921T053146649843Z/analysis/20260921T054300697290Z/analysis_manifest.json"
+    },
+    {
+      "document": "docs/audits/2026-09/論文收斂深度審查_20260921.md",
+      "original_target": "experiments/phase4_drift/bankruptcy_ross_validation.py",
+      "new_target": "experiments/phase4_drift/bankruptcy_ross_validation.py"
+    },
+    {
+      "document": "docs/audits/2026-09/論文收斂深度審查_20260921.md",
+      "original_target": "results/phase4_drift/bk_validation_ross_candidates.csv",
+      "new_target": "results/phase4_drift/bk_validation_ross_candidates.csv"
+    },
+    {
+      "document": "docs/audits/2026-09/論文與實作完整性審查_20260911.md",
+      "original_target": "experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py",
+      "new_target": "experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py"
+    },
+    {
+      "document": "docs/audits/2026-09/論文與實作完整性審查_20260911.md",
+      "original_target": "experiments/phase_flexible/study3b_continual_runtime.py",
+      "new_target": "experiments/phase_flexible/study3b_continual_runtime.py"
+    },
+    {
+      "document": "docs/audits/2026-09/論文與實作完整性審查_20260911.md",
+      "original_target": "results/phase_flexible/study3_ab_fair/runs/20260909T122839561377Z/seed_42/fair_predictions.csv",
+      "new_target": "results/phase_flexible/study3_ab_fair/runs/20260909T122839561377Z/seed_42/fair_predictions.csv"
+    },
+    {
+      "document": "docs/audits/2026-09/論文與實作完整性審查_20260911.md",
+      "original_target": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T175100152579Z/",
+      "new_target": "results/phase_flexible/study3b_sampling_ablation/analysis/20260910T175100152579Z/"
+    },
+    {
+      "document": "docs/audits/2026-09/論文與實作完整性審查_20260911.md",
+      "original_target": "results/phase_flexible/study3b_pool_ablation/analysis/20260910T181408321502Z/",
+      "new_target": "results/phase_flexible/study3b_pool_ablation/analysis/20260910T181408321502Z/"
+    },
+    {
+      "document": "docs/audits/2026-09/論文與實作完整性審查_20260911.md",
+      "original_target": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/",
+      "new_target": "results/phase_flexible/study3b_window_ablation/analysis/20260911T021739729683Z/"
+    },
+    {
+      "document": "docs/audits/2026-09/論文與實作完整性審查_20260911.md",
+      "original_target": "results/phase_flexible/study3_ab_fair/runs/20260909T122839561377Z/seed_42/paired_company_cluster_bootstrap.csv",
+      "new_target": "results/phase_flexible/study3_ab_fair/runs/20260909T122839561377Z/seed_42/paired_company_cluster_bootstrap.csv"
+    }
+  ]
+}

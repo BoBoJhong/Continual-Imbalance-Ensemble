@@ -53,12 +53,6 @@ def main():
     logger.info("=" * 70 + "\nBankruptcy  (Re-training)\n" + "=" * 70)
     _run_and_save("bankruptcy", *get_bankruptcy_splits(logger, split_mode=SPLIT_MODE), logger)
 
-    for ds in ["stock_spx", "stock_dji", "stock_ndx"]:
-        logger.info("=" * 70 + f"\n{ds.upper()}  (Re-training)\n" + "=" * 70)
-        try:
-            _run_and_save(ds, *get_splits(ds, logger, split_mode=SPLIT_MODE), logger)
-        except Exception as e:
-            logger.error(f"[ERROR] {ds}: {e}")
 
     logger.info("=" * 70 + "\nMedical  (Re-training)\n" + "=" * 70)
     try:

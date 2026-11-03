@@ -1,0 +1,9 @@
+{
+  "project_id": "6acef24f1aecda6740296760",
+  "observed_at_utc": "2026-10-14T16:24:14.597719+00:00",
+  "sha256": {
+    "chapters/03_method.tex": "c00aff0e966fd95931a40a1fcdea9d1f8575b8f2f87e0f96373b2d4dc6fe7206"
+  },
+  "backup_archive_sha256": "5cbb197cee35234cef433160a000908aa6f0c708f1cbc9ffa940777e0f2f572b",
+  "evidence": "Local comparison of a provided full backup; not live browser verification."
+}

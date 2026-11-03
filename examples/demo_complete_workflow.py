@@ -193,7 +193,7 @@ def main():
     print("🎉 示範完成！")
     print("="*60)
     print("\n下一步:")
-    print("1. 下載真實資料集 (Bankruptcy, Stock, Medical)")
+    print("1. 下載真實資料集 (Bankruptcy, Medical)")
     print("2. 使用 notebooks/ 進行資料探索")
     print("3. 調整 config/ 中的參數")
     print("4. 開始正式實驗！")

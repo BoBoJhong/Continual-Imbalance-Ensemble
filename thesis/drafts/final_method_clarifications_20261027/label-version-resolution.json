@@ -1,0 +1,15 @@
+{
+  "old_new_common_fields_equal_after_year_rename": false,
+  "years_old": [
+    1999,
+    2018
+  ],
+  "years_new": [
+    1999,
+    2018
+  ],
+  "old_positive_company_years_before_last_year": 4611,
+  "failed_company_count": 609,
+  "classification_target": "released company-level status repeated across observed years; no supplied event date or year-specific event label",
+  "year_specific_event_target_reconstructed": false
+}

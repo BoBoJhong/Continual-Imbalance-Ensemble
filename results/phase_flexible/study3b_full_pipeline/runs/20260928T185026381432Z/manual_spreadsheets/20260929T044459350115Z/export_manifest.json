@@ -1,0 +1,20 @@
+{
+  "completed_seeds": [
+    42,
+    123,
+    456
+  ],
+  "methods": 81,
+  "source_sha256": {
+    "seed_42\\summary.csv": "b9a7851f20b2bfaba665715c96611256ea9bd896d153e2ad1f87b1456f205374",
+    "seed_42\\by_year.csv": "57f03f5a15da6dfc9c40a1ec9332189c6def887dbab4bbe410828c753c75b620",
+    "seed_123\\summary.csv": "7c0a9705e45202079db482de28a78364795e0f3cce90fd755a71fcf200e05f8c",
+    "seed_123\\by_year.csv": "6b10a5d0965079717dd88aa8fb0148d18efb9cbab2bb54398627231895ab056e",
+    "seed_456\\summary.csv": "7b3a386511efa23902ed55ff86e035d5dc728fce0bce53c9801ad0817f472013",
+    "seed_456\\by_year.csv": "385dfc77f60ab90592c542a76abcf38c49a5eade22d298f316c2a782a1ac0679"
+  },
+  "exporter_sha256": "a96f249ad80bbac25252dbd7f38baa0d412abe035f40bdd469fabf83adb33a8f",
+  "unique_method_partition": true,
+  "sampling_pivots_verified": true,
+  "csv_files": 312
+}

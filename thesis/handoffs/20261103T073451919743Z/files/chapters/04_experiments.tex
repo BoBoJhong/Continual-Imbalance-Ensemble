@@ -1,0 +1,154 @@
+\chapter{實驗結果與討論}\label{chap:results}
+\begingroup
+\setlength{\emergencystretch}{2em}
+
+\section{結果範圍與閱讀方式}
+
+本章主要結果使用第~\ref{sec:method-label}~節定義的事件標籤。第~\ref{sec:results-deep-reference}~節另暫列 TabM 與 TabICL 的既有最終狀態標籤結果，其標籤、驗證方式及彙整口徑不同，並於表名與表下注明。除另行標示的深度學習既有結果外，事件標籤的 Baseline、集成與 FS 共用相同資料列、擬合年份與 Test：2015--2018 年共 12,282 筆紀錄、3,700 家公司，其中 119 筆為事件，各屬一家破產公司。事件結果表的分數為合併四年結果（pooled）的十種子平均，並附種子標準差；粗體只標示表定範圍內較高的數值。
+
+事件標籤已完成以公司為單位、9,999 次重抽的配對分析，兩項實驗的 165 項檢定共同採 Holm 校正；摘要見第~\ref{sec:results-event-statistics}~節，完整結果見附錄~\ref{sec:event-stats-full}。Baseline 與集成的參數與驗證資料不同，其比較仍屬描述性。第~\ref{sec:results-label}~節另以最終狀態標籤對照，該標籤的 49,999 次重抽與 165 項校正另成一個分析家族，列於附錄~\ref{sec:stats-full}。
+
+\section{實驗一：Baseline 比較}\label{sec:results-baseline}
+
+表~\ref{tab:results-baseline} 列出四種分類器在三種訓練策略下的結果。每一列平均四種採樣與十個種子；超參數與門檻都由 2014 年驗證資料決定，各採樣的完整結果見附錄~\ref{sec:results-baseline-full}。
+
+\input{generated/event-results-20261103/event-baseline-summary.tex}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/event-baseline-strategies.png}
+\caption{事件標籤下各分類器之訓練策略比較}\label{fig:results-baseline}
+\par\smallskip{\footnotesize (資料來源：本研究依表~\ref{tab:results-baseline}之完整精度結果繪製)\par 各點為四種採樣與十個種子之平均。各指標刻度不同；點位不含信賴區間，分類器依固定順序排列。\par}
+\end{figure}
+
+近期資料的優勢並非在所有分類器都出現。XGBoost 與 LightGBM 的 New AUC 分別為 0.8272 與 0.8646，高於 Old 的 0.8125 與 0.8123；Random Forest 則以 Retrain 的 0.8543 最高，Old 的 0.8437 也高於 New 的 0.8389。Logistic Regression 三種策略的 AUC 都約為 0.769。F1-score 方面，XGBoost、LightGBM 與 Random Forest 都以 New 最高，Logistic Regression 則以 Old 最高。因此，資料期間的影響須與分類器一起判讀，不能概括為「近期資料一定較好」。
+
+表~\ref{tab:results-classifier-validation} 只使用驗證資料，比較四種分類器在集成池六個位置上的表現。Random Forest 的驗證 AUC 為 0.8538，其次為 Logistic Regression 0.8330、XGBoost 0.8314 與 LightGBM 0.8260。Logistic Regression 的驗證排名較前，但 Test AUC 最低，顯示本次驗證排名未直接延續至測試期；驗證資料只有 33 筆事件，可能增加排名的不確定性，但本研究未分離其與模型、期間變化的影響。本研究不據此改換集成基底，也不宣稱 XGBoost 為最佳分類器。
+
+\input{generated/event-results-20261103/event-classifier-validation.tex}
+
+\subsection{TabM 與 TabICL 既有結果（暫列）}\label{sec:results-deep-reference}
+
+為保留六分類器的完整研究架構，表~\ref{tab:deep-reference-summary} 先放入 TabM 與 TabICL 的既有結果。這批數字預測的是公司最終狀態，使用 15 組 Old／New 訓練邊界與各自的舊驗證程序，並非前表的事件標籤實驗；事件數據待重跑後更新。
+
+\input{generated/deep-baseline-reference-20261103/summary.tex}
+
+Old 與 New 各彙整 60 筆設定紀錄，即 15 個邊界乘四種採樣；Retrain 僅有四筆，不複製為 15 組。這些設定共用測試期間，且訓練資料重疊，不是 60 次或 15 次獨立重複，也沒有可據以報告的十種子標準差。此處先保留三種策略及三項指標的紀錄，不將其與事件表的分數高低解讀為分類器優劣。各採樣明細與後端限制列於附錄~\ref{sec:deep-reference-details}。
+
+\section{實驗一：Old／New 集成比較}\label{sec:results-experiment1}
+
+\subsection{六個基礎模型與靜態成員數}
+
+表~\ref{tab:results-pool-models} 為池內六個 XGBoost 模型的結果。三個 New 模型的 AUC 都約為 0.83；Old\_over 與 Old\_hybrid 只有 0.6844 與 0.6874，F1-score 也僅 0.0227 與 0.0260。Old\_under 的 AUC 為 0.7812，是三個 Old 模型中最高者。成員品質差異明顯，後續的集成結果應連同成員本身解讀。
+
+\input{generated/event-results-20261103/event-pool-models.tex}
+
+\input{generated/event-results-20261103/event-static-size.tex}
+
+表~\ref{tab:results-static-size} 依成員數平均 49 個混合候選。兩模型到六模型候選的平均 AUC 介於 0.7846 與 0.7881，差距很小；這些平均涵蓋不同組合，不能解釋為只改變成員數的效果。V-static 仍由 Calibration AP 選擇，不依本表決定成員數。
+
+\subsection{集成方法比較}
+
+表~\ref{tab:results-ensemble} 與圖~\ref{fig:results-ensemble} 比較八種集成方法。Old3 與 New3 各整合同一期間的三個模型，Equal6 平均全部六模型，V-static 依各種子的 Calibration AP 從 49 個混合子集選定成員；四種動態方法使用相同模型池與 DSEL。
+
+\input{generated/event-results-20261103/event-ensemble.tex}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/event-ensemble-comparison.png}
+\caption{事件標籤下未進行 FS 之集成方法比較}\label{fig:results-ensemble}
+\par\smallskip{\footnotesize (資料來源：本研究事件標籤集成實驗結果)\par 點為合併四年測試指標的十種子平均，線段為種子標準差，並非公司重抽樣的信賴區間。各指標刻度不同，方法順序不依測試分數排列。\par}
+\end{figure}
+
+New3 的平均 AUC 最高，為 0.8601；V-static 為 0.8472，但 PR-AUC 與 F1-score 最高，分別為 0.1252 與 0.1795。十個種子的 V-static 都選中 Old\_under 與 New\_under 兩個模型，等於只保留各期間表現最好的一個成員。相對地，Equal6 的 AUC 為 0.7881，低於 New3，顯示把兩個較弱的 Old 模型一起等權平均，會拉低整體排序能力。Old3 的 F1-score 與 Recall 僅 0.0199 與 0.0168，幾乎無法辨識事件。
+
+動態方法沒有超過 New3 或 V-static。DCS-OLA 與 DCS-LCA 的 AUC 都是 0.7450；KNORA-E 為 0.7859，與 Equal6 相近。KNORA-U 與兩種 DCS 的平均 Recall 雖高於 0.38，但種子標準差超過 0.21，F1-score 也偏低，代表判為事件的紀錄中誤報很多，且結果隨種子變動大。
+
+綜合而言，在本次六模型池中，New3 的平均 AUC 與 V-static 的平均 F1-score 分別較高，納入全部成員與使用動態選擇未在這兩項指標上取得最高平均值。公司配對檢定支持兩者相對 Equal6 的 AUC 增加，但 V-static 的 F1-score 增加未通過 165 項 Holm 校正，詳見第~\ref{sec:results-event-statistics}~節。本研究沒有將成員品質與整合規則分開控制，因而不比較兩種因素的相對重要性。
+
+\subsection{與 Baseline 的公平比較}
+
+集成池的六個 XGBoost 使用預設參數，即 Baseline 搜尋中的候選 0；Baseline 則從 24 組候選中選參。表~\ref{tab:results-tuning-gap} 以相同資料列、標籤、擬合期間與採樣對照兩者。
+
+\input{generated/event-results-20261103/event-tuning-gap.tex}
+
+調參在五個位置提高 AUC，例如 Old\_under 由 0.7812 提高到 0.8710，Old\_hybrid 由 0.6874 提高到 0.7544；New\_under 則由 0.8311 降為 0.7965，表示依 33 筆事件選出的參數未必在 Test 較好。調參後的單一模型亦有接近或高於集成的描述性分數，例如 LightGBM New 的平均 AUC 為 0.8646，Random Forest Retrain 為 0.8543，兩個描述性平均值均高於 V-static 的 0.8472；前者為四種採樣的平均，不能當成單一可部署模型，也未作此跨設定差異的顯著性或等效檢定。
+
+因此，Baseline 與集成之間的分數差同時包含參數、驗證資料（完整 2014 年或其中一半）與分類器的差異，不能全部歸因於集成本身。本研究可以比較的是同一模型池內的整合方式；集成能否優於調參後的單一分類器，需要以調參後的成員重建模型池才能回答。
+
+\subsection{不同測試年度的表現}
+
+\input{generated/event-results-20261103/event-ensemble-yearly.tex}
+
+表~\ref{tab:results-ensemble-yearly} 分開列出四個測試年度。New3 在 2015 與 2016 年的 AUC 最高，V-static 則在 2017 與 2018 年最高，分別為 0.8917 與 0.8651。各年只有 21 至 36 筆事件，年度間的排名變動可能受少數樣本影響；本表不把四年當成四次獨立實驗，也不據此推論特定景氣因素。
+
+\section{實驗二：FS 集成比較}\label{sec:results-experiment2}
+
+八種 FS 條件分別與相同種子、測試樣本及集成方法的 no-FS 結果配對。50\% 與 80\% 分別保留 9 與 14 個特徵，精簡率為 50.00\% 與 22.22\%；各條件都重新訓練模型，並依相同 Calibration 規則決定成員與門檻。表~\ref{tab:results-fs-auc}、表~\ref{tab:results-fs-f1} 與表~\ref{tab:results-fs-recall} 列出完整結果。
+
+\input{generated/event-results-20261103/event-fs-auc.tex}
+\input{generated/event-results-20261103/event-fs-f1.tex}
+\input{generated/event-results-20261103/event-fs-recall.tex}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/event-fs-auc-differences.png}
+\caption{事件標籤下各 FS 條件相對同方法 no-FS 之 AUC 差值}\label{fig:results-fs-differences}
+\par\smallskip{\footnotesize (資料來源：本研究事件標籤 FS 集成實驗結果)\par 每格為十種子平均的 FS 減 no-FS，正值表示增加、負值表示下降。色彩只表示差值方向與大小，不表示統計顯著；50\%／80\% 分別實際保留 9／14 個特徵。\par}
+\end{figure}
+
+圖~\ref{fig:results-fs-differences} 顯示，多數 FS 條件降低 Equal6 與四種動態方法的 AUC，其中 SHAP 50\% 在六種方法都下降，降幅介於 0.0275 與 0.0587。V-static 在六個條件下 AUC 略增，最大為 RFE 80\% 的 0.0107；Equal6 與 KNORA-U 在 MI 80\% 與 SHAP 80\%、KNORA-E 在 SHAP 80\% 也有小幅增加。整體而言，保留 14 個特徵的條件較接近 no-FS，刪去一半特徵時下降較多。
+
+F1-score 與 Recall 的方向依方法而異。V-static 在八個 FS 條件下的 F1-score 都低於 no-FS，降幅介於 0.0046 與 0.0399。Equal6 的 Recall 在八個條件都提高，增幅介於 0.0857 與 0.3244；兩種 DCS 則全部下降，但其 no-FS Recall 的種子標準差已超過 0.25，差值不宜單獨解讀。V-static 在 FS 後會重新選擇成員，例如 MI 50\% 只有五個種子仍選 Old\_under 與 New\_under，SHAP 50\% 只有四個種子，因此其變化包含整個選模流程，而非只反映特徵減少。
+
+本實驗未出現在多數方法與指標上一致改善的 FS 條件。FS 能把輸入由 18 個減為 9 或 14 個，但需要接受 AUC 或 F1-score 的變動；是否可接受取決於應用對精簡程度與漏判、誤報的權衡。各特徵在十個種子中的入選次數列於附錄~\ref{sec:appendix-data-fs}。
+
+\section{事件標籤之公司群聚配對分析}\label{sec:results-event-statistics}
+
+本節依第三章的既定比較，以 3,700 家測試公司為重抽單位；其中 119 家各有一筆事件。所有種子與方法共用相同公司重抽權重，模型與驗證門檻保持不變。信賴區間描述固定模型在重抽測試公司下的差值變化；顯著性以事件標籤全部 165 項比較共同校正後的 \(p_H\) 判斷，不能由逐項區間是否跨零單獨決定。
+
+\Needspace{20\baselineskip}
+\subsection{集成方法相對 Equal6}
+
+\input{generated/event-statistics-20261103/experiment1-auc-tests.tex}
+
+表~\ref{tab:event-stats-exp1-auc} 顯示，New3 相對 Equal6 的 AUC 增加 0.0719，逐項 95\% 信賴區間為 [0.0381, 0.1054]；V-static 增加 0.0591，區間為 [0.0292, 0.0885]，兩者的 \(p_H\) 均為 0.0165。Old3 的 AUC 則顯著較低。其餘四種動態方法的 AUC 差異皆未通過校正；未達顯著不表示與 Equal6 等效。本分析未設定 New3 與 V-static 的直接檢定，因此不能由兩者相對共同基準的結果推論彼此顯著不同。
+
+V-static 相對 Equal6 的 F1-score 增加 0.0754，逐項區間為 [0.0194, 0.1316]，但未校正 \(p=0.0093\)、\(p_H=0.9672\)，不構成校正後顯著改善。這說明最高平均 F1-score 與整體多重比較支持的改善是不同判斷。兩種 DCS 的 F1-score 顯著下降；New3 與四種動態方法的 Recall 均顯著增加，但不能忽略同時發生的誤報與 F1-score 變化。實驗一共 12 項檢定通過校正，其中 AUC、F1-score、Recall 分別為 3、3、6 項，方向包含增加與下降。
+
+\subsection{FS 相對相同方法 no-FS}
+
+實驗二的 48 項 AUC 比較中，沒有校正後顯著增加。V-static 在 RFE 80\% 的平均 AUC 增加雖為所有 FS 條件中該方法最大，仍不足以單憑平均值宣稱改善。唯一校正後顯著的 AUC 變化為 SHAP 50\% 的 V-static 下降 0.0587，逐項區間為 [-0.0895, -0.0288]、\(p_H=0.0254\)。但其 9,999 次重抽僅有一次尾端超越，未校正 \(p=0.0002\) 的 Monte Carlo 標準誤約為 0.00014，應視為對重抽精度敏感的結果，後續可增加重抽次數核對。
+
+48 項 F1-score 比較皆未通過校正，不能將其解釋為 FS 與 no-FS 等效。Recall 有 32 項通過校正，涵蓋不同方向；Recall 的改變也包含各條件重新決定門檻的影響，並不代表整體辨識品質一致改善。完整差值、區間、原始與校正後 \(p\) 值見附錄~\ref{sec:event-stats-full}。整體證據支持保留 no-FS 作為必要對照，尚不足以主張特徵刪減能穩定提升效能。
+
+\section{標籤定義對結果的影響}\label{sec:results-label}
+
+為了解結論是否依賴標籤定義，表~\ref{tab:results-label-comparison} 對照相同資料列、模型池與選擇規則下，最終狀態標籤與事件標籤的 no-FS 結果。兩者正類比例不同，原始分數只比較方向，不比較高低。
+
+\input{generated/event-results-20261103/label-comparison.tex}
+
+兩種標籤下，V-static 的 F1-score 都高於 Equal6，Old3 的 AUC 都最低，動態方法的 AUC 與 F1-score 也都未超過 V-static。差別在於最佳 AUC：最終狀態標籤下 V-static 為 0.8152，高於 New3 的 0.7959；事件標籤下則是 New3 的 0.8601 高於 V-static 的 0.8472。Old3 的 F1-score 也由 0.1168 降為 0.0199。最終狀態標籤把破產公司的每個年度都記為正類，歷史模型可以學到「哪些公司最終會破產」的特徵；改為只標記事件前一年後，歷史模型對近期事件的辨識能力明顯較弱。
+
+最終狀態標籤已完成以公司為單位的配對 bootstrap 與 165 項 Holm 校正。該分析中，V-static 相對 Equal6 的 AUC 與 F1-score 增加均達校正後顯著（\(p_H\) 為 0.00632 與 0.02416），FS 則沒有校正後顯著的 AUC 增加；完整結果見附錄~\ref{sec:stats-full}。這些檢定只適用於最終狀態標籤，不直接延伸至事件標籤。
+
+\section{研究問題的綜合討論}\label{sec:results-discussion}
+
+\subsection{訓練資料期間與單一分類器}
+
+研究問題一的答案是：資料期間的效果依分類器而異。XGBoost 與 LightGBM 以 New 的 AUC 較高，Random Forest 以 Retrain 最高，Logistic Regression 三者相近。由於各策略的訓練筆數同時不同，本研究不把差異完全歸因於資料新近程度。
+
+\subsection{集成規則與模型成員}
+
+研究問題二的答案是：在本次預設參數模型池中，New3 與 V-static 相對 Equal6 的 AUC 增加具有公司配對檢定支持。V-static 雖有最高平均 F1-score，其相對 Equal6 的增加未通過多重比較校正；與動態方法的高低僅依平均值描述，未另作直接檢定。這些結果支持保留單一期間與等權集成控制組，檢查加入歷史模型是否有益，但未分離成員品質與整合規則的效果。
+
+不過，調參後的單一分類器有接近或高於集成的描述性分數，集成池成員又未經調參，跨設定差異未作等效或顯著性檢定。因此本研究只能說明同一池內整合方式的差異，尚不能主張集成優於調參後的單一模型。
+
+\subsection{特徵精簡與少數類辨識}
+
+研究問題三的答案是：FS 沒有帶來一致的改善。保留 14 個特徵時大多接近 no-FS，保留 9 個特徵時 AUC 多半下降；Recall 與 F1-score 的方向則隨集成方法而變。本研究記錄了特徵數，但未比較訓練與推論時間，因此不能將輸入維度減少換算為已證實的成本節省。
+
+\section{推論範圍與限制}
+
+事件標籤以破產公司的最後觀測年度推定事件時間，並非逐筆核對的破產申請日；Calibration 與 DSEL 各只有 16 與 17 筆事件，選模與門檻決策的不確定性較大。事件標籤的配對分析屬事後探索性，固定已訓練模型及驗證決策；有限重抽與多重比較仍限制推論，Baseline 及未事先列入的兩兩差異維持描述性解讀。同一公司可能同時出現在擬合與測試期間，主要實驗以固定年份分區離線模擬 Old 到 Old／New 的一次模型池更新，Test 期間未再更新，因此結果限於兩階段持續集成情境，不能延伸為對未見公司、多輪遺忘或長期線上適應的驗證。實證只使用一份公開資料，結論限於本資料與既定時間分區。
+\endgroup

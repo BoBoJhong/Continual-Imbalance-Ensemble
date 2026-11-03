@@ -1,0 +1,38 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}@{}}
+\caption{實驗一 Baseline 各分類器與訓練策略之測試結果}\label{tab:results-baseline}\\
+\toprule
+分類器／版本 & 策略 & AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{5}{c}{表~\thetable（續）}\\
+\toprule
+分類器／版本 & 策略 & AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{5}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+XGBoost（較早版本） & Old & 0.7018 & 0.1136 & 0.3365 \\
+XGBoost（較早版本） & New & \textbf{0.8526} & \textbf{0.2408} & 0.4689 \\
+XGBoost（較早版本） & Retrain & 0.8325 & 0.2117 & \textbf{0.4861} \\
+XGBoost（擴充版本） & Old & 0.7091 & 0.1138 & 0.3516 \\
+XGBoost（擴充版本） & New & \textbf{0.8589} & \textbf{0.2475} & \textbf{0.4713} \\
+XGBoost（擴充版本） & Retrain & 0.8386 & 0.2024 & 0.4686 \\
+LightGBM & Old & 0.7212 & 0.1208 & 0.3386 \\
+LightGBM & New & \textbf{0.8645} & \textbf{0.2616} & \textbf{0.4762} \\
+LightGBM & Retrain & 0.8431 & 0.2206 & 0.4443 \\
+Random Forest & Old & 0.7284 & 0.1052 & 0.4258 \\
+Random Forest & New & \textbf{0.8453} & \textbf{0.2071} & \textbf{0.4668} \\
+Random Forest & Retrain & 0.8294 & 0.1886 & 0.4512 \\
+Logistic Regression & Old & 0.6657 & 0.0691 & \textbf{0.6305} \\
+Logistic Regression & New & \textbf{0.7074} & \textbf{0.1493} & 0.3710 \\
+Logistic Regression & Retrain & 0.6992 & 0.0962 & 0.4817 \\
+TabM & Old & 0.6601 & 0.0846 & 0.3800 \\
+TabM & New & \textbf{0.8008} & \textbf{0.1860} & \textbf{0.4231} \\
+TabM & Retrain & 0.7940 & 0.1496 & 0.4111 \\
+TabICL 標記版本 & Old & 0.7062 & 0.0931 & 0.4643 \\
+TabICL 標記版本 & New & \textbf{0.8221} & \textbf{0.2057} & 0.4400 \\
+TabICL 標記版本 & Retrain & 0.7707 & 0.1380 & \textbf{0.4922} \\
+\end{longtable}
+\noindent{\footnotesize 資料來源：本研究實驗結果整理。\par Old／New 各先平均同一邊界的四種採樣，再平均 15 組邊界；Retrain 只平均四種採樣。粗體為同一分類器版本內該指標的最高值，四位小數相同者並列；不跨分類器排名，也不表示差異達統計顯著。不同歷史版本的調參與處理條件未完全一致，與固定年份集成須分開解讀。TabICL 為結果標記，後端限制見附錄。}
+\endgroup

@@ -1,0 +1,168 @@
+"""Fixed six-year history, five chronological Old/New partitions, equal weights.
+
+Old and New are independently fitted pipelines, rebuilt each annual origin.
+This is the B-data partition branch, not a frozen FIFO pool or weight search.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import platform
+import sys
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from datetime import datetime, timezone
+from importlib.metadata import version
+from pathlib import Path
+from time import perf_counter
+
+import numpy as np
+import pandas as pd
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+
+from experiments.phase_flexible import rolling_bankruptcy_overlap_ensemble as base  # noqa: E402
+from experiments.phase_flexible.study3b_window_sensitivity import SEEDS, sha256  # noqa: E402
+from src.utils import get_logger, set_seed  # noqa: E402
+
+TOTAL_YEARS = 6
+OLD_WIDTHS = (5, 4, 3, 2, 1)
+TEST_YEARS = tuple(range(2009, 2019))
+METHODS = ("Recent6y",) + tuple(f"Old{o}_New{TOTAL_YEARS-o}" for o in OLD_WIDTHS)
+OUTPUT = ROOT / "results/phase_flexible/study3b_oldnew_ratio_sensitivity/runs"
+
+
+def partition_years(test_year: int, old_width: int):
+    if old_width not in OLD_WIDTHS:
+        raise ValueError("Old width must be 1..5")
+    years = tuple(range(test_year - TOTAL_YEARS - 1, test_year - 1))
+    return years[:old_width], years[old_width:]
+
+
+def build_protocol(test_years=TEST_YEARS):
+    rows = []
+    for year in test_years:
+        for old_width in OLD_WIDTHS:
+            old, new = partition_years(year, old_width)
+            rows.append({"method": f"Old{old_width}_New{len(new)}", "test_feature_year": year,
+                         "test_event_year": year + 1, "validation_feature_year": year - 1,
+                         "old_years": ",".join(map(str, old)), "new_years": ",".join(map(str, new)),
+                         "old_width": len(old), "new_width": len(new),
+                         "train_start": old[0], "train_end": new[-1], "old_weight": .5,
+                         "new_weight": .5, "test_used_for_selection": False})
+    return pd.DataFrame(rows)
+
+
+def fit_evaluate_seed(data, features, *, seed, folder, logger, test_years=TEST_YEARS):
+    folder.mkdir(parents=True, exist_ok=False)
+    set_seed(seed)
+    yearly, predictions, audits = [], [], []
+    for year in test_years:
+        validation = data.loc[data.fyear == year - 1]
+        test = data.loc[data.fyear == year]
+        if validation.target.nunique() != 2 or test.target.nunique() != 2:
+            raise ValueError("Validation and Test must each contain both classes")
+        full = tuple(range(year - TOTAL_YEARS - 1, year - 1))
+
+        def fit(years, method, side):
+            assert max(years) < year - 1
+            started = perf_counter()
+            model = base._fit_window_model(data, features, years, f"S{seed}_{method}_{side}_{year}",
+                                           logger, seed=seed)
+            audits.append({**model.audit, "method": method, "side": side,
+                           "test_feature_year": year, "fit_seconds": perf_counter() - started})
+            return model
+
+        baseline = fit(full, "Recent6y", "all")
+        vp, tp = baseline.predict_proba(validation, features), baseline.predict_proba(test, features)
+        row, pred = base._evaluate("Recent6y", year, validation, test, vp, tp)
+        yearly.append(row)
+        predictions.append(pd.DataFrame(pred).assign(old_proba=np.nan, new_proba=np.nan))
+        for old_width in OLD_WIDTHS:
+            old, new = partition_years(year, old_width)
+            assert old + new == full and not set(old) & set(new)
+            method = f"Old{len(old)}_New{len(new)}"
+            old_model, new_model = fit(old, method, "old"), fit(new, method, "new")
+            old_vp, new_vp = old_model.predict_proba(validation, features), new_model.predict_proba(validation, features)
+            old_tp, new_tp = old_model.predict_proba(test, features), new_model.predict_proba(test, features)
+            row, pred = base._evaluate(method, year, validation, test,
+                                      (old_vp + new_vp) / 2, (old_tp + new_tp) / 2)
+            yearly.append(row)
+            predictions.append(pd.DataFrame(pred).assign(old_proba=old_tp, new_proba=new_tp))
+        logger.info(f"Completed seed={seed}, test={year}, all five partitions and baseline")
+    yearly = pd.DataFrame(yearly).assign(seed=seed)
+    predictions = pd.concat(predictions, ignore_index=True).assign(seed=seed)
+    assert len(yearly) == len(test_years) * len(METHODS)
+    assert not predictions.duplicated(["method", "test_feature_year", "source_row_id"]).any()
+    identity = None
+    for _, group in predictions.groupby("method"):
+        keys = group.sort_values(["test_feature_year", "source_row_id"])[
+            ["test_feature_year", "source_row_id", "company_name", "y_true"]].reset_index(drop=True)
+        if identity is not None:
+            pd.testing.assert_frame_equal(identity, keys)
+        identity = keys
+    yearly.to_csv(folder / "by_year.csv", index=False)
+    predictions.to_csv(folder / "predictions.csv.gz", index=False, compression="gzip")
+    base._pooled_summary(predictions).assign(seed=seed).to_csv(folder / "pooled.csv", index=False)
+    pd.DataFrame(audits).to_csv(folder / "training_audit.csv", index=False)
+
+
+def run_seed_worker(seed: int, run: str):
+    data, features, _ = base.load_event_data()
+    logger = get_logger(f"OldNewRatio{seed}", console=True, file=False)
+    fit_evaluate_seed(data, features, seed=seed, folder=Path(run) / f"seed_{seed}", logger=logger)
+    return seed
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--seeds", type=int, nargs="+", default=list(SEEDS))
+    parser.add_argument("--workers", type=int, default=2)
+    parser.add_argument("--output-root", type=Path, default=OUTPUT)
+    args = parser.parse_args()
+    if args.workers < 1 or len(set(args.seeds)) != len(args.seeds) or any(s < 0 or s >= 2**32 for s in args.seeds):
+        parser.error("Require positive workers and distinct uint32 seeds")
+    data, features, annual = base.load_event_data()
+    protocol = build_protocol()
+    assert data.fyear.min() <= protocol.train_start.min()
+    run = args.output_root / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    run.mkdir(parents=True, exist_ok=False)
+    print(f"RUN_DIR={run}", flush=True)
+    sources = [Path(__file__), Path(base.__file__),
+               ROOT / "experiments/phase_flexible/study3b_window_sensitivity.py",
+               ROOT / "src/models/xgboost_wrapper.py", ROOT / "src/evaluation/metrics.py",
+               ROOT / "config/model_config.yaml", ROOT / "config/sampling_config.yaml"]
+    manifest = {"status": "running", "started_at": datetime.now(timezone.utc).isoformat(),
+                "protocol": "oldnew_ratio_fixed6_equal_v1_exploratory", "seeds": args.seeds,
+                "test_years": TEST_YEARS, "total_train_years": TOTAL_YEARS,
+                "old_widths": OLD_WIDTHS, "methods": METHODS, "workers": args.workers,
+                "ensemble_weights": [0.5, 0.5], "test_used_for_selection": False,
+                "target_definition": "failed company final observed fyear; event=fyear+1",
+                "limitations": "retrospective reconstructed target; unverified filing/label dates; post-hoc exploratory",
+                "model_lifecycle": "two disjoint chronological groups, independently refit each year; no frozen FIFO",
+                "thresholds": "shared t-1 Validation; F1 grid and validation FPR<=0.05; per method/year",
+                "features": features, "sampling": "TomekLinks separately fitted to each training group",
+                "command": sys.argv, "data_sha256": sha256(base.US_CSV),
+                "source_hashes": {p.relative_to(ROOT).as_posix(): sha256(p) for p in sources},
+                "python": platform.python_version(),
+                "packages": {p: version(p) for p in ("numpy", "pandas", "scikit-learn", "imbalanced-learn", "xgboost")}}
+    path = run / "manifest.json"
+    path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    protocol.to_csv(run / "protocol.csv", index=False)
+    annual.to_csv(run / "label_audit.csv", index=False)
+    try:
+        with ProcessPoolExecutor(max_workers=args.workers) as pool:
+            futures = [pool.submit(run_seed_worker, seed, str(run)) for seed in args.seeds]
+            for future in as_completed(futures):
+                print(f"Finished seed={future.result()}", flush=True)
+        manifest["status"] = "completed"
+    except Exception as error:
+        manifest.update(status="failed", error=repr(error))
+        raise
+    finally:
+        manifest["finished_at"] = datetime.now(timezone.utc).isoformat()
+        path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+
+if __name__ == "__main__":
+    main()

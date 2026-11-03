@@ -50,6 +50,9 @@ ENV/
 # Results (too large to commit) -> 應使用者要求全部加入版控
 # results/
 # !results/.gitkeep
+# Study 3B 凍結學習器機率快取（約 930 MB，可由 study3b_full_pipeline.py 重建）；
+# cache/*.json 稽核仍納入版控，compare_static_vs_sliding.py 需本機 .npz。
+/results/phase_flexible/study3b_full_pipeline/runs/*/seed_*/cache/*.npz
 logs/
 # !logs/.gitkeep
 
@@ -86,7 +89,41 @@ error_output.txt
 last_run_output.txt
 test_output.csv
 
+# Thesis toolchain and private browser state
+/.tools/
+/.local/
+/tools/thesis-agent/node_modules/
+/thesis/latex/build/
+/thesis/latex/fonts/*.ttf
+/thesis/latex/fonts/*.otf
+/thesis/latex/forms/*.pdf
+/scratch/thesis_integration/
+/scratch/thesis_skill_tests/
+/scratch/thesis_skill_forward_test/
+/scratch/thesis_playwright_live/
+# Handoff records may be tracked deliberately; private/binary snapshots stay local.
+/thesis/handoffs/**/compiled-preview.pdf
+/thesis/handoffs/**/files/**/*.pdf
+/thesis/handoffs/**/files/**/*.ttf
+/thesis/handoffs/**/files/**/*.otf
+/thesis/handoffs/**/files/**/*.png
+/thesis/handoffs/**/files/**/*.jpg
+/thesis/handoffs/**/files/**/*.jpeg
+# Share the thesis tasks and MCP config while retaining other IDE exclusions.
+!/.vscode/
+/.vscode/*
+!/.vscode/mcp.json
+!/.vscode/tasks.json
+
 # Coverage
 .coverage
 htmlcov/
 .pytest_cache/
+
+# BRFSS branch removed from the published snapshot on 2026-11-03.
+# Keep original files locally; publish only the removal decision and receipt.
+*[bB][rR][fF][sS][sS]*
+!/docs/BRFSS支線停止紀錄_20261103.md
+!/docs/audits/2026-11/BRFSS支線停止驗證_20261103.json
+# Mixed research-spec backups include retired BRFSS results; retain locally.
+/thesis/drafts/*/before*/docs/研究方向.md

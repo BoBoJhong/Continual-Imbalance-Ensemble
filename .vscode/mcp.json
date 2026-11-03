@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "${workspaceFolder}/scripts/thesis/start-playwright.mjs"
+      ]
+    }
+  }
+}

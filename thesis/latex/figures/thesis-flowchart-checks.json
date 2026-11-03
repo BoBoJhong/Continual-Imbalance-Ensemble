@@ -1,0 +1,20 @@
+[
+  {
+    "title": "實驗一：Baseline 分類器比較",
+    "source_geometry": "stage1",
+    "image": "experiment1-baseline.png",
+    "sha256": "2093d83b573680ec3a4e6c4e00b0b33aa6cc60efd83dd207062dd721abd08c44"
+  },
+  {
+    "title": "實驗一：Old／New 集成比較",
+    "source_geometry": "stage2",
+    "image": "experiment1-ensemble.png",
+    "sha256": "0dad03450c93337634916c704e5fc3240600731ce53ff2c4218d2bfd2ecbc709"
+  },
+  {
+    "title": "實驗二：特徵選取集成比較",
+    "source_geometry": "stage3",
+    "image": "experiment2-fs-ensemble.png",
+    "sha256": "f008846a0562ee0ef2e5228db0ac365685ea2093809afd1bd88ee9800bd57386"
+  }
+]
