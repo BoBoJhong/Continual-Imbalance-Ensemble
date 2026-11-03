@@ -1,0 +1,61 @@
+candidate,source,method,sampling,n_boundaries,AUC,F1,Recall
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,Old,none,15,0.7168672,0.12064906666666667,0.3180024666666667
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,Old,undersampling,15,0.7066782666666668,0.12213106666666666,0.3080140666666667
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,Old,oversampling,15,0.6919523333333333,0.10043606666666666,0.3765389333333333
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,Old,hybrid,15,0.7209489333333334,0.1118578,0.4037166666666667
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,New,none,15,0.8741328666666668,0.27618940000000003,0.48757246666666665
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,New,undersampling,15,0.8724901333333334,0.2813088,0.4550522666666667
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,New,oversampling,15,0.8334506666666666,0.21040606666666667,0.425784
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,New,hybrid,15,0.8556892666666667,0.22220953333333332,0.5166086666666667
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,Retrain,none,1,0.856106,0.234332,0.449477
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,Retrain,undersampling,1,0.856415,0.237996,0.397213
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,Retrain,oversampling,1,0.798738,0.160906,0.470383
+XGBoost,results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv,Retrain,hybrid,1,0.843186,0.176309,0.557491
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,Old,none,15,0.7293468666666667,0.13288133333333335,0.31753780000000004
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,Old,undersampling,15,0.7274896666666667,0.13231133333333334,0.32102206666666666
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,Old,oversampling,15,0.6987822666666668,0.10381706666666665,0.3372822666666666
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,Old,hybrid,15,0.7290969333333334,0.11406233333333332,0.3783972
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,New,none,15,0.8742578000000001,0.29098399999999996,0.48199773333333334
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,New,undersampling,15,0.8757325333333333,0.2982315333333333,0.47874579999999994
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,New,oversampling,15,0.8463128666666667,0.22209306666666664,0.4257841333333333
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,New,hybrid,15,0.861611,0.234941,0.518467
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,Retrain,none,1,0.853815,0.239754,0.407666
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,Retrain,undersampling,1,0.856252,0.250958,0.456446
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,Retrain,oversampling,1,0.81794,0.203852,0.442509
+LightGBM,results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv,Retrain,hybrid,1,0.844523,0.188022,0.470383
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,Old,none,15,0.7464483333333334,0.11928466666666666,0.35516846666666674
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,Old,undersampling,15,0.7419873333333332,0.11680766666666668,0.33821133333333336
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,Old,oversampling,15,0.7045523333333333,0.08696786666666667,0.5189313333333333
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,Old,hybrid,15,0.7204975333333332,0.09761826666666668,0.491057
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,New,none,15,0.8662591333333334,0.2386419333333333,0.5175376666666667
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,New,undersampling,15,0.8644599999999999,0.2531524,0.47549359999999996
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,New,oversampling,15,0.8199498666666666,0.15461200000000003,0.42833913333333334
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,New,hybrid,15,0.8304396666666667,0.1819834,0.4459930666666667
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,Retrain,none,1,0.859615,0.243728,0.473868
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,Retrain,undersampling,1,0.853927,0.212575,0.494774
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,Retrain,oversampling,1,0.787514,0.135987,0.428571
+Random Forest,results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv,Retrain,hybrid,1,0.816628,0.162162,0.407666
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,Old,none,15,0.6681805333333333,0.07017906666666666,0.6274099999999999
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,Old,undersampling,15,0.6682977333333333,0.06965726666666666,0.6134725999999999
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,Old,oversampling,15,0.6599194,0.06803946666666666,0.6327526
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,Old,hybrid,15,0.6663116,0.06854080000000001,0.648316
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,New,none,15,0.7026862,0.14334446666666664,0.36771193333333335
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,New,undersampling,15,0.7031232666666666,0.1464609333333333,0.36306619999999995
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,New,oversampling,15,0.7041802,0.1555098666666667,0.3544716
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,New,hybrid,15,0.7195271333333333,0.15206139999999999,0.39860633333333334
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,Retrain,none,1,0.694847,0.082408,0.491289
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,Retrain,undersampling,1,0.695106,0.078632,0.536585
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,Retrain,oversampling,1,0.695197,0.082356,0.501742
+Logistic Regression,results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv,Retrain,hybrid,1,0.711806,0.141439,0.397213
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,Old,none,15,0.6830724666666668,0.0868646,0.4648082666666666
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,Old,undersampling,15,0.6923189333333332,0.0887544,0.5135889333333333
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,Old,oversampling,15,0.6197361333333334,0.0796534,0.28292680000000003
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,Old,hybrid,15,0.6452972666666668,0.0833054,0.25876899999999997
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,New,none,15,0.7886300666666667,0.18031113333333332,0.45063879999999995
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,New,undersampling,15,0.7890278,0.19222619999999999,0.41904766666666676
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,New,oversampling,15,0.7982300666666665,0.1774318,0.38350759999999995
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,New,hybrid,15,0.8274735333333333,0.19403553333333337,0.4392566666666668
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,Retrain,none,1,0.789661,0.156002,0.445993
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,Retrain,undersampling,1,0.799693,0.138696,0.522648
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,Retrain,oversampling,1,0.782256,0.150576,0.296167
+TabM,results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv,Retrain,hybrid,1,0.80455,0.152982,0.379791

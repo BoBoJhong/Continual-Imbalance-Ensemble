@@ -1,0 +1,52 @@
+{
+  "job_id": "lgb_none_M2009_mi_r80",
+  "seed": 21,
+  "classifier": "lgb",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2007,
+    2008,
+    2009
+  ],
+  "n_train": 11609,
+  "positive_before": 140,
+  "n_after": 11609,
+  "positive_after": 140,
+  "fs": "mi",
+  "ratio": 0.8,
+  "selected_features": [
+    "X11",
+    "X12",
+    "X15",
+    "X6",
+    "X9",
+    "X10",
+    "X1",
+    "X5",
+    "X7",
+    "X18",
+    "X13",
+    "X2",
+    "X3",
+    "X4"
+  ],
+  "n_features": 14,
+  "fit_predict_seconds": 2.6464836999075487,
+  "params": {
+    "objective": "binary",
+    "metric": "auc",
+    "verbosity": -1,
+    "seed": 21,
+    "deterministic": true,
+    "force_col_wise": true,
+    "boosting_type": "gbdt",
+    "num_threads": 4
+  },
+  "warnings": [],
+  "selector_seed": 21,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-09-30T11:04:31.234915+00:00",
+  "cache_sha256": "15677b66ee96aadeefd3efe4a8de844043d48379fc5a7f43ecdc5295400378fc"
+}

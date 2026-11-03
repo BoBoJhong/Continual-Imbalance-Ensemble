@@ -1,0 +1,44 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{0.13\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}@{}}
+\caption{事件標籤實驗一：各方法減 Equal6}\label{tab:event-stats-all-exp1}\\
+\toprule
+方法 & 指標 & 差值 & 95\% 信賴區間 & \(p\) & \(p_H\) \\
+\midrule\endfirsthead
+\multicolumn{6}{c}{表~\thetable（續）}\\
+\toprule
+方法 & 指標 & 差值 & 95\% 信賴區間 & \(p\) & \(p_H\) \\
+\midrule\endhead
+\midrule\multicolumn{6}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+\multirow[t]{3}{=}{Old3} & AUC & -0.0684 & [-0.0911, -0.0481] & 0.00010 & 0.01650 \\*
+ & F1 & -0.0842 & [-0.1162, -0.0546] & 0.00010 & 0.01650 \\*
+ & Recall & -0.1773 & [-0.2349, -0.1228] & 0.00010 & 0.01650 \\
+\addlinespace[4pt]
+\multirow[t]{3}{=}{New3} & AUC & +0.0719 & [+0.0381, +0.1054] & 0.00010 & 0.01650 \\*
+ & F1 & +0.0249 & [-0.0043, +0.0543] & 0.09640 & 1.00000 \\*
+ & Recall & +0.2378 & [+0.1645, +0.3125] & 0.00010 & 0.01650 \\
+\addlinespace[4pt]
+\multirow[t]{3}{=}{V-static} & AUC & +0.0591 & [+0.0292, +0.0885] & 0.00010 & 0.01650 \\*
+ & F1 & +0.0754 & [+0.0194, +0.1316] & 0.00930 & 0.96720 \\*
+ & Recall & +0.0412 & [-0.0414, +0.1235] & 0.33130 & 1.00000 \\
+\addlinespace[4pt]
+\multirow[t]{3}{=}{DCS-OLA} & AUC & -0.0431 & [-0.0667, -0.0210] & 0.00080 & 0.09520 \\*
+ & F1 & -0.0630 & [-0.0956, -0.0309] & 0.00020 & 0.02540 \\*
+ & Recall & +0.1916 & [+0.1156, +0.2674] & 0.00010 & 0.01650 \\
+\addlinespace[4pt]
+\multirow[t]{3}{=}{DCS-LCA} & AUC & -0.0431 & [-0.0671, -0.0208] & 0.00080 & 0.09520 \\*
+ & F1 & -0.0637 & [-0.0972, -0.0311] & 0.00020 & 0.02540 \\*
+ & Recall & +0.1908 & [+0.1149, +0.2667] & 0.00010 & 0.01650 \\
+\addlinespace[4pt]
+\multirow[t]{3}{=}{KNORA-E} & AUC & -0.0023 & [-0.0129, +0.0052] & 0.64790 & 1.00000 \\*
+ & F1 & -0.0024 & [-0.0162, +0.0098] & 0.71560 & 1.00000 \\*
+ & Recall & +0.0798 & [+0.0487, +0.1092] & 0.00010 & 0.01650 \\
+\addlinespace[4pt]
+\multirow[t]{3}{=}{KNORA-U} & AUC & -0.0110 & [-0.0197, -0.0028] & 0.01070 & 1.00000 \\*
+ & F1 & -0.0355 & [-0.0587, -0.0134] & 0.00250 & 0.28500 \\*
+ & Recall & +0.2882 & [+0.2351, +0.3437] & 0.00010 & 0.01650 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究事件標籤公司群聚配對分析)\par 差值為候選方法減比較基準；區間為逐項 95\% 百分位區間，非同時區間。9,999 次公司重抽；\(p_H\) 為本標籤兩項實驗共 165 項雙尾近似檢定的 Holm 校正值。星號表示 \(p_H<0.05\)，未達顯著不表示等效；模型、種子及驗證決策固定。}
+\endgroup

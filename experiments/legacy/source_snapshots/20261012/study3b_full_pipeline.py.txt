@@ -1,0 +1,463 @@
+"""Annual multi-classifier sampling -> ensembles -> validation-selected FS.
+
+Every cached learner is fitted once on a fixed window. Its future probabilities
+are cached without future labels, so FIFO reuse does not require keeping all
+estimators in RAM. This is a retrospective frozen-model replay, not deployment.
+"""
+# ruff: noqa: E402
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import platform
+import sys
+import traceback
+import warnings
+from datetime import datetime, timezone
+from importlib.metadata import version
+from itertools import product
+from pathlib import Path
+from time import perf_counter
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+
+import numpy as np
+import pandas as pd
+from sklearn.feature_selection import RFE, mutual_info_classif
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import average_precision_score, brier_score_loss
+from sklearn.preprocessing import StandardScaler
+from sklearn.tree import DecisionTreeClassifier
+from threadpoolctl import threadpool_limits
+
+from experiments.phase_flexible import rolling_bankruptcy_overlap_ensemble as base
+from src.data import ImbalanceSampler
+from src.models import (
+    LightGBMWrapper,
+    LogisticRegressionWrapper,
+    MLPWrapper,
+    RandomForestWrapper,
+    SVMWrapper,
+    XGBoostWrapper,
+)
+
+PROTOCOL = "study3b_multiclassifier_sampling_ensemble_fs_v1_exploratory"
+CLASSIFIERS = ("lr", "rf", "xgb", "lgb", "mlp", "svm")
+SAMPLING = ("none", "under", "over", "hybrid")
+SAMPLER_NAMES = {"none": "None", "under": "TomekLinks", "over": "ADASYN", "hybrid": "SMOTEENN"}
+STRATEGIES = {"none": "none", "under": "undersampling", "over": "oversampling", "hybrid": "hybrid"}
+FS_METHODS = ("mi", "cart", "rfe", "shap")
+SEEDS = (42, 123, 456, 789, 2024, 7, 21, 84, 168, 999)
+OUTPUT = ROOT / "results/phase_flexible/study3b_full_pipeline/runs"
+
+
+def now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def atomic_json(path: Path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
+    temporary.replace(path)
+
+
+def atomic_csv(path: Path, frame: pd.DataFrame):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + ".tmp")
+    frame.to_csv(temporary, index=False, compression="gzip" if path.suffix == ".gz" else None)
+    temporary.replace(path)
+
+
+def sha256(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def make_model(classifier, seed, threads):
+    # Sampling is the only class-imbalance intervention in this factorial study.
+    factories = {
+        "lr": lambda: LogisticRegressionWrapper(random_state=seed, class_weight=None),
+        "rf": lambda: RandomForestWrapper(random_state=seed, class_weight=None, n_jobs=threads),
+        "xgb": lambda: XGBoostWrapper(use_imbalance=False, random_state=seed, seed=seed, n_jobs=threads),
+        "lgb": lambda: LightGBMWrapper(use_imbalance=False, seed=seed, num_threads=threads),
+        # Fixed epochs avoid a random early-stopping holdout created after oversampling.
+        "mlp": lambda: MLPWrapper(random_state=seed, early_stopping=False),
+        "svm": lambda: SVMWrapper(random_state=seed, class_weight=None),
+    }
+    return factories[classifier]()
+
+
+def feature_columns(X, y, method, ratio, seed, threads):
+    if method == "none":
+        return list(X.columns)
+    k = max(1, int(X.shape[1] * ratio))
+    tree = DecisionTreeClassifier(random_state=seed, class_weight="balanced")
+    if method == "rfe":
+        selector = RFE(tree, n_features_to_select=k, step=1).fit(X, y)
+        return list(X.columns[selector.get_support()])
+    if method == "mi":
+        scores = mutual_info_classif(X, y, random_state=seed)
+    elif method == "cart":
+        scores = tree.fit(X, y).feature_importances_
+    elif method == "shap":
+        from lightgbm import LGBMClassifier
+        selector = LGBMClassifier(n_estimators=100, random_state=seed, verbosity=-1,
+                                 class_weight="balanced", n_jobs=threads)
+        selector.fit(X, y)
+        # Exact tree contributions; exclude the bias column. No fallback ranking.
+        scores = np.abs(selector.booster_.predict(X, pred_contrib=True)[:, :-1]).mean(axis=0)
+    else:
+        raise ValueError(f"Unknown FS method: {method}")
+    indices = np.argsort(-np.asarray(scores), kind="stable")[:k]
+    return list(X.columns[indices])
+
+
+def fs_variants(methods=FS_METHODS, ratios=(0.5, 0.8)):
+    return [("none", 1.0)] + list(product(methods, ratios))
+
+
+def job_id(classifier, sampling, end, fs="none", ratio=1.0):
+    return f"{classifier}_{sampling}_M{end}_{fs}_r{round(ratio * 100)}"
+
+
+class FrozenCache:
+    def __init__(self, data, features, directory, config, seed, progress=None):
+        self.data, self.features = data, features
+        self.directory, self.config, self.seed = Path(directory), config, seed
+        self.progress = progress or (lambda **kwargs: None)
+        self.directory.mkdir(parents=True, exist_ok=True)
+
+    def get(self, classifier, sampling, end, fs="none", ratio=1.0):
+        key = job_id(classifier, sampling, end, fs, ratio)
+        path = self.directory / f"{key}.npz"
+        audit_path = self.directory / f"{key}.json"
+        if path.exists() and audit_path.exists():
+            audit = json.loads(audit_path.read_text(encoding="utf-8"))
+            if audit["cache_sha256"] != sha256(path):
+                raise ValueError(f"Corrupt cache: {path}")
+            with np.load(path, allow_pickle=False) as saved:
+                return pd.Series(saved["probability"], index=saved["source_row_id"])
+        self.progress(current_job=key, seed=self.seed, job_started_at=now())
+        print(f"FIT seed={self.seed} {key}", flush=True)
+        begin = perf_counter()
+        years = base.window_years(end, self.config["window_years"])
+        train = self.data.loc[self.data.fyear.isin(years)]
+        if tuple(sorted(train.fyear.unique())) != years or train.target.nunique() != 2:
+            raise ValueError(f"Incomplete or single-class training window: {years}")
+        # Only features from later years are passed to prediction. No future labels.
+        future = self.data.loc[(self.data.fyear > end) &
+                               (self.data.fyear <= max(self.config["test_years"])), self.features]
+        y = train.target.to_numpy(dtype=int)
+        with warnings.catch_warnings(record=True) as observed, threadpool_limits(self.config["threads"]):
+            warnings.simplefilter("always")
+            imputer = SimpleImputer(strategy="mean", keep_empty_features=True)
+            scaler = StandardScaler()
+            X = pd.DataFrame(scaler.fit_transform(imputer.fit_transform(train[self.features])),
+                             columns=self.features, index=train.index)
+            selected = feature_columns(X, y, fs, ratio, self.seed, self.config["threads"])
+            sampler = ImbalanceSampler(random_state=self.seed)
+            sampled_X, sampled_y = sampler.apply_sampling(X[selected], y, STRATEGIES[sampling])
+            if len(np.unique(sampled_y)) != 2:
+                raise ValueError("Sampling removed a class")
+            model = make_model(classifier, self.seed, self.config["threads"])
+            model.fit(sampled_X, np.asarray(sampled_y))
+            transformed = pd.DataFrame(scaler.transform(imputer.transform(future)),
+                                       columns=self.features, index=future.index)
+            probabilities = np.asarray(model.predict_proba(transformed[selected]), dtype=float)
+        if probabilities.shape != (len(future),) or not np.isfinite(probabilities).all() or \
+                np.any((probabilities < 0) | (probabilities > 1)):
+            raise ValueError(f"Invalid probabilities for {key}")
+        params = getattr(model, "params", None)
+        if params is None:
+            params = model.model.get_params()
+        audit = {
+            "job_id": key, "seed": self.seed, "classifier": classifier, "sampling": sampling,
+            "sampler": type(sampler.sampler).__name__ if sampler.sampler is not None else "None",
+            "train_years": list(years), "n_train": len(train), "positive_before": int(y.sum()),
+            "n_after": len(sampled_y), "positive_after": int(np.sum(sampled_y)),
+            "fs": fs, "ratio": ratio, "selected_features": selected, "n_features": len(selected),
+            "fit_predict_seconds": perf_counter() - begin, "params": params,
+            "warnings": sorted({f"{w.category.__name__}: {w.message}" for w in observed}),
+            "selector_seed": self.seed, "selector_fit_scope": "original_training_only_before_sampling",
+            "future_labels_used": False, "completed_at": now(),
+        }
+        temporary = path.with_suffix(".tmp")
+        with temporary.open("wb") as stream:
+            np.savez_compressed(stream, source_row_id=future.index.to_numpy(), probability=probabilities)
+        temporary.replace(path)
+        audit["cache_sha256"] = sha256(path)
+        atomic_json(audit_path, audit)
+        return pd.Series(probabilities, index=future.index)
+
+
+def candidates(classifiers, sampling, test_year, pool_size):
+    """Predeclared equal-weight groups; no test-driven subset search."""
+    ends = base.model_window_ends(test_year, pool_size)
+    newest = (ends[-1],)
+    groups = {}
+
+    def add(name, family, models, samplers, windows):
+        members = tuple(product(models, samplers, windows))
+        if len(members) > 1 or family == "single":
+            groups[name] = {"family": family, "members": members}
+
+    for model, sampler in product(classifiers, sampling):
+        add(f"Newest_{model}_{sampler}", "single", (model,), (sampler,), newest)
+        add(f"FIFO_{model}_{sampler}", "temporal", (model,), (sampler,), ends)
+    # Cross-sampling ensembles use all three requested sampling treatments;
+    # none remains an independent control, not an implicit fourth vote.
+    sampled = tuple(s for s in sampling if s != "none")
+    for model in classifiers:
+        add(f"SamplingNewest_{model}", "sampling", (model,), sampled, newest)
+        add(f"SamplingFIFO_{model}", "sampling_temporal", (model,), sampled, ends)
+    for sampler in sampling:
+        add(f"ClassifierNewest_{sampler}", "classifier", classifiers, (sampler,), newest)
+        add(f"ClassifierFIFO_{sampler}", "classifier_temporal", classifiers, (sampler,), ends)
+    add("CombinedNewest", "combined", classifiers, sampled, newest)
+    add("CombinedFIFO", "combined_temporal", classifiers, sampled, ends)
+    return groups
+
+
+def group_probabilities(cache, members, index, fs="none", ratio=1.0):
+    predictions = [cache.get(*member, fs, ratio).loc[index].to_numpy() for member in members]
+    if not predictions:
+        raise ValueError("Empty ensemble")
+    return np.mean(predictions, axis=0)
+
+
+def rank_validation(y_validation, candidate_probabilities):
+    """This function deliberately accepts no test data or test scores."""
+    ranking = [{"candidate": name, "validation_AP": float(average_precision_score(y_validation, p))}
+               for name, p in candidate_probabilities.items()]
+    if not ranking or any(not np.isfinite(row["validation_AP"]) for row in ranking):
+        raise ValueError("No valid validation candidates")
+    return sorted(ranking, key=lambda row: (-row["validation_AP"], row["candidate"]))
+
+
+def evaluate(name, year, validation, test, vp, tp, metadata):
+    row, predictions = base._evaluate(name, year, validation, test, vp, tp)
+    row.update(metadata)
+    row["Brier"] = float(brier_score_loss(test.target, tp))
+    row["Specificity"] = 1.0 - row["Type1_Error"]
+    row["validation_Brier"] = float(brier_score_loss(validation.target, vp))
+    for prediction in predictions:
+        prediction.update(metadata)
+    return row, predictions
+
+
+def run_seed(data, features, config, seed, directory, progress=None):
+    directory = Path(directory)
+    cache = FrozenCache(data, features, directory / "cache", config, seed, progress)
+    progress = progress or (lambda **kwargs: None)
+    all_ends = sorted({end for year in config["test_years"]
+                       for end in base.model_window_ends(year, config["pool_size"])})
+    failures = []
+    progress(stage="baseline", seed=seed)
+    for end, classifier, sampling in product(all_ends, config["classifiers"], config["sampling"]):
+        try:
+            cache.get(classifier, sampling, end)
+        except Exception:
+            failures.append({"job": job_id(classifier, sampling, end), "error": traceback.format_exc()})
+            atomic_json(directory / "failures.json", failures)
+    if failures:
+        raise RuntimeError(f"{len(failures)} base fits failed; refusing incomplete ensemble comparison")
+    atomic_json(directory / "failures.json", [])
+    # Stage 2: evaluate ALL predefined ensembles before stage 3 FS starts.
+    selected_by_year = {}
+    for year in config["test_years"]:
+        progress(stage="ensembles", seed=seed, test_year=year)
+        validation = data.loc[data.fyear == year - 1]
+        test = data.loc[data.fyear == year]
+        if validation.target.nunique() != 2 or test.target.nunique() != 2:
+            raise ValueError("Validation and test must contain both classes")
+        groups = candidates(config["classifiers"], config["sampling"], year, config["pool_size"])
+        val = {name: group_probabilities(cache, g["members"], validation.index) for name, g in groups.items()}
+        ranking = rank_validation(validation.target, {name: val[name] for name, g in groups.items()
+                                                     if g["family"] != "single"})
+        chosen = ranking[0]["candidate"]
+        selected_by_year[year] = (chosen, groups[chosen])
+        # Freeze selection before computing any test metrics.
+        atomic_json(directory / f"year_{year}/ensemble_selection.json", {
+            "selected": chosen, "ranking": ranking, "members": groups[chosen]["members"],
+            "validation_year": year - 1, "selection_metric": "AP", "test_used": False,
+        })
+        rows, predictions = [], []
+        for name, group in groups.items():
+            tp = group_probabilities(cache, group["members"], test.index)
+            metadata = {"seed": seed, "stage": "baseline" if group["family"] == "single" else "ensemble",
+                        "family": group["family"], "members": json.dumps(group["members"]),
+                        "member_count": len(group["members"]), "fs": "none", "ratio": 1.0}
+            row, pred = evaluate(name, year, validation, test, val[name], tp, metadata)
+            rows.append(row)
+            predictions.extend(pred)
+            if name == chosen:
+                row, pred = evaluate("ValidationSelectedEnsemble", year, validation, test,
+                                     val[name], tp, {**metadata, "stage": "selected", "selected_config": chosen})
+                rows.append(row)
+                predictions.extend(pred)
+        atomic_csv(directory / f"year_{year}/stage12_metrics.csv", pd.DataFrame(rows))
+        atomic_csv(directory / f"year_{year}/stage12_predictions.csv.gz", pd.DataFrame(predictions))
+    # Stage 3: re-fit the selected composition with training-only FS.
+    for year, (chosen, group) in selected_by_year.items():
+        progress(stage="fs", seed=seed, test_year=year, selected_config=chosen)
+        validation, test = data.loc[data.fyear == year - 1], data.loc[data.fyear == year]
+        variants = fs_variants(config["fs_methods"], config["fs_ratios"])
+        vp = {f"{fs}_r{round(ratio * 100)}": group_probabilities(cache, group["members"], validation.index, fs, ratio)
+              for fs, ratio in variants}
+        ranking = rank_validation(validation.target, vp)
+        chosen_fs = ranking[0]["candidate"]
+        atomic_json(directory / f"year_{year}/fs_selection.json", {
+            "selected_config": chosen, "selected_fs": chosen_fs, "ranking": ranking,
+            "validation_year": year - 1, "test_used": False,
+            "note": "Sequential screening reuses validation; final evidence is held-out annual test",
+        })
+        rows, predictions = [], []
+        for fs, ratio in variants:
+            variant = f"{fs}_r{round(ratio * 100)}"
+            tp = group_probabilities(cache, group["members"], test.index, fs, ratio)
+            metadata = {"seed": seed, "stage": "fs", "family": group["family"],
+                        "members": json.dumps(group["members"]), "member_count": len(group["members"]),
+                        "fs": fs, "ratio": ratio, "selected_config": chosen}
+            row, pred = evaluate(f"SelectedEnsemble_{variant}", year, validation, test, vp[variant], tp, metadata)
+            rows.append(row)
+            predictions.extend(pred)
+            if variant == chosen_fs:
+                row, pred = evaluate("ValidationSelectedFS", year, validation, test, vp[variant], tp,
+                                     {**metadata, "stage": "selected_fs"})
+                rows.append(row)
+                predictions.extend(pred)
+        atomic_csv(directory / f"year_{year}/stage3_metrics.csv", pd.DataFrame(rows))
+        atomic_csv(directory / f"year_{year}/stage3_predictions.csv.gz", pd.DataFrame(predictions))
+    summarize_seed(directory, config)
+
+
+def summarize_seed(directory, config):
+    metrics, predictions = [], []
+    for year, stage in product(config["test_years"], ("stage12", "stage3")):
+        metrics.append(pd.read_csv(directory / f"year_{year}/{stage}_metrics.csv"))
+        predictions.append(pd.read_csv(directory / f"year_{year}/{stage}_predictions.csv.gz"))
+    metrics, predictions = pd.concat(metrics, ignore_index=True), pd.concat(predictions, ignore_index=True)
+    keys = ["method", "test_feature_year", "source_row_id"]
+    if predictions.duplicated(keys).any():
+        raise AssertionError("Duplicate prediction keys")
+    reference = None
+    for _, group in predictions.groupby("method"):
+        cohort = group.sort_values(keys[1:])[keys[1:] + ["y_true", "company_name"]].reset_index(drop=True)
+        if reference is not None and not cohort.equals(reference):
+            raise AssertionError("Methods do not share identical test cohorts")
+        reference = cohort
+    pooled = base._pooled_summary(predictions)
+    macro = metrics.groupby("method")[list(base.METRICS) + ["Brier", "Specificity"]].mean().add_prefix("annual_mean_")
+    pooled = pooled.merge(macro, left_on="method", right_index=True)
+    pooled["seed"] = config.get("current_seed", int(metrics.seed.iloc[0]))
+    atomic_csv(directory / "by_year.csv", metrics)
+    atomic_csv(directory / "predictions.csv.gz", predictions)
+    atomic_csv(directory / "summary.csv", pooled)
+    audits = [json.loads(p.read_text(encoding="utf-8")) for p in sorted((directory / "cache").glob("*.json"))]
+    atomic_csv(directory / "training_audit.csv", pd.DataFrame(audits))
+    atomic_json(directory / "complete.json", {"status": "completed", "at": now(),
+                                              "fit_count": len(audits), "prediction_count": len(predictions)})
+
+
+def validate_config(config, data):
+    for key in ("classifiers", "sampling", "fs_methods", "fs_ratios", "test_years", "seeds"):
+        if not config[key] or len(config[key]) != len(set(config[key])):
+            raise ValueError(f"{key} must be nonempty and unique")
+    if config["test_years"] != sorted(config["test_years"]):
+        raise ValueError("Test years must be chronological")
+    if config["pool_size"] < 2 or config["window_years"] < 1 or config["threads"] < 1:
+        raise ValueError("pool_size >= 2, window_years >= 1 and threads >= 1 required")
+    if any(not 0 < ratio < 1 for ratio in config["fs_ratios"]):
+        raise ValueError("FS ratios must be between zero and one")
+    if any(seed < 0 or seed >= 2**32 for seed in config["seeds"]):
+        raise ValueError("Seeds must be uint32")
+    if min(config["test_years"]) - config["pool_size"] - config["window_years"] < data.fyear.min():
+        raise ValueError("Insufficient history for a full FIFO pool")
+    if max(config["test_years"]) > data.fyear.max():
+        raise ValueError("Test year outside data")
+    if not data.index.is_unique:
+        raise ValueError("Source row ids must be unique")
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--classifiers", nargs="+", choices=CLASSIFIERS, default=list(CLASSIFIERS))
+    parser.add_argument("--sampling", nargs="+", choices=SAMPLING, default=list(SAMPLING))
+    parser.add_argument("--fs-methods", nargs="+", choices=FS_METHODS, default=list(FS_METHODS))
+    parser.add_argument("--fs-ratios", type=float, nargs="+", default=[0.5, 0.8])
+    parser.add_argument("--seeds", type=int, nargs="+", default=list(SEEDS))
+    parser.add_argument("--test-years", type=int, nargs="+", default=list(range(2009, 2019)))
+    parser.add_argument("--window-years", type=int, default=3)
+    parser.add_argument("--pool-size", type=int, default=3)
+    parser.add_argument("--threads", type=int, default=4)
+    parser.add_argument("--output-root", type=Path, default=OUTPUT)
+    parser.add_argument("--resume", type=Path)
+    args = parser.parse_args(argv)
+    data, features, annual = base.load_event_data()
+    sources = [Path(__file__), Path(base.__file__), ROOT / "src/data/sampler.py",
+               ROOT / "src/evaluation/metrics.py", ROOT / "config/model_config.yaml",
+               ROOT / "config/sampling_config.yaml"] + sorted((ROOT / "src/models").glob("*_wrapper.py"))
+    provenance = {"data_sha256": sha256(base.US_CSV),
+                  "sources": {p.relative_to(ROOT).as_posix(): sha256(p) for p in sources},
+                  "packages": {p: version(p) for p in ("numpy", "pandas", "scikit-learn", "imbalanced-learn", "xgboost", "lightgbm")},
+                  "python": platform.python_version()}
+    config = {key: getattr(args, key) for key in ("classifiers", "sampling", "fs_methods", "fs_ratios",
+              "seeds", "test_years", "window_years", "pool_size", "threads")}
+    if args.resume:
+        run = args.resume.resolve()
+        manifest = json.loads((run / "manifest.json").read_text(encoding="utf-8"))
+        config = manifest["config"]
+        if manifest["provenance"] != provenance:
+            raise ValueError("Resume refused: source, data or environment changed; create a new run")
+    else:
+        run = args.output_root / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+        run.mkdir(parents=True, exist_ok=False)
+        manifest = {"protocol": PROTOCOL, "config": config, "provenance": provenance,
+                    "created_at": now(), "features": features, "samplers": SAMPLER_NAMES,
+                    "selection": "annual t-1 validation AP, deterministic identifier tie-break; FS after ensemble screening",
+                    "fitting": "window ends t-2; impute -> scale -> FS -> sampling -> classifier; no class weights",
+                    "thresholds": "annual validation F1 and separate validation FPR<=0.05",
+                    "cache": "frozen learner future probabilities, no future labels, no estimator checkpoint",
+                    "limitations": "Reconstructed target; exact availability unverified; post-hoc exploratory; validation reused for sequential screening; fixed hyperparameters; no DES/DCS",
+                    "status": "created"}
+        atomic_json(run / "manifest.json", manifest)
+        atomic_csv(run / "label_audit.csv", annual)
+    validate_config(config, data)
+    # Atomic creation prevents two controllers from mutating a single run.
+    lock = run / "RUNNING.lock"
+    with lock.open("x", encoding="utf-8") as stream:
+        stream.write(str(os.getpid()))
+    print(f"RUN_DIR={run}", flush=True)
+    current_progress = {}
+
+    def progress(**fields):
+        current_progress.update(fields)
+        atomic_json(run / "progress.json", {**current_progress, "updated_at": now(), "pid": os.getpid()})
+    try:
+        manifest.update(status="running", pid=os.getpid(), last_started_at=now())
+        atomic_json(run / "manifest.json", manifest)
+        for seed in config["seeds"]:
+            directory = run / f"seed_{seed}"
+            if not (directory / "complete.json").exists():
+                run_seed(data, features, config, seed, directory, progress)
+        all_summary = pd.concat([pd.read_csv(run / f"seed_{seed}/summary.csv") for seed in config["seeds"]])
+        atomic_csv(run / "summary_by_seed.csv", all_summary)
+        numeric = all_summary.select_dtypes(include=np.number).columns.difference(["seed"])
+        summary = all_summary.groupby("method")[numeric].agg(["mean", "std"])
+        summary.columns = [f"{metric}_seed_{stat}" for metric, stat in summary.columns]
+        atomic_csv(run / "summary.csv", summary.reset_index())
+        manifest.update(status="completed", completed_at=now())
+        progress(stage="completed")
+    except BaseException:
+        manifest.update(status="failed", error=traceback.format_exc(), failed_at=now())
+        raise
+    finally:
+        atomic_json(run / "manifest.json", manifest)
+        lock.unlink()
+
+
+if __name__ == "__main__":
+    main()

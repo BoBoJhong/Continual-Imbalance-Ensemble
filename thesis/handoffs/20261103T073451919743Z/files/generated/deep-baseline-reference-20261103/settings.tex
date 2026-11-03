@@ -1,0 +1,29 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.48\linewidth}@{}}
+\caption{深度學習分類器之既有設定紀錄與更新狀態}\label{tab:deep-reference-settings}\\
+\toprule
+分類器 & 項目 & 保存內容 \\
+\midrule\endfirsthead
+\multicolumn{3}{c}{表~\thetable（續）}\\
+\toprule
+分類器 & 項目 & 保存內容 \\
+\midrule\endhead
+\midrule\multicolumn{3}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+\multirow[t]{8}{=}{TabM} & 展示情境 & Old 1999--2011、Hybrid；由已保存驗證選參紀錄取值 \\*
+ & \nolinkurl{d_block} & 512 \\*
+ & \nolinkurl{dropout} & 0.2 \\*
+ & \nolinkurl{k} & 32 \\*
+ & \nolinkurl{lr} & 0.001 \\*
+ & \nolinkurl{n_blocks} & 3 \\*
+ & \nolinkurl{use_num_embeddings} & False \\*
+ & \nolinkurl{weight_decay} & 1e-05 \\
+\addlinespace[4pt]
+TabICL & 選參與後端 & 原 CSV 未保存選定參數及可確認的後端版本 \\
+\addlinespace[4pt]
+兩分類器 & 事件標籤 & 待以相同年份、驗證規則與種子重跑後更新 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究既有原始結果欄位與執行入口核對)\par TabM 僅展示預先固定情境的一組已選參數，不代表所有邊界皆使用相同設定；不由所選值反推完整歷史搜尋預算。未保存的 TabICL 設定不依目錄名稱或測試分數補造。}
+\endgroup

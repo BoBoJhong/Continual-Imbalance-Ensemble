@@ -1,0 +1,25 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{14\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.09\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}@{}}
+\caption{TabM 與 TabICL 既有最終狀態標籤結果（暫列，待事件數據更新）}\label{tab:deep-reference-summary}\\
+\toprule
+分類器 & 策略 & 紀錄數 & AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{6}{c}{表~\thetable（續）}\\
+\toprule
+分類器 & 策略 & 紀錄數 & AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{6}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+\multirow[t]{3}{=}{TabM} & Old & 60 & 0.6601 & 0.0846 & 0.3800 \\*
+ & New & 60 & 0.8008 & 0.1860 & 0.4231 \\*
+ & Retrain & 4 & 0.7940 & 0.1496 & 0.4111 \\
+\addlinespace[4pt]
+\multirow[t]{3}{=}{TabICL} & Old & 60 & 0.7062 & 0.0931 & 0.4643 \\*
+ & New & 60 & 0.8221 & 0.2057 & 0.4400 \\*
+ & Retrain & 4 & 0.7707 & 0.1380 & 0.4922 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究既有最終狀態標籤之 TabM 與 TabICL 執行紀錄，暫列待更新)\par 本表使用公司最終狀態標籤與舊驗證方式，事件數據待更新。Old／New 平均 15 個邊界與四採樣，Retrain 僅四採樣；紀錄數不是獨立種子數，不與事件模型作同條件排名。TabICL 沿用既有入口名稱，歷史後端待核對。}
+\endgroup

@@ -1,0 +1,25 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}@{}}
+\caption{實驗二各 FS 設定相對同方法 no-FS 之 AUC 差值}\label{tab:stats-exp2-auc}\\
+\toprule
+FS & Equal6 & V-static & OLA & LCA & KNORA-E & KNORA-U \\
+\midrule\endfirsthead
+\multicolumn{7}{c}{表~\thetable（續）}\\
+\toprule
+FS & Equal6 & V-static & OLA & LCA & KNORA-E & KNORA-U \\
+\midrule\endhead
+\midrule\multicolumn{7}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+MI 50\% & -0.0171 & -0.0327 & -0.0257 & -0.0431 & -0.0274 & -0.0220 \\
+MI 80\% & +0.0007 & -0.0007 & -0.0066 & -0.0184 & -0.0100 & +0.0076 \\
+CART 50\% & -0.0304 & -0.0221 & -0.0299 & -0.0295 & -0.0435\(^{*}\) & -0.0229 \\
+CART 80\% & -0.0003 & -0.0013 & +0.0026 & +0.0003 & -0.0056 & +0.0013 \\
+SHAP 50\% & -0.0220 & -0.0182 & -0.0033 & -0.0109 & -0.0216 & -0.0141 \\
+SHAP 80\% & -0.0000 & -0.0036 & -0.0041 & -0.0090 & -0.0129 & -0.0013 \\
+RFE 50\% & -0.0198 & -0.0141 & -0.0278 & -0.0286 & -0.0378 & -0.0125 \\
+RFE 80\% & +0.0022 & -0.0002 & +0.0115 & -0.0013 & -0.0014 & +0.0087 \\
+\end{longtable}
+\noindent{\footnotesize 資料來源：本研究實驗結果整理。\par 50\% 與 80\% 設定實際保留 9 與 14 個特徵。正值表示 AUC 增加。星號定義與表~\ref{tab:stats-exp1-auc} 相同；完整區間、F1-score、Recall 與校正值見附錄~\ref{sec:stats-full}。}
+\endgroup

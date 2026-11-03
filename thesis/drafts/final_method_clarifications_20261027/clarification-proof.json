@@ -1,0 +1,52 @@
+{
+  "status": "passed",
+  "official_commit": "8bcd8db3b432b1fa6d65e26753b5c9fc6567438d",
+  "local_matches_official_byte_for_byte": true,
+  "original_and_updated_public_company_count": 8971,
+  "reported_paper_company_count": 8262,
+  "company_count_resolution": "inconsistency in author descriptions versus both public releases; not caused by local processing or company-count changes in 2024; no author mapping to 8262 available",
+  "target": "company-level status repeated across all observed years; no event date supplied; not independent next-year event labels",
+  "source_financial_header_order": [
+    "current_assets",
+    "total_assets",
+    "cost_of_goods_sold",
+    "total_long_term_debt",
+    "depreciation_and_amortization",
+    "ebit",
+    "ebitda",
+    "gross_profit",
+    "inventory",
+    "total_current_liabilities",
+    "net_income",
+    "retained_earnings",
+    "total_receivables",
+    "total_revenue",
+    "market_value",
+    "total_liabilities",
+    "net_sales",
+    "total_operating_expenses"
+  ],
+  "classifier_position": "fixed XGBoost base learner; not validation-selected best algorithm",
+  "classifier_selected_on_test": false,
+  "source_sha256": {
+    "thesis/drafts/final_method_clarifications_20261027/official-public-data.csv": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+    "thesis/drafts/final_method_clarifications_20261027/official-2022-data.csv": "1aff805af8d2f4368ffcd876814a4589e09905a9cbac289a7b780ed0f7a2478a",
+    "thesis/drafts/final_method_clarifications_20261027/official-data-comparison.json": "367fcef364864e612062f8ad36d93a7774d496684f633648b51193a52fc3d1d7",
+    "thesis/drafts/final_method_clarifications_20261027/official-data-history.json": "5c22ea8c0e0ec942b7f4aaf0626f159a8f6cfcd5d8846c71d5dfead467590e58",
+    "thesis/drafts/final_method_clarifications_20261027/official-2022-comparison.json": "8695a4ca6e25d912aba56483864aca21a50a00b2e4d50bcbeb825c06a865b5dd",
+    "thesis/drafts/final_method_clarifications_20261027/official-paper-archive.zip": "86d6ec8c34f1cb17e4acb5429fc02ca62988abfb621149a4ce0c4122a4f6983c",
+    "thesis/drafts/final_method_clarifications_20261027/hardware.json": "540efa965cd6b6b4234da123aa375bc8c8ba987701556df5408b182bfdf09a4a",
+    "data/raw/bankruptcy/american_bankruptcy_dataset.csv": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+    "scripts/thesis/resolve_method_clarifications.py": "faa945a33a2d7343eae0bd3c64bbf95694270a28e32a6f3324c9dc9134e51f6e",
+    "scripts/thesis/export_fixed_statistics.py": "8e72ad11477b85aa29266af63405352afff11bea976f2d97a56c7d314b469fe1",
+    "results/phase1_baseline/xgb/rerun_20260406_gridplus_n24/tuned/bankruptcy_year_splits_xgb_raw.csv": "73091c35626daa030a463aab05367a35d26f303404769317e92dc23f111e77c9",
+    "results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv": "987a0d8fca8723e3279223d2ed0993e6726e8c02f5a832b6c2fa65caa8ad12d5",
+    "results/phase1_baseline/random_forest/tuned/bankruptcy_year_splits_rf_raw.csv": "834fdd9ddc937e097d6313da626239b7a57ea097093bbf3f954f217c0439f2a0",
+    "results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv": "eee97abd27078b0b60bce9e228977d287d3810e45e9af600b0be5f630184868e",
+    "results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv": "3d8454dd425d1e45667ac5e88b995b3dc53a473b88d7250a2319dcb5e985a138"
+  },
+  "generated_sha256": {
+    "thesis/latex/generated/method-clarifications-20261027/baseline-validation.tex": "640fb1bccc4e61160018b99994af37a2b1c81749685f4d4e222376fbdfc9c00f",
+    "thesis/latex/generated/method-clarifications-20261027/hardware.tex": "fbb0af9849377df4c497911f81a7e837c4dd9678f4e6708b229fe50949f320e0"
+  }
+}

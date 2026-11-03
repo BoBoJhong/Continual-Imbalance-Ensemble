@@ -1,0 +1,41 @@
+{
+  "official_url": "https://raw.githubusercontent.com/sowide/bankruptcy_dataset/8bcd8db3b432b1fa6d65e26753b5c9fc6567438d/american_bankruptcy_dataset.csv",
+  "official_commit": "8bcd8db3b432b1fa6d65e26753b5c9fc6567438d",
+  "official_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+  "local_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+  "official_rows": 78682,
+  "official_company_count": 8971,
+  "official_columns": [
+    "company_name",
+    "fyear",
+    "status_label",
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18",
+    "Division",
+    "MajorGroup"
+  ],
+  "local_company_count": 8971,
+  "local_extra_columns": [],
+  "all_model_fields_equal": true,
+  "official_status_changes_per_company": {
+    "1": 8971
+  },
+  "official_positive_rows": 5220,
+  "official_positive_companies": 609
+}

@@ -1,0 +1,58 @@
+{
+  "created_at": "2026-09-29T04:36:14.767458+00:00",
+  "run": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\results\\phase_flexible\\study3b_full_pipeline\\runs\\20260928T185026381432Z",
+  "completed_seeds": [
+    42,
+    123,
+    456
+  ],
+  "planned_seeds": [
+    42,
+    123,
+    456,
+    789,
+    2024,
+    7,
+    21,
+    84,
+    168,
+    999
+  ],
+  "source_sha256": {
+    "seed_42\\summary.csv": "b9a7851f20b2bfaba665715c96611256ea9bd896d153e2ad1f87b1456f205374",
+    "seed_42\\by_year.csv": "57f03f5a15da6dfc9c40a1ec9332189c6def887dbab4bbe410828c753c75b620",
+    "seed_42\\complete.json": "e7d26954c46738dd035b5b4b37706142799a4e08d085aeb8ff07b2faeda8c540",
+    "seed_123\\summary.csv": "7c0a9705e45202079db482de28a78364795e0f3cce90fd755a71fcf200e05f8c",
+    "seed_123\\by_year.csv": "6b10a5d0965079717dd88aa8fb0148d18efb9cbab2bb54398627231895ab056e",
+    "seed_123\\complete.json": "1633d0124ebeafb2788c64be4977fe76f08185740e0ea7f50b16492ee7bf3940",
+    "seed_456\\summary.csv": "7b3a386511efa23902ed55ff86e035d5dc728fce0bce53c9801ad0817f472013",
+    "seed_456\\by_year.csv": "385dfc77f60ab90592c542a76abcf38c49a5eade22d298f316c2a782a1ac0679",
+    "seed_456\\complete.json": "a81be221c4d28bfa1931c466e43fc649f921443176e78a9c2b0f4a8b2f2dde25"
+  },
+  "method_counts": {
+    "01_single_models/lr": 4,
+    "01_single_models/rf": 4,
+    "01_single_models/xgb": 4,
+    "01_single_models/lgb": 4,
+    "01_single_models/mlp": 4,
+    "01_single_models/svm": 4,
+    "02_ensembles/temporal": 24,
+    "02_ensembles/sampling": 6,
+    "02_ensembles/sampling_temporal": 6,
+    "02_ensembles/classifier": 4,
+    "02_ensembles/classifier_temporal": 4,
+    "02_ensembles/combined": 1,
+    "02_ensembles/combined_temporal": 1,
+    "02_ensembles/validation_selected": 1,
+    "03_feature_selection/fs_comparison": 9,
+    "03_feature_selection/validation_selected": 1
+  },
+  "methods_total": 81,
+  "checks": {
+    "unique_partition": true,
+    "equal_method_coverage": true,
+    "equal_year_coverage": true,
+    "annual_means_reconciled": true
+  },
+  "status": "interim"
+}

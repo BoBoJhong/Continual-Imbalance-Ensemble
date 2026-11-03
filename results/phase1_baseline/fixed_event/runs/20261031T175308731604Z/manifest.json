@@ -1,0 +1,134 @@
+{
+  "protocol": "fixed_bankruptcy_event_target_baselines_v1",
+  "status": "completed",
+  "created_at": "2026-10-31T17:53:08.732090+00:00",
+  "config": {
+    "classifiers": [
+      "xgb",
+      "lgb",
+      "rf",
+      "lr"
+    ],
+    "periods": [
+      "Old",
+      "New",
+      "Retrain"
+    ],
+    "samplings": [
+      "none",
+      "under",
+      "over",
+      "hybrid"
+    ],
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      2024,
+      7,
+      21,
+      84,
+      168,
+      999
+    ],
+    "budget": 24,
+    "threads": 4,
+    "workers": 4,
+    "tabm_fixed": {
+      "pos_weight": null,
+      "batch_size": 1024,
+      "max_epochs": 100,
+      "patience": 10
+    }
+  },
+  "provenance": {
+    "raw_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+    "labels_sha256": "abe246e285d4f6214df8ae32d7dd245647c6c7cf89dc10e79eafc4830e44bf11",
+    "python": "3.14.0",
+    "versions": {
+      "numpy": "2.4.2",
+      "pandas": "3.0.1",
+      "scikit-learn": "1.8.0",
+      "xgboost": "3.2.0",
+      "lightgbm": "4.6.0",
+      "imbalanced-learn": "0.14.1",
+      "torch": "2.12.0.dev20260326+cu128",
+      "tabm": "0.0.3"
+    },
+    "sources": {
+      "experiments\\phase1_baseline\\bankruptcy_fixed_event_baselines.py": "9e0464b6029d10232797b56f09eea3689054e966cd2a49a6097c8a78a2a2f76d",
+      "experiments\\phase2_ensemble\\dynamic\\des\\bankruptcy_standard_dynamic.py": "760540b189e2c264fa7189a216a827db5c36cd0b07e6ad1759c669a49bcd086e",
+      "experiments\\phase2_ensemble\\dynamic\\des\\bankruptcy_standard_dynamic_event.py": "31766dcc611dd071ca1fe01281043b03a6c74d7ea4a4151715a0b74c6680a46e",
+      "experiments\\_shared\\baseline_val_search.py": "0a44761277ee2c6b9a83cff04f49ca1200cc0764014bc5950dab26081f8e005b",
+      "experiments\\_shared\\common_modeling.py": "210d5bb3b3cb2a53b4a1eecbdd301a5bf7149393a0d591c0450724e4c27428ec",
+      "src\\data\\sampler.py": "4aeb1e488f28f9141096214156e94c2568c2f57939fc2c5277ea1f456a3b3c5a",
+      "src\\models\\xgboost_wrapper.py": "7d45444407d25551af061658f992015891e81f6bfb04202fdbea7ae38225369e",
+      "src\\models\\lightgbm_wrapper.py": "17a6282348e27cecb6d7b5efc0317c270397015a0948ea72f3fee1ea5069d3c0",
+      "src\\models\\random_forest_wrapper.py": "b6e3074c6e6dc2d4bf4563ceca5f3912d042c71bf99b8151ce7eec596081f871",
+      "src\\models\\logistic_regression_wrapper.py": "dd656f1fd0af6f7741a0fdcb579a30e88f07c51643cc824ce1bb3bf63f4b5ff0",
+      "src\\models\\tabm_wrapper.py": "72052e14081247fbcdee8b17dd8c29ef3d9f9903f3e209268d1b8b5f821d02ae",
+      "src\\evaluation\\metrics.py": "07f81f81138338e39e46d194e0aa5a39819d21c360b2968a18da0c0c4728c14e",
+      "config\\model_config.yaml": "ac67e15f7666a83a6688d22d3a16848917ecfebc77c61637d8a8cb96c61edfac",
+      "config\\sampling_config.yaml": "2692f15fabceeaf0f354ecba10c94b6ce99c28af510b815e8aecc8f1701e603d"
+    }
+  },
+  "command": [
+    "experiments/phase1_baseline/bankruptcy_fixed_event_baselines.py",
+    "--classifiers",
+    "xgb",
+    "lgb",
+    "rf",
+    "lr",
+    "--workers",
+    "4"
+  ],
+  "features": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ],
+  "target": "reconstructed next-year event (same ledger as the event-target Study I/II run)",
+  "training_periods": {
+    "Old": "1999-2011",
+    "New": "2012-2013",
+    "Retrain": "1999-2013"
+  },
+  "validation": "all of 2014 (event-run DSEL+Calibration); hyperparameters by AUC, threshold by F1",
+  "representation": {
+    "selector_fit_scope": "Old_fit_only",
+    "imputer_fit_scope": "Old_fit_only",
+    "scaler_fit_scope": "Old_fit_only"
+  },
+  "samplers": {
+    "none": "None",
+    "under": "TomekLinks",
+    "over": "ADASYN",
+    "hybrid": "SMOTEENN"
+  },
+  "imbalance_intervention": "sampling only; no class weights",
+  "tuning": "same budget per classifier x period x sampler; candidate 0 = ensemble factory default; tuned once with the first seed",
+  "classifier_choice": "rank by mean 2014 validation AUC over the six ensemble pool slots (Old/New x under/over/hybrid)",
+  "tabm_early_stopping": "10% stratified holdout of the real training-period rows, before sampling",
+  "excluded": "SVM, sklearn MLP and other deep tabular models: not part of the thesis baseline set",
+  "limitations": "2014 validation has 33 events; tuning noise is shared by all classifiers; seed SD is not independent-data uncertainty",
+  "last_started_at": "2026-10-31T17:53:08.753913+00:00",
+  "pid": 37656,
+  "completed_at": "2026-10-31T21:30:29.483018+00:00",
+  "n_metric_rows": 2400
+}

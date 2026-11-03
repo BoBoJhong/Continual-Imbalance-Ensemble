@@ -1,0 +1,52 @@
+{
+  "job_id": "svm_hybrid_M2012_mi_r80",
+  "seed": 456,
+  "classifier": "svm",
+  "sampling": "hybrid",
+  "sampler": "SMOTEENN",
+  "train_years": [
+    2010,
+    2011,
+    2012
+  ],
+  "n_train": 10623,
+  "positive_before": 86,
+  "n_after": 21054,
+  "positive_after": 10517,
+  "fs": "mi",
+  "ratio": 0.8,
+  "selected_features": [
+    "X11",
+    "X12",
+    "X15",
+    "X6",
+    "X3",
+    "X1",
+    "X16",
+    "X13",
+    "X7",
+    "X2",
+    "X17",
+    "X5",
+    "X14",
+    "X8"
+  ],
+  "n_features": 14,
+  "fit_predict_seconds": 144.6058160000248,
+  "params": {
+    "C": 1.0,
+    "kernel": "rbf",
+    "gamma": "scale",
+    "probability": true,
+    "class_weight": null,
+    "random_state": 456,
+    "max_iter": -1,
+    "cache_size": 500
+  },
+  "warnings": [],
+  "selector_seed": 456,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-09-29T02:10:52.471467+00:00",
+  "cache_sha256": "5e4421231970407d14fe0d3cdd3f1b9f19dbf6a2da688c03b9af73dbf3771e57"
+}

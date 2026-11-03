@@ -1,0 +1,16 @@
+{
+  "replicates": 49999,
+  "n_tests": 165,
+  "rejected_by_experiment": {
+    "experiment1": 6,
+    "experiment2": 10
+  },
+  "rejected_by_experiment_metric": {
+    "experiment1/AUC": 4,
+    "experiment1/F1": 2,
+    "experiment1/Recall": 0,
+    "experiment2/AUC": 1,
+    "experiment2/F1": 0,
+    "experiment2/Recall": 9
+  }
+}

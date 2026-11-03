@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "validation": "built-in compile_latex_document returned kind=success",
+  "open_document": "chapters/03_method.tex",
+  "main_document": "main.tex",
+  "fix": "BibLaTeX backend=biber -> backend=bibtex; numeric style retained",
+  "main_sha256": "637e9b1d21a1f8712031fafc204bc7329b6f7cb17366dd73736ae7ac52c1e16b",
+  "chapter_and_appendix_unchanged": true,
+  "separate_pdf_exported": false,
+  "global_registry_or_application_files_modified": false
+}

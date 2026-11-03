@@ -1,0 +1,44 @@
+{
+  "job_id": "rf_under_M2010_mi_r50",
+  "seed": 168,
+  "classifier": "rf",
+  "sampling": "under",
+  "sampler": "TomekLinks",
+  "train_years": [
+    2008,
+    2009,
+    2010
+  ],
+  "n_train": 11225,
+  "positive_before": 116,
+  "n_after": 11181,
+  "positive_after": 116,
+  "fs": "mi",
+  "ratio": 0.5,
+  "selected_features": [
+    "X11",
+    "X15",
+    "X12",
+    "X6",
+    "X3",
+    "X1",
+    "X7",
+    "X9",
+    "X5"
+  ],
+  "n_features": 9,
+  "fit_predict_seconds": 10.832036899984814,
+  "params": {
+    "n_estimators": 200,
+    "class_weight": null,
+    "random_state": 168,
+    "n_jobs": 4,
+    "max_depth": null
+  },
+  "warnings": [],
+  "selector_seed": 168,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-10-01T12:39:52.963270+00:00",
+  "cache_sha256": "209db1d7275b303ebb79884865c5bb6c17788138dd117ec50c3ca2d8431e722f"
+}

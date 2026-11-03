@@ -1,0 +1,79 @@
+{
+  "verified_at_utc": "2026-11-03T07:03:46.482193+00:00",
+  "status": "passed",
+  "scope": "authorized local thesis revision; no online edits or new training",
+  "pages": 87,
+  "pdf_sha256": "a7d0fef4ba50eb3e908bc47453880ebfb56960ec119dfc0de175b89a25b6a205",
+  "native_build": "passed",
+  "bibliography": "Biber 2.22, existing native path; required normal local process permissions; BibTeX trial not accepted as final build",
+  "source_check": "passed; pinned-source snapshot and all generated evidence",
+  "analysis_checks": "both 165-test exports and independent event Holm recalculation passed",
+  "tests": {
+    "passed": 44,
+    "warning": "pytest cache could not be created; tests passed"
+  },
+  "visual_review": {
+    "representative_pages": [
+      3,
+      4,
+      15,
+      20,
+      23,
+      26,
+      45,
+      46,
+      47,
+      49,
+      51,
+      52,
+      58,
+      59,
+      60,
+      63,
+      64,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81
+    ],
+    "checks": "abstracts single page, new main table and appendix rows readable, group labels remain together, no clipping or overlap observed; subsection/table orphan positions repaired"
+  },
+  "log_checks": {
+    "undefined_references": false,
+    "missing_characters": false,
+    "overfull_boxes": false,
+    "remaining_notices": [
+      "NCU NOTICE: Signed form forms/authorization.pdf not inserted.",
+      "NCU NOTICE: Signed form forms/advisor.pdf not inserted.",
+      "NCU NOTICE: Signed form forms/committee.pdf not inserted."
+    ]
+  },
+  "handoff": "thesis/handoffs/20261103T070318349378Z",
+  "uncertainty": [
+    "proxy event dates not individually verified",
+    "9,999 event resamples give limited tail precision",
+    "not a complete external citation audit",
+    "baseline/ensemble tuning and validation not aligned"
+  ],
+  "source_audit": "source-audit.json",
+  "changed_files": [
+    "config/thesis_sources.json",
+    "scripts/thesis/export_fixed_statistics.py",
+    "scripts/thesis/sync_results.py",
+    "docs/研究方向.md",
+    "thesis/README.md",
+    "thesis/latex/chapters/01_introduction.tex",
+    "thesis/latex/chapters/02_literature.tex",
+    "thesis/latex/chapters/03_method.tex",
+    "thesis/latex/chapters/04_experiments.tex",
+    "thesis/latex/chapters/05_conclusion.tex",
+    "thesis/latex/chapters/appendix.tex",
+    "thesis/latex/frontmatter/abstract_zh.tex",
+    "thesis/latex/frontmatter/abstract_en.tex"
+  ]
+}

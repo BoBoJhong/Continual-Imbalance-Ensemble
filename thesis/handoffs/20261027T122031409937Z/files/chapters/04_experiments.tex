@@ -1,0 +1,98 @@
+\chapter{實驗設計與結果}\label{chap:results}
+\begingroup
+\setlength{\emergencystretch}{2em}
+
+\section{統計分析資料與比較範圍}
+
+本章先呈現實驗一的 Baseline 與 Old／New 集成結果，再比較實驗二的特徵選取結果。Baseline 與固定年份集成的驗證方式不同，因此分開呈現；統計檢定只比較資料切分與驗證規則相同的方法。集成與 FS 使用 1999--2011 年訓練 Old 模型，2012--2013 年訓練 New 模型，2014 年分為 DSEL 與 Calibration，2015--2018 年作為 Test。Test 含 12,282 筆公司年度紀錄，其中 287 筆為正類；若按公司計算，共 3,700 家，其中 119 家為破產公司。
+
+固定年份集成與 FS 共使用十個隨機種子及九種特徵設定，合計 90 組設定。統計分析前，先核對各組測試樣本與標籤，再以保存的預測機率及門檻重算指標，確認與原紀錄一致。本次分析沿用原有模型與驗證決策，沒有重新選擇設定。
+
+表中的「合併四年結果（pooled）」先在每個種子內合併四個測試年度計算，再取十個種子的平均值。標準差用來觀察十次執行的分數有多接近。信賴區間與統計檢定則依第~\ref{sec:method-statistics}~節，以公司為單位重抽樣：同一公司的各年度紀錄一起保留，兩個方法使用同一批抽到的公司。全部 165 項比較再一併採 Holm 校正，降低同時比較多種方法時的誤判機會。
+
+本章表格的粗體只幫助辨認指定比較範圍內較高的分數，範圍在各表下方說明。粗體不代表差異已達統計顯著；是否顯著仍依校正後的檢定結果判斷。第三章超參數表的粗體則表示驗證資料選出的參數值，兩者用途不同。
+
+Baseline 的 Old／New 使用 15 組年份邊界，每組包含四種採樣；Retrain 的每種採樣只有一筆完整期間結果。其表格不加上跨種子的標準差，也不把重疊邊界當成獨立重複。與固定年份集成尚未完成同協定的重新調參比較，因此兩類結果的分數差不作為集成效益之檢定證據。
+
+\section{實驗一：Baseline 分類器比較}\label{sec:results-baseline}
+
+表~\ref{tab:results-baseline} 彙整七組已保存的分類器／版本紀錄。Old 與 New 先在同一邊界內平均四種採樣，再平均 15 組邊界；Retrain 直接平均四種採樣。這個彙整方式讓每個邊界與每種採樣具有相同權重，沒有依 Test 挑出最佳組合。各採樣的完整結果列於附錄~\ref{sec:results-baseline-full}。
+
+\input{generated/chapter-results-20261027/baseline-summary.tex}
+
+七組紀錄的 New 平均 AUC 與 F1-score 均高於對應 Old。例如 XGBoost 擴充版本的 Old／New AUC 為 0.7091／0.8589，F1-score 為 0.1138／0.2475；其 Retrain AUC 為 0.8386。這些數值反映本資料中近期期間模型的描述性表現，並未排除樣本量、驗證來源或歷史執行設定差異的影響。
+
+Recall 的方向並不完全相同。Logistic Regression 的 Old Recall 為 0.6305，高於 New 的 0.3710，但 Old F1-score 僅為 0.0691，低於 New 的 0.1493。因此，較高 Recall 不能單獨解釋為較好的分類表現，也需要同時檢視正類預測的精確程度。
+
+XGBoost 兩版本分列，TabICL 依原標記呈現；缺少的後端與驗證資料不由 Test 反推。這些紀錄用於觀察訓練期間與採樣的差異，因歷史調參條件不同，不作跨演算法排名。後續集成採用第三章的固定 XGBoost。
+
+\section{實驗一：Old／New 集成比較}\label{sec:results-experiment1}
+
+\subsection{六個基礎模型與靜態成員數}
+
+本部分使用完整 18 個特徵與固定年份配置。表~\ref{tab:results-pool-models} 先列六個池內模型的測試結果，使後續整合結果可連同成員本身的表現解讀。
+
+\input{generated/chapter-results-20261027/pool-models.tex}
+
+例如 New-under 的 AUC、F1-score 與 Recall 為 0.8067、0.2332 與 0.3206，顯示六個基礎模型的表現並不相同。本表僅列出分數，未另外檢定個別模型與 V-static 或動態方法的差異，因此不由分數高低宣稱差異已達統計顯著。
+
+\input{generated/chapter-results-20261027/static-size.tex}
+
+表~\ref{tab:results-static-size} 將 49 個混合候選依成員數分組。兩模型候選的平均 AUC 為 0.7701，六模型為 0.7815；F1-score 並非在每次增加成員時都上升。這些平均值涵蓋不同模型組合，不能解釋為只改變成員數所造成的效果。實際採用的 V-static 仍由 Calibration AP 決定，不依本表的 Test 平均值選擇成員數。
+
+\subsection{集成方法與配對檢定}
+
+先比較使用完整 18 個特徵的集成結果。Old3 與 New3 各整合同一期間的三種採樣模型，Equal6 使用全部六模型；V-static 則依各種子的 Calibration AP，從 49 個混合子集中選定成員。動態方法使用相同六模型池與 DSEL，結果見表~\ref{tab:stats-exp1-descriptive}。
+
+\input{generated/statistics-20261027T051346477136Z/experiment1-descriptive.tex}
+
+表~\ref{tab:stats-exp1-auc} 將各方法與 Equal6 比較：差值為正表示 AUC 較高，為負表示較低。95\% 信賴區間表示公司重抽樣估計的差值範圍；是否達到統計顯著，則看 Holm 校正後的 \(p_H\) 是否小於 0.05。
+
+\input{generated/statistics-20261027T051346477136Z/experiment1-auc-tests.tex}
+
+V-static 的 AUC 與 F1-score 相對 Equal6 分別增加 0.0337 與 0.0540，Holm 校正後 \(p_H\) 分別為 0.00632 與 0.02416。AUC 差值的逐項 95\% 信賴區間為 [0.0198, 0.0480]。其靜態成員由 Calibration 決定，因此該差異屬於驗證選模程序與完整六模型等權平均之比較。相對地，Old3 的 AUC 與 F1-score 差值分別為 \(-0.0681\) 與 \(-0.0647\)，兩者 \(p_H\) 均為 0.00330。
+
+DCS-OLA 與 DCS-LCA 的 AUC 相對 Equal6 分別降低 0.0430 與 0.0446，兩者 \(p_H=0.01860\)。New3、KNORA-E 與 KNORA-U 的 AUC 比較未通過整體 Holm 校正；所有方法相對 Equal6 的 Recall 比較亦未達校正後顯著。這些結果顯示，不能預設動態選擇或跨期間整合必然優於所有控制組。
+
+F1-score 與 Recall 的完整檢定列於附錄~\ref{sec:stats-full}。AUC 為主要報告指標，但其改善不自動代表指定門檻下的 Recall 也同時改善；三項指標須分別解讀。
+
+\subsection{不同測試年度的表現}
+
+\input{generated/chapter-results-20261027/ensemble-yearly.tex}
+
+表~\ref{tab:results-ensemble-yearly} 分開呈現四個測試年度。以 V-static 為例，2015 年與 2018 年 AUC 為 0.8022 與 0.8556，F1-score 卻由 0.2949 降至 0.1304。AUC 衡量正負類分數能否排開，F1-score 則與實際分類門檻有關，兩者可能朝不同方向變化。因此，除了合併四年的 AUC，也需要查看逐年結果。
+
+測試正類紀錄數由 2015 年的 111 筆降至 2018 年的 36 筆，類別比例與樣本組成也隨年度不同。年度結果維持原驗證門檻，沒有依測試年度重新校正；本表不將四個年度當成四次獨立實驗，也未據此宣稱變化由特定景氣或漂移因素造成。
+
+\section{實驗二：FS 集成比較}\label{sec:results-experiment2}
+
+接著將八種 FS 條件，與相同種子、測試公司及集成方法的 no-FS 結果配對。兩種保留設定分別使用 9 與 14 個特徵，精簡率為 50.00\% 與 22.22\%。各條件都重新訓練模型，並依相同的 Calibration 規則選擇靜態成員與門檻。
+
+\subsection{特徵條件的完整測試結果}
+
+表~\ref{tab:results-fs-auc}、表~\ref{tab:results-fs-f1} 與表~\ref{tab:results-fs-recall} 分別列出八個 FS 條件及 no-FS 對照。每一欄使用同一種集成規則，每一條件以十個種子彙整，不把不同方法的分數混成單一平均。
+
+\input{generated/chapter-results-20261027/fs-auc-absolute.tex}
+\input{generated/chapter-results-20261027/fs-f1-absolute.tex}
+\input{generated/chapter-results-20261027/fs-recall-absolute.tex}
+
+以 Equal6 為例，no-FS、MI 50\% 與 MI 80\% 的 AUC 為 0.7815、0.7644 與 0.7822，顯示大幅刪減與保留較多特徵的結果不同。V-static 在 SHAP 50\% 下的 Recall 為 0.3502，高於 no-FS 的 0.2481，但 F1-score 為 0.1867，低於 no-FS 的 0.2355。因而不能把少數類涵蓋率的增加直接視為所有指標均改善。
+
+\subsection{與同方法 no-FS 的配對比較}
+
+\input{generated/statistics-20261027T051346477136Z/experiment2-auc-differences.tex}
+
+表~\ref{tab:stats-exp2-auc} 呈現 FS 與同方法 no-FS 的 AUC 差值。完整的 48 組 AUC 比較，以及 F1-score、Recall 的檢定結果與信賴區間，列於附錄~\ref{sec:stats-full}。分數增加不一定達到統計顯著；沒有達到顯著，也不能反過來認定兩者表現相同。
+
+Holm 校正後，沒有 FS 條件呈現顯著的 AUC 增加，F1-score 的全部 48 項比較也未達顯著。CART 50\% 搭配 KNORA-E 的 AUC 低 0.0435，\(p_H=0.03900\)，達到本次設定的顯著門檻。不過，這個值靠近 0.05，且隨機重抽估計仍有波動，因此對這一項結果保留較審慎的解讀。
+
+Recall 共有九項比較通過 Holm 校正，其中 V-static 在 MI 80\%、SHAP 50\%、SHAP 80\% 及 RFE 80\% 下增加，其餘五項為 DCS 方法下的下降。例如，SHAP 50\% 的 V-static Recall 增加 0.1021，\(p_H=0.00632\)；CART 50\% 的 DCS-LCA Recall 降低 0.1847，\(p_H=0.00330\)。此差異顯示 FS 的影響與集成方法有關，不能僅因部分 Recall 改善，就推論 FS 全面提升區辨能力或精確率與召回率的平衡。
+
+V-static 在 FS 後會重新選擇成員與門檻，因此分數變化包含整個選模流程的影響。其他方法雖然保持集成規則，仍會重新訓練與決定門檻。故本章比較的是加入 FS 後整套流程的結果，無法把所有變化都歸因於特徵數減少。
+
+\section{統計推論範圍與限制}
+
+本章的統計分析是在原實驗完成後補做，用來檢查已保存的分數差異。全部 165 項比較均保留，不只列出分數增加或達到顯著者。重抽樣一起保留同公司的各年度紀錄，但沒有重新訓練模型，因此不能代表換一批訓練資料或換到其他年份時的結果。不同公司也可能受同一產業或景氣影響，這部分未另行估計。
+
+本章使用公開資料中的公司層級狀態，該標籤在同一公司所有年度保持相同，且公司可能跨擬合與測試期間出現。因此，結論限於本資料與既定時間分區下的回溯性公司狀態分類。統計差異不等同模型已具備提前一年預測能力，也不能據此宣稱對全新公司或不同市場具有普遍優越性。第三章的欄位表已依實際發布版修正，但模型使用的財務欄位、數值與預測結果保持原狀。
+\endgroup

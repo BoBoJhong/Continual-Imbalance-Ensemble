@@ -1,0 +1,53 @@
+{
+  "job_id": "lr_hybrid_M2016_none_r100",
+  "seed": 999,
+  "classifier": "lr",
+  "sampling": "hybrid",
+  "sampler": "SMOTEENN",
+  "train_years": [
+    2014,
+    2015,
+    2016
+  ],
+  "n_train": 10049,
+  "positive_before": 95,
+  "n_after": 19883,
+  "positive_after": 9929,
+  "fs": "none",
+  "ratio": 1.0,
+  "selected_features": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ],
+  "n_features": 18,
+  "fit_predict_seconds": 0.9133871000958607,
+  "params": {
+    "class_weight": null,
+    "random_state": 999,
+    "solver": "lbfgs",
+    "max_iter": 1000,
+    "warm_start": false
+  },
+  "warnings": [],
+  "selector_seed": 999,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-10-01T23:15:34.936124+00:00",
+  "cache_sha256": "7ba53f27e05218fe1f1b70993fbaa7512a858142de5c5dc70f319290aadd9dad"
+}

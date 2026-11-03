@@ -1,0 +1,775 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "request": "我認為就是要清理一些很舊的檔案 股票相關的感覺可以移除了",
+  "scope": "Dedicated stock data, experiments, tools, results, logs and caches removed; bankruptcy/medical and mixed historical records preserved.",
+  "files": [
+    {
+      "path": "data/raw/stock/stock_data.csv",
+      "bytes": 1048554,
+      "sha256": "232002a789e40221f7bf3442ef82972a87818f7593f6e86d92326b0cf12325b9",
+      "category": "data"
+    },
+    {
+      "path": "data/raw/stock/stock_dji.csv",
+      "bytes": 1062687,
+      "sha256": "d51e7149e4e8fccb2d3809b92761ba327baf7a25d0665d6c8a7601813cadf116",
+      "category": "data"
+    },
+    {
+      "path": "data/raw/stock/stock_ndx.csv",
+      "bytes": 1048023,
+      "sha256": "f02b28e42f187bfbc0ffab67bb10ca77912750759a364dbe0988c96222eb5f29",
+      "category": "data"
+    },
+    {
+      "path": "data/raw/stock/stock_spx.csv",
+      "bytes": 1048554,
+      "sha256": "232002a789e40221f7bf3442ef82972a87818f7593f6e86d92326b0cf12325b9",
+      "category": "data"
+    },
+    {
+      "path": "experiments/phase1_baseline/stock_year_splits_mlp.py",
+      "bytes": 5990,
+      "sha256": "d6ddf2fb2f2f28eb3bf01337fe694cbe2b7999f715f9ed473ef2cd3c7cf654b6",
+      "category": "experiments"
+    },
+    {
+      "path": "experiments/phase1_baseline/stock_year_splits_xgb.py",
+      "bytes": 10432,
+      "sha256": "ebacbad926593b9700ff1f1a7444b6dcd1eb25bd66efc989ea8e7df4583091e3",
+      "category": "experiments"
+    },
+    {
+      "path": "experiments/phase2_ensemble/dynamic/dcs/xgb_oldnew_stock_year_splits_dcs.py",
+      "bytes": 3075,
+      "sha256": "b46faa429e9ba9e000fa37637ca26152e24e62b7617b590c633c52b6adf2022f",
+      "category": "experiments"
+    },
+    {
+      "path": "experiments/phase2_ensemble/dynamic/des/xgb_oldnew_stock_year_splits_des.py",
+      "bytes": 1629,
+      "sha256": "5af7379b65447d654d7ca52f6bd07f6c4bb1b6832c3dae7283c6ef8d9cb4f01b",
+      "category": "experiments"
+    },
+    {
+      "path": "experiments/phase2_ensemble/static/xgb_oldnew_stock_year_splits_static.py",
+      "bytes": 1647,
+      "sha256": "bc002342fabb1bd9637f3015187d650a71acdd409c448902394129b5f71d4af0",
+      "category": "experiments"
+    },
+    {
+      "path": "experiments/phase3_feature/mutual_info/xgb_stock_year_splits_fs_full.py",
+      "bytes": 7561,
+      "sha256": "8578b0799a5ac5d8b03e20c2c90880c8a4dcd22a85857564e264543ced5f5f31",
+      "category": "experiments"
+    },
+    {
+      "path": "experiments/phase3_feature/xgb_stock_year_splits_fs_full.py",
+      "bytes": 7470,
+      "sha256": "3531e02cfd914af1bd053470db599791901543365c94d454c29685781b3e4743",
+      "category": "experiments"
+    },
+    {
+      "path": "logs/Phase3_FS_Full_Stock_20260426_161637.log",
+      "bytes": 7964,
+      "sha256": "ad634aeebf8e6c8a5384aa433d85cb1f87a3d2bdde74e8400c065cf7e573021b",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Baseline_20260226_010120.log",
+      "bytes": 3748,
+      "sha256": "54a1d2a20925bed01a2f17a2d571a3b282ff9d755fcf950227ebeb2f1aed3c77",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Baseline_Ensemble_20260223_192713.log",
+      "bytes": 452,
+      "sha256": "f9694c5872d8b4f386d7d18e954822632df3faa8e8b7d002d75e9b4f54838d41",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Baseline_Ensemble_20260223_193230.log",
+      "bytes": 452,
+      "sha256": "ba8effee14be3117c60f9494433d9e9ba0a9435210b0969c116f60cfe5836ef2",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Baseline_Ensemble_20260223_193542.log",
+      "bytes": 452,
+      "sha256": "9b971c457eebbb69de287537daef58f3718d81e9f1481ef9859850a674b3f5fd",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Baseline_Ensemble_20260224_000401.log",
+      "bytes": 2126,
+      "sha256": "5826c8dbc554863601da2487600e3923f91cd588283c4303829c5e624c4e2b34",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Baseline_Ensemble_20260224_000925.log",
+      "bytes": 2126,
+      "sha256": "7a484a03096ddb5a977d0a88bddb9c0a3d9c3b2870957660f7e564e1fdee8d17",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Baseline_Ensemble_20260224_001059.log",
+      "bytes": 2126,
+      "sha256": "3da669f6a935ea4faa0362235cbaeda1839a0abd207aaf12682dba3403cfaeff",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Baseline_Ensemble_20260224_001114.log",
+      "bytes": 2126,
+      "sha256": "d12f2f6cd8c8ea7112fd7ed74c411c7074f078b7d0ff6123163dea3407299d6c",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Baseline_Ensemble_20260224_022124.log",
+      "bytes": 4326,
+      "sha256": "f099c77d668b6b6633163537f2ab79c3d4f1880fc904894744d04dcd4a9756af",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Baseline_Ensemble_20260225_233651.log",
+      "bytes": 5316,
+      "sha256": "c8306ff29e4485982acc0498346316349f20104c10734ca6088e717d99610ca7",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_DES_20260223_192718.log",
+      "bytes": 390,
+      "sha256": "0f9a6809a106841404df187ce907388880a906d765a2f3c4a798e941e685dded",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_DES_20260223_193625.log",
+      "bytes": 390,
+      "sha256": "d7a58416ec8ef7e94b0e7f4865f5aa5162bf660b2477488b1db1adb5e486e8bf",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_DES_20260224_000432.log",
+      "bytes": 1027,
+      "sha256": "6deccc852e5a19525b516baf37d1f50781fb9ebce03cb2588ffcd80baf96e634",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_DES_20260224_001317.log",
+      "bytes": 982,
+      "sha256": "37e2fa01bff946b100709ae59b8705a9070295676c548386090579edf42dfb5e",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_DES_20260224_022209.log",
+      "bytes": 2414,
+      "sha256": "decd0d24928005c3f734fff90eacab3bcf3c6a3f88249f5d84d3c23351aae726",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_DES_20260225_164131.log",
+      "bytes": 2414,
+      "sha256": "af6cf629a3d95dfaec453b0da300a37d2ba01f9a0379ee418e720025a5bac945",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_DES_20260226_013108.log",
+      "bytes": 2414,
+      "sha256": "4cff636b51aa90feca20f47fc5b3382965c0490084ed2fc1e973fd6b29650f8a",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_DES_Advanced_20260226_014227.log",
+      "bytes": 3094,
+      "sha256": "acae55e87201c1dac233018014c7c24e7b0b7861b83b1e490d6d70dd880caab2",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Ensemble_20260226_010501.log",
+      "bytes": 3595,
+      "sha256": "c2cee1ef1234ded63da2e8cc47416476f96f482412a6fe37a6ee5b768bbf5cba",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_FS_Study_20260226_013956.log",
+      "bytes": 8564,
+      "sha256": "e6a8289c222c9bc0f8c0ed5b07392a81b38441c94a2a4228f38174822d1267c2",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_FS_Sweep_20260226_101252.log",
+      "bytes": 1726,
+      "sha256": "429b4c4b8e70a2307b4a4a5a6dccb416bc3bb664c5de083e1d9b762a4c9962ae",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Proportion_Study_20260226_014447.log",
+      "bytes": 1746,
+      "sha256": "3cac2b5531aca31963da108c1072090b634f6caa693e9eec8967acea83e8d583",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_Threshold_20260302_193858.log",
+      "bytes": 1847,
+      "sha256": "58571881fad5622df47fc0e1408f049fa76b5dab58c4ff253aa5096c734259d9",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_YearSplits_XGB_20260311_154542.log",
+      "bytes": 16919,
+      "sha256": "68a85646f7583d31d9da32587c70dc89c87ebb935ee8d5631af4f145564e3d98",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_YearSplits_XGB_20260311_155020.log",
+      "bytes": 17927,
+      "sha256": "5f0d2c9af63341c0786c8bb3ee8588b093727092195cb2859ad48a676f84f7f0",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_YearSplits_XGB_20260317_012601.log",
+      "bytes": 17969,
+      "sha256": "dab20f698960aab4697e93a2a5a97757e5489eb0155d3b6d8610698e88a05b0c",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_YearSplits_XGB_20260317_021026.log",
+      "bytes": 19145,
+      "sha256": "2afdb317a86e8548998eb9c81e698be2534cd6c8044f9f3318f573f1a56fde13",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_YearSplits_XGB_20260317_021808.log",
+      "bytes": 21329,
+      "sha256": "49e41f9937df55de2de8785b837b50a5db87b649f8501f945bddaefcb80b11c3",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_YearSplits_XGB_20260317_022041.log",
+      "bytes": 22589,
+      "sha256": "1628cf8b09e798e080cece6258e359fc43d608971374986902eedad5c9c1d33c",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_YearSplits_XGB_20260317_023227.log",
+      "bytes": 11312,
+      "sha256": "9dab5c075122a06e3016750388e8a9a9cc5dbfedbf68560a3facce7ec8b525fc",
+      "category": "logs"
+    },
+    {
+      "path": "logs/Stock_YearSplits_XGB_20260317_024353.log",
+      "bytes": 19897,
+      "sha256": "474e6fb9ed1ef3943996f63390e070e2f134068723f6cf7ad7294a29a002b6b1",
+      "category": "logs"
+    },
+    {
+      "path": "results/multi_seed/stock_multi_seed.csv",
+      "bytes": 921,
+      "sha256": "1a8e1cfa927508e200bee42c31f1417f396dc4d6dae72ebe74114526c331b8e6",
+      "category": "results"
+    },
+    {
+      "path": "results/phase1_baseline/xgb/plots/stock_year_splits_AUC_F1.png",
+      "bytes": 181813,
+      "sha256": "024b84aa00c767691fc4397500ef7ee4906051c9fc142381586133302620e6bb",
+      "category": "results"
+    },
+    {
+      "path": "results/phase1_baseline/xgb/stock_year_splits_xgb_raw.csv",
+      "bytes": 7633,
+      "sha256": "84c8fe48ca0fd5534eaae26e15aed34f1f4b49e088da3c832bc8a94df2ca8799",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/ga/stock_dji_ga_fs_sweep.csv",
+      "bytes": 360,
+      "sha256": "c8999329fbd8ca823f4a1bb1a3a945ce8fd8793406bd24e68e146e6e0c5b5361",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/ga/stock_ndx_ga_fs_sweep.csv",
+      "bytes": 360,
+      "sha256": "cedfe38df7282007e94b7306c091d1aa3aa52a78235e2c3644147fa8d0c756f0",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/ga/stock_spx_ga_fs_sweep.csv",
+      "bytes": 360,
+      "sha256": "4d2c7db99b08d1b78af643338fd6249ebb1fd0199234dde2c4bbbd17999e05fe",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/mutual_info/stock_dji_fs_sweep.csv",
+      "bytes": 584,
+      "sha256": "de6ea6591e6078063cb6630cbb41868ffde5a23eb978cbf05d4794d80da041ff",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/mutual_info/stock_ndx_fs_sweep.csv",
+      "bytes": 915,
+      "sha256": "888e2da3c88312d3cfb6a83a10df84951f75f3f4d82142f13658d84d2d3c7ea0",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/mutual_info/stock_spx_fs_sweep.csv",
+      "bytes": 633,
+      "sha256": "d16df2f3fa57a4bc13ea90e633b415dbb2880b72e7e88e1a239d69fa72acff3f",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/mutual_info/xgb_stock_fs_full_des.csv",
+      "bytes": 5911,
+      "sha256": "daeaab33710c21abaedd264f26126a2820b5a18d9d4725439dc3d1aed264802d",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/mutual_info/xgb_stock_fs_full_static.csv",
+      "bytes": 5719,
+      "sha256": "b793b0442ef9a7126e75a9e8b27d02eaa0bd85aec8b693304e571e55eaddc932",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/thesis/xgb_stock_dji_CART_static.csv",
+      "bytes": 129,
+      "sha256": "874901ee11bbee9c79a52d3aceb359a4e60ef29ab4c0e674dc6d86733bd33dc5",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/thesis/xgb_stock_dji_cart_sweep.csv",
+      "bytes": 129,
+      "sha256": "874901ee11bbee9c79a52d3aceb359a4e60ef29ab4c0e674dc6d86733bd33dc5",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/thesis/xgb_stock_ndx_CART_static.csv",
+      "bytes": 129,
+      "sha256": "cd475e68079e0f8a6768fe5b350efe94085ca256e8e7cd1fa92f29d5163e781d",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/thesis/xgb_stock_ndx_cart_sweep.csv",
+      "bytes": 129,
+      "sha256": "cd475e68079e0f8a6768fe5b350efe94085ca256e8e7cd1fa92f29d5163e781d",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/thesis/xgb_stock_spx_CART_static.csv",
+      "bytes": 129,
+      "sha256": "4bb39a101aa897babf43980ec587d395b51ac6f793568341be339ac7a2d742e5",
+      "category": "results"
+    },
+    {
+      "path": "results/phase3_feature/thesis/xgb_stock_spx_cart_sweep.csv",
+      "bytes": 129,
+      "sha256": "4bb39a101aa897babf43980ec587d395b51ac6f793568341be339ac7a2d742e5",
+      "category": "results"
+    },
+    {
+      "path": "scripts/data/download_real_stock_data.py",
+      "bytes": 4768,
+      "sha256": "c4262d62421e8321a96e594e2c2f4505c6edf99d66852d547cf036204ae90c69",
+      "category": "tools"
+    },
+    {
+      "path": "scripts/data/download_stock_data.py",
+      "bytes": 5521,
+      "sha256": "17a56059167eb8cfef0260b7d1cc68e41c616fed7497117745f8003510546239",
+      "category": "tools"
+    },
+    {
+      "path": "experiments/phase1_baseline/__pycache__/stock_year_splits_mlp.cpython-314.pyc",
+      "bytes": 9187,
+      "sha256": "7bb21d6dd4d8d177a0fab055bffe1ea829c7204736c64bb29eaea4dfa7447167",
+      "category": "cache"
+    },
+    {
+      "path": "experiments/phase1_baseline/__pycache__/stock_year_splits_xgb.cpython-314.pyc",
+      "bytes": 13712,
+      "sha256": "5ce7e1313bdec5f16db5194e6d7b2f72f1c424f349d109f514d98d83704bb3fd",
+      "category": "cache"
+    },
+    {
+      "path": "experiments/phase2_ensemble/dynamic/dcs/__pycache__/xgb_oldnew_stock_year_splits_dcs.cpython-314.pyc",
+      "bytes": 4278,
+      "sha256": "27a25465902179b3e889924d48372f0867fe001e4e483bcac4d99a2bff0da47e",
+      "category": "cache"
+    },
+    {
+      "path": "experiments/phase2_ensemble/dynamic/des/__pycache__/xgb_oldnew_stock_year_splits_des.cpython-314.pyc",
+      "bytes": 2364,
+      "sha256": "184e75182d2b86db904a6c92e77a9965a405158307ba6f4c446b40c730266468",
+      "category": "cache"
+    },
+    {
+      "path": "experiments/phase2_ensemble/static/__pycache__/xgb_oldnew_stock_year_splits_static.cpython-314.pyc",
+      "bytes": 2339,
+      "sha256": "410e06ab1d95fbb5922deabb9ab1ad370a84f145b553e4a70fbabbd2c165e2d3",
+      "category": "cache"
+    },
+    {
+      "path": "experiments/phase3_feature/mutual_info/__pycache__/xgb_stock_year_splits_fs_full.cpython-314.pyc",
+      "bytes": 9384,
+      "sha256": "ae52f77b554c2cc588d75cb57fc0bfe96844040ddd7a05ec5697eec40dea59ce",
+      "category": "cache"
+    },
+    {
+      "path": "experiments/phase3_feature/__pycache__/xgb_stock_year_splits_fs_full.cpython-314.pyc",
+      "bytes": 9253,
+      "sha256": "87ed46092c2ca61326b3ddecf5f2c89787834875c743141eb135c9e341f00ddb",
+      "category": "cache"
+    },
+    {
+      "path": "experiments/__pycache__/22_stock_threshold_cost.cpython-314.pyc",
+      "bytes": 5622,
+      "sha256": "2ff037089cb8bed132d5629cc2c93430fae4931a577c001d3917ee0b9bbd7291",
+      "category": "cache"
+    },
+    {
+      "path": "experiments/__pycache__/27_stock_split_comparison.cpython-314.pyc",
+      "bytes": 6263,
+      "sha256": "42a03c2246562fb9fbfdfadc5bf31988a7e8493618aa944c58a3a62648c1e3d6",
+      "category": "cache"
+    },
+    {
+      "path": "scripts/data/__pycache__/download_real_stock_data.cpython-314.pyc",
+      "bytes": 9059,
+      "sha256": "b51149e3e8955752147343973320c79de8e51b46aaea3fa2d3fab1b85211bf63",
+      "category": "cache"
+    },
+    {
+      "path": "scripts/data/__pycache__/download_stock_data.cpython-314.pyc",
+      "bytes": 7847,
+      "sha256": "04198715942f835890a84ec9c53ba25d8007a72980724d9447a0959216fe88b6",
+      "category": "cache"
+    }
+  ],
+  "totals": {
+    "files": 73,
+    "bytes": 4750106
+  },
+  "modified_files": [
+    "experiments/phase1_baseline/retrain.py",
+    "experiments/phase2_ensemble/xgb_year_split_shared.py",
+    "experiments/_shared/common_dataset.py",
+    "experiments/phase2_ensemble/static/regenerate_phase2_ensemble_summary_from_raw.py",
+    "experiments/legacy/phase3_feature/fs_study.py",
+    "experiments/legacy/phase3_feature/fs_sweep.py",
+    "experiments/legacy/phase3_feature/mutual_info/fs_study.py",
+    "experiments/legacy/phase3_feature/mutual_info/fs_sweep.py",
+    "experiments/legacy/phase2_ensemble/static/all_combinations.py",
+    "experiments/legacy/phase2_ensemble/static/hybrid.py",
+    "experiments/legacy/phase2_ensemble/static/oversampling.py",
+    "experiments/legacy/phase2_ensemble/static/undersampling.py",
+    "experiments/legacy/phase2_ensemble/dynamic/dcs/comparison.py",
+    "experiments/legacy/phase2_ensemble/dynamic/des/advanced.py",
+    "experiments/legacy/phase2_ensemble/dynamic/des/standard.py",
+    "src/data/loader.py",
+    "scripts/data/generate_synthetic_data.py",
+    "scripts/plots/phase1_baseline_plotting.py",
+    "scripts/plots/visualize_phase1_sklearn_mlp_baseline.py",
+    "scripts/legacy/analysis/statistical_test.py",
+    "scripts/legacy/reports/archive_fs_methods.py",
+    "scripts/legacy/reports/generate_advisor_excel.py",
+    "scripts/legacy/reports/migrate_phase3_results_to_method_dirs.py",
+    "scripts/legacy/reports/sync_ga_phase3_outputs.py",
+    "scripts/legacy/run/run_multi_seed.py",
+    "scripts/legacy/run/_run_both_splits.py",
+    "tests/test_core_contracts.py",
+    "config/base_config.yaml",
+    "config/feature_config.yaml",
+    "config/result_catalog_config.json",
+    "examples/demo_complete_workflow.py",
+    "run_all_experiments.bat",
+    "experiments/legacy/MIGRATION_MANIFEST.json",
+    "scripts/legacy/MIGRATION_MANIFEST.json",
+    "scripts/analysis/build_result_catalog.py",
+    "tests/test_result_catalog.py",
+    "tests/test_stock_retirement.py",
+    "README.md",
+    "experiments/README.md",
+    "docs/實驗索引.md",
+    "docs/歷史與待整理項目.md",
+    "scripts/data/README.md",
+    "scripts/legacy/README.md",
+    "experiments/legacy/README.md",
+    "docs/README.md",
+    "docs/研究方向.md",
+    "docs/股票清理紀錄_20261012.md"
+  ],
+  "function_review": [
+    {
+      "path": "experiments/phase1_baseline/retrain.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/phase2_ensemble/xgb_year_split_shared.py",
+      "changed_functions": [],
+      "removed_functions": [
+        "iter_stock_year_splits"
+      ]
+    },
+    {
+      "path": "experiments/_shared/common_dataset.py",
+      "changed_functions": [
+        "get_splits"
+      ],
+      "removed_functions": [
+        "get_stock_year_split",
+        "_build_stock_year_splits",
+        "_load_stock"
+      ]
+    },
+    {
+      "path": "experiments/phase2_ensemble/static/regenerate_phase2_ensemble_summary_from_raw.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/legacy/phase3_feature/fs_study.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/legacy/phase3_feature/fs_sweep.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/legacy/phase3_feature/mutual_info/fs_study.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/legacy/phase3_feature/mutual_info/fs_sweep.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/legacy/phase2_ensemble/static/all_combinations.py",
+      "changed_functions": [],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/legacy/phase2_ensemble/static/hybrid.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/legacy/phase2_ensemble/static/oversampling.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/legacy/phase2_ensemble/static/undersampling.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/legacy/phase2_ensemble/dynamic/dcs/comparison.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/legacy/phase2_ensemble/dynamic/des/advanced.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "experiments/legacy/phase2_ensemble/dynamic/des/standard.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "src/data/loader.py",
+      "changed_functions": [
+        "load_dataset"
+      ],
+      "removed_functions": [
+        "load_stock"
+      ]
+    },
+    {
+      "path": "scripts/data/generate_synthetic_data.py",
+      "changed_functions": [],
+      "removed_functions": [
+        "generate_stock",
+        "sma",
+        "vol",
+        "rsi"
+      ]
+    },
+    {
+      "path": "scripts/plots/phase1_baseline_plotting.py",
+      "changed_functions": [
+        "dataset_label_from_raw_stem"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "scripts/plots/visualize_phase1_sklearn_mlp_baseline.py",
+      "changed_functions": [],
+      "removed_functions": []
+    },
+    {
+      "path": "scripts/legacy/analysis/statistical_test.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "scripts/legacy/reports/archive_fs_methods.py",
+      "changed_functions": [],
+      "removed_functions": []
+    },
+    {
+      "path": "scripts/legacy/reports/generate_advisor_excel.py",
+      "changed_functions": [
+        "read_csv_safe",
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "scripts/legacy/reports/migrate_phase3_results_to_method_dirs.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "scripts/legacy/reports/sync_ga_phase3_outputs.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "scripts/legacy/run/run_multi_seed.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "scripts/legacy/run/_run_both_splits.py",
+      "changed_functions": [],
+      "removed_functions": []
+    },
+    {
+      "path": "tests/test_core_contracts.py",
+      "changed_functions": [
+        "test_data_loader_supports_repository_dataset_schemas"
+      ],
+      "removed_functions": []
+    },
+    {
+      "path": "examples/demo_complete_workflow.py",
+      "changed_functions": [
+        "main"
+      ],
+      "removed_functions": []
+    }
+  ],
+  "preserved_functions": 108,
+  "protected_data_files": 26,
+  "protected_result_files": 14678,
+  "verification": {
+    "focused_tests": "78 passed",
+    "full_suite": "150 passed in 64.85s",
+    "lint": "E9,F63,F7,F82 passed on all modified Python files",
+    "maintained_entries": 17,
+    "preserved_result_files": 14677,
+    "data_files_remaining": 26,
+    "removed_paths_absent": true,
+    "historical_catalog_sha256": "05dbd50da622c302c7d1c274e3d4aa2b3235615a8eeab91a06d24172cbd57c6e",
+    "historical_catalog_exceptions": [
+      {
+        "path": "results/README.md",
+        "issue": "stat changed",
+        "reason": "results/README.md is navigation changed in previous organization rounds; not edited by stock cleanup."
+      }
+    ],
+    "new_catalog": "results/catalog/20261012T081236903281Z",
+    "new_catalog_file_count": 14678,
+    "new_catalog_duplicate_groups": 292,
+    "known_existing_lint_issue": "experiments/phase1_baseline/bankruptcy_year_splits_tabm.py:701 undefined args (pre-existing; outside stock scope)",
+    "local_markdown_links_checked": 8192,
+    "broken_local_links": 0,
+    "legacy_current_hashes_verified": true
+  },
+  "current_source_hashes": {
+    "experiments/phase1_baseline/retrain.py": "8f34a65e2dce26ac8fd28188348305e0e6e59e0481ec4b643f00244faf9bf24e",
+    "experiments/phase2_ensemble/xgb_year_split_shared.py": "7bfe65f57772b3582b162cf66c4310a7a3df0db7f132d326c86a24021911f5d1",
+    "experiments/_shared/common_dataset.py": "ac77d816a593599e1d61bfbf79e4772ddce364e50b28a2419cf5e1077413a544",
+    "experiments/phase2_ensemble/static/regenerate_phase2_ensemble_summary_from_raw.py": "4b7847b3a1ed55d24aae0c2f2f9983e54e3c8d91fa741e5c22e72006d52a5bf5",
+    "experiments/legacy/phase3_feature/fs_study.py": "bac3a79dbb1294872260c95dfbee0fee33f961c34bf71bc7fb0a9b009947adb0",
+    "experiments/legacy/phase3_feature/fs_sweep.py": "fe06de34a1119373c6e1411d319a83b0cc2d81cdecb3da497cdcf2f100d59000",
+    "experiments/legacy/phase3_feature/mutual_info/fs_study.py": "68bd8a818671cfdc51f5641f37fdc302f168c356d81f0af7cad88a504811a558",
+    "experiments/legacy/phase3_feature/mutual_info/fs_sweep.py": "35d19f2f42706ed53ec36544d60b86619873e9d66c8f30fdd4b7989a4376d0ef",
+    "experiments/legacy/phase2_ensemble/static/all_combinations.py": "bd421ecac26e0f77be31346df9b2f62429bccb06ded79564b3380e33999a946d",
+    "experiments/legacy/phase2_ensemble/static/hybrid.py": "bf88bdfe114d2bace6b9c8447fe95b7817d77a41e1134cabbfe9d080c99f5018",
+    "experiments/legacy/phase2_ensemble/static/oversampling.py": "aabb6dc4e8afead7b7507281aa54900b9062f1a6d22507e75f325f40388a5fb3",
+    "experiments/legacy/phase2_ensemble/static/undersampling.py": "1949f0a3a663cc9e1d5e9a13581996ace9beee8bf5cd85da60e55e3efea6f3db",
+    "experiments/legacy/phase2_ensemble/dynamic/dcs/comparison.py": "00ced469ad8bbefbd256a4e50cb626e82dedd0542512d92956102ca904fb58f1",
+    "experiments/legacy/phase2_ensemble/dynamic/des/advanced.py": "980d4ff0485fa7858da69bdef8f99d6b7afacc370d819b9465c5ca27561c6631",
+    "experiments/legacy/phase2_ensemble/dynamic/des/standard.py": "b53a9cc153f175eb4790759ffa412e0da8f623e1316edb4950cb7e17d6d26daa",
+    "src/data/loader.py": "8dd2c37c637e59917e58bc1548cbab06a17c1b28c4f0ab5a345ef9fd74320568",
+    "scripts/data/generate_synthetic_data.py": "09b04113db263dcff9514b2ad7e5ff4d74c125b4a6be54a3568f9405ea7fb819",
+    "scripts/plots/phase1_baseline_plotting.py": "4db991fe97ec982dcf43026d69c6ed00b5902cece0c8ee2730f9a3335b2989e8",
+    "scripts/plots/visualize_phase1_sklearn_mlp_baseline.py": "3d28e1f6fab13fc76f54e869c1995d49ca7ab2c66c76185cfea287c8be29b220",
+    "scripts/legacy/analysis/statistical_test.py": "5eea580100649bc9a3c34bffca650fad0270fd5cb2b34a6a8576859e6b021f5a",
+    "scripts/legacy/reports/archive_fs_methods.py": "5b461436b2e9b839c1090a7e0ca228a81fd33db9b3fa8abf06291456d9a33afa",
+    "scripts/legacy/reports/generate_advisor_excel.py": "6489d7cb6f5c2abfcff1fd98a891c4b936a0cd71556338ce820bf1ab0dcca6e9",
+    "scripts/legacy/reports/migrate_phase3_results_to_method_dirs.py": "339c66397fd919324b0844b451c1180089e46d03f35e2ddf94f3a01dd997db1c",
+    "scripts/legacy/reports/sync_ga_phase3_outputs.py": "9c6713a3e5a885ccd406f29e2ce27c22037e7c49758132b6608a0fbc7cd81daa",
+    "scripts/legacy/run/run_multi_seed.py": "145c230ab7954748cd7916762cd86bd001c5dc70b19b4d611e778cc82df011dd",
+    "scripts/legacy/run/_run_both_splits.py": "80916faf1ce754b9b96e6115cd3aa88cae19f974403abd01568bfc719da5b527",
+    "tests/test_core_contracts.py": "05b7bad56950ebe4a6b70c058b4439ca184dd8c234cdb94bd064dd4f613327c8",
+    "config/base_config.yaml": "115277e37f20042da0cefe5d74ede5bb8da4979d4758be3cdb7aa1f1b59aea24",
+    "config/feature_config.yaml": "a6783194d0e5598ab6874f2a6c6a5d6419ce382eed4b39565f34b56a8d0fd7c0",
+    "config/result_catalog_config.json": "b578c8ce8130b19bd134557b24b823037a550c9d1c750e0d87706dfcace0954c",
+    "examples/demo_complete_workflow.py": "43786dd953604d6c12972bdacaf8e94a66aff005a46e12bc75edf119b759b481",
+    "run_all_experiments.bat": "b0204c71f8df533773ecc0e5dfc1d8178badc0fecc31a3aa0f671032d243467f",
+    "experiments/legacy/MIGRATION_MANIFEST.json": "f596366f1c30062dea3209e8b2c561370e79489fd831a06ebcc5a77c8f252eba",
+    "scripts/legacy/MIGRATION_MANIFEST.json": "5823fa4dd7f9f3693439b88f14069dfe3a363938cf9019f9c8a4e4964d9a2f8c",
+    "scripts/analysis/build_result_catalog.py": "c44d27dfe127ac32f03bffa661e617ba40e13d140816cf3b791e6a7fb2c3b607",
+    "tests/test_result_catalog.py": "3ece03beef4cab0ee06d68d37b33129b52b0baba0ee14e3ae950fe341f3aa839",
+    "tests/test_stock_retirement.py": "3a545b0d146c07884615f062ea6ba92ceb7bb1a4ce56a0f1b7121ff2f6e01366",
+    "README.md": "a803e41dc6c0d261195fc2f34e01707088431cc81e376af69686ae16ee126055",
+    "experiments/README.md": "8212409185a72450d9cfd8bf9836c8a7218e6f37bf47e9b71d4d572dc9dba55f",
+    "docs/實驗索引.md": "db03be1e9c4901d7fe0334aaa3ee80f6448a7074e8629e0df376ee3f330d559a",
+    "docs/歷史與待整理項目.md": "e99f7a947a6d5237852198d0ae0a4f4a769ea16c0f669f197ccd10860fbbfc70",
+    "scripts/data/README.md": "9f1f52489f8ab38593ebfc0c95ef87df0e9da61b8842a4ef03eac0712ca1f03e",
+    "scripts/legacy/README.md": "dd5ab871a826cdecfd6eca120210f2faf7071e04d17cea07f3ffcde5b667d385",
+    "experiments/legacy/README.md": "82f1a56adfc30ccdd31380d1c106e0f1c24de5c59e2f62746fe77ea27fadc286",
+    "docs/README.md": "fad27b6d94733eed2b8c2ca31c34380bb624540fb22fcb31298600f6d1314567",
+    "docs/研究方向.md": "ae9f0efd8960520beab82c11e38d909d1af8c3e1b58216a41aa6298e87b79d39",
+    "docs/股票清理紀錄_20261012.md": "6efdb090d0e70bbfce787b275980071acf53be7e979f71136b9cedf6dee20b21"
+  }
+}

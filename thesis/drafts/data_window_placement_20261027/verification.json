@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "pages": 65,
+  "pdf_sha256": "372ae6e71ac97f279cbeeaf3c8ad7b8008b1e827f4bc4f26185d97993329f5f2",
+  "dataset_pdf_page": 15,
+  "dataset_printed_page": 3,
+  "window_pdf_page": 18,
+  "window_printed_page": 6,
+  "window_figure_number": 1,
+  "window_embedded_images": 1,
+  "native_compile": "passed",
+  "editor_compile": "success",
+  "source_check": "passed",
+  "visual_review": "Inspected actual PDF pages 15, 18, 19; dataset overview opens chapter 3, diagram and caption appear together after data partitioning and before generic framework",
+  "scope": "placement and opening summary only; no data, protocol or results changed",
+  "handoff": "thesis/handoffs/20261027T123746066730Z",
+  "handoff_check": "passed"
+}

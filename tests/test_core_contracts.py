@@ -141,10 +141,8 @@ def test_sampler_uses_yaml_parameters_and_overrides_run_seed():
 def test_data_loader_supports_repository_dataset_schemas(tmp_path):
     bankruptcy_dir = tmp_path / "bankruptcy"
     medical_dir = tmp_path / "medical" / "diabetes130"
-    stock_dir = tmp_path / "stock"
     bankruptcy_dir.mkdir(parents=True)
     medical_dir.mkdir(parents=True)
-    stock_dir.mkdir(parents=True)
 
     pd.DataFrame(
         {
@@ -162,25 +160,15 @@ def test_data_loader_supports_repository_dataset_schemas(tmp_path):
             "mortality": [0, 1],
         }
     ).to_csv(medical_dir / "diabetes130_medical.csv", index=False)
-    (stock_dir / "stock_spx.csv").write_text(
-        "metadata\nmetadata\n"
-        "2007-01-01,10,11,9,10,100,0.1,0.1,10,10,10,0.2,50,0.3,0\n"
-        "2008-01-01,9,10,8,9,110,-0.1,-0.1,9,9,9,0.3,40,-0.4,1\n",
-        encoding="utf-8",
-    )
 
     loader = DataLoader(tmp_path)
     bankruptcy_X, bankruptcy_y = loader.load_bankruptcy()
     medical_X, medical_y = loader.load_medical()
-    stock_X, stock_y = loader.load_stock()
 
     assert list(bankruptcy_y) == [0, 1]
     assert list(bankruptcy_X.columns) == ["fyear", "X1"]
     assert list(medical_y) == [0, 1]
     assert list(medical_X["Year"]) == [2007, 2008]
-    assert list(stock_y) == [0, 1]
-    assert "Future_Returns_20" not in stock_X
-    assert list(stock_X["Year"]) == [2007, 2008]
 
 
 def test_config_loader_cache_is_scoped_by_directory(tmp_path):

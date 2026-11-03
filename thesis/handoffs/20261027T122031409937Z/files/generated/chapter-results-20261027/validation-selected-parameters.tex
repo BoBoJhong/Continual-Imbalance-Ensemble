@@ -1,0 +1,23 @@
+\begingroup
+\footnotesize\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.71\linewidth}@{}}
+\caption{Baseline 指定情境之驗證選定超參數}\label{tab:validation-selected-parameters}\\
+\toprule
+分類器／版本 & 驗證選定值（粗體） \\
+\midrule\endfirsthead
+\multicolumn{2}{c}{表~\thetable（續）}\\
+\toprule
+分類器／版本 & 驗證選定值（粗體） \\
+\midrule\endhead
+\midrule\multicolumn{2}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+XGBoost（較早版本） & \nolinkurl{learning_rate} = \textbf{0.3}；\nolinkurl{max_depth} = \textbf{10}；\nolinkurl{min_child_weight} = \textbf{5}；\nolinkurl{n_estimators} = \textbf{1000} \\
+XGBoost（擴充版本） & \nolinkurl{colsample_bytree} = \textbf{0.85}；\nolinkurl{gamma} = \textbf{0.2}；\nolinkurl{learning_rate} = \textbf{0.2}；\nolinkurl{max_depth} = \textbf{10}；\nolinkurl{min_child_weight} = \textbf{20}；\nolinkurl{n_estimators} = \textbf{1000}；\nolinkurl{reg_alpha} = \textbf{0.0}；\nolinkurl{reg_lambda} = \textbf{3.0}；\nolinkurl{subsample} = \textbf{0.85} \\
+LightGBM & \nolinkurl{colsample_bytree} = \textbf{1.0}；\nolinkurl{learning_rate} = \textbf{0.2}；\nolinkurl{max_depth} = \textbf{-1}；\nolinkurl{min_child_samples} = \textbf{50}；\nolinkurl{n_estimators} = \textbf{800}；\nolinkurl{num_leaves} = \textbf{150}；\nolinkurl{reg_alpha} = \textbf{0.0}；\nolinkurl{reg_lambda} = \textbf{1.0}；\nolinkurl{subsample} = \textbf{0.85} \\
+Random Forest & \nolinkurl{max_depth} = \textbf{32}；\nolinkurl{max_features} = \textbf{sqrt}；\nolinkurl{min_samples_leaf} = \textbf{1}；\nolinkurl{min_samples_split} = \textbf{16}；\nolinkurl{n_estimators} = \textbf{600} \\
+Logistic Regression & \nolinkurl{C} = \textbf{100.0}；\nolinkurl{max_iter} = \textbf{1000}；\nolinkurl{solver} = \textbf{lbfgs} \\
+TabM & \nolinkurl{d_block} = \textbf{512}；\nolinkurl{dropout} = \textbf{0.2}；\nolinkurl{k} = \textbf{32}；\nolinkurl{lr} = \textbf{0.001}；\nolinkurl{n_blocks} = \textbf{3}；\nolinkurl{use_num_embeddings} = \textbf{False}；\nolinkurl{weight_decay} = \textbf{1e-05} \\
+\end{longtable}
+\noindent{\footnotesize 資料來源：本研究已保存的驗證選參紀錄。固定展示 Old 1999--2011 年、Hybrid 採樣；此情境不是依 Test 分數選出。粗體表示該情境中經驗證 AUC 選定的參數，並非跨年份通用最佳值，也不直接沿用至固定年份集成。TabICL 未保存相同選參欄位，故不補列。}
+\endgroup

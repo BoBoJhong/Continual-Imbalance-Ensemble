@@ -1,0 +1,27 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{26\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}>{\raggedright\arraybackslash}p{0.123\linewidth}@{}}
+\caption{事件標籤下實驗二各特徵條件之 Recall}\label{tab:results-fs-recall}\\
+\toprule
+FS & Equal6 & V-static & OLA & LCA & KNORA-E & KNORA-U \\
+\midrule\endfirsthead
+\multicolumn{7}{c}{表~\thetable（續）}\\
+\toprule
+FS & Equal6 & V-static & OLA & LCA & KNORA-E & KNORA-U \\
+\midrule\endhead
+\midrule\multicolumn{7}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+no-FS（18） & \shortstack[l]{0.1941\\{\scriptsize(\(\pm\)0.0535)}} & \shortstack[l]{0.2353\\{\scriptsize(\(\pm\)0.0000)}} & \shortstack[l]{\textbf{0.3857}\\{\scriptsize(\(\pm\)0.2526)}} & \shortstack[l]{\textbf{0.3849}\\{\scriptsize(\(\pm\)0.2540)}} & \shortstack[l]{0.2739\\{\scriptsize(\(\pm\)0.2164)}} & \shortstack[l]{\textbf{0.4824}\\{\scriptsize(\(\pm\)0.2116)}} \\
+MI 50\% & \shortstack[l]{0.3790\\{\scriptsize(\(\pm\)0.1278)}} & \shortstack[l]{0.1571\\{\scriptsize(\(\pm\)0.0457)}} & \shortstack[l]{0.1689\\{\scriptsize(\(\pm\)0.1181)}} & \shortstack[l]{0.1538\\{\scriptsize(\(\pm\)0.1211)}} & \shortstack[l]{0.3101\\{\scriptsize(\(\pm\)0.0931)}} & \shortstack[l]{0.2748\\{\scriptsize(\(\pm\)0.1645)}} \\
+MI 80\% & \shortstack[l]{0.3336\\{\scriptsize(\(\pm\)0.1473)}} & \shortstack[l]{0.2277\\{\scriptsize(\(\pm\)0.1376)}} & \shortstack[l]{0.1261\\{\scriptsize(\(\pm\)0.1771)}} & \shortstack[l]{0.1252\\{\scriptsize(\(\pm\)0.1776)}} & \shortstack[l]{0.3261\\{\scriptsize(\(\pm\)0.1594)}} & \shortstack[l]{0.4017\\{\scriptsize(\(\pm\)0.1917)}} \\
+CART 50\% & \shortstack[l]{0.3143\\{\scriptsize(\(\pm\)0.1097)}} & \shortstack[l]{0.1092\\{\scriptsize(\(\pm\)0.0000)}} & \shortstack[l]{0.0353\\{\scriptsize(\(\pm\)0.0301)}} & \shortstack[l]{0.0353\\{\scriptsize(\(\pm\)0.0293)}} & \shortstack[l]{0.1815\\{\scriptsize(\(\pm\)0.1095)}} & \shortstack[l]{0.2563\\{\scriptsize(\(\pm\)0.1148)}} \\
+CART 80\% & \shortstack[l]{0.3218\\{\scriptsize(\(\pm\)0.0952)}} & \shortstack[l]{0.2798\\{\scriptsize(\(\pm\)0.0080)}} & \shortstack[l]{0.1261\\{\scriptsize(\(\pm\)0.1075)}} & \shortstack[l]{0.1227\\{\scriptsize(\(\pm\)0.1096)}} & \shortstack[l]{0.2874\\{\scriptsize(\(\pm\)0.1092)}} & \shortstack[l]{0.2513\\{\scriptsize(\(\pm\)0.1195)}} \\
+SHAP 50\% & \shortstack[l]{0.2798\\{\scriptsize(\(\pm\)0.0506)}} & \shortstack[l]{0.1689\\{\scriptsize(\(\pm\)0.0897)}} & \shortstack[l]{0.0958\\{\scriptsize(\(\pm\)0.0182)}} & \shortstack[l]{0.0790\\{\scriptsize(\(\pm\)0.0182)}} & \shortstack[l]{0.4092\\{\scriptsize(\(\pm\)0.1019)}} & \shortstack[l]{0.3193\\{\scriptsize(\(\pm\)0.0920)}} \\
+SHAP 80\% & \shortstack[l]{\textbf{0.5185}\\{\scriptsize(\(\pm\)0.1460)}} & \shortstack[l]{0.3361\\{\scriptsize(\(\pm\)0.0000)}} & \shortstack[l]{0.2798\\{\scriptsize(\(\pm\)0.1375)}} & \shortstack[l]{0.2748\\{\scriptsize(\(\pm\)0.1406)}} & \shortstack[l]{\textbf{0.4504}\\{\scriptsize(\(\pm\)0.1299)}} & \shortstack[l]{0.4370\\{\scriptsize(\(\pm\)0.1643)}} \\
+RFE 50\% & \shortstack[l]{0.3109\\{\scriptsize(\(\pm\)0.1184)}} & \shortstack[l]{0.1092\\{\scriptsize(\(\pm\)0.0000)}} & \shortstack[l]{0.0378\\{\scriptsize(\(\pm\)0.0300)}} & \shortstack[l]{0.0328\\{\scriptsize(\(\pm\)0.0208)}} & \shortstack[l]{0.1756\\{\scriptsize(\(\pm\)0.0748)}} & \shortstack[l]{0.2311\\{\scriptsize(\(\pm\)0.0932)}} \\
+RFE 80\% & \shortstack[l]{0.3756\\{\scriptsize(\(\pm\)0.0984)}} & \shortstack[l]{\textbf{0.3445}\\{\scriptsize(\(\pm\)0.0000)}} & \shortstack[l]{0.1210\\{\scriptsize(\(\pm\)0.0617)}} & \shortstack[l]{0.0899\\{\scriptsize(\(\pm\)0.0675)}} & \shortstack[l]{0.3336\\{\scriptsize(\(\pm\)0.0747)}} & \shortstack[l]{0.2798\\{\scriptsize(\(\pm\)0.1310)}} \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究事件標籤 FS 集成實驗結果)\par 各格上列為十個種子的合併四年 Test 平均，下列為種子標準差。粗體表示同一方法（同一欄）九種特徵條件中最高的平均分數，不代表已選定最佳設定或差異達統計顯著。50\%、80\% 分別保留 9、14 個特徵；V-static 依各條件的 Calibration 重新選成員。}
+\endgroup

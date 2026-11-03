@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "project_url": "https://www.overleaf.com/project/6acef24f1aecda6740296760",
+  "project_id": "6acef24f1aecda6740296760",
+  "project_name": "NCU_IM_Thesis",
+  "project_role": null,
+  "local_source": "thesis/latex",
+  "sync_mode": "on_user_request",
+  "verification": {
+    "status": "access_verified_compile_timeout",
+    "checked_at_utc": "2026-10-14T16:22:15Z",
+    "project_access": true,
+    "main_document": "main.tex",
+    "compiler": "XeLaTeX",
+    "tex_live": "2026",
+    "compile_result": "free_plan_timeout",
+    "content_write_tested": false,
+    "browser_method": "Codex in-app browser (previous verification)",
+    "playwright_mcp": {
+      "checked_at_utc": "2026-10-15T02:03:31Z",
+      "launcher": "scripts/thesis/start-playwright.mjs",
+      "npm_package": "@playwright/mcp@0.0.83",
+      "tool_count": 25,
+      "chrome_navigation": "passed",
+      "dom_snapshot": "passed",
+      "click_login": "passed",
+      "project_response": "Restricted (HTTP 403) before login",
+      "login_url": "https://www.overleaf.com/login",
+      "project_access_verified": false,
+      "status": "awaiting_login_in_dedicated_chrome",
+      "content_write_tested": false
+    }
+  }
+}

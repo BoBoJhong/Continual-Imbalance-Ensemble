@@ -1,0 +1,22 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.15\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}@{}}
+\caption{實驗一不同靜態成員數之候選平均結果}\label{tab:results-static-size}\\
+\toprule
+模型數 & 候選數 & AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{5}{c}{表~\thetable（續）}\\
+\toprule
+模型數 & 候選數 & AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{5}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+2 & 9 & 0.7701 & 0.1763 & 0.2348 \\
+3 & 18 & 0.7731 & 0.1745 & 0.2468 \\
+4 & 15 & 0.7760 & 0.1752 & 0.2440 \\
+5 & 6 & 0.7792 & 0.1763 & 0.2469 \\
+6 & 1 & 0.7815 & 0.1815 & 0.2690 \\
+\end{longtable}
+\noindent{\footnotesize 資料來源：本研究實驗結果整理。\par 每個種子先等權平均相同成員數的全部候選之 Test 指標，再跨十個種子平均；未按 Test 挑選候選，也未將候選再次集成。這是模型組成的描述性比較，不是成員數效果的因果或顯著性檢定。}
+\endgroup

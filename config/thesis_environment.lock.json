@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "prepared_on": "2026-10-14",
+  "texlive_image": "texlive/texlive@sha256:7056390eac37715fd3e01875037ceb4016cb17d44c611f7bbbfa7a012007979f",
+  "texlive_tag_reference": "TL2025-historic",
+  "docker_platform": "linux/amd64",
+  "playwright_mcp": "0.0.83",
+  "node_recommendation": "24 LTS",
+  "python_minimum": "3.10",
+  "windows_tinytex_url": "https://github.com/rstudio/tinytex-releases/releases/download/v2026.10/TinyTeX-v2026.10.zip",
+  "windows_tinytex_sha256": "dc1d6e63b21af62130ede1dcc4113bffdc184544690a23e3f489d75340f4ff61",
+  "note": "Docker digest 固定 TeX 套件；Windows snapshot 套件見 runtime-packages。字體另記錄於 build/build-report.json。"
+}

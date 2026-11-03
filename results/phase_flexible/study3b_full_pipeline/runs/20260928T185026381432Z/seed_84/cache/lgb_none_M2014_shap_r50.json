@@ -1,0 +1,47 @@
+{
+  "job_id": "lgb_none_M2014_shap_r50",
+  "seed": 84,
+  "classifier": "lgb",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2012,
+    2013,
+    2014
+  ],
+  "n_train": 10473,
+  "positive_before": 87,
+  "n_after": 10473,
+  "positive_after": 87,
+  "fs": "shap",
+  "ratio": 0.5,
+  "selected_features": [
+    "X11",
+    "X15",
+    "X6",
+    "X16",
+    "X12",
+    "X10",
+    "X1",
+    "X9",
+    "X18"
+  ],
+  "n_features": 9,
+  "fit_predict_seconds": 4.070126899983734,
+  "params": {
+    "objective": "binary",
+    "metric": "auc",
+    "verbosity": -1,
+    "seed": 84,
+    "deterministic": true,
+    "force_col_wise": true,
+    "boosting_type": "gbdt",
+    "num_threads": 4
+  },
+  "warnings": [],
+  "selector_seed": 84,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-10-01T04:28:46.774369+00:00",
+  "cache_sha256": "f3a3f9bbe8dc83148b1c2d3c0efc0b17e81dd76f8c756944ffb39797b23b6926"
+}

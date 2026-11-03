@@ -1,0 +1,25 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{15\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.33\linewidth}>{\raggedright\arraybackslash}p{0.17\linewidth}@{}}
+\caption{實驗一各集成方法相對 Equal6 之 AUC 配對檢定}\label{tab:stats-exp1-auc}\\
+\toprule
+方法 & \(\Delta\mathrm{AUC}\) & 95\% 信賴區間 & \(p_H\) \\
+\midrule\endfirsthead
+\multicolumn{4}{c}{表~\thetable（續）}\\
+\toprule
+方法 & \(\Delta\mathrm{AUC}\) & 95\% 信賴區間 & \(p_H\) \\
+\midrule\endhead
+\midrule\multicolumn{4}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+Old3 & -0.0681 & [-0.0890, -0.0488] & 0.0033\(^{*}\) \\
+New3 & +0.0144 & [-0.0019, +0.0313] & 1.0000 \\
+V-static & +0.0337 & [+0.0198, +0.0480] & 0.0063\(^{*}\) \\
+DCS-OLA & -0.0430 & [-0.0634, -0.0233] & 0.0186\(^{*}\) \\
+DCS-LCA & -0.0446 & [-0.0663, -0.0242] & 0.0186\(^{*}\) \\
+KNORA-E & -0.0202 & [-0.0387, -0.0029] & 1.0000 \\
+KNORA-U & -0.0334 & [-0.0517, -0.0161] & 0.0626 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究實驗結果整理)\par 差值為候選方法減比較基準；信賴區間為公司群聚 bootstrap 的逐項 95\% 區間，非同時區間。\(p_H\) 為兩項實驗全部 165 項比較共同採 Holm 校正之雙尾近似 \(p\) 值；星號表示 \(p_H<0.05\)。所有比較使用相同公司重抽權重，模型與驗證門檻固定。}
+\endgroup

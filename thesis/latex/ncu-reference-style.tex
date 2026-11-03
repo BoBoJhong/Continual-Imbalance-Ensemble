@@ -1,0 +1,58 @@
+% NCU guidelines 114.09.25, pp.11--14. Load after biblatex.
+% No bibliography metadata is invented; absent fields are omitted.
+\renewcommand*{\bibleftbracket}{〔}
+\renewcommand*{\bibrightbracket}{〕}
+\DeclareFieldFormat{labelnumberwidth}{〔#1〕}
+\DeclareNameAlias{author}{given-family}
+\DeclareNameAlias{editor}{given-family}
+\DeclareFieldFormat[article,inproceedings,online,thesis]{title}{%
+  \iffieldequalstr{langid}{chinese}{〈#1〉}{\mkbibquote{#1}}}
+\DeclareFieldFormat[book]{title}{%
+  \iffieldequalstr{langid}{chinese}{《#1》}{\mkbibemph{#1}}}
+\DeclareFieldFormat{journaltitle}{\mkbibemph{#1}}
+\DeclareFieldFormat{booktitle}{\mkbibemph{#1}}
+\DeclareFieldFormat[article]{eid}{Article~#1}
+\DeclareFieldFormat{urldate}{檢索日期：#1}
+\newbibmacro*{ncu:author}{%
+  \ifnameundef{author}
+    {\ifnameundef{editor}{\printlist{organization}}{\printnames{editor}}}
+    {\printnames{author}}}
+\newbibmacro*{ncu:links}{%
+  \iffieldundef{doi}{\usebibmacro{url+urldate}}{\printfield{doi}}}
+\DeclareBibliographyDriver{article}{%
+  \usebibmacro{bibindex}\usebibmacro{begentry}%
+  \usebibmacro{ncu:author}\setunit{\addcomma\space}%
+  \printfield{title}\newunit
+  \printfield{journaltitle}\setunit{\addcomma\space}%
+  \printfield{volume}\iffieldundef{number}{}{\printtext[parens]{\printfield{number}}}%
+  \newunit\printlist{publisher}\newunit\printdate
+  \newunit\iffieldundef{eid}{\printfield{pages}}{\printfield{eid}}%
+  \newunit\usebibmacro{ncu:links}%
+  \usebibmacro{finentry}}
+\DeclareBibliographyDriver{inproceedings}{%
+  \usebibmacro{bibindex}\usebibmacro{begentry}%
+  \usebibmacro{ncu:author}\setunit{\addcomma\space}%
+  \printfield{title}\newunit\printfield{booktitle}%
+  \newunit\printfield{volume}\newunit\printlist{publisher}%
+  \newunit\printlist{location}\newunit\printdate
+  \newunit\printfield{pages}\newunit\usebibmacro{ncu:links}%
+  \usebibmacro{finentry}}
+\DeclareBibliographyDriver{book}{%
+  \usebibmacro{bibindex}\usebibmacro{begentry}%
+  \usebibmacro{ncu:author}\setunit{\addcomma\space}%
+  \printfield{title}\newunit\printfield{volume}%
+  \newunit\printnames{translator}\newunit\printfield{edition}%
+  \newunit\printlist{location}\setunit{\addcolon\space}\printlist{publisher}%
+  \newunit\printdate\newunit\usebibmacro{ncu:links}%
+  \usebibmacro{finentry}}
+\DeclareBibliographyDriver{online}{%
+  \usebibmacro{bibindex}\usebibmacro{begentry}%
+  \usebibmacro{ncu:author}\setunit{\addcomma\space}%
+  \printfield{title}\newunit\printfield{version}\newunit\printdate
+  \newunit\usebibmacro{url+urldate}\usebibmacro{finentry}}
+\DeclareBibliographyDriver{thesis}{%
+  \usebibmacro{bibindex}\usebibmacro{begentry}%
+  \usebibmacro{ncu:author}\setunit{\addcomma\space}%
+  \printfield{title}\newunit\printfield{type}%
+  \newunit\printlist{institution}\newunit\printdate
+  \newunit\usebibmacro{ncu:links}\usebibmacro{finentry}}

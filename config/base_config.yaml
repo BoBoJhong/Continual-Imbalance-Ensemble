@@ -26,11 +26,6 @@ datasets:
     target_column: "mortality"
     time_column: "date"
     
-  stock:
-    name: "Stock_Market_Crash_SPX"
-    source: "Project dataset"
-    target_column: "Crash_Event"
-    time_column: "Date"
 
 split_modes:
   chronological:

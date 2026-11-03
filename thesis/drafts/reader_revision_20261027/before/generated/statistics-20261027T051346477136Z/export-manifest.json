@@ -1,0 +1,15 @@
+{
+  "analysis_directory": "results/statistical_tests/fixed_two_experiments/20261027T051346477136Z",
+  "analysis_manifest_sha256": "7d4efce40175420350168bb8f7fef2bd90a426b43060b57dd1626eb7f70048cf",
+  "exporter_sha256": "7d18d1b9cdd966cda502db949adbe4c917b32eff247d51f0a1b54b9582f7fa08",
+  "generated_sha256": {
+    "appendix-experiment1.tex": "60f653e69af0ca3f14f3de9d2b9f0139f9dba4a1bbcb20a11029174f6775f2c9",
+    "appendix-experiment2-AUC.tex": "988dae50fb0c062e9ddde36ff113c710f23daddbf095690d56e1ab072bc487ef",
+    "appendix-experiment2-F1.tex": "f218cb893abbe2de4d2d2d9122092af47fd94fb303bf982564a3a8276dc722a3",
+    "appendix-experiment2-Recall.tex": "cfcf702c29cdb8f5e406de181c2a28db7dd18871b9bd3b8d6ae671d5a56ad68b",
+    "experiment1-auc-tests.tex": "ec3d0f8a63da49b6a945300f482b941410d9c9933d9355abb1e2d3888abdee49",
+    "experiment1-descriptive.tex": "5ddaea83df698f9d9ce8d9f5de4f1c2f990e3afe58194752305973da01602ec3",
+    "experiment2-auc-differences.tex": "c9b3d4f87b2879e4b39ce83c0bcf86f3d5ba784c86d2bd144491f68f1423de49",
+    "summary.json": "efe6f7bd4143b4ac8b67508e8bdcc8a9b58dc92a799afc2e09c599aa2e77a253"
+  }
+}

@@ -1,0 +1,23 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{13\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.29\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.16\linewidth}@{}}
+\caption{Baseline 已保存之驗證 AUC 紀錄彙整}\label{tab:baseline-validation-evidence}\\
+\toprule
+分類器 & 有效驗證筆數 & Old 平均 & New 平均 & Retrain 平均 \\
+\midrule\endfirsthead
+\multicolumn{5}{c}{表~\thetable（續）}\\
+\toprule
+分類器 & 有效驗證筆數 & Old 平均 & New 平均 & Retrain 平均 \\
+\midrule\endhead
+\midrule\multicolumn{5}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+XGBoost & 124 & 0.7657 & 0.8557 & 0.8139 \\
+LightGBM & 124 & 0.7837 & 0.8683 & 0.8307 \\
+Random Forest & 124 & 0.7344 & 0.8367 & 0.7886 \\
+Logistic Regression & 124 & 0.5857 & 0.6507 & 0.6101 \\
+TabM & 124 & 0.7000 & 0.7893 & 0.7607 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究既有 Baseline 驗證紀錄整理；未讀取 Test 指標作選型)\par Old／New 各 60 筆（15 邊界乘四採樣），Retrain 僅四筆，不複製為 15 次。不同版本搜尋預算、前處理與驗證來源未完全對齊；本表為描述性核對，不作公平演算法排名。未保存不表示指標為零。}
+\endgroup

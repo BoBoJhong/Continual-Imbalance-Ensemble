@@ -1,0 +1,37 @@
+{
+  "url": "https://raw.githubusercontent.com/sowide/bankruptcy_dataset/7f56a80b73c2f32582fcc01d28acb6adc665ae40/american_bankruptcy_dataset.csv",
+  "commit": "7f56a80b73c2f32582fcc01d28acb6adc665ae40",
+  "sha256": "1aff805af8d2f4368ffcd876814a4589e09905a9cbac289a7b780ed0f7a2478a",
+  "rows": 78682,
+  "companies": 8971,
+  "status_values": {
+    "alive": 73462,
+    "failed": 5220
+  },
+  "company_status_nunique_counts": {
+    "1": 8971
+  },
+  "columns": [
+    "company_name",
+    "status_label",
+    "year",
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ]
+}

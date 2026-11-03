@@ -1,0 +1,789 @@
+{
+  "scope": "bankruptcy Phase 1-3 only",
+  "run": "results/phase2_ensemble/standard_dynamic/runs/20261004T202331745995Z",
+  "formats": [
+    "PNG 300 dpi",
+    "SVG with editable text"
+  ],
+  "metrics": [
+    "AUC",
+    "F1-score",
+    "Recall"
+  ],
+  "primary_metric": "AUC",
+  "positive_class": "failed",
+  "generator": {
+    "path": "scripts/plots/build_bankruptcy_experiment_figures.py",
+    "sha256": "ab29dbc78177388d7d2cb63d7ad143c1783b4ed7231b66714f476b849d6dcfeb"
+  },
+  "source_manifest_config": {
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      2024,
+      7,
+      21,
+      84,
+      168,
+      999
+    ],
+    "fs_configs": [
+      [
+        "none",
+        1.0
+      ],
+      [
+        "mi",
+        0.5
+      ],
+      [
+        "mi",
+        0.8
+      ],
+      [
+        "cart",
+        0.5
+      ],
+      [
+        "cart",
+        0.8
+      ],
+      [
+        "shap",
+        0.5
+      ],
+      [
+        "shap",
+        0.8
+      ],
+      [
+        "rfe",
+        0.5
+      ],
+      [
+        "rfe",
+        0.8
+      ]
+    ],
+    "threads": 4,
+    "workers": 3,
+    "k": 7
+  },
+  "sources": [
+    {
+      "path": "results/phase1_baseline/xgb/tuned/bankruptcy_year_splits_xgb_raw.csv",
+      "sha256": "6d577f3703f7166dfe1c16e59704e67e4b656398ac8ed6af15b2b17594596356",
+      "kind": "historical baseline; incomplete training provenance"
+    },
+    {
+      "path": "results/phase1_baseline/lgbm/bk_lgb_tuned48_20260421/tuned/bankruptcy_year_splits_lgb_raw.csv",
+      "sha256": "987a0d8fca8723e3279223d2ed0993e6726e8c02f5a832b6c2fa65caa8ad12d5",
+      "kind": "historical baseline; incomplete training provenance"
+    },
+    {
+      "path": "results/phase1_baseline/random_forest/bankruptcy_year_splits_rf_raw.csv",
+      "sha256": "dcccb6d546483c4bad469f6aa0be22d648c03ed001c0061caf710b7ccaf04692",
+      "kind": "historical baseline; incomplete training provenance"
+    },
+    {
+      "path": "results/phase1_baseline/logistic_regression/bk_lr_tuned4_20260421/tuned/bankruptcy_year_splits_lr_raw.csv",
+      "sha256": "eee97abd27078b0b60bce9e228977d287d3810e45e9af600b0be5f630184868e",
+      "kind": "historical baseline; incomplete training provenance"
+    },
+    {
+      "path": "results/phase1_baseline/tabm/tuned_light_full_20260410/tuned/bankruptcy_year_splits_tabm_raw.csv",
+      "sha256": "3d8454dd425d1e45667ac5e88b995b3dc53a473b88d7250a2319dcb5e985a138",
+      "kind": "historical baseline; incomplete training provenance"
+    },
+    {
+      "path": "results/phase1_baseline/tabicl/tabicl_gpu_20260506_setA_temp075_ctx2048/bankruptcy_year_splits_tabicl_raw.csv",
+      "sha256": "be8af5bcb38023e9e455448c89ac1d2b1121a517e2291857ef7ab3916db0ef77",
+      "kind": "historical baseline; incomplete training provenance"
+    },
+    {
+      "path": "results/phase2_ensemble/standard_dynamic/runs/20261004T202331745995Z/manifest.json",
+      "sha256": "e48137768f596a88189768a8f70521165238a3ff913a11b93e3945ed08e3a9e0",
+      "kind": "completed run metadata"
+    },
+    {
+      "path": "results/phase2_ensemble/standard_dynamic/runs/20261004T202331745995Z/audit_validation.json",
+      "sha256": "69f31d55df6b2bfddd13a2d05669ce7f2c6b9e3aec4c83801265100e70f576d9",
+      "kind": "existing independent numeric audit"
+    },
+    {
+      "path": "results/phase2_ensemble/standard_dynamic/runs/20261004T202331745995Z/metrics.csv",
+      "sha256": "340af41caa655be37ff709373c7012111f4e4e11ff8fb1361b994b6bd7402337",
+      "kind": "pooled and annual test metrics"
+    },
+    {
+      "path": "results/phase2_ensemble/standard_dynamic/runs/20261004T202331745995Z/fs_paired_differences.csv",
+      "sha256": "bf98f6ed058053885770395528c6a247cb5dabfcbb629dd73160d08b8a6473ab",
+      "kind": "official same-seed FS differences"
+    }
+  ],
+  "checks": {
+    "baseline_rows_all_sampling": 744,
+    "baseline_rows_hybrid": 186,
+    "baseline_provenance_limit": "Artifact hashes and coverage checked; historical models not retrained; six files have different tuning provenance.",
+    "standard_configurations": 90,
+    "standard_metric_rows": 28350,
+    "standard_seeds": 10,
+    "standard_per_config_checksums": true,
+    "aggregate_reproduced_from_configuration_metrics": true,
+    "source_audit_at": "2026-10-06T07:17:57.768340+00:00",
+    "static_subsets_per_seed": {
+      "2": 9,
+      "3": 18,
+      "4": 15,
+      "5": 6,
+      "6": 1
+    },
+    "annual_temporal_points": 4,
+    "fs_paired_rows": 400,
+    "fs_delta_cells_per_metric": 40,
+    "fs_differences_match_official": true,
+    "fs_heatmap_shared_absolute_limit": 0.19
+  },
+  "charts": [
+    {
+      "id": "phase1-hybrid-boundary-auc",
+      "phase": "phase1",
+      "analytical_question": "How does AUC vary over 15 Old/New boundaries under fixed hybrid sampling?",
+      "takeaway": "Describe the observed Old/New boundary sensitivity separately for each historical candidate.",
+      "family": "line / six faceted parameter-sensitivity panels",
+      "renderer": "Matplotlib standalone static",
+      "surface": "user-owned thesis figure; omit provider branding",
+      "data_rows": 186,
+      "fields": [
+        "candidate_code",
+        "model_family",
+        "method",
+        "old_end_year",
+        "sampling",
+        "AUC",
+        "F1",
+        "Recall",
+        "source_path",
+        "source_row"
+      ],
+      "notes": "No uncertainty estimate for historical rows; no ranking or cross-phase effect attribution. Retrain is plotted as a reference, not 15 independent retrain runs.",
+      "palette_policy": "at most two approved roots (blue/gold) plus neutrals; markers/line styles distinguish series",
+      "exports": [
+        "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-auc.png",
+        "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-auc.svg"
+      ],
+      "data": "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-auc.csv",
+      "figure_inches": [
+        7.2,
+        8.4
+      ],
+      "minimum_font_pt": 9,
+      "metrics": [
+        "AUC",
+        "F1-score",
+        "Recall"
+      ],
+      "absolute_score_domains": {
+        "AUC": [
+          0.45,
+          1.0
+        ],
+        "F1": [
+          0.0,
+          0.35
+        ],
+        "Recall": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "id": "phase1-hybrid-boundary-f1",
+      "phase": "phase1",
+      "analytical_question": "How does F1-score vary over 15 Old/New boundaries under fixed hybrid sampling?",
+      "takeaway": "Describe the observed Old/New boundary sensitivity separately for each historical candidate.",
+      "family": "line / six faceted parameter-sensitivity panels",
+      "renderer": "Matplotlib standalone static",
+      "surface": "user-owned thesis figure; omit provider branding",
+      "data_rows": 186,
+      "fields": [
+        "candidate_code",
+        "model_family",
+        "method",
+        "old_end_year",
+        "sampling",
+        "AUC",
+        "F1",
+        "Recall",
+        "source_path",
+        "source_row"
+      ],
+      "notes": "No uncertainty estimate for historical rows; no ranking or cross-phase effect attribution. Retrain is plotted as a reference, not 15 independent retrain runs.",
+      "palette_policy": "at most two approved roots (blue/gold) plus neutrals; markers/line styles distinguish series",
+      "exports": [
+        "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-f1.png",
+        "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-f1.svg"
+      ],
+      "data": "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-f1.csv",
+      "figure_inches": [
+        7.2,
+        8.4
+      ],
+      "minimum_font_pt": 9,
+      "metrics": [
+        "AUC",
+        "F1-score",
+        "Recall"
+      ],
+      "absolute_score_domains": {
+        "AUC": [
+          0.45,
+          1.0
+        ],
+        "F1": [
+          0.0,
+          0.35
+        ],
+        "Recall": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "id": "phase1-hybrid-boundary-recall",
+      "phase": "phase1",
+      "analytical_question": "How does Recall vary over 15 Old/New boundaries under fixed hybrid sampling?",
+      "takeaway": "Describe the observed Old/New boundary sensitivity separately for each historical candidate.",
+      "family": "line / six faceted parameter-sensitivity panels",
+      "renderer": "Matplotlib standalone static",
+      "surface": "user-owned thesis figure; omit provider branding",
+      "data_rows": 186,
+      "fields": [
+        "candidate_code",
+        "model_family",
+        "method",
+        "old_end_year",
+        "sampling",
+        "AUC",
+        "F1",
+        "Recall",
+        "source_path",
+        "source_row"
+      ],
+      "notes": "No uncertainty estimate for historical rows; no ranking or cross-phase effect attribution. Retrain is plotted as a reference, not 15 independent retrain runs.",
+      "palette_policy": "at most two approved roots (blue/gold) plus neutrals; markers/line styles distinguish series",
+      "exports": [
+        "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-recall.png",
+        "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-recall.svg"
+      ],
+      "data": "assets/research/experiment-results/bankruptcy/phase1/phase1-hybrid-boundary-recall.csv",
+      "figure_inches": [
+        7.2,
+        8.4
+      ],
+      "minimum_font_pt": 9,
+      "metrics": [
+        "AUC",
+        "F1-score",
+        "Recall"
+      ],
+      "absolute_score_domains": {
+        "AUC": [
+          0.45,
+          1.0
+        ],
+        "F1": [
+          0.0,
+          0.35
+        ],
+        "Recall": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "id": "phase2-pooled-ensemble-comparison",
+      "phase": "phase2",
+      "analytical_question": "How do fixed ensemble strategies compare on the same pooled Test rows?",
+      "takeaway": "Compare the eight prespecified strategies using the same Test and ten seeds.",
+      "family": "faceted dot and SD interval",
+      "renderer": "Matplotlib standalone static",
+      "surface": "user-owned thesis figure; omit provider branding",
+      "data_rows": 80,
+      "fields": [
+        "seed",
+        "fs",
+        "n_features",
+        "method",
+        "threshold",
+        "calibration_AP",
+        "selected_static",
+        "period",
+        "n_test",
+        "n_test_positive",
+        "AUC",
+        "PR_AUC",
+        "F1",
+        "G_Mean",
+        "Recall",
+        "Precision",
+        "Balanced_Accuracy",
+        "Cohen_Kappa",
+        "Type1_Error",
+        "Type2_Error",
+        "Brier"
+      ],
+      "notes": "Fixed run only; no same-protocol Retrain exists here. Algorithm code key in README.",
+      "palette_policy": "at most two approved roots (blue/gold) plus neutrals; markers/line styles distinguish series",
+      "exports": [
+        "assets/research/experiment-results/bankruptcy/phase2/phase2-pooled-ensemble-comparison.png",
+        "assets/research/experiment-results/bankruptcy/phase2/phase2-pooled-ensemble-comparison.svg"
+      ],
+      "data": "assets/research/experiment-results/bankruptcy/phase2/phase2-pooled-ensemble-comparison.csv",
+      "figure_inches": [
+        7.2,
+        5.2
+      ],
+      "minimum_font_pt": 9,
+      "metrics": [
+        "AUC",
+        "F1-score",
+        "Recall"
+      ],
+      "absolute_score_domains": {
+        "AUC": [
+          0.45,
+          1.0
+        ],
+        "F1": [
+          0.0,
+          0.35
+        ],
+        "Recall": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "id": "phase2-static-subset-size",
+      "phase": "phase2",
+      "analytical_question": "How do average candidate metrics vary with mixed-subset size?",
+      "takeaway": "Show descriptive metric averages for all subsets at each size, without selecting a Test winner.",
+      "family": "line / ordered model-count sensitivity",
+      "renderer": "Matplotlib standalone static",
+      "surface": "user-owned thesis figure; omit provider branding",
+      "data_rows": 490,
+      "fields": [
+        "seed",
+        "fs",
+        "n_features",
+        "method",
+        "threshold",
+        "calibration_AP",
+        "selected_static",
+        "period",
+        "n_test",
+        "n_test_positive",
+        "AUC",
+        "PR_AUC",
+        "F1",
+        "G_Mean",
+        "Recall",
+        "Precision",
+        "Balanced_Accuracy",
+        "Cohen_Kappa",
+        "Type1_Error",
+        "Type2_Error",
+        "Brier",
+        "ensemble_size"
+      ],
+      "notes": "Seed SD is calculated after averaging within seed. This does not isolate a causal size effect.",
+      "palette_policy": "at most two approved roots (blue/gold) plus neutrals; markers/line styles distinguish series",
+      "exports": [
+        "assets/research/experiment-results/bankruptcy/phase2/phase2-static-subset-size.png",
+        "assets/research/experiment-results/bankruptcy/phase2/phase2-static-subset-size.svg"
+      ],
+      "data": "assets/research/experiment-results/bankruptcy/phase2/phase2-static-subset-size.csv",
+      "figure_inches": [
+        7.2,
+        4.0
+      ],
+      "minimum_font_pt": 9,
+      "metrics": [
+        "AUC",
+        "F1-score",
+        "Recall"
+      ],
+      "absolute_score_domains": {
+        "AUC": [
+          0.45,
+          1.0
+        ],
+        "F1": [
+          0.0,
+          0.35
+        ],
+        "Recall": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "id": "phase2-annual-test-comparison",
+      "phase": "phase2",
+      "analytical_question": "How do prespecified strategies differ within each of four Test years?",
+      "takeaway": "Display annual snapshots and failed-class denominators without interpolating a long-term trend.",
+      "family": "faceted grouped dot and SD interval",
+      "renderer": "Matplotlib standalone static",
+      "surface": "user-owned thesis figure; omit provider branding",
+      "data_rows": 240,
+      "fields": [
+        "seed",
+        "fs",
+        "n_features",
+        "method",
+        "threshold",
+        "calibration_AP",
+        "selected_static",
+        "period",
+        "n_test",
+        "n_test_positive",
+        "AUC",
+        "PR_AUC",
+        "F1",
+        "G_Mean",
+        "Recall",
+        "Precision",
+        "Balanced_Accuracy",
+        "Cohen_Kappa",
+        "Type1_Error",
+        "Type2_Error",
+        "Brier",
+        "year"
+      ],
+      "notes": "Finer Test timestamps are unavailable in this run; do not add synthetic monthly points or older protocols.",
+      "palette_policy": "at most two approved roots (blue/gold) plus neutrals; markers/line styles distinguish series",
+      "exports": [
+        "assets/research/experiment-results/bankruptcy/phase2/phase2-annual-test-comparison.png",
+        "assets/research/experiment-results/bankruptcy/phase2/phase2-annual-test-comparison.svg"
+      ],
+      "data": "assets/research/experiment-results/bankruptcy/phase2/phase2-annual-test-comparison.csv",
+      "figure_inches": [
+        7.2,
+        4.8
+      ],
+      "minimum_font_pt": 9,
+      "metrics": [
+        "AUC",
+        "F1-score",
+        "Recall"
+      ],
+      "absolute_score_domains": {
+        "AUC": [
+          0.45,
+          1.0
+        ],
+        "F1": [
+          0.0,
+          0.35
+        ],
+        "Recall": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "id": "phase3-fs-paired-auc",
+      "phase": "phase3",
+      "analytical_question": "What is the same-seed change in AUC after feature selection?",
+      "takeaway": "Describe positive, negative and null mean differences for fixed methods without a superiority claim.",
+      "family": "annotated paired-difference heatmap",
+      "renderer": "Matplotlib standalone static",
+      "surface": "user-owned thesis figure; omit provider branding",
+      "data_rows": 400,
+      "fields": [
+        "seed",
+        "fs",
+        "n_features",
+        "method",
+        "threshold",
+        "calibration_AP",
+        "selected_static",
+        "period",
+        "n_test",
+        "n_test_positive",
+        "AUC",
+        "PR_AUC",
+        "F1",
+        "G_Mean",
+        "Recall",
+        "Precision",
+        "Balanced_Accuracy",
+        "Cohen_Kappa",
+        "Type1_Error",
+        "Type2_Error",
+        "Brier",
+        "AUC_no_fs",
+        "F1_no_fs",
+        "Recall_no_fs",
+        "AUC_delta",
+        "F1_delta",
+        "Recall_delta",
+        "fs_code"
+      ],
+      "notes": "Each cell averages ten paired seed differences; training and threshold fitting are repeated per FS setting. V-static policy is excluded.",
+      "palette_policy": "at most two approved roots (blue/gold) plus neutrals; markers/line styles distinguish series",
+      "exports": [
+        "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-auc.png",
+        "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-auc.svg"
+      ],
+      "data": "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-auc.csv",
+      "figure_inches": [
+        7.2,
+        5.8
+      ],
+      "minimum_font_pt": 9,
+      "metrics": [
+        "AUC",
+        "F1-score",
+        "Recall"
+      ],
+      "absolute_score_domains": {
+        "AUC": [
+          0.45,
+          1.0
+        ],
+        "F1": [
+          0.0,
+          0.35
+        ],
+        "Recall": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "id": "phase3-fs-paired-f1",
+      "phase": "phase3",
+      "analytical_question": "What is the same-seed change in F1-score after feature selection?",
+      "takeaway": "Describe positive, negative and null mean differences for fixed methods without a superiority claim.",
+      "family": "annotated paired-difference heatmap",
+      "renderer": "Matplotlib standalone static",
+      "surface": "user-owned thesis figure; omit provider branding",
+      "data_rows": 400,
+      "fields": [
+        "seed",
+        "fs",
+        "n_features",
+        "method",
+        "threshold",
+        "calibration_AP",
+        "selected_static",
+        "period",
+        "n_test",
+        "n_test_positive",
+        "AUC",
+        "PR_AUC",
+        "F1",
+        "G_Mean",
+        "Recall",
+        "Precision",
+        "Balanced_Accuracy",
+        "Cohen_Kappa",
+        "Type1_Error",
+        "Type2_Error",
+        "Brier",
+        "AUC_no_fs",
+        "F1_no_fs",
+        "Recall_no_fs",
+        "AUC_delta",
+        "F1_delta",
+        "Recall_delta",
+        "fs_code"
+      ],
+      "notes": "Each cell averages ten paired seed differences; training and threshold fitting are repeated per FS setting. V-static policy is excluded.",
+      "palette_policy": "at most two approved roots (blue/gold) plus neutrals; markers/line styles distinguish series",
+      "exports": [
+        "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-f1.png",
+        "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-f1.svg"
+      ],
+      "data": "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-f1.csv",
+      "figure_inches": [
+        7.2,
+        5.8
+      ],
+      "minimum_font_pt": 9,
+      "metrics": [
+        "AUC",
+        "F1-score",
+        "Recall"
+      ],
+      "absolute_score_domains": {
+        "AUC": [
+          0.45,
+          1.0
+        ],
+        "F1": [
+          0.0,
+          0.35
+        ],
+        "Recall": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "id": "phase3-fs-paired-recall",
+      "phase": "phase3",
+      "analytical_question": "What is the same-seed change in Recall after feature selection?",
+      "takeaway": "Describe positive, negative and null mean differences for fixed methods without a superiority claim.",
+      "family": "annotated paired-difference heatmap",
+      "renderer": "Matplotlib standalone static",
+      "surface": "user-owned thesis figure; omit provider branding",
+      "data_rows": 400,
+      "fields": [
+        "seed",
+        "fs",
+        "n_features",
+        "method",
+        "threshold",
+        "calibration_AP",
+        "selected_static",
+        "period",
+        "n_test",
+        "n_test_positive",
+        "AUC",
+        "PR_AUC",
+        "F1",
+        "G_Mean",
+        "Recall",
+        "Precision",
+        "Balanced_Accuracy",
+        "Cohen_Kappa",
+        "Type1_Error",
+        "Type2_Error",
+        "Brier",
+        "AUC_no_fs",
+        "F1_no_fs",
+        "Recall_no_fs",
+        "AUC_delta",
+        "F1_delta",
+        "Recall_delta",
+        "fs_code"
+      ],
+      "notes": "Each cell averages ten paired seed differences; training and threshold fitting are repeated per FS setting. V-static policy is excluded.",
+      "palette_policy": "at most two approved roots (blue/gold) plus neutrals; markers/line styles distinguish series",
+      "exports": [
+        "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-recall.png",
+        "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-recall.svg"
+      ],
+      "data": "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-paired-recall.csv",
+      "figure_inches": [
+        7.2,
+        5.8
+      ],
+      "minimum_font_pt": 9,
+      "metrics": [
+        "AUC",
+        "F1-score",
+        "Recall"
+      ],
+      "absolute_score_domains": {
+        "AUC": [
+          0.45,
+          1.0
+        ],
+        "F1": [
+          0.0,
+          0.35
+        ],
+        "Recall": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "id": "phase3-fs-selected-static-policy",
+      "phase": "phase3",
+      "analytical_question": "How does the validation-selected static policy perform across all FS configurations?",
+      "takeaway": "Show all prespecified FS configurations, keeping policy comparisons separate from fixed-method deltas.",
+      "family": "faceted dot and SD interval",
+      "renderer": "Matplotlib standalone static",
+      "surface": "user-owned thesis figure; omit provider branding",
+      "data_rows": 90,
+      "fields": [
+        "seed",
+        "fs",
+        "n_features",
+        "method",
+        "threshold",
+        "calibration_AP",
+        "selected_static",
+        "period",
+        "n_test",
+        "n_test_positive",
+        "AUC",
+        "PR_AUC",
+        "F1",
+        "G_Mean",
+        "Recall",
+        "Precision",
+        "Balanced_Accuracy",
+        "Cohen_Kappa",
+        "Type1_Error",
+        "Type2_Error",
+        "Brier"
+      ],
+      "notes": "No FS is an analytical comparator in result charts, not an extra Phase 3 methodology-diagram node.",
+      "palette_policy": "at most two approved roots (blue/gold) plus neutrals; markers/line styles distinguish series",
+      "exports": [
+        "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-selected-static-policy.png",
+        "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-selected-static-policy.svg"
+      ],
+      "data": "assets/research/experiment-results/bankruptcy/phase3/phase3-fs-selected-static-policy.csv",
+      "figure_inches": [
+        7.2,
+        5.4
+      ],
+      "minimum_font_pt": 9,
+      "metrics": [
+        "AUC",
+        "F1-score",
+        "Recall"
+      ],
+      "absolute_score_domains": {
+        "AUC": [
+          0.45,
+          1.0
+        ],
+        "F1": [
+          0.0,
+          0.35
+        ],
+        "Recall": [
+          0.0,
+          1.0
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Phase 1 is historical and does not share the fixed-year validation/tuning protocol of Phase 2-3.",
+    "Historical baseline artifacts do not independently establish the best classifier or complete training provenance.",
+    "No same-protocol Retrain run is added to Phase 2-3.",
+    "Seed SD is descriptive run variability, not independent-data confidence or statistical significance.",
+    "Final company status is the retrospective target, not a verified one-year-ahead bankruptcy event target.",
+    "Result plotting does not modify data, original results, training settings, or methodology diagrams."
+  ]
+}

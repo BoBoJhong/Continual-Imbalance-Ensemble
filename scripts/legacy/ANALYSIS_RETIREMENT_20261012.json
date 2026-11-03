@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-12",
+  "entries": [
+    {
+      "original_path": "scripts/analysis/audit_thesis_convergence.py",
+      "archived_path": "scripts/legacy/analysis/audit_thesis_convergence.py",
+      "source_snapshot": "scripts/legacy/source_snapshots/20261012/audit_thesis_convergence.original.py.txt",
+      "original_sha256": "99c668c0d8146f5b0953849214a7b4cc9474a3eeac328045ad7c24e738d6faf8",
+      "archived_sha256": "ba21b8b2ae5b971e0adf4f68ad2496402cf8c8b15a068cf087f8d83c7992f4a3",
+      "reason": "Dated 2026-09-21 audit depends on retired ratio predictions; preflight fails clearly without reading data or writing replacement metrics."
+    }
+  ]
+}

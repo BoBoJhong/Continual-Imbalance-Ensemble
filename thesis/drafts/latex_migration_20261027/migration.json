@@ -1,0 +1,19 @@
+{
+  "migrated_at_utc": "2026-10-26T18:25:52.222883+00:00",
+  "markdown_source": "thesis/drafts/第三章_研究方法_優化稿_20261027.md",
+  "markdown_sha256": "672918dc2a229793fde86d5d5c75055c8e2055358e1034f55b72f342a23e855c",
+  "chapter_sha256": "bbdcc0ccfb09cec5cbfdc4a147ec72ed6236abd062c75dd23daf43e83e47f5c3",
+  "bibliography_sha256": "01a826a4c97007fcbdf80a95139e0f85a4474cc767eb8bbda66e596d82f5d5a9",
+  "tables": 7,
+  "equations": 11,
+  "sections": 6,
+  "original_class_sha256": "27bdf2fe65c734e230c0a118604a6c5dd28147fc60684f8b58d353f8a571d079",
+  "scope": [
+    "chapters/03_method.tex",
+    "references.bib"
+  ],
+  "build": "passed",
+  "verification": "verification.json",
+  "handoff": "thesis/handoffs/20261026T182640096685Z",
+  "pdf_sha256": "1db4a8f6a2b4e6b8c17a54fe4d5f0813c5903e25bffa69a42e0a922eca9f4d12"
+}

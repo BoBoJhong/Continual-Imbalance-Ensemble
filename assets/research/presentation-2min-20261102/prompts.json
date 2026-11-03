@@ -1,0 +1,23 @@
+{
+  "mode": "built-in image_gen",
+  "slides": [
+    {
+      "file": "01-introduction.png",
+      "prompt": "Use case: productivity-visual.\nCreate ONE finished academic presentation slide as a flat raster image, widescreen 16:9 landscape, preferably 1920x1080 or higher. It is a standalone slide for a two-minute individual research presentation, not a photograph of a screen. Premium editorial academic design, ivory white background #F8FAFC, deep navy #12243A typography, restrained teal #168C91 and amber #E9AB46 highlights, spacious margins, left-aligned precise modern sans-serif type, simple clean vector-like illustrations and diagrams. Readable at projection size, deliberate hierarchy, no tiny paragraphs. Use only the exact English text specified below; no added sentences, no fake citations, no logos, no invented plots, no decorative random numbers. Keep all text comfortably inside the frame. A thin navy horizontal footer line with the slide index. All four slides in this series should share the same visual system.\nSlide 01 / 04. Layout: small section eyebrow top left, large title below; two equally weighted concept illustrations across the central area (changing dot distributions along time and many navy dots with a few amber minority dots); beneath them a prominent question strip. Include the exact text:\nEyebrow: \"01  INTRODUCTION\"\nMain title on two lines: \"Learning from the Past,\nAdapting to the Present\"\nSubtitle: \"Ensemble learning for imbalanced data over time\"\nLeft concept heading: \"Data change over time\"\nLeft concept line: \"Historical patterns may become less useful.\"\nRight concept heading: \"Important cases are rare\"\nRight concept line: \"Overall accuracy can hide missed positive cases.\"\nBottom question strip label: \"THE PROBLEM\"\nBottom question: \"How should we combine historical and recent models?\"\nFooter left: \"Temporal data • Class imbalance • Ensemble learning\"\nFooter right: \"01 / 04\"\nAvoid using any trend chart that appears to contain empirical results."
+    },
+    {
+      "file": "02-research-question.png",
+      "prompt": "Edit this existing academic slide. Preserve the exact 16:9 canvas, ivory/navy/teal/amber style, title, all three question cards, numbering, icons in those cards, footer page 02 / 04. Change ONLY bottom STUDY CONTEXTS strip and footer left. Replace the entire strip contents with label STUDY CONTEXT, one building icon and exact text: 'Corporate bankruptcy event-proxy classification'. Remove the plus, health questionnaire icon and all diabetes / BRFSS text. Set footer left to 'Compare historical and recent information under shared rules'. Keep the title 'When does combining old and new models help?' unchanged. Make clean typography matching the original."
+    },
+    {
+      "file": "03-methodology.png",
+      "prompt": "Edit this existing academic methodology slide, preserving exact 16:9 canvas and ivory navy teal amber style. Preserve diagram, six model boxes Old-1/2/3 New-1/2/3, sampling list and DSEL + Calibration. Replace the top-left label '6 XGBoost models' with '6 models from a selected classifier'. In bottom metric line replace '10 seeds • ROC-AUC • Average precision • F1 • Recall' with '10 seeds / ROC-AUC / F1 / Recall'. Change bottom footer left to 'Validation selects the classifier. Current pilot: XGBoost.' Keep page 03 / 04. All text must be clear, no other changes. This is a proposed validation-selected base classifier framework, do not imply the full classifier selection has already been completed."
+    },
+    {
+      "file": "04-contributions.png",
+      "prompt": "Edit this existing academic contribution slide, preserving exact 16:9 canvas and ivory/navy/teal/amber style, main title, upper two contribution cards and page 04 / 04. Replace the entire OBSERVED TAKEAWAY section with label 'CURRENT SCOPE', bold text 'One corporate dataset. A two-stage model-pool update.' and smaller line 'Current ensemble results use an XGBoost pilot.'. Remove both original sentences about recent models not always outperforming and directions differing between two datasets. Replace the descriptive evidence line beneath with 'Event timing uses a reconstructed proxy. Interpret within this dataset.'. Set footer left to 'Next: complete shared validation and rebuild the selected model pool'. Do not invent numerical results or claims of completed full model selection."
+    }
+  ],
+  "revision": "2026-11-03: one corporate event-proxy case; shared-validation framework; current XGBoost pilot",
+  "edit_tool": "built-in image_gen"
+}

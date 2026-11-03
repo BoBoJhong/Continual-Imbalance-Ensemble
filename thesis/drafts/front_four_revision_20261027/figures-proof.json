@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "source_sha256": {
+    "scripts/plots/build_thesis_chapter4_figures.py": "0e87636822aa89034800119942f8840e1a557500bb62534b4aab2154e859c164",
+    "thesis/drafts/framework_results_revision_20261027/results-proof.json": "d09c723c53899c810b8a310a64bd2e9528b1066f5243e6fac616efc2cc3d99f7",
+    "thesis/latex/generated/chapter-results-20261027/baseline-summary.csv": "eaab7a0d4daf307dfdbc3e80e0c2611d41133718e350acf3c6cffcf7541dedd8",
+    "results/statistical_tests/fixed_two_experiments/20261027T051346477136Z/descriptive.csv": "4666ec8dce0307bfe2b86e4e28f1d60c731af54baeafb5c58c87551296225860",
+    "results/statistical_tests/fixed_two_experiments/20261027T051346477136Z/paired_tests.csv": "75f52f0de1fe8cb5dd4c7fb434d39c86984f67baec9508114da4644b33710460",
+    "results/statistical_tests/fixed_two_experiments/20261027T051346477136Z/manifest.json": "7d4efce40175420350168bb8f7fef2bd90a426b43060b57dd1626eb7f70048cf"
+  },
+  "generated_sha256": {
+    "thesis/latex/figures/results-baseline-strategies.png": "236d94167cc38fb17076fd020548cf3e865f36293d45333fa19dbd9cfd130c2c",
+    "thesis/latex/figures/results-baseline-strategies.svg": "8b444e94b2cd6462040883190beaf6a1d6cd2a511812c192f6e8baff853bbe8f",
+    "thesis/latex/figures/results-ensemble-comparison.png": "1449a963811ea1bc9c04ce4309d82fb237390904a53387ab57076fe48d8dcff1",
+    "thesis/latex/figures/results-ensemble-comparison.svg": "e6aaac62d331e3b08a3390344576a1de9701956281df39276bc00113fcea8fdc",
+    "thesis/latex/figures/results-fs-auc-differences.png": "c09aa295f7d59934e388a25dc73d66683d73be13a3582be51d394510bdbd4484",
+    "thesis/latex/figures/results-fs-auc-differences.svg": "d5fd0c5d47236a2b220ab08694c5505a5fa57c7e959bb342349fb7d8c1263037"
+  },
+  "rules": {
+    "baseline": "Fixed exporter order; equal boundary/sampling weights; no error bars",
+    "ensemble": "Pooled four-year scores; mean +/- sample SD across ten seeds, not CI",
+    "fs": "48 matched AUC mean differences; no significance encoded; no Test selection"
+  }
+}

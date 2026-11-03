@@ -1,0 +1,30 @@
+{
+  "date_taipei": "2026-10-15",
+  "unit_tests": {
+    "passed": 17,
+    "command": "python -m pytest tests/test_thesis_sync.py tests/test_thesis_handoff.py -q"
+  },
+  "forward_scenarios": 28,
+  "distribution_checks": [
+    "ZIP CRC and all packaged SHA256 passed",
+    "fresh extraction: sync_results --check passed",
+    "fresh extraction: verify-original passed"
+  ],
+  "local_compile": {
+    "main_template_pages": 17,
+    "main_form_notices": 4,
+    "results_pages": 5,
+    "results_warnings": 0
+  },
+  "live_overleaf": {
+    "project_id": "6acef24f1aecda6740296760",
+    "access": true,
+    "download_files": 21,
+    "all_downloads_match_template": true,
+    "compiler": "XeLaTeX",
+    "tex_live": "2026",
+    "main": "main.tex",
+    "result": "free_plan_timeout",
+    "content_write_tested": false
+  }
+}

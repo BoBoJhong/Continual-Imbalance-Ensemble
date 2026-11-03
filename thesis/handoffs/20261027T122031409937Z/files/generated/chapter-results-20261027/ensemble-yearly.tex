@@ -1,0 +1,49 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.28\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}@{}}
+\caption{實驗一固定年份集成之逐年測試結果}\label{tab:results-ensemble-yearly}\\
+\toprule
+方法 & 年度 & AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{5}{c}{表~\thetable（續）}\\
+\toprule
+方法 & 年度 & AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{5}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+Old3 & 2015 & 0.6822 & 0.1289 & 0.2099 \\
+Old3 & 2016 & 0.6992 & 0.1301 & 0.2542 \\
+Old3 & 2017 & 0.7620 & 0.1032 & 0.2421 \\
+Old3 & 2018 & 0.7692 & 0.0928 & 0.2833 \\
+New3 & 2015 & 0.7834 & 0.2674 & 0.2550 \\
+New3 & 2016 & 0.7731 & 0.2020 & 0.2048 \\
+New3 & 2017 & 0.8350 & 0.1956 & 0.2421 \\
+New3 & 2018 & 0.8325 & 0.0924 & 0.1667 \\
+Equal6 & 2015 & 0.7567 & 0.2275 & 0.2838 \\
+Equal6 & 2016 & 0.7560 & 0.1935 & 0.2663 \\
+Equal6 & 2017 & 0.8464 & 0.1611 & 0.2596 \\
+Equal6 & 2018 & 0.8209 & 0.1071 & 0.2444 \\
+V-static & 2015 & \textbf{0.8022} & \textbf{0.2949} & 0.2649 \\
+V-static & 2016 & \textbf{0.7937} & \textbf{0.2309} & 0.2205 \\
+V-static & 2017 & \textbf{0.8496} & \textbf{0.2451} & 0.2772 \\
+V-static & 2018 & \textbf{0.8556} & 0.1304 & 0.2139 \\
+DCS-OLA & 2015 & 0.7257 & 0.2000 & 0.2928 \\
+DCS-OLA & 2016 & 0.7139 & 0.1629 & 0.2880 \\
+DCS-OLA & 2017 & 0.7730 & 0.1232 & 0.2649 \\
+DCS-OLA & 2018 & 0.7834 & 0.1089 & 0.3333 \\
+DCS-LCA & 2015 & 0.7224 & 0.1909 & 0.2910 \\
+DCS-LCA & 2016 & 0.7254 & 0.1826 & \textbf{0.3289} \\
+DCS-LCA & 2017 & 0.7567 & 0.1310 & 0.2982 \\
+DCS-LCA & 2018 & 0.7790 & \textbf{0.1321} & \textbf{0.4194} \\
+KNORA-E & 2015 & 0.7639 & 0.2499 & \textbf{0.2973} \\
+KNORA-E & 2016 & 0.7103 & 0.1567 & 0.2133 \\
+KNORA-E & 2017 & 0.8016 & 0.1806 & \textbf{0.3088} \\
+KNORA-E & 2018 & 0.8111 & 0.1171 & 0.2667 \\
+KNORA-U & 2015 & 0.7368 & 0.2355 & 0.2802 \\
+KNORA-U & 2016 & 0.7317 & 0.1868 & 0.2482 \\
+KNORA-U & 2017 & 0.7806 & 0.1663 & 0.2684 \\
+KNORA-U & 2018 & 0.7719 & 0.1009 & 0.2278 \\
+\end{longtable}
+\noindent{\footnotesize 資料來源：本研究實驗結果整理。\par 各值為十個種子的年度指標平均。粗體表示同一年度八種方法中該指標最高值，不比較不同年度，也不表示差異達統計顯著。2015--2018 年正類紀錄數依序為 111、83、57、36；各年沿用 Calibration 固定的門檻。}
+\endgroup

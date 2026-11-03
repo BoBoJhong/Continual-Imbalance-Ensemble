@@ -1,0 +1,17 @@
+% 可由 Zotero + Better BibTeX 匯出並覆蓋此檔。請核對引文資訊。
+@article{chawla2002smote,
+  author  = {Chawla, Nitesh V. and Bowyer, Kevin W. and Hall, Lawrence O. and Kegelmeyer, W. Philip},
+  title   = {SMOTE: Synthetic Minority Over-sampling Technique},
+  journal = {Journal of Artificial Intelligence Research},
+  year    = {2002},
+  volume  = {16},
+  pages   = {321--357},
+  doi     = {10.1613/jair.953}
+}
+@inproceedings{lundberg2017shap,
+  author    = {Lundberg, Scott M. and Lee, Su-In},
+  title     = {A Unified Approach to Interpreting Model Predictions},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2017},
+  volume    = {30}
+}

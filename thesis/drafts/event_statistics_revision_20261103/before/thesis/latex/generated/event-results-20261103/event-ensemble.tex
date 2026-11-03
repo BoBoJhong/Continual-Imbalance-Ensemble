@@ -1,0 +1,26 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{24\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}@{}}
+\caption{事件標籤下未進行 FS 之集成方法結果}\label{tab:results-ensemble}\\
+\toprule
+方法 & AUC & PR-AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{5}{c}{表~\thetable（續）}\\
+\toprule
+方法 & AUC & PR-AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{5}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+Old3 & \shortstack[l]{0.7198\\{\scriptsize(\(\pm\)0.0062)}} & \shortstack[l]{0.0245\\{\scriptsize(\(\pm\)0.0009)}} & \shortstack[l]{0.0199\\{\scriptsize(\(\pm\)0.0146)}} & \shortstack[l]{0.0168\\{\scriptsize(\(\pm\)0.0137)}} \\
+New3 & \shortstack[l]{\textbf{0.8601}\\{\scriptsize(\(\pm\)0.0043)}} & \shortstack[l]{0.0905\\{\scriptsize(\(\pm\)0.0055)}} & \shortstack[l]{0.1289\\{\scriptsize(\(\pm\)0.0142)}} & \shortstack[l]{0.4319\\{\scriptsize(\(\pm\)0.0605)}} \\
+Equal6 & \shortstack[l]{0.7881\\{\scriptsize(\(\pm\)0.0037)}} & \shortstack[l]{0.0533\\{\scriptsize(\(\pm\)0.0027)}} & \shortstack[l]{0.1041\\{\scriptsize(\(\pm\)0.0073)}} & \shortstack[l]{0.1941\\{\scriptsize(\(\pm\)0.0535)}} \\
+V-static & \shortstack[l]{0.8472\\{\scriptsize(\(\pm\)0.0000)}} & \shortstack[l]{\textbf{0.1252}\\{\scriptsize(\(\pm\)0.0000)}} & \shortstack[l]{\textbf{0.1795}\\{\scriptsize(\(\pm\)0.0000)}} & \shortstack[l]{0.2353\\{\scriptsize(\(\pm\)0.0000)}} \\
+DCS-OLA & \shortstack[l]{0.7450\\{\scriptsize(\(\pm\)0.0079)}} & \shortstack[l]{0.0288\\{\scriptsize(\(\pm\)0.0025)}} & \shortstack[l]{0.0411\\{\scriptsize(\(\pm\)0.0167)}} & \shortstack[l]{0.3857\\{\scriptsize(\(\pm\)0.2526)}} \\
+DCS-LCA & \shortstack[l]{0.7450\\{\scriptsize(\(\pm\)0.0082)}} & \shortstack[l]{0.0298\\{\scriptsize(\(\pm\)0.0032)}} & \shortstack[l]{0.0404\\{\scriptsize(\(\pm\)0.0185)}} & \shortstack[l]{0.3849\\{\scriptsize(\(\pm\)0.2540)}} \\
+KNORA-E & \shortstack[l]{0.7859\\{\scriptsize(\(\pm\)0.0052)}} & \shortstack[l]{0.0581\\{\scriptsize(\(\pm\)0.0049)}} & \shortstack[l]{0.1017\\{\scriptsize(\(\pm\)0.0297)}} & \shortstack[l]{0.2739\\{\scriptsize(\(\pm\)0.2164)}} \\
+KNORA-U & \shortstack[l]{0.7771\\{\scriptsize(\(\pm\)0.0045)}} & \shortstack[l]{0.0513\\{\scriptsize(\(\pm\)0.0039)}} & \shortstack[l]{0.0686\\{\scriptsize(\(\pm\)0.0268)}} & \shortstack[l]{\textbf{0.4824}\\{\scriptsize(\(\pm\)0.2116)}} \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究事件標籤集成實驗結果)\par 各格上列為十個種子之合併四年 Test 平均，下列為種子標準差；Test 共 12,282 筆紀錄、119 筆事件。粗體為八種方法中該指標最高值，不表示差異達統計顯著。}
+\endgroup

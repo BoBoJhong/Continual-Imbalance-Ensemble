@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "pdf_pages": 55,
+  "pdf_sha256": "a02768523d6b006f14092f384d84162c913d9795b1530e009b65f12d7413a039",
+  "native_compile": "passed",
+  "editor_compile": "success",
+  "tests": "16 passed",
+  "visual_check": "flowcharts, full feature dictionary, validation summary and hardware table reviewed",
+  "unresolved_references": 0,
+  "obsolete_stage_titles": false,
+  "warnings": [
+    "NCU NOTICE: Signed form forms/authorization.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/embargo.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/advisor.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/committee.pdf not inserted."
+  ],
+  "verified_company_ids": 8971,
+  "official_local_hash_equal": true,
+  "target": "company-level status, repeated across years",
+  "baseline_position": "fixed XGBoost; not best-algorithm selection",
+  "locations": {
+    "baseline_validation_explanation": 17,
+    "dataset_source": 25,
+    "feature_dictionary": 27,
+    "fs_parameters": 31,
+    "validation_summary": 45,
+    "hardware_table": 46
+  },
+  "handoff": "thesis/handoffs/20261027T063832462417Z",
+  "handoff_check": "passed"
+}

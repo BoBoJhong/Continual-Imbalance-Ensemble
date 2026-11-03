@@ -1,0 +1,10 @@
+\chapter{研究方法}
+\section{實驗設計}
+本節示範如何寫出 Old、New 與 Retrain 等實驗設定。實際切分、標籤定義、採樣流程與評估方式，應以研究設計為準。
+\section{評估指標}
+例如召回率（Recall）的定義為公式~\ref{eq:recall}：
+\begin{equation}\label{eq:recall}
+  \mathrm{Recall}=\frac{\mathrm{TP}}{\mathrm{TP}+\mathrm{FN}}.
+\end{equation}
+\section{模型訓練流程}
+請確保資料採樣、特徵選取及超參數調整僅使用訓練資料，避免資訊洩漏。

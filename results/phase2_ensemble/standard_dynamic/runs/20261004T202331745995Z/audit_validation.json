@@ -1,0 +1,465 @@
+{
+  "status": "verified",
+  "at": "2026-10-06T07:17:57.768340+00:00",
+  "protocol": "fixed_bankruptcy_standard_deslib_fit_only_fs_v1",
+  "configurations": 90,
+  "metric_rows": 28350,
+  "independently_recomputed_metric_rows": 7110,
+  "independently_replayed_dynamic_probabilities": 5052240,
+  "verified_fs_difference_rows": 5040,
+  "manifest_sha256": "e48137768f596a88189768a8f70521165238a3ff913a11b93e3945ed08e3a9e0",
+  "checks": [
+    {
+      "seed": 42,
+      "fs": "no_fs",
+      "status": "verified"
+    },
+    {
+      "seed": 42,
+      "fs": "mi_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 42,
+      "fs": "mi_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 42,
+      "fs": "cart_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 42,
+      "fs": "cart_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 42,
+      "fs": "shap_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 42,
+      "fs": "shap_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 42,
+      "fs": "rfe_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 42,
+      "fs": "rfe_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 123,
+      "fs": "no_fs",
+      "status": "verified"
+    },
+    {
+      "seed": 123,
+      "fs": "mi_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 123,
+      "fs": "mi_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 123,
+      "fs": "cart_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 123,
+      "fs": "cart_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 123,
+      "fs": "shap_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 123,
+      "fs": "shap_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 123,
+      "fs": "rfe_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 123,
+      "fs": "rfe_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 456,
+      "fs": "no_fs",
+      "status": "verified"
+    },
+    {
+      "seed": 456,
+      "fs": "mi_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 456,
+      "fs": "mi_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 456,
+      "fs": "cart_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 456,
+      "fs": "cart_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 456,
+      "fs": "shap_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 456,
+      "fs": "shap_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 456,
+      "fs": "rfe_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 456,
+      "fs": "rfe_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 789,
+      "fs": "no_fs",
+      "status": "verified"
+    },
+    {
+      "seed": 789,
+      "fs": "mi_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 789,
+      "fs": "mi_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 789,
+      "fs": "cart_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 789,
+      "fs": "cart_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 789,
+      "fs": "shap_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 789,
+      "fs": "shap_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 789,
+      "fs": "rfe_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 789,
+      "fs": "rfe_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 2024,
+      "fs": "no_fs",
+      "status": "verified"
+    },
+    {
+      "seed": 2024,
+      "fs": "mi_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 2024,
+      "fs": "mi_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 2024,
+      "fs": "cart_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 2024,
+      "fs": "cart_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 2024,
+      "fs": "shap_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 2024,
+      "fs": "shap_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 2024,
+      "fs": "rfe_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 2024,
+      "fs": "rfe_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 7,
+      "fs": "no_fs",
+      "status": "verified"
+    },
+    {
+      "seed": 7,
+      "fs": "mi_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 7,
+      "fs": "mi_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 7,
+      "fs": "cart_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 7,
+      "fs": "cart_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 7,
+      "fs": "shap_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 7,
+      "fs": "shap_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 7,
+      "fs": "rfe_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 7,
+      "fs": "rfe_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 21,
+      "fs": "no_fs",
+      "status": "verified"
+    },
+    {
+      "seed": 21,
+      "fs": "mi_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 21,
+      "fs": "mi_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 21,
+      "fs": "cart_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 21,
+      "fs": "cart_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 21,
+      "fs": "shap_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 21,
+      "fs": "shap_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 21,
+      "fs": "rfe_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 21,
+      "fs": "rfe_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 84,
+      "fs": "no_fs",
+      "status": "verified"
+    },
+    {
+      "seed": 84,
+      "fs": "mi_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 84,
+      "fs": "mi_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 84,
+      "fs": "cart_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 84,
+      "fs": "cart_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 84,
+      "fs": "shap_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 84,
+      "fs": "shap_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 84,
+      "fs": "rfe_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 84,
+      "fs": "rfe_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 168,
+      "fs": "no_fs",
+      "status": "verified"
+    },
+    {
+      "seed": 168,
+      "fs": "mi_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 168,
+      "fs": "mi_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 168,
+      "fs": "cart_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 168,
+      "fs": "cart_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 168,
+      "fs": "shap_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 168,
+      "fs": "shap_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 168,
+      "fs": "rfe_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 168,
+      "fs": "rfe_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 999,
+      "fs": "no_fs",
+      "status": "verified"
+    },
+    {
+      "seed": 999,
+      "fs": "mi_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 999,
+      "fs": "mi_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 999,
+      "fs": "cart_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 999,
+      "fs": "cart_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 999,
+      "fs": "shap_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 999,
+      "fs": "shap_r80",
+      "status": "verified"
+    },
+    {
+      "seed": 999,
+      "fs": "rfe_r50",
+      "status": "verified"
+    },
+    {
+      "seed": 999,
+      "fs": "rfe_r80",
+      "status": "verified"
+    }
+  ],
+  "scope": "all dynamic calibration/Test probabilities; all pooled methods; dynamic yearly metrics; calibration-only ranking/thresholds; checksums; partition membership; aggregate mean/SD; FS paired differences",
+  "limits": "does not verify real event dates or independently retrain all models; seed SD is not independent-data uncertainty"
+}

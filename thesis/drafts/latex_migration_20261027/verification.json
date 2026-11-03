@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "pdf_pages": 29,
+  "chapter_pdf_pages": [
+    13,
+    25
+  ],
+  "chapter_page_count": 13,
+  "sections": 6,
+  "tables": 7,
+  "equations": 11,
+  "changed_latex_sources": [
+    "references.bib",
+    "chapters/03_method.tex"
+  ],
+  "warnings": [
+    "NCU NOTICE: Signed form forms/authorization.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/embargo.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/advisor.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/committee.pdf not inserted."
+  ],
+  "font_messages": [
+    "NCU FONT: English = Times New Roman (installed)",
+    "NCU FONT: Chinese = actual BiauKai (fonts/kaiu.ttf)",
+    "NCU BUILD FONT MODE: strict"
+  ],
+  "pdf_sha256": "1db4a8f6a2b4e6b8c17a54fe4d5f0813c5903e25bffa69a42e0a922eca9f4d12",
+  "visual_review": "passed: whole-chapter overview and detailed page inspection; final parameter and partition tables fit within one page",
+  "reviewed_pdf_pages": [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "job_id": "rf_none_M2016_shap_r50",
+  "seed": 789,
+  "classifier": "rf",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2014,
+    2015,
+    2016
+  ],
+  "n_train": 10049,
+  "positive_before": 95,
+  "n_after": 10049,
+  "positive_after": 95,
+  "fs": "shap",
+  "ratio": 0.5,
+  "selected_features": [
+    "X15",
+    "X6",
+    "X11",
+    "X10",
+    "X12",
+    "X16",
+    "X1",
+    "X3",
+    "X18"
+  ],
+  "n_features": 9,
+  "fit_predict_seconds": 7.724802399985492,
+  "params": {
+    "n_estimators": 200,
+    "class_weight": null,
+    "random_state": 789,
+    "n_jobs": 4,
+    "max_depth": null
+  },
+  "warnings": [],
+  "selector_seed": 789,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-09-29T09:01:39.055537+00:00",
+  "cache_sha256": "356fea6c2443bce8c26ccd44cfb57ddbfbc24feef70c55efaf225cea47a434c0"
+}

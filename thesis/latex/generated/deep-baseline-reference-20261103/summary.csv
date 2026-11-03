@@ -1,0 +1,7 @@
+classifier,target,status,method,n_rows,AUC,F1,Recall
+TabM,final_status,provisional_reference,Old,60,0.6601061999999999,0.08464445000000001,0.3800232499999999
+TabM,final_status,provisional_reference,New,60,0.8008403666666667,0.18600116666666666,0.42311268333333335
+TabM,final_status,provisional_reference,Retrain,4,0.79404,0.149564,0.41114975
+TabICL,final_status,provisional_reference,Old,60,0.7062304500000001,0.09308476666666668,0.46434373333333334
+TabICL,final_status,provisional_reference,New,60,0.8220947499999999,0.20565918333333336,0.43995355
+TabICL,final_status,provisional_reference,Retrain,4,0.77074825,0.137962,0.49216025

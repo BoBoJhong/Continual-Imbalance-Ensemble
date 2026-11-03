@@ -1,0 +1,100 @@
+{
+  "sha": "8bcd8db3b432b1fa6d65e26753b5c9fc6567438d",
+  "node_id": "C_kwDOHt-QmdoAKDhiY2Q4ZGIzYjQzMmIxZmE2ZDY1ZTI2NzUzYjVjOWZjNjU2NzQzOGQ",
+  "commit": {
+    "author": {
+      "name": "Social Web, Intelligent and Distributed systems Engineering LAB",
+      "email": "110017299+sowide@users.noreply.github.com",
+      "date": "2024-08-06T06:52:45Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2024-08-06T06:52:45Z"
+    },
+    "message": "Add files via upload",
+    "tree": {
+      "sha": "119036ce53469ccc35b03beabab469abadfe7695",
+      "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/git/trees/119036ce53469ccc35b03beabab469abadfe7695"
+    },
+    "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/git/commits/8bcd8db3b432b1fa6d65e26753b5c9fc6567438d",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmscg+CRC1aQ7uu5UhlAAAV2sQADQsqnrBDzUKAWsXroQZP/0L\nwGlBDyDwH/SWrRz5uON3+ALvCo1Zk3HM9nCkXTyI1HBFT7B++6V8Dib9ti74gee4\nGk/o+80Ztd4rc0Fj8PvTTBv6jV5zPZYmkcsqtXqDsKPM5/jCf0gPeRFRgwzSR1Q0\nnbCRC97QajrPRM9Pcf8Loqr4bt2LqhJgJpVB9xAq7Cygv30oe8lcUSFsRAsfEW+l\n+7zE996C5KoAiXF4OOZ9VskyXmBHWPEXps9O0cR5tx5qHutIRGWeLu8bLQb0Lvsf\ndRgMtQMKlr3xu5D9uqdjrdZ0nH3k993F7J3sochCGe4DYeosFu/0Rz3yKaswzXvA\n8z3LdO3l0zLzCtUL/kHT9pfZtYYgiwf+WoBhJLKpFeR9lbTI+YJMMBE5Nu/LuIg4\nFFJbrNTLtQY7nk3A15gt7SFThF+LI1D69F3GtDlgZ/9Hfn1EMLoz3rnHd7WzimXJ\nu6MAviq5X4OYq1Sm067vBHaukCBvYZ/Fcz4ePsCtp/l7wPmOVoIU0HZx7/OJsgzb\n2OsU4U64oMzODQJ+PqueGFX4zK4tWRsKfZam9q+o/Oea0Uat5P1QGoR77qGA6M4x\nGuDlYlh/p5ZedBwLQC0Gx7XrSyMx6YhU0nXpLTDmr2oZ+P31gsyB8jiSTgxeQieJ\nkt8kdXZRJSHOqmLVORHa\n=eSzT\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 119036ce53469ccc35b03beabab469abadfe7695\nparent b78d1afe13ea8dae8efbb19ba29bfed053c4abdb\nauthor Social Web, Intelligent and Distributed systems Engineering LAB <110017299+sowide@users.noreply.github.com> 1722927165 +0200\ncommitter GitHub <noreply@github.com> 1722927165 +0200\n\nAdd files via upload",
+      "verified_at": "2024-11-25T14:46:19Z"
+    }
+  },
+  "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/commits/8bcd8db3b432b1fa6d65e26753b5c9fc6567438d",
+  "html_url": "https://github.com/sowide/bankruptcy_dataset/commit/8bcd8db3b432b1fa6d65e26753b5c9fc6567438d",
+  "comments_url": "https://api.github.com/repos/sowide/bankruptcy_dataset/commits/8bcd8db3b432b1fa6d65e26753b5c9fc6567438d/comments",
+  "author": {
+    "login": "sowide",
+    "id": 110017299,
+    "node_id": "U_kgDOBo67Ew",
+    "avatar_url": "https://avatars.githubusercontent.com/u/110017299?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/sowide",
+    "html_url": "https://github.com/sowide",
+    "followers_url": "https://api.github.com/users/sowide/followers",
+    "following_url": "https://api.github.com/users/sowide/following{/other_user}",
+    "gists_url": "https://api.github.com/users/sowide/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/sowide/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/sowide/subscriptions",
+    "organizations_url": "https://api.github.com/users/sowide/orgs",
+    "repos_url": "https://api.github.com/users/sowide/repos",
+    "events_url": "https://api.github.com/users/sowide/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/sowide/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+    "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/web-flow",
+    "html_url": "https://github.com/web-flow",
+    "followers_url": "https://api.github.com/users/web-flow/followers",
+    "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+    "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+    "organizations_url": "https://api.github.com/users/web-flow/orgs",
+    "repos_url": "https://api.github.com/users/web-flow/repos",
+    "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/web-flow/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "b78d1afe13ea8dae8efbb19ba29bfed053c4abdb",
+      "url": "https://api.github.com/repos/sowide/bankruptcy_dataset/commits/b78d1afe13ea8dae8efbb19ba29bfed053c4abdb",
+      "html_url": "https://github.com/sowide/bankruptcy_dataset/commit/b78d1afe13ea8dae8efbb19ba29bfed053c4abdb"
+    }
+  ],
+  "stats": {
+    "total": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  "files": [
+    {
+      "sha": "ec511f3762d36cb5d3ddc6818c8fbb235204e437",
+      "filename": "dataset_paper.zip",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0,
+      "changes": 0,
+      "blob_url": "https://github.com/sowide/bankruptcy_dataset/blob/8bcd8db3b432b1fa6d65e26753b5c9fc6567438d/dataset_paper.zip",
+      "raw_url": "https://github.com/sowide/bankruptcy_dataset/raw/8bcd8db3b432b1fa6d65e26753b5c9fc6567438d/dataset_paper.zip",
+      "contents_url": "https://api.github.com/repos/sowide/bankruptcy_dataset/contents/dataset_paper.zip?ref=8bcd8db3b432b1fa6d65e26753b5c9fc6567438d"
+    }
+  ]
+}

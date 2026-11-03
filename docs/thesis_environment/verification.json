@@ -1,0 +1,35 @@
+{
+  "verified_on": "2026-10-14",
+  "preserved_existing_files": {
+    "thesis/THESIS_FULL.md": true,
+    "thesis/NCU_IM_FORMAT.md": true,
+    ".vscode/settings.json": true,
+    "requirements.txt": true,
+    "pyproject.toml": true
+  },
+  "source_bindings": [
+    {
+      "id": "fixed_no_fs_pooled",
+      "rows": 63,
+      "seed_count": 10,
+      "run": "results/phase2_ensemble/standard_dynamic/runs/20261004T202331745995Z"
+    },
+    {
+      "id": "study3b_pooled",
+      "rows": 81,
+      "seed_count": 10,
+      "run": "results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z"
+    }
+  ],
+  "source_hashes_unchanged": true,
+  "original_template_files_verified": 21,
+  "thesis_sync_tests_passed": 7,
+  "result_preview_status": "passed",
+  "result_preview_warnings": [],
+  "template_pdf_pages": 17,
+  "result_preview_pdf_pages": 5,
+  "mcp_initialize_passed": true,
+  "mcp_tool_count": 25,
+  "online_overleaf_tested": false,
+  "markdown_migrated_to_latex": false
+}

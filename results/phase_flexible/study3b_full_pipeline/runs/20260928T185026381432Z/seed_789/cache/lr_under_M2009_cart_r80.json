@@ -1,0 +1,49 @@
+{
+  "job_id": "lr_under_M2009_cart_r80",
+  "seed": 789,
+  "classifier": "lr",
+  "sampling": "under",
+  "sampler": "TomekLinks",
+  "train_years": [
+    2007,
+    2008,
+    2009
+  ],
+  "n_train": 11609,
+  "positive_before": 140,
+  "n_after": 11576,
+  "positive_after": 140,
+  "fs": "cart",
+  "ratio": 0.8,
+  "selected_features": [
+    "X11",
+    "X15",
+    "X3",
+    "X10",
+    "X6",
+    "X12",
+    "X1",
+    "X8",
+    "X18",
+    "X7",
+    "X16",
+    "X4",
+    "X17",
+    "X2"
+  ],
+  "n_features": 14,
+  "fit_predict_seconds": 0.890470499987714,
+  "params": {
+    "class_weight": null,
+    "random_state": 789,
+    "solver": "lbfgs",
+    "max_iter": 1000,
+    "warm_start": false
+  },
+  "warnings": [],
+  "selector_seed": 789,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-09-29T07:17:42.970271+00:00",
+  "cache_sha256": "c9dc2f9c036d3e714766e502de2d50cdd89849731c661e0da7b6d23b4549a69e"
+}

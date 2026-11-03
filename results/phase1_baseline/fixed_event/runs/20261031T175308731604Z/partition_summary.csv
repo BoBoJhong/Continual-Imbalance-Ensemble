@@ -1,0 +1,5 @@
+partition,n_rows,n_positive,first_year,last_year
+Old_fit,55927,403,1999,2011
+New_fit,6969,54,2012,2013
+Test,12282,119,2015,2018
+Validation,3504,33,2014,2014

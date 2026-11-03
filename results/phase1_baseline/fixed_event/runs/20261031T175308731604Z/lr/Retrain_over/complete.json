@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "at": "2026-10-31T20:57:21.541658+00:00",
+  "chosen_params": {
+    "C": 100.0,
+    "solver": "lbfgs",
+    "max_iter": 500
+  },
+  "chosen_candidate": 3,
+  "default_validation_AUC": 0.8578612398837119,
+  "chosen_tuning_validation_AUC": 0.8580445771457008,
+  "test_used_for_selection": false,
+  "duration_seconds": 654.4416683000163,
+  "metrics_sha256": "303f8cf99a258934a88414c4bb40e313edfffdc1b6fd2371163b1816e155ab4d",
+  "predictions_sha256": "a566f359c7e1e5105e9870028248d1e1c3078c9075c307ae11f17eb81fee1f88"
+}

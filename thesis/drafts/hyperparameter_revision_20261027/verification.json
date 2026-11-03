@@ -1,0 +1,58 @@
+{
+  "status": "passed",
+  "pdf_pages": 33,
+  "chapter_pdf_pages": [
+    13,
+    29
+  ],
+  "chapter_printed_pages": [
+    3,
+    19
+  ],
+  "parameter_rendered_pdf_pages": [
+    22,
+    23,
+    24,
+    25,
+    26
+  ],
+  "new_tables": {
+    "tab:method-ml-search": {
+      "number": "7",
+      "printed_page": "13"
+    },
+    "tab:method-tabm-search": {
+      "number": "8",
+      "printed_page": "14"
+    },
+    "tab:method-tabm-runtime": {
+      "number": "9",
+      "printed_page": "14"
+    },
+    "tab:method-tabicl-params": {
+      "number": "10",
+      "printed_page": "15"
+    }
+  },
+  "section_count": 6,
+  "subsection_count": 20,
+  "table_count": 11,
+  "equation_count": 11,
+  "changed_latex_sources": [
+    "chapters/03_method.tex"
+  ],
+  "warnings": [
+    "NCU NOTICE: Signed form forms/authorization.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/embargo.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/advisor.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/committee.pdf not inserted."
+  ],
+  "font_messages": [
+    "NCU FONT: English = Times New Roman (installed)",
+    "NCU FONT: Chinese = actual BiauKai (fonts/kaiu.ttf)",
+    "NCU BUILD FONT MODE: strict"
+  ],
+  "pdf_sha256": "82b5be6d09ec667acb4fcb91f6dd925695f841af627e5c66eb1346c29a18ab50",
+  "visual_review": "passed: overview of updated pages 22-26 and detailed review of complete parameter tables on PDF pages 23-25",
+  "handoff": "thesis/handoffs/20261027T000303350714Z"
+}

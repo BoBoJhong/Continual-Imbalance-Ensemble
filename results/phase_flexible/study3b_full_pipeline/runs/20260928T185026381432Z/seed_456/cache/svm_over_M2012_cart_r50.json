@@ -1,0 +1,47 @@
+{
+  "job_id": "svm_over_M2012_cart_r50",
+  "seed": 456,
+  "classifier": "svm",
+  "sampling": "over",
+  "sampler": "ADASYN",
+  "train_years": [
+    2010,
+    2011,
+    2012
+  ],
+  "n_train": 10623,
+  "positive_before": 86,
+  "n_after": 21103,
+  "positive_after": 10566,
+  "fs": "cart",
+  "ratio": 0.5,
+  "selected_features": [
+    "X11",
+    "X12",
+    "X15",
+    "X16",
+    "X18",
+    "X9",
+    "X10",
+    "X13",
+    "X8"
+  ],
+  "n_features": 9,
+  "fit_predict_seconds": 185.02091680001467,
+  "params": {
+    "C": 1.0,
+    "kernel": "rbf",
+    "gamma": "scale",
+    "probability": true,
+    "class_weight": null,
+    "random_state": 456,
+    "max_iter": -1,
+    "cache_size": 500
+  },
+  "warnings": [],
+  "selector_seed": 456,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-09-29T02:13:59.894713+00:00",
+  "cache_sha256": "f72003bbd21af2b73cb93a1187c098e40d8343ba0eeb6905d5b51a28b6809380"
+}

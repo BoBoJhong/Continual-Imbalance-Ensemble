@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "n_test_rows": 12282,
+  "n_test_companies": 3700,
+  "n_predictors_replayed": 720,
+  "max_metric_replay_error": 9.71445146547012e-17,
+  "group_counts": [
+    {
+      "group": "seen",
+      "n_rows": 10302,
+      "n_positive_rows": 260,
+      "n_companies": 2992,
+      "n_positive_companies": 108
+    },
+    {
+      "group": "unseen",
+      "n_rows": 1980,
+      "n_positive_rows": 27,
+      "n_companies": 708,
+      "n_positive_companies": 11
+    },
+    {
+      "group": "seen_new_fit",
+      "n_rows": 10190,
+      "n_positive_rows": 254,
+      "n_companies": 2950,
+      "n_positive_companies": 106
+    },
+    {
+      "group": "seen_old_fit_only",
+      "n_rows": 112,
+      "n_positive_rows": 6,
+      "n_companies": 42,
+      "n_positive_companies": 2
+    }
+  ],
+  "seen_positive_gap_years": {
+    "2": 105,
+    "4": 1,
+    "5": 1,
+    "11": 1
+  },
+  "seen_positive_in_2014_validation": 103,
+  "weights_sha256": "bfa706c6cd5c90c37a2a0f38bc6bed04060df66ef4ca4507b9e7d2ac2a293570"
+}

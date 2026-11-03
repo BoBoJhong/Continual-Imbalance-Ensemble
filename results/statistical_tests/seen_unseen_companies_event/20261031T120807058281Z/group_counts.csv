@@ -1,0 +1,5 @@
+group,n_rows,n_positive_rows,n_companies,n_positive_companies
+seen,10302,108,2992,108
+unseen,1980,11,708,11
+seen_new_fit,10190,106,2950,106
+seen_old_fit_only,112,2,42,2

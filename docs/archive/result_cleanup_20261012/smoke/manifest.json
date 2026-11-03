@@ -1,0 +1,102 @@
+{
+  "protocol": "study3b_multiclassifier_sampling_ensemble_fs_v1_exploratory",
+  "config": {
+    "classifiers": [
+      "lr"
+    ],
+    "sampling": [
+      "none",
+      "under",
+      "over",
+      "hybrid"
+    ],
+    "fs_methods": [
+      "mi",
+      "cart",
+      "rfe",
+      "shap"
+    ],
+    "fs_ratios": [
+      0.5,
+      0.8
+    ],
+    "seeds": [
+      42
+    ],
+    "test_years": [
+      2009
+    ],
+    "window_years": 3,
+    "pool_size": 3,
+    "threads": 4
+  },
+  "provenance": {
+    "data_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+    "sources": {
+      "experiments/phase_flexible/study3b_full_pipeline.py": "fb4e7479029210c45afd9c83c530c36e6bff909b421af6b27a960775a8aac91c",
+      "experiments/phase_flexible/rolling_bankruptcy_overlap_ensemble.py": "bcc9e29fd2ec1e9c6897877340880d0827018d0fa661a2df11e1d2061cc79230",
+      "src/data/sampler.py": "4aeb1e488f28f9141096214156e94c2568c2f57939fc2c5277ea1f456a3b3c5a",
+      "src/evaluation/metrics.py": "07f81f81138338e39e46d194e0aa5a39819d21c360b2968a18da0c0c4728c14e",
+      "config/model_config.yaml": "ac67e15f7666a83a6688d22d3a16848917ecfebc77c61637d8a8cb96c61edfac",
+      "config/sampling_config.yaml": "2692f15fabceeaf0f354ecba10c94b6ce99c28af510b815e8aecc8f1701e603d",
+      "src/models/fttransformer_wrapper.py": "9fb9c5164a82b5c2fb893ccfd11766f98e0252339d0a76cffaa0885a00cf6248",
+      "src/models/lightgbm_wrapper.py": "17a6282348e27cecb6d7b5efc0317c270397015a0948ea72f3fee1ea5069d3c0",
+      "src/models/logistic_regression_wrapper.py": "dd656f1fd0af6f7741a0fdcb579a30e88f07c51643cc824ce1bb3bf63f4b5ff0",
+      "src/models/lstm_wrapper.py": "c9d78bb830de1379bf6c7b15c7e990f0ce3e9e991bdf78fd68ae961f478d3f2b",
+      "src/models/mlp_wrapper.py": "e421d580d4f469581c4ac98be365566e7e1042ddf6534ebc22d868c25d8fa57b",
+      "src/models/random_forest_wrapper.py": "b6e3074c6e6dc2d4bf4563ceca5f3912d042c71bf99b8151ce7eec596081f871",
+      "src/models/svm_wrapper.py": "3ed2ce40da0e7b69f8538368ca8facc04e9a8b801e2558dd082227b4c7c49e94",
+      "src/models/tabicl_wrapper.py": "484bc3b8b861490eb007522ccc0bcc29119c698b60ec0fb76d63f45cccdb718f",
+      "src/models/tabm_wrapper.py": "72052e14081247fbcdee8b17dd8c29ef3d9f9903f3e209268d1b8b5f821d02ae",
+      "src/models/tabnet_wrapper.py": "0ac2a498ffddb68d5128e8f3791a9ff7960e336010f15ed00e896458ef8a53f7",
+      "src/models/tabr_wrapper.py": "b3dceddb9a8e1dd01381307d268fa37c0a8ca0f0cb725c12b1e9d3b34702bdbd",
+      "src/models/torch_mlp_wrapper.py": "173f570e63fecf2a2cd681da1f806891273788a788494625a5bfbac46492a3f3",
+      "src/models/xgboost_wrapper.py": "7d45444407d25551af061658f992015891e81f6bfb04202fdbea7ae38225369e"
+    },
+    "packages": {
+      "numpy": "2.4.0",
+      "pandas": "2.3.3",
+      "scikit-learn": "1.8.0",
+      "imbalanced-learn": "0.14.1",
+      "xgboost": "3.2.0",
+      "lightgbm": "4.6.0"
+    },
+    "python": "3.14.0"
+  },
+  "created_at": "2026-09-28T19:14:51.990851+00:00",
+  "features": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ],
+  "samplers": {
+    "none": "None",
+    "under": "TomekLinks",
+    "over": "ADASYN",
+    "hybrid": "SMOTEENN"
+  },
+  "selection": "annual t-1 validation AP, deterministic identifier tie-break; FS after ensemble screening",
+  "fitting": "window ends t-2; impute -> scale -> FS -> sampling -> classifier; no class weights",
+  "thresholds": "annual validation F1 and separate validation FPR<=0.05",
+  "cache": "frozen learner future probabilities, no future labels, no estimator checkpoint",
+  "limitations": "Reconstructed target; exact availability unverified; post-hoc exploratory; validation reused for sequential screening; fixed hyperparameters; no DES/DCS",
+  "status": "completed",
+  "pid": 29640,
+  "last_started_at": "2026-09-28T19:14:52.017307+00:00",
+  "completed_at": "2026-09-28T19:15:53.043414+00:00"
+}

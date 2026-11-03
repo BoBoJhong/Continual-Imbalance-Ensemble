@@ -1,0 +1,101 @@
+"""Read-only source checks for the 2026-09-21 thesis convergence review.
+
+Recompute saved prediction metrics without fitting or selecting any model.
+Writes a new, timestamped audit artifact; never overwrites experiment results.
+"""
+
+import hashlib
+import json
+import re
+from datetime import datetime, timezone
+from pathlib import Path
+
+import pandas as pd
+from sklearn.metrics import average_precision_score, roc_auc_score
+
+ROOT = Path(__file__).resolve().parents[2]
+RUNS = {
+    "window": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z",
+    "ratio": "results/phase_flexible/study3b_oldnew_ratio_sensitivity/runs/20260921T053146649843Z",
+}
+
+
+def main():
+    raw_path = ROOT / "data/raw/bankruptcy/american_bankruptcy_dataset.csv"
+    raw = pd.read_csv(raw_path)
+    failed = raw.status_label.eq("failed")
+    event = failed & raw.fyear.eq(raw.groupby("company_name").fyear.transform("max"))
+    assert not raw.duplicated(["company_name", "fyear"]).any()
+    assert raw.groupby("company_name").status_label.nunique().max() == 1
+    report = {
+        "created_utc": datetime.now(timezone.utc).isoformat(),
+        "scope": "Saved predictions and manuscript provenance; no training, no model selection",
+        "raw_sha256": hashlib.sha256(raw_path.read_bytes()).hexdigest(),
+        "raw_counts": {
+            "rows": len(raw), "companies": raw.company_name.nunique(),
+            "failed_status_rows": int(failed.sum()),
+            "failed_status_fraction": float(failed.mean()),
+            "reconstructed_events": int(event.sum()),
+            "reconstructed_event_fraction": float(event.mean()),
+            "event_date_independently_verified": False,
+        },
+        "runs": {},
+    }
+    rows = []
+    expected_keys = set(raw.index[raw.fyear.between(2009, 2018)])
+    for family, relative in RUNS.items():
+        run = ROOT / relative
+        manifest = json.loads((run / "manifest.json").read_text(encoding="utf-8"))
+        assert manifest["status"] == "completed"
+        for filename, digest in manifest["source_hashes"].items():
+            assert hashlib.sha256((ROOT / filename).read_bytes()).hexdigest() == digest
+        pred_path = run / "seed_42/predictions.csv.gz"
+        pred = pd.read_csv(pred_path)
+        grouping = ["window_years", "method"] if family == "window" else ["method"]
+        for key, frame in pred.groupby(grouping):
+            assert not frame.source_row_id.duplicated().any()
+            assert set(frame.source_row_id) == expected_keys
+            assert (frame.y_true.to_numpy() == event.loc[frame.source_row_id].astype(int).to_numpy()).all()
+            assert frame.y_proba.between(0, 1).all()
+            annual = [average_precision_score(f.y_true, f.y_proba)
+                      for _, f in frame.groupby("test_feature_year")]
+            rows.append({
+                "family": family, "configuration": str(key), "rows": len(frame),
+                "companies": frame.company_name.nunique(), "events": int(frame.y_true.sum()),
+                "pooled_AP": average_precision_score(frame.y_true, frame.y_proba),
+                "pooled_AUC": roc_auc_score(frame.y_true, frame.y_proba),
+                "annual_macro_AP": sum(annual) / len(annual),
+            })
+        report["runs"][family] = {
+            "path": relative, "source_hashes_match": True,
+            "seed42_cohort_and_labels_match_raw_reconstruction": True,
+            "predictions_sha256": hashlib.sha256(pred_path.read_bytes()).hexdigest(),
+            "packages": manifest.get("packages"),
+        }
+    candidates = pd.read_csv(ROOT / "results/phase4_drift/bk_validation_ross_candidates.csv")
+    report["ross_saved_candidates"] = {
+        "count": len(candidates), "start_min": int(candidates.drift_start_year.min()),
+        "start_max": int(candidates.drift_start_year.max()),
+        "best": candidates.sort_values("rank_by_new_val_auc").iloc[0].to_dict(),
+    }
+    thesis = ROOT / "thesis/THESIS_FULL.md"
+    text = thesis.read_text(encoding="utf-8")
+    links = [p for p in re.findall(r"\]\(([^)]+)\)", text)
+             if not p.startswith(("http", "#", "mailto:"))]
+    report["thesis"] = {
+        "sha256": hashlib.sha256(thesis.read_bytes()).hexdigest(),
+        "relative_links_checked": len(links),
+        "missing_relative_links": [p for p in links if not (thesis.parent / p.split("#")[0]).exists()],
+        "final_document_render_checked": False,
+    }
+    output = ROOT / "results/research_audit" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    output.mkdir(parents=True)
+    pd.DataFrame(rows).to_csv(output / "independent_metrics.csv", index=False)
+    (output / "audit.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(json.dumps({"output": str(output), "raw_counts": report["raw_counts"],
+                      "configurations_verified": len(rows), "ross": report["ross_saved_candidates"],
+                      "thesis": report["thesis"]}, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()

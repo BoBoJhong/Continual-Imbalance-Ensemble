@@ -1,0 +1,75 @@
+{
+  "scope": [
+    "thesis/latex/chapters/03_method.tex"
+  ],
+  "source_check": "passed: pinned sources and generated thesis tables are current",
+  "build_status": "passed",
+  "chapter_sha256": "f48358bcd909a2ff83f73e561ad44edc830815dd9c12c64f3f8300cbc026edfd",
+  "pdf_sha256": "cdad694ad76a0a9560a4640e175b889820e5bee1f02d10b335b7bb77f3e97dc7",
+  "before_pdf": {
+    "pages": 92,
+    "chapter3_pages": [
+      26,
+      49
+    ],
+    "chapter3_page_count": 24
+  },
+  "final_pdf": {
+    "pages": 86,
+    "chapter3_pages": [
+      26,
+      43
+    ],
+    "chapter3_page_count": 18
+  },
+  "preserved_table_data_rows": [
+    "tab:method-ml-search",
+    "tab:method-fs-parameters",
+    "tab:method-feature-dictionary",
+    "tab:method-pool",
+    "tab:method-combinations"
+  ],
+  "generated_inputs_unchanged": [
+    "generated/event-results-20261103/event-partitions.tex",
+    "generated/deep-baseline-reference-20261103/settings.tex"
+  ],
+  "removed_labels_have_no_remaining_references": true,
+  "latex_undefined_missing_glyph_overfull_warnings": 0,
+  "existing_document_notices": [
+    "NCU NOTICE: Signed form forms/authorization.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/advisor.pdf not inserted.",
+    "NCU NOTICE: Signed form forms/committee.pdf not inserted."
+  ],
+  "visual_review": {
+    "status": "passed",
+    "render_directory": "render-verified",
+    "pages_reviewed": [
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "short_tables_kept_together": true,
+    "no_short_overflow_page": true
+  },
+  "handoff": "thesis/handoffs/20261103T123320759082Z",
+  "research_pending": [
+    "six-classifier common-protocol model selection and pool rerun",
+    "TabM and TabICL event-label reruns",
+    "TabICL historical backend verification"
+  ]
+}

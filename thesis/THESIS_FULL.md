@@ -6,7 +6,8 @@
 
 ## 使用說明
 
-- 本稿為依專案實際實驗成果整理之碩士論文架構，已納入現有統計數字與 APA 第七版文獻引用；惟部分檢定仍有相依樣本、偽重複與跨種子驗證未完成等限制，應先完成 §5.3 所列補強再作正式投稿或繳交。
+- 本稿以既有實驗進行收斂修訂，不再擴大年份、比例或方法網格。主要證據為 Study 3B 的回溯性年度更新；Study 1–3A 的相依切割、oracle 與歷史診斷結果依各節標示解讀。§5.3 的外部資料、部署及機制驗證列為未來工作，不視為本輪全部必須完成的實驗。
+- 本稿已納入中英文摘要、正文、表格與參考文獻；正式 Word／PDF、封面、審定書、目次頁碼與圖表目錄尚待依學校規範製作及驗收。
 - 若為**國立中央大學資管所**，請依學校「研究生畢業論文格式條例」及系所公告為準；格式對照表見同目錄 `NCU_IM_FORMAT.md`。
 - 本稿已納入中英文摘要、正文、表格與參考文獻；封面、授權書、審定書、謝辭、正式目次頁碼與圖表目錄仍須於排版成 Word/PDF 後，依學校規定及個人資料補入。
 
@@ -22,6 +23,9 @@ Study 3B 進一步將研究問題改寫為未知未來終點下的年度更新�
 
 消融結果顯示，Tomek 相較不採樣的 AP 僅方向性增加 0.0039，主要指標信賴區間皆跨零，因此取樣貢獻尚未確認。Pool3 相較 Pool1 的 AP、AUC 與 Recall 差異區間未跨零；但增加模型池亦同步延長歷史資料聯集，因此此結果支持的是整體設計差異，尚不能把提升單獨歸因於模型保留。Pool2、Pool3 與 Pool5 呈現 ranking、Recall 與 Precision 取捨，不能宣稱 Pool3 為最佳容量。訓練窗口 1、3、5 年的 AP 分別為 0.1142、0.1215、0.1106；三年相較一年與五年的 AP/AUC 差異區間均跨零。五年窗口 Recall 較高但 Precision 較低，故三年仍作預先設定的主方案，而非已證明最佳。
 
+擴充至 2、3、5、7 年窗口的十種子敏感度分析中，FIFO3 的年度平均 AP 分別為 0.1474、0.1418、0.1307、0.1291，未隨窗口加長而改善；三年與其餘窗口的 AP 差之公司群聚及年度區塊區間均跨零。三年集成相對單模型的 AP 差在公司區間未跨零，但年度區塊區間跨零，故不能將公司組成下的優勢延伸為未來年度穩健性。十個種子的逐筆預測完全一致，亦不構成十份獨立資料證據。
+
+
 本研究的主要貢獻是建立可稽核的雙路線研究框架：A 路線檢驗封閉歷史範圍內的資料驅動切點與權重；B 路線保存模型、前處理器與更新紀錄，使系統可逐年推移且每輪只新增一個模型。現有證據顯示 Pool3 整體設計相較單一近期三年模型具有較高排序與少數類召回，但資料涵蓋與模型保留效益尚待進一步分離；目前亦不足以證明 Tomek、三年窗口與三模型組合具有全域最適性，不能把回溯事件重建等同真實部署。
 
 **關鍵詞**：持續學習、概念漂移、類別不平衡、集成學習、破產預測、特徵選取、ROSS、DAWCE、重疊窗口、FIFO 模型池
@@ -35,6 +39,9 @@ Financial risk prediction under non-stationary and highly imbalanced data is cha
 Using 78,682 U.S. firm-year observations from 1999–2018, this study first evaluates static and validation-guided Old/New strategies and then develops a sustainable annual-update route. Route A uses a closed historical range to select temporal boundaries and group weights. Route B reconstructs an exploratory one-year-ahead event target because the source status label is constant within each firm, and uses a three-year rolling fit window, a three-model FIFO pool, equal probability averaging, and a validation-only threshold. For each test year $t$, training ends at $t-2$, year $t-1$ is reserved for validation, and year $t$ is used only once for testing.
 
 Across 33,636 pooled out-of-sample predictions from 2009–2018 with 289 positive events, the prespecified Route-B setting obtains AP/AUC/F1 of 0.1215/0.8576/0.1917. It improves AP and AUC over a single recent three-year model under paired company-cluster bootstrap, but does not significantly outperform the A-inspired validation-boundary comparator. A fully sliding extension moves both Old and New years forward from the earliest eligible period and evaluates 16 rolling origins from 2003–2018. FIFO3 obtains AP/Recall of 0.0860/0.1923 versus 0.0730/0.1416 for the newest model; paired company-cluster intervals for both differences exclude zero, although precision is lower. Because increasing pool size also lengthens the union of historical years, this contrast does not isolate a pure ensemble-retention effect. Ablations show no confirmed advantage of Tomek Links over no sampling. Pool sizes two to five exhibit ranking, recall, and precision trade-offs. One-, three-, and five-year training windows obtain AP values of 0.1142, 0.1215, and 0.1106, respectively; their paired ranking-metric intervals overlap. Consequently, the three-year, three-model configuration is retained as a prespecified main setting rather than claimed as globally optimal.
+
+An extended ten-seed sensitivity analysis evaluates two-, three-, five-, and seven-year windows on identical 2009–2018 test observations. FIFO3 annual-macro AP is 0.1474, 0.1418, 0.1307, and 0.1291, respectively, without monotonic improvement from longer history. Company-cluster and annual-block intervals for AP differences between the three-year setting and each alternative include zero. The three-year ensemble advantage over its newest single model excludes zero under company resampling but not annual-block resampling. All ten seeds produce identical predictions; they do not provide ten independent datasets.
+
 
 The contribution is therefore a reproducible dual-route framework and an auditable persistent model lifecycle, not a claim that one preprocessing combination universally dominates. Route B can resume across processes and adds only one new model per annual update, but the reconstructed event timing and retrospective replay still require external validation before real-time deployment claims are warranted.
 
@@ -69,6 +76,7 @@ The contribution is therefore a reproducible dual-route framework and an auditab
 | 圖 3-1 | Study 3B 年度持續更新流程 |
 | 圖 4-1～4-2 | Study 3B 年度少數類表現與警報負擔 |
 | 圖 4-3 | Study 3B 訓練窗口敏感度 |
+| 圖 4-3A | 2／3／5／7 年窗口的年度平均與 pooled AP |
 
 ## 表目錄
 
@@ -77,6 +85,7 @@ The contribution is therefore a reproducible dual-route framework and an auditab
 | 表 4-1～4-4 | 基準方法、統計檢定與特徵選取結果 |
 | 表 4-5～4-12 | Study 3A ROSS、DAWCE、公平消融與 rolling 結果 |
 | 表 4-13～4-17 | Study 3B 主結果、協定對齊比較、操作門檻與三組消融 |
+| 表 4-17A～4-17C | 擴充窗口的單模型／集成比較、不確定性與訓練成本 |
 | 表 4-18 | 條件錯誤成本敏感度 |
 
 ---
@@ -91,7 +100,7 @@ The contribution is therefore a reproducible dual-route framework and an auditab
 
 正式地說，設資料生成過程為聯合分布 $P_t(X, y)$，其中 $t$ 代表時間。**概念漂移**意指存在時間點 $t^*$ 使得 $P_{t < t^*}(X, y) \neq P_{t \geq t^*}(X, y)$（Lu et al., 2018）。在破產預測中，2008–2009 年金融危機造成企業財務指標的結構性重組，即為典型的突變型（abrupt）概念漂移——危機後存活企業的財務比率分布已與危機前呈現質性差異，使以危機前資料訓練的模型在危機後的預測力急劇下降。
 
-**類別不平衡**則指 $P(y=1) \ll P(y=0)$，少數類（破產）在訓練集中稀少，模型易以「全預測多數類」達到表面上的高準確率而無實際辨別力（He & Garcia, 2009）。本研究之破產資料整體破產率約 6.63%，測試期（2015–2018）更低至約 2.3%，意謂著即使是零技術的「全預測存活」模型，準確率也高達 97.7%，使準確率完全失去評估意義。
+**類別不平衡**則指 $P(y=1) \ll P(y=0)$，少數類（破產）在訓練集中稀少，模型易以「全預測多數類」達到表面上的高準確率而無實際辨別力（He & Garcia, 2009）。本研究原始資料的 failed 公司狀態列占 6.63%，此為公司最終狀態在歷年資料列上的比例，不是年度破產事件率。Study 3B 重建事件占全資料 609／78,682（0.7740%），2009–2018 測試 cohort 則為 289／33,636（0.8592%）；因此準確率不足以反映少數類辨識能力。
 
 ### 1.1.2 現有方法的設計缺口
 
@@ -107,13 +116,13 @@ The contribution is therefore a reproducible dual-route framework and an auditab
 
 上述分析揭示一個在現有文獻中尚未被系統性解決的設計問題：**在批次年度資料、類別高度不平衡、且初始期本身不穩定的情境下，如何自動且客觀地決定 Old/New 模型池的分界點，並以驗證集引導的方式確定最佳的 New-dominant 加權比重？**
 
-本研究以美國破產預測資料（1999–2018）為主要實驗場域，採兩條互補路線。**A 路線**假定研究者已知可分析的完整歷史區間，以 ROSS（Retrospective Optimal Split Selection）與 DAWCE（Drift-Aware Weighted Continual Ensemble）將 Old/New 邊界及相對群組權重轉化為 Validation-guided 最佳化問題。**B 路線**不假定已知未來資料內容或資料流終點，預先固定「窗口寬度、每年新增一模型、FIFO 淘汰、等權集成」規則，研究模型能否隨年度批次持續演進。兩路線不是相加成單一方法：A 回答封閉資料內如何選擇，B 回答開放時間軸上如何維護模型生命週期。
+本研究以美國破產資料（1999–2018）的回溯性年度更新為主線，採兩條互補路線。Study 3B 為主要實證；Study 1、2、3A 與成本分析保留為設計探索及適用限制。**A 路線**假定研究者已知可分析的完整歷史區間，以 ROSS（Retrospective Optimal Split Selection）與 DAWCE（Drift-Aware Weighted Continual Ensemble）將 Old/New 邊界及相對群組權重轉化為 Validation-guided 最佳化問題。**B 路線**不假定已知未來資料內容或資料流終點，預先固定「窗口寬度、每年新增一模型、FIFO 淘汰、等權集成」規則，研究模型能否隨年度批次持續演進。兩路線不是相加成單一方法：A 回答封閉資料內如何選擇，B 回答開放時間軸上如何維護模型生命週期。
 
 ---
 
 ## 1.2 研究目的與假設
 
-本研究之具體目的與對應假設如下：
+本研究以 Study 3B 回答主要研究問題。以下保留研究發展時的假設編號，以對照既有結果；相依切割及事後選擇的分析不作確認性假設檢定。主貢獻是可重現的年度更新流程與歷史配置取捨，不以證明新演算法普遍最優為目標。
 
 **Study 1 — 建立方法比較基準**
 
@@ -138,10 +147,10 @@ The contribution is therefore a reproducible dual-route framework and an auditab
 
 **Study 3B — 重疊窗口持續集成**
 
-目的：在未知未來終點下，建立可跨程序保存與逐年更新的 FIFO 模型池，並分離窗口長度、模型池容量與不平衡處理對少數類辨識的影響。
+目的：在未知未來終點下，建立可跨程序保存與逐年更新的 FIFO 模型池，並檢查窗口長度、模型池容量、不平衡處理與固定歷史範圍內的 Old/New 分組對少數類辨識的取捨；各消融的混合因素另行說明。
 
 - **H₃₃（多模型保留效益）**：固定三年窗口下，Pool3 相較只保留最新模型的 Pool1，可提高事件目標的 AP 與 Recall。
-- **H₃₄（組合最適性）**：Tomek、三年窗口與 Pool3 的組合優於對照設定。此假設需分別經 sampling、window 與 pool ablation 檢驗，不因主設定單次分數較高即視為成立。
+- **H₃₄（參考設定的敏感度）**：檢查 Tomek、三年窗口與 Pool3 在各單因子對照下的表現。此設計不估計全因子交互作用，不能確認全域最佳組合，不據 Test 改選主設定。
 
 **Study 4 — 穩健性與成本敏感分析**
 
@@ -153,20 +162,20 @@ The contribution is therefore a reproducible dual-route framework and an auditab
 
 ## 1.3 研究問題
 
-1. 在持續學習與類別不平衡情境下，Old-side 模型池與 New-side 模型池哪個對測試期更有效？靜態集成是否優於 DES / DCS？
-2. 四種特徵選取方法（MI / CART / SHAP / RFE）是否對集成效能有統計顯著提升？在已納入穩定性分析的 MI / SHAP / RFE 中，r80 與 r50 的特徵集合穩定性是否有顯著差異？
-3. Data-driven drift boundary selection（ROSS）是否能找到比人工指定邊界更合適的 Old/New 分界點？New-dominant weighted ensemble 是否跨多個年份切割皆顯著優於等權集成？
-4. 在未知未來資料內容與終點時，固定窗口、FIFO 模型池是否能以有界更新成本持續演進，並提高破產事件少數類的 AP 或 Recall？
-5. Sampling、訓練窗口長度與模型池容量各自帶來何種效益與取捨？三年、Pool3 與 Tomek 是否確有實證優勢？
-6. 在不同 Type2:Type1 成本比下，最佳模型設定如何轉換？
+1. 在回溯性年度資料中，固定窗口與 FIFO 模型池能否逐年新增模型、保留固定容量的活躍池並跨程序恢復？其 AP、Recall 與警報負擔如何？
+2. 延長訓練窗口或增加模型池容量，會如何改變排序指標、少數類辨識及成本？哪些差異同時涉及歷史資料範圍與模型數？
+3. 在共同滑動窗口協定下，不同分類器與採樣配置、集成及後續 FS 的效能如何？Validation 選擇策略能否改善單模型對照？（本輪擴充仍在執行中。）
+4. 作為設計探索，Old/New 單模型、靜態集成與特定 DES/DCS 實作呈現何種排序？ROSS 邊界選擇與 Validation 加權是否改善固定等權，並能否超越強近期單模型？
+5. 特徵選取的效能與原始集合重疊有何描述性差異？相依切割與特徵集合大小如何限制穩定性解讀？
+6. 在不同 Type2:Type1 條件錯誤權重下，模型排序如何轉換？
 
 ---
 
 ## 1.4 研究範圍與限制
 
-- **資料集**：以美國破產預測（1999–2018）為主要實驗資料；Medical（UCI Diabetes 130）與 Stock 資料集用於輔助驗證，主要結論以破產資料為準。
+- **資料集**：本稿實證範圍為美國破產資料（1999–2018）。Medical 與 Stock 程式及資料保留為專案歷史資產或未來延伸，不納入本文主要證據。
 - **目標定義**：既有 Study 1–3A 沿用原始公司狀態標籤，屬歷史公司狀態辨識；Study 3B 則以 failed 公司最後觀測年重建次年事件，屬探索性事件預測。兩者盛行率與 estimand 不同，不直接混合比較。
-- **切割方式**：破產資料採時序年份切割。Study 3 確認性與 rolling 流程的補值、標準化及特徵選取只以 fitting data 擬合；部分既有 Phase 4/5 路徑仍有各分割自行估計補值平均數的轉導式限制。原始 bankruptcy 資料目前無缺失值，因此該限制不改變本次數值，但不可概括為全專案皆嚴格 inductive。
+- **切割方式**：各 Study 的資料用途依 §3.1 協定表分開列示。現行 Phase 4 前處理以 fitting data 的均值補值並擬合 scaler；不能由現行程式概括認證所有歷史輸出的生成版本。主要 B 結果以保存的 manifest、逐列 predictions 與 training audit 追溯。
 - **Fine-tuning 定義**：本研究之 Fine-tuning 為「先在歷史資料訓練，再以新資料做第二階段訓練」，未強制使用降低學習率的古典微調形式。
 - **泛化限制**：目前主要統計結論來自 Bankruptcy 資料集；模型設計的泛化能力尚待跨市場、跨產業或跨國資料進一步驗證。
 
@@ -226,9 +235,9 @@ Lu 等人（2018）在 *IEEE TKDE* 的綜論中，將適應策略分為三類：
 
 **PHT（Page-Hinkley Test; Page, 1954）** 以累積殘差監控信號的均值上升，適合偵測均值的單調漂移。觸發條件為：
 
-$$\text{PHT}_t = \sum_{i=1}^{t}(x_i - \bar{x} + \delta) > \lambda$$
+$$S_t=S_{t-1}+x_t-\mu_{\mathrm{ref},t}-\delta,\qquad S_t-\min_{0\leq j\leq t}S_j>\lambda$$
 
-其中 $\delta$ 為容忍的小幅波動、$\lambda$ 為觸發門檻。
+其中 $S_0=0$，$\delta$ 為容忍量、$\lambda$ 為觸發門檻；$\mu_{\mathrm{ref},t}$ 為實作使用的固定參考均值或累積均值。本式對應 `_detectors.py` 的單側實作，並非所有 PHT 變體的通用公式。
 
 **EDDM（Early Drift Detection Method; Baena-García et al., 2006）** 改良自 DDM，改以相鄰兩次分類錯誤之間的樣本距離作為信號，對尚未明顯惡化的早期漂移更敏感。
 
@@ -301,7 +310,7 @@ Chawla 等人（2002）提出的 **SMOTE** 透過少數類樣本間的插值合�
 
 ### 2.4.3 概念漂移與類別不平衡的交互效應
 
-Wang 等人（2013）指出，在資料串流中同時存在類別不平衡與概念漂移時，標準的重採樣策略可能因少數類漂移比多數類更快而失效——舊期合成的少數類樣本在新期分布下成為誤導性雜訊。Brzezinski & Stefanowski（2014）也指出，以模型在最新批次的準確率直接加權（如 AWE）可能因不平衡資料的少數類稀少而不穩定。本研究透過以 AUC（而非準確率）作為 AWE 的加權信號，並以 DAWCE 的群組加權框架提供更穩定的替代方案。
+Wang 等人（2015）指出，在資料串流中同時存在類別不平衡與概念漂移時，標準的重採樣策略可能因少數類漂移比多數類更快而失效——舊期合成的少數類樣本在新期分布下成為誤導性雜訊。Brzezinski & Stefanowski（2014）也指出，以模型在最新批次的準確率直接加權（如 AWE）可能因不平衡資料的少數類稀少而不穩定。本研究透過以 AUC（而非準確率）作為 AWE 的加權信號，並以 DAWCE 的群組加權框架提供更穩定的替代方案。
 
 ---
 
@@ -326,7 +335,7 @@ Wang 等人（2013）指出，在資料串流中同時存在類別不平衡與�
 
 ### 2.5.3 特徵穩定性
 
-在時序非平穩資料中，特徵選取不只影響當期效能，更影響被選特徵集的**跨期一致性（Feature Stability）**。Nogueira 等人（2018）系統性討論了特徵選取穩定性的量化方式，指出 Jaccard 相似度是在小樣本與高維度場景下評估集合一致性的可靠指標。本研究以 15 個不同年份切割下的 Jaccard 均值量化各方法的穩定性，並以 paired Wilcoxon 檢定比較 r80 與 r50 的差異。
+在時序資料中，特徵選取也涉及跨期集合重疊。Nogueira 等人（2018，Table 2、Appendix C.5）指出，Jaccard 不具 chance correction，跨不同特徵數的比較會受到集合大小影響。本研究保留其均值作描述；r80 大於 r50 不能單獨證明方法較穩定。此外，15 個切割形成的 105 個 pair 並非獨立觀測，原 Wilcoxon 僅列為歷史診斷，不作確認性推論。
 
 ---
 
@@ -358,9 +367,9 @@ Wang 等人（2013）指出，在資料串流中同時存在類別不平衡與�
 本文比較範圍內的逐模型加權方法無法直接對 Old/New 兩組模型施加群組偏好。當新期模型在本資料上呈現較佳表現時，個別模型的加權分散效果有限——AWE-inspired 診斷中的 Old/New 單模型權重均值分別為 0.142 與 0.192。**DAWCE 以群組為單位**，允許選擇 w\_new = 1.0 的極端配置，在新期規律占優的情境下表達知識優先性。
 
 **缺口 3：不平衡與漂移的聯合設計**
-在本文納入的比較方法中，對「明確 Old/New 群組權重」與「多種不平衡取樣模型池」的聯合設計仍有限。Wang 等人（2013）指出在串流不平衡資料中，標準取樣策略可能因少數類漂移速度快於多數類而失效；本研究透過三種取樣策略的模型池設計，在訓練階段即將多樣性取樣納入集成基礎。
+在本文納入的比較方法中，對「明確 Old/New 群組權重」與「多種不平衡取樣模型池」的聯合設計仍有限。Wang 等人（2015）指出在串流不平衡資料中，標準取樣策略可能因少數類漂移速度快於多數類而失效；本研究透過三種取樣策略的模型池設計，在訓練階段即將多樣性取樣納入集成基礎。
 
-DAWCE 在「批次年度資料、離線訓練、類別不平衡、有明確驗證集可用」的場景下，以資料驅動的方式同時解決上述三個缺口，更契合金融風險預測的實務限制（年度財報批次公告、標籤有延遲、不平衡率極高）。
+上述文獻引出本研究的設計問題：在年度批次、不平衡資料及可用 Validation 下，如何配置歷史與近期資訊。ROSS／DAWCE 將邊界與權重選擇明確化，Study 3B 則固定更新規則並檢查歷史配置。本文不宣稱已普遍解決文獻缺口，或比所有既有串流方法更適合金融部署。
 
 ---
 
@@ -397,7 +406,7 @@ Study 3 中，ROSS 邊界搜尋使用以下延伸切割：
 | Validation period | 2012–2014 | 邊界選擇依據（隔離測試集） |
 | Test period | 2015–2018 | 最終效能評估（不參與邊界選擇） |
 
-其中 b 為候選 drift start year（範圍：2003–2011）。
+其中 b 為候選 New 起始年；表 4-6 的實際搜尋範圍為 2000–2011，共 12 個切點。這是回溯選擇的資料分界，不等於經獨立驗證的真實漂移時間。
 
 本資料屬公司年度 panel data：1999–2014 訓練期有 8,503 家公司，2015–2018 測試期有 3,700 家，其中 3,232 家（87.35%）曾出現在訓練期；且同一公司的 `status_label` 在資料內不隨年度改變。雖然模型移除公司識別碼而避免直接 ID 洩漏，但目前評估代表「已見與未見公司混合的未來年度辨識」，不是完全未見公司的 entity-holdout 泛化；公司跨年重複亦使年度觀測可能具有群聚相關性。
 
@@ -405,7 +414,7 @@ Study 3B 對每一測試特徵年 $t\in\{2009,\ldots,2018\}$ 採獨立時間契�
 
 ### 3.1.2 輔助資料集
 
-- **Medical（UCI Diabetes 130）**：約 11% 再入院率，用於輔助驗證集成設計在中度不平衡場域的適用性。
+- **Medical／Stock**：保留於專案的歷史或延伸資料，不納入本稿的主結果與跨域泛化證據。
 - **Stock（美國三大指數趨勢）**：高度隨機性市場資料，主要用於觀察不同策略在高雜訊任務下的行為差異。
 
 ### 3.1.3 無資料洩漏原則
@@ -452,7 +461,7 @@ Old-side 與 New-side 各以三種取樣策略訓練三個基學習器（基學�
 
 ## 3.5 動態集成選擇（DES）與動態分類器選擇（DCS）
 
-**DES（KNORA-E 風格）**：以 Old + New 合併為動態選擇集（DSEL）；對每個測試樣本以 k-NN（k=7）在 DSEL 上找鄰居，保留在該鄰域中全部預測正確的模型，以其機率平均作為最終預測；若無合格模型則退回全池平均（KNORA-U fallback）。
+**DES（KNORA-E 風格）**：以 Old + New 合併為動態選擇集（DSEL）；對每個測試樣本以 k-NN（k=7）在 DSEL 上找鄰居，保留在該鄰域中全部預測正確的模型，以其機率平均作為最終預測；若無合格模型則退回全池平均（自訂全池平均 fallback，非標準 KNORA-U）。
 
 **DCS（動態分類器選擇）**：與 DES 相同的鄰域搜尋流程，但最終僅選擇在鄰域中表現最佳的**單一**模型進行預測，而非多個模型的集成。
 
@@ -493,7 +502,7 @@ $$\hat{p}(x) = \sum_{j=1}^{k+1} w_j \cdot \bar{p}_j(x), \quad \sum_{j=1}^{k+1} w
 
 其中 $\bar{p}_j(x) = \frac{1}{|\mathcal{M}_j|}\sum_{m \in \mathcal{M}_j} p_m(x)$ 為第 $j$ 期模型池的機率均值。
 
-**邊界與權重聯合最佳化**（在驗證集上進行）：
+**多邊界探索版本的邊界與權重聯合最佳化**（不等同 §3.7.3 的單邊界兩階段程序）：
 
 $$\{b_1^*, \ldots, b_k^*\}, \{w_1^*, \ldots, w_{k+1}^*\} = \arg\max \; \text{F1}\!\left(\hat{p}(\cdot;\, b_{1:k},\, w_{1:k+1}),\; y_{\mathcal{V}}\right)$$
 
@@ -519,65 +528,25 @@ $$\{b_1^*, \ldots, b_k^*\}, \{w_1^*, \ldots, w_{k+1}^*\} = \arg\max \; \text{F1}
 
 本研究在破產資料（1999–2018）上同時執行 k=1 和 k=2 搜尋（詳見 §4.4.4）。依預設規則，k=2 的 Validation F1 提升 0.0128，超過 $\tau = 0.005$，因此演算法選擇 k=2；然而其最佳權重為 $(0,0,1)$，實際只保留 2009–2011 的最後一期模型池，預測結構與 k=1 的 New-side 模型池高度相近。故本文以 k=1 作為主要方法解釋與跨切割統計分析對象，並將 k=2 視為探索性一般化實驗；此報告選擇基於模型可解釋性，而非 Test 效能。
 
-### 3.7.3 ROSS 正式演算法（k=1）
+### 3.7.3 單邊界 ROSS 的實際搜尋協定
 
-**Algorithm 1: ROSS (k=1)**
+**Algorithm 1：表 4-6 的 Validation 邊界搜尋**
 
-```
-輸入：
-    D        ← 時序訓練資料 {(xᵢ, yᵢ, tᵢ)}，t 為時間標籤
-    V        ← 驗證期資料（訓練期之後、測試期之前，嚴格隔離）
-    T        ← 測試期資料（全程不參與選擇）
-    B        ← 候選邊界集合 {b_min, ..., b_max}（最小每段至少 MIN_PERIODS 年）
-    K        ← 取樣策略集合 {undersampling, oversampling, hybrid}
-    W        ← 加權網格 {0.0, 0.05, 0.10, ..., 1.0}
-
-輸出：
-    b*       ← 最佳 drift start year
-    w*_new   ← 最佳 New-side 群組權重
-
-Phase 1：邊界搜尋
-─────────────────
-FOR each b ∈ B:
-    D_old(b) ← {(x,y,t) ∈ D : t < b}
-    D_new(b) ← {(x,y,t) ∈ D : b ≤ t ≤ TRAIN_END}
-
-    IF |D_old(b)| < MIN_SAMPLES OR |D_new(b)| < MIN_SAMPLES:
-        CONTINUE
-
-    FOR each k ∈ K:
-        m_old_k(b) ← Train(D_old(b), sampling=k)   ← Scaler fit on D_old only
-        m_new_k(b) ← Train(D_new(b), sampling=k)
-
-    p̄_old(b, V) ← mean_{k}[ m_old_k(b).predict_proba(V) ]
-    p̄_new(b, V) ← mean_{k}[ m_new_k(b).predict_proba(V) ]
-
-    val_AUC_old(b) ← AUC(y_V, p̄_old(b, V))
-    val_AUC_new(b) ← AUC(y_V, p̄_new(b, V))
-
-b* ← argmax_{b} val_AUC_new(b)          ← 以 New pool 的驗證 AUC 選邊界
-
-Phase 2：加權搜尋（使用 b* 重新訓練完整模型池）
-─────────────────────────────────────────────
-D_old* ← {(x,y,t) ∈ D : t < b*}
-D_new* ← {(x,y,t) ∈ D : b* ≤ t ≤ TRAIN_END}
-訓練 M_old = {m_old_k(b*) | k ∈ K}，訓練 M_new = {m_new_k(b*) | k ∈ K}
-
-FOR each w_new ∈ W:
-    val_proba(w_new) ← (1 - w_new)·p̄_old(b*, V) + w_new·p̄_new(b*, V)
-    τ*(w_new) ← argmax_τ F1(y_V, 𝟙[val_proba ≥ τ])
-    val_F1(w_new) ← F1(y_V, 𝟙[val_proba ≥ τ*(w_new)])
-
-w*_new ← argmax_{w_new} val_F1(w_new)
-
-Phase 3：測試（僅執行一次）
-─────────────────────────
-p̂(T) ← (1 - w*_new)·p̄_old(b*, T) + w*_new·p̄_new(b*, T)
-τ_final ← τ*(w*_new)
-RETURN Metrics(y_T, p̂(T), threshold=τ_final)
+```text
+D = 1999–2011；V = 2012–2014；T = 2015–2018
+B = {2000, ..., 2011}
+K = {none, undersampling, oversampling, hybrid}
+對每個 b：
+    Old = 1999 至 b−1；New = b 至 2011
+    每側各訓練四個 sampling 候選單模型；前處理只在 fitting data 擬合
+    每側以 V 的 AUC、F1、Precision 依序排名，保存最佳單模型指標
+依 New 最佳單模型的 Validation AUC 排名切點；AUC 同分時依 Validation F1
+回傳 b*；T 不參與本階段
 ```
 
-**時間複雜度**：$O(|B| \times |K| \times C_{\text{train}})$，其中 $C_{\text{train}}$ 為單模型訓練成本。對 $|B|=11$（本研究）、$|K|=3$，共訓練 66 個模型進行邊界搜尋，加上最終 6 個模型（Phase 2），總計 72 次模型訓練。
+此程序對應 `bankruptcy_ross_validation.py` 的 `build_validation_candidates`，不是 New3 機率平均的 AUC 搜尋。搜尋階段訓練 12×2×4＝96 個候選模型；後續模型池另計，不能把它寫成全流程固定 72 次 fitting。
+
+**後續版本必須分開解讀**：表 4-7 的歷史 weight sweep 重新使用 1999–2014，Old／New 各留末段 20% 資料列作閾值驗證，三種 sampling 建立各側模型池；其摘要依 Test F1／AUC 選權重，故屬 Test-selected 探索結果。它不是與邊界搜尋共用獨立 2012–2014 Validation 的確認性流程。§4.4.5 的跨切割 Validation-selected 權重與 §3.9／§4.4.7 的年度 rolling 選擇另有協定，不能用表 4-7 代替其證據。k=2 的聯合搜尋也只依 §3.7.2 的特定候選與門檻評估。
 
 **ROSS 的適用前提**：
 
@@ -602,7 +571,7 @@ ROSS 的關鍵設計跳過傳統偵測器的「即時觸發」假設，直接以
 3. **加權搜尋**：在 Validation 上以網格搜尋最佳群組權重 $\{w_1^*, \ldots, w_{k^*+1}^*\}$，目標為最大化 Validation F1。
 4. **測試評估**：以選出的邊界、模型池與群組權重，在 Test period 上計算最終效能指標。
 
-DAWCE 的核心主張是：在非平穩資料中，各時期模型池不應被假設為等價——透過 validation-guided 加權，框架可系統性地反映「哪個時期的知識在新測試期更有預測力」；透過 k 邊界 ROSS，框架可自動處理單次或多次概念漂移事件，而不需預先假設飄移次數。
+DAWCE 表達不同時期模型池的相對權重；權重只反映指定 Validation 上的選擇結果，不保證新測試期的效益。本文的 k=1／2 搜尋限定候選複雜度，不能估計真實漂移事件數量。具體證據以各版本獨立協定為準，Test-selected 歷史權重摘要不作部署流程。
 
 ## 3.9 Rolling AdaptiveChoice：批次式動態更新
 
@@ -616,14 +585,13 @@ Rolling AdaptiveChoice 的批次流程、目前結果與可重現命令統一整
 
 ## 3.10 Study 3B：重疊窗口持續集成
 
-### 3.10.1 研究定位與兩種 Old 定義
+### 3.10.1 研究定位與模型保留
 
-Study 3B 的目的不是再搜尋一次最佳歷史切點，而是預先固定更新規則，使模型在不知道未來終點時仍能持續前移。為釐清教授討論中的 Old 概念，本研究分別實作兩個比較路徑：
+Study 3B 的目的不是再搜尋一次最佳歷史切點，而是預先固定更新規則，使模型在不知道未來終點時仍能持續前移。目前以模型保留為主線，Old 指保留的歷史模型：
 
-- **B-data**：把重疊歷史年份視為 Old data，最近進入的成熟年度視為 New data，分別訓練後等權平均。它檢驗資料分組的概念。
 - **B-model**：把上一輪保留下來的凍結模型視為 Old models，只為最新成熟窗口訓練一個 New model。它檢驗模型生命週期與可持續更新。
 
-B-data 與 B-model 共享事件目標、特徵、分類器及時間隔離，但不混合成同一模型。本文主張的「永續推移」以 B-model 為主，B-data 僅作機制對照。
+單模型 baseline 重用最新窗口模型；新增採樣與 FS 對照依 §3.10.7 執行，不將歷史資料拆成 B-data 的兩個分組模型。
 
 ### 3.10.2 年度更新流程
 
@@ -676,7 +644,52 @@ $$
 
 所有比較串接相同 2009–2018 Test predictions，並以 5,512 家 Test 公司為 cluster 做 1,000 次 paired percentile bootstrap。此區間處理同一公司跨年度列的群聚相關，但不代表只有十個年度下的未來時間變異，也不包含重新抽樣後的訓練不確定性。
 
----
+### 3.10.5 擴充訓練年份的敏感度協定
+
+為檢查 Old 兩年加 New 一年的設定是否依賴特定歷史長度，本研究另固定 $L\in\{2,3,5,7\}$，分別表示 $(L-1)$ 年 Old 加一年 New。此處 Old/New 是單一窗口內的年份描述；兩者合併訓練同一個 XGBoost，並非兩組各自訓練或加權。因此，本實驗檢查的是總訓練歷史長度，不能解讀為固定資料跨度下的 Old/New 樣本比例或預測權重消融。
+
+對 Test 財報年 $t$，最新模型使用 $[t-L-1,t-2]$，$t-1$ 僅供 Validation；三模型池保留結束年為 $t-4,t-3,t-2$ 的三個凍結模型，各自保存前處理並等權平均，每年以 FIFO 淘汰一個、加入一個。各窗口同時評估最新單模型（Newest）與三模型集成（FIFO3）。FIFO3 的歷史聯集為 $L+2$ 年，故同一 $L$ 下 Newest 與 FIFO3 並非相同歷史資訊範圍；其差異仍是模型保留與歷史涵蓋的聯合效果。
+
+原始資料始於 1999 年，七年窗口的完整三模型池最早對應 Test feature year 2009，初始化窗口為 1999–2005、2000–2006、2001–2007，Validation 為 2008。所有配置均限定在共同的 2009–2018 十個 Test 年度，不把較短窗口可額外評估的早期年度混入比較。採相同 18 項財務特徵、training-only TomekLinks、XGBoost 設定與 Validation 閾值規則；種子事先固定為 42、123、456、789、2024、7、21、84、168、999。
+
+主要摘要為各年度 AP 的等權平均（annual macro AP），另報年度標準差、pooled AP、ROC-AUC、F1、Recall、Precision、G-Mean 與 Validation-FPR 操作點的實際 Test FPR。各 seed 分開計算，種子標準差只描述演算法亂數變異，不將年×seed 視為獨立樣本。公司不確定性採固定 seed 42 predictions 的 1,000 次成對公司群聚 bootstrap；時間敏感度另以跨 seed 平均後的十個年度 AP 差，做長度 2／3 的 circular moving-block bootstrap，各 2,000 次。年度區塊法僅是十年歷史上的敏感度診斷，不能取代跨景氣或外部資料驗證；兩種區間分開呈現，不視為公司與時間的聯合不確定性。
+
+此擴充是在檢視既有實驗後提出的探索性分析。候選窗口先固定，再保存所有配置結果，不依 Test 挑選新主設定，也不將未校正多重比較的邊際 95% 區間解讀為確認性顯著性檢定。
+
+### 3.10.6 已退出之 B-data 分支
+
+2026-09-29 研究範圍收斂後，B-data 與固定六年年份分組退出目前主線。原方法與結果移至[歷史封存](../docs/archive/study3b_b_data/thesis_retired_20260929.md)，不作本輪比較方法或研究結論。
+
+<!-- STUDY3B_FULL_METHOD_START -->
+### 3.10.7 多分類器、採樣、集成與 FS 的分階段協定
+
+本擴充沿用三年 fit 窗口、FIFO3 及 2009–2018 年度 Test。分類器為 Logistic Regression、
+Random Forest、XGBoost、LightGBM、MLP 與 RBF SVM，分別搭配 none、TomekLinks（under）、
+ADASYN（over）及 SMOTEENN（hybrid），共 24 個單模型配置。各預測分類器不另加類別權重，
+使用既有 wrapper 的基礎參數；MLP 停用採樣後的隨機 early-stopping holdout。
+每個窗口獨立擬合均值補值與標準化，採樣只作用於訓練資料。
+
+集成候選事先固定為跨時間 FIFO、跨採樣、跨分類器，以及其組合，共 46 種等權機率平均配置。
+none 保留為獨立對照，不併入 under／over／hybrid 的跨採樣三票。
+各年度只用前一年度 Validation AP 選一個集成，同分依配置名稱排序，沒有以跨年度 Test 排名回選。
+最新版單模型直接重用當年的最新窗口模型。每個 seed 的十二個不同窗口共訓練 288 個 no-FS 基模型。
+
+FS 階段針對該年度選中的集成配置，比較 no-FS 與 MI、CART、RFE、SHAP，各保留 50%／80%
+（18 維對應 9／14 維）。FS 只使用各成員的原始訓練窗口，次序為補值、標準化、FS、採樣及訓練；
+每個成員保存自己的特徵欄位。CART／RFE 使用 balanced decision tree；SHAP 以訓練窗口上的
+100 棵樹 balanced LightGBM 計算平均絕對 TreeSHAP contribution，排除 bias 欄。
+FS 的 no-FS 對照直接重用原集成，另以同年度 Validation AP 選 FS／no-FS 規則。
+
+各年度 Validation 也決定 F1 門檻及 FPR 操作點，Test 不參與任何選擇。
+此分階段搜尋重用 Validation，故其分數不作無偏效能；它亦不搜尋完整分類器×集成×FS 全組合。
+輸出將單模型、各類集成、FS 分表，pooled 與年度等權平均分開，另保存各 seed 與逐年明細。
+預定十個 seeds；未完成時只報所有方法均完成的 seeds，不混入部分年度。
+本輪保存凍結模型的未來機率快取以供研究 replay，不等同 §3.10.2 的部署模型 checkpoint。
+新流程尚未包含 DES/DCS 或深度表格模型，也未以 Test 最佳表現更改既定候選集合。
+
+完整設定、來源版本與執行限制見[實驗規格](../docs/Study3B_多分類器採樣集成FS流程.md)及 §4.5.8 的快照來源。
+
+<!-- STUDY3B_FULL_METHOD_END -->
 
 # 第四章 實驗設計與結果
 
@@ -684,12 +697,12 @@ $$
 
 - **基學習器**：主要實驗採 XGBoost（Chen & Guestrin, 2016）。設定為 `objective=binary:logistic`、`eval_metric=auc`、`tree_method=hist`、`seed=42`，其餘使用套件預設值；各模型先以對應取樣策略處理訓練集，再使用相同模型設定訓練，以確保跨切割比較公平。
 - **取樣參數**：產生既有主要結果時，Undersampling 使用 TomekLinks；Oversampling 使用 ADASYN（`n_neighbors=5`、`random_state=42`）；Hybrid 呼叫 `SMOTEENN(random_state=42)`，內部元件依當時安裝版 imbalanced-learn 預設。現行程式已把 `sampling_config.yaml` 的 SMOTE（`k_neighbors=5`）與 ENN（`n_neighbors=3`、`kind_sel=all`）明確傳入；因此新舊結果必須以 manifest/commit 區分，且主結果在採用新設定後需重新產生才可直接比較。
-- **分類閾值**：在 Validation 資料上枚舉 0.05–0.95（步長 0.01），以 F1 最大者作為最終分類閾值；Test 僅套用已選定閾值。
+- **分類閾值**：A rolling 以 Validation 枚舉 0.05–0.95（步長 0.01）；B 以 0.01–0.99（步長 0.01）選 F1 最大者。Test 只套用已選閾值。歷史 weight sweep 的閾值雖由內部 Validation 決定，其權重摘要仍為 Test-selected，兩者不可混淆。
 - **評估指標**：既有 A 路線以 AUC-ROC、F1、Recall、Precision、FPR 與 FNR 為主；B 路線因事件盛行率僅 0.774%，預先以 Average Precision（AP）作主要 ranking 指標，另報 AUC、F1、Recall、Precision、G-Mean、Balanced Accuracy 與 Recall@5%FPR。準確率不作主要指標。各表必須註明目標定義，避免把 6.63% 狀態標籤與 0.774% 事件目標的分數直接比較。
 - **統計檢定**：方法比較採 paired Wilcoxon signed-rank test（雙尾）；既有 15 個年份切割多數共享測試期且訓練窗巢狀重疊，只作診斷性敏感度分析。Rolling AdaptiveChoice 以 10 個資料列互不重疊的年度 Test 批次比較並作 Holm 校正，但同一公司可跨年度出現，因此仍可能有時間與公司群聚相關性。顯著性水準為 $\alpha = 0.05$。
-- **資訊洩漏防護**：模型選擇與主要統計推論不使用 Test 標籤。既有 Phase 4/5 的缺失值補值仍存在使用各分割自身特徵平均數的轉導式限制；新增 rolling 實驗則將補值器與 StandardScaler 僅在截至 $t-2$ 的訓練歷史上擬合，屬完全 inductive 的 walk-forward 評估。
+- **資訊用途**：主要 B 與年度 rolling 的選模、前處理及閾值不使用當年度 Test 標籤；Test 標籤用於最終指標及成對比較。Test-selected static oracle、表 4-7 權重摘要及 Validation 重疊診斷均明列為歷史探索，不納入無偏優越性主張。
 - **多種子驗證（Study 4）**：現有 A 路線 10-seed 檔案來自 LightGBM/block-CV 輔助流程，不是主要 XGBoost Study 1/3 的完整重跑。B 路線已跑 10 個 configured seeds，但 Tomek 與目前 XGBoost 設定形成完全相同輸出，標準差為零只表示管線在此設定下具決定性，不代表未來樣本不確定性為零；故 B 消融改以公司成對 bootstrap 報告。
-- **軟體環境**：主要結果由 Python 實作產生；本次審查環境為 Python 3.14.0、NumPy 2.4.0、pandas 2.3.3、scikit-learn 1.8.0、SciPy 1.17.1、XGBoost 3.2.0 與 imbalanced-learn 0.14.1。完整依賴範圍記錄於專案 `requirements.txt`。
+- **軟體環境**：各結果依自身 manifest 追溯，不以單一審查環境替代所有 run。新增多分類器流程的完整套件版本見 §4.5.8 所連結的 run manifest。舊表若沒有完整版本證據，保留為歷史診斷，不宣稱已逐項重現。
 
 ---
 
@@ -711,7 +724,7 @@ $$
 | DES\_KNORAE | 0.8560 | 0.2224 | 0.4503 | 0.1501 | — | — |
 | DCS | 0.8160 | 0.1897 | 0.3802 | 0.1281 | — | — |
 
-**觀察**：Re-training 的 Type 1 Error 高達 0.2450，反映在低破產率的測試期，合併舊資料的重訓模型大量誤判健康企業為破產，雖然 Recall 高（0.8119），但 Precision 極低（0.0749），F1 僅 0.1347。相較之下，ensemble\_new\_3 以更緊湊的 Type 1 Error（0.0674）搭配合理 Recall，達到較高 F1（0.2394），顯示 New-side 模型池對測試期分布的適應能力優於混合重訓。
+**觀察**：歷史狀態目標下，Re-training 與 New3 的誤報及辨識取捨不同。這些比較同時涉及訓練時期、取樣與模型組合，不能把差異單獨歸因於金融危機前資料已失效。B 的同歷史分組與窗口敏感度進一步顯示，增加歷史長度並不帶來各指標一致改善；這支持檢查資料配置，而非斷言舊資料必然有害。
 
 ### 4.2.2 跨 15 個年份切割的 Wilcoxon 統計檢定
 
@@ -721,18 +734,18 @@ $$
 
 **表 4-2　Study 1 主要 Wilcoxon 檢定結果（跨 15 個年份切割，$n=15$）**
 
-| 假設 | 比較 | 指標 | 均值 A | 均值 B | Mean Diff | Two-sided p | 效果量 r | 顯著？ |
+| 假設 | 比較 | 指標 | 均值 A | 均值 B | Mean Diff | Two-sided p | 效果量 r | 描述定位 |
 |------|------|------|--------|--------|-----------|-------------|---------|-------|
-| H₁₁ | New\_under > Old\_under | AUC | 0.8647 | 0.7042 | +0.1605 | 0.000061 | 1.00 | ✓ 大效果 |
-| H₁₁ | New\_under > Old\_under | F1 | 0.2346 | 0.1214 | +0.1132 | 0.000610 | 0.87 | ✓ 大效果 |
-| H₁₁ | New\_under > Old\_under | Recall | 0.5742 | 0.2992 | +0.2750 | 0.000653 | 0.87 | ✓ 大效果 |
-| H₁₁ | New\_hybrid > Old\_hybrid | AUC | 0.8518 | 0.7142 | +0.1376 | 0.000122 | 0.93 | ✓ 大效果 |
-| H₁₁ | New\_hybrid > Old\_hybrid | F1 | 0.1947 | 0.1133 | +0.0814 | 0.000427 | 0.87 | ✓ 大效果 |
-| H₁₂ | Static oracle best > DES | AUC | 0.8687 | 0.8445 | +0.0242 | 0.000061 | 1.00 | ✓ 大效果 |
-| H₁₂ | Static oracle best > DES | F1 | 0.2525 | 0.2268 | +0.0257 | 0.000183 | 0.93 | ✓ 大效果 |
-| H₁₂ | Static oracle best > DCS | AUC | 0.8687 | 0.8160 | +0.0527 | 0.000061 | 1.00 | ✓ 大效果 |
-| — | DES > DCS | AUC | 0.8445 | 0.8160 | +0.0285 | 0.000061 | 1.00 | ✓ 大效果 |
-| — | DES > DCS | F1 | 0.2268 | 0.1897 | +0.0371 | 0.008362 | 0.60 | ✓ 中效果 |
+| H₁₁ | New\_under > Old\_under | AUC | 0.8647 | 0.7042 | +0.1605 | 0.000061 | 1.00 | 描述性大差異 |
+| H₁₁ | New\_under > Old\_under | F1 | 0.2346 | 0.1214 | +0.1132 | 0.000610 | 0.87 | 描述性大差異 |
+| H₁₁ | New\_under > Old\_under | Recall | 0.5742 | 0.2992 | +0.2750 | 0.000653 | 0.87 | 描述性大差異 |
+| H₁₁ | New\_hybrid > Old\_hybrid | AUC | 0.8518 | 0.7142 | +0.1376 | 0.000122 | 0.93 | 描述性大差異 |
+| H₁₁ | New\_hybrid > Old\_hybrid | F1 | 0.1947 | 0.1133 | +0.0814 | 0.000427 | 0.87 | 描述性大差異 |
+| H₁₂ | Static oracle best > DES | AUC | 0.8687 | 0.8445 | +0.0242 | 0.000061 | 1.00 | 描述性大差異 |
+| H₁₂ | Static oracle best > DES | F1 | 0.2525 | 0.2268 | +0.0257 | 0.000183 | 0.93 | 描述性大差異 |
+| H₁₂ | Static oracle best > DCS | AUC | 0.8687 | 0.8160 | +0.0527 | 0.000061 | 1.00 | 描述性大差異 |
+| — | DES > DCS | AUC | 0.8445 | 0.8160 | +0.0285 | 0.000061 | 1.00 | 描述性大差異 |
+| — | DES > DCS | F1 | 0.2268 | 0.1897 | +0.0371 | 0.008362 | 0.60 | 描述性差異 |
 
 **H₁₁ 診斷**：New-side 模型在 AUC、F1、Recall 上皆呈一致優勢，原始 $p < 0.001$ 且 rank-biserial $|r| \geq 0.87$。但 15 個切割共享測試資料，不能視為獨立複驗；因此本文將其解讀為效果方向與切割敏感度證據，而非僅憑 p-value 拒絕虛無假設。rolling 中 `New_under` 的領先方向提供額外支持。
 
@@ -748,7 +761,7 @@ $$
 | ensemble\_all\_6 vs retrain | 0.0020 | 0.0020 |
 | ensemble\_all\_6 vs DES\_KNORAE | — | 0.0020 |
 
-未列於上表的 DES vs retrain AUC 比較為 $p=0.1934$，也顯示「所有主要比較皆顯著」並不成立。投稿前需以相同 XGBoost 主流程、相同時序協定及完整 seed 傳遞重新執行多種子實驗。
+未列於上表的 DES vs retrain AUC 比較為 $p=0.1934$，也顯示「所有主要比較皆顯著」並不成立。因此本文不以此批結果確認主要 XGBoost 結論；若未來欲提出該重現性主張，才需依同一主流程重跑。本輪不追加此歷史支線實驗。
 
 ---
 
@@ -758,9 +771,9 @@ $$
 
 **表 4-3　特徵選取對 New\_3 集成 AUC 的影響（跨 15 個年份切割）**
 
-| 比較 | 指標 | FS 均值 | No-FS 均值 | Two-sided p | 顯著？ |
+| 比較 | 指標 | FS 均值 | No-FS 均值 | Two-sided p | 描述定位 |
 |------|------|---------|-----------|-------------|-------|
-| New\_3 + MI r80 > no\_fs | AUC | 0.8537 | 0.8490 | 0.000305 | ✓ |
+| New\_3 + MI r80 > no\_fs | AUC | 0.8537 | 0.8490 | 0.000305 | 診斷性差異 |
 | All\_6 + MI r80 > no\_fs | F1（方向性） | 0.1671 | 0.1602 | 0.094604 | — |
 
 MI r80 對 New\_3 集成的 AUC 呈現正向差異，原始 p-value 為 0.000305；對 All\_6 的 F1 則僅有正向趨勢。因 15 個切割相依，這些結果作診斷性證據；它們顯示特徵選取效果可能因模型組合與指標而異，不宜過度概化。
@@ -808,11 +821,11 @@ MI r80 對 New\_3 集成的 AUC 呈現正向差異，原始 p-value 為 0.000305
 
 PHT 設計為偵測「信號上升（性能惡化）」，但 burn-in 期（1999–2004）正值 .com 泡沫衰退，初始模型的 hold-out AUC 僅 0.61（1-AUC = 0.39），屬於偏低的基準。後續 2005–2007 年模型在更正常的市場中 AUC 反升至 0.73，信號值（0.27）低於基準（0.39），PHT 累積量無法建立。
 
-**核心發現**：傳統漂移偵測器隱含「模型從穩定好基準逐漸惡化」的假設。破產資料的實際規律是——沒有一個全期穩定的好基準，因為 1999–2004 本身就是異常經濟環境。ROSS 的設計跳過「偵測到漂移點」的前提假設，直接以 Validation period 的集成效能作為邊界選擇依據，提供不依賴穩定初始基準的可重現流程；但此流程不保證所選邊界在 Test 上優於固定邊界。
+**本研究的診斷結果**：在所測信號、初始模型及參數下，ADWIN、DDM、PHT 未給出可直接採用的穩定分界。此結果不證明所有偵測器需要低誤差初始基準，也不涵蓋未測方法。ROSS 改以 Validation 選擇資料分界，但不保證 Test 優於固定邊界。
 
 ### 4.4.1 ROSS 邊界選擇結果
 
-以 Validation period（2012–2014）的 **New-side 模型池 AUC** 作為邊界選擇目標，ROSS 搜尋結果如下。Validation F1 僅作輔助診斷，不參與邊界排名：
+以 Validation period（2012–2014）的 **New-side 最佳候選單模型 AUC** 作為邊界選擇目標，ROSS 搜尋結果如下。Validation F1 僅作輔助診斷，不參與邊界排名：
 
 **表 4-6　ROSS 候選邊界與 Validation AUC**
 
@@ -824,13 +837,13 @@ PHT 設計為偵測「信號上升（性能惡化）」，但 burn-in 期（1999
 | 2006 | 1999–2005 | 2006–2011 | 0.8543 | **0.4093** | 4 |
 | 2008 | 1999–2007 | 2008–2011 | 0.8542 | 0.3802 | 5 |
 
-資料驅動的 ROSS 選出 **2009** 作為最佳 drift start year，比原始人工設定的 2012 早三年。這與 2008–2009 年金融危機的時序吻合：金融危機大幅改變了企業財務健康的判斷標準，2009 年後的破產特徵分布與危機前呈現明顯差異。
+ROSS 依指定 Validation 排名選出 2009，相較原先固定 2012 提早三年。與金融危機時間接近只屬事後解釋線索；本實驗沒有獨立確認分布變化原因，也不能將邊界選擇視為危機造成概念漂移的證明。
 
 ### 4.4.2 加權集成結果
 
-在 ROSS-selected boundary（b\* = 2009）下，對 Validation 執行 w\_new ∈ {0.00, 0.05, …, 1.00} 的網格搜尋，選出最佳權重並評估 Test period：
+本節保留歷史權重掃描結果。`bk_validation_ross_weight_summary.csv` 的生成程式按 Test F1、AUC 排名選出權重；Validation 僅用於各候選權重的分類閾值。因此本表為 Test-selected 權重摘要，不是 Validation-selected 的無偏方法比較。
 
-**表 4-7　DAWCE 主要分析協定之最佳配置 vs 固定等權基準**
+**表 4-7　歷史 Test-selected 權重摘要（探索性，不作主要優越性證據）**
 
 | 設定 | w\_old | w\_new | AUC | F1 | Recall | Precision |
 |------|--------|--------|-----|----|--------|-----------|
@@ -839,7 +852,7 @@ PHT 設計為偵測「信號上升（性能惡化）」，但 burn-in 期（1999
 | ValROSS\_2009（FS，w\_new=0.80） | 0.20 | 0.80 | 0.8135 | 0.2002 | 0.3902 | **0.1346** |
 | ValROSS\_2009（無 FS，w\_new=0.85） | 0.15 | 0.85 | **0.8418** | 0.1947 | **0.5679** | 0.1175 |
 
-修正前處理資料洩漏後，最高 Test F1 為 Fixed 2012 + no-FS + w\_new = 0.95（F1 = 0.2039）；ValROSS 2009 + no-FS 雖具有最高 AUC（0.8418）與 Recall（0.5679），但 F1 僅 0.1947。因此 ROSS 仍能以 Validation 客觀選出 2009 邊界，但本實驗不支持其 Test F1 優於固定 2012 邊界。四種 validation-selected 配置相較固定等權的 F1 仍皆提升 0.0087–0.0179，支持加權而非等權平均。
+表中最高 Test F1 為 Fixed 2012 no-FS 的 0.2039，ValROSS no-FS 為 0.1947；這些是事後選权重的描述值，不能用來確認加權效益或 ROSS／固定邊界的泛化勝負。可用的 Validation-selected 比較見 §4.4.5–4.4.7；本文不據此表改選主方法。
 
 ### 4.4.3 AWE-inspired 個別權重診斷實驗
 
@@ -899,7 +912,7 @@ PHT 設計為偵測「信號上升（性能惡化）」，但 burn-in 期（1999
 
 這一結果揭示了兩個重要面向：
 
-1. **破產資料只有一個主要飄移事件**：最佳 k=2 配置以 w1=w2=0 放棄了 P1 和 P2，本質上與 k=1 b*=2009 相同。2004 年作為第二個邊界，並未帶入有效的跨期知識——引入額外模型池反而稀釋了 P3 的信號。
+1. **第二個邊界未形成額外非零權重群組**：最佳配置 `(0,0,1)` 只使用 P3，沒有證據顯示 P1／P2 提供额外加權資訊；這不等於真實資料只有一次漂移。零權重群組不參與預測，亦不能把 Test 差異歸因於它們稀釋 P3。
 
 2. **val_F1 提升不等於 test_F1 提升**：k=2 在驗證集上的 +0.013 超過了門檻 τ=0.005，但測試集上退步了 0.030。這說明在單次驗證分割下，k 選擇機制可能受驗證期的隨機偏差影響，對「k 是否真有必要」的判斷過於樂觀。在實際應用中，建議以 **多次滾動驗證（rolling validation）** 或領域知識輔助 k 的選擇，而非單純依賴 val_F1 的絕對數值。
 
@@ -977,7 +990,7 @@ ROSS 選出的邊界隨年度在 2005–2011 間移動，證明程式已能依�
 
 ## 4.5 Study 3B：重疊窗口持續集成
 
-### 4.5.1 主設定與 B-data／B-model 比較
+### 4.5.1 主設定與最新單模型比較
 
 本節使用探索性事件目標，以 2009–2018 十個逐年 Test 批次評估。各年度 Test 列互斥；串接後共 33,636 筆預測、5,512 家公司、289 個正例。主設定為三年訓練窗口、Pool3、Tomek Links、XGBoost 與固定等權；閾值由各年度前一年的 Validation 決定。
 
@@ -986,12 +999,11 @@ ROSS 選出的邊界隨年度在 2005–2011 間移動，證明程式已能依�
 | 方法 | AP | AUC | F1 | Recall | Precision | Recall@5%FPR |
 |---|---:|---:|---:|---:|---:|---:|
 | **B-model FIFO3 equal** | **0.1215** | **0.8576** | **0.1917** | **0.2145** | 0.1732 | **0.4014** |
-| B-data equal | 0.1202 | 0.8529 | 0.1765 | 0.1661 | 0.1882 | 0.3599 |
 | Recent3y | 0.0966 | 0.8450 | 0.1656 | 0.1384 | **0.2062** | 0.3910 |
 
 資料來源：本研究整理。
 
-B-model 相較 Recent3y 的 AP 差為 0.0249，95% 公司群聚 bootstrap CI 為 [0.0045, 0.0449]；AUC 差為 0.0126，CI 為 [0.0002, 0.0248]；Recall 差為 0.0761，CI 為 [0.0418, 0.1130]。三者未跨零，支持 Pool3 整體設計相較只使用最新三年模型具有資訊價值；但前者的連續窗口聯集涵蓋五年，資料年代與模型數同時改變，不能將差異全數歸因於集成保留。F1 與 Precision 區間跨零，且點估計顯示 Recent3y Precision 較高，故不能將此結果解讀為所有操作指標全面改善。B-model 與 B-data 的 AP/AUC/F1 區間亦跨零，僅 Recall 差 [0.0076, 0.0865] 未跨零。
+B-model 相較 Recent3y 的 AP 差為 0.0249，95% 公司群聚 bootstrap CI 為 [0.0045, 0.0449]；AUC 差為 0.0126，CI 為 [0.0002, 0.0248]；Recall 差為 0.0761，CI 為 [0.0418, 0.1130]。三者未跨零，支持 Pool3 整體設計相較只使用最新三年模型具有資訊價值；但前者的連續窗口聯集涵蓋五年，資料年代與模型數同時改變，不能將差異全數歸因於集成保留。F1 與 Precision 區間跨零，且點估計顯示 Recent3y Precision 較高，故不能將此結果解讀為所有操作指標全面改善。
 
 #### 4.5.1.1 Old/New 同步滑動延伸實驗
 
@@ -1005,6 +1017,29 @@ B-model 相較 Recent3y 的 AP 差為 0.0249，95% 公司群聚 bootstrap CI 為
 | 當輪最新三年模型 | 0.0730 | 0.7722 | 0.1391 | 0.1416 | **0.1366** | 81 | **512** | 491 |
 
 資料來源：本研究整理。
+
+**表 4-13B　Old/New 同步滑動之逐輪 Test 指標**
+
+| 輪次 | Test 年 | FIFO AP | FIFO AUC | FIFO F1 | FIFO Recall | FIFO Precision | 最新 AP | 最新 AUC | 最新 F1 | 最新 Recall | 最新 Precision |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 2003 | 0.0235 | 0.6760 | 0.0000 | 0.0000 | 0.0000 | 0.0235 | 0.6760 | 0.0000 | 0.0000 | 0.0000 |
+| 2 | 2004 | 0.0266 | 0.6542 | 0.0351 | 0.0217 | 0.0909 | 0.0296 | 0.6697 | 0.0313 | 0.0217 | 0.0556 |
+| 3 | 2005 | 0.0240 | 0.6653 | 0.0000 | 0.0000 | 0.0000 | 0.0299 | 0.6914 | 0.0000 | 0.0000 | 0.0000 |
+| 4 | 2006 | 0.0427 | 0.6797 | 0.1149 | 0.0980 | 0.1389 | 0.0338 | 0.6537 | 0.0506 | 0.0392 | 0.0714 |
+| 5 | 2007 | 0.0685 | 0.7305 | 0.1163 | 0.1695 | 0.0885 | 0.0580 | 0.6832 | 0.1226 | 0.2203 | 0.0850 |
+| 6 | 2008 | 0.1160 | 0.8496 | 0.1645 | 0.5517 | 0.0967 | 0.1203 | 0.8295 | 0.2146 | 0.4310 | 0.1429 |
+| 7 | 2009 | 0.0346 | 0.8337 | 0.1067 | 0.1739 | 0.0769 | 0.0413 | 0.8459 | 0.0930 | 0.0870 | 0.1000 |
+| 8 | 2010 | 0.1235 | 0.8329 | 0.1395 | 0.0857 | 0.3750 | 0.0734 | 0.8101 | 0.0952 | 0.0571 | 0.2857 |
+| 9 | 2011 | 0.1108 | 0.8980 | 0.1791 | 0.2400 | 0.1429 | 0.1161 | 0.9046 | 0.0714 | 0.0800 | 0.0645 |
+| 10 | 2012 | 0.2313 | 0.8926 | 0.2807 | 0.3077 | 0.2581 | 0.2229 | 0.8835 | 0.2353 | 0.1538 | 0.5000 |
+| 11 | 2013 | 0.0858 | 0.8559 | 0.1111 | 0.0714 | 0.2500 | 0.0832 | 0.7825 | 0.0784 | 0.0714 | 0.0870 |
+| 12 | 2014 | 0.0635 | 0.8663 | 0.1400 | 0.2121 | 0.1045 | 0.0792 | 0.8452 | 0.1311 | 0.1212 | 0.1429 |
+| 13 | 2015 | 0.1683 | 0.8963 | 0.2143 | 0.3636 | 0.1519 | 0.1526 | 0.8947 | 0.2769 | 0.2727 | 0.2813 |
+| 14 | 2016 | 0.2796 | 0.8524 | 0.3214 | 0.3103 | 0.3333 | 0.1324 | 0.8468 | 0.2273 | 0.1724 | 0.3333 |
+| 15 | 2017 | 0.1340 | 0.8908 | 0.2000 | 0.1905 | 0.2105 | 0.1111 | 0.8646 | 0.0690 | 0.0476 | 0.1250 |
+| 16 | 2018 | 0.1865 | 0.8592 | 0.2295 | 0.1944 | 0.2800 | 0.2063 | 0.8551 | 0.3103 | 0.2500 | 0.4091 |
+
+註：AP 與 AUC 使用預測機率；F1、Recall 與 Precision 使用每輪 Validation 選定的 F1 閾值，Test 不參與閾值選擇。資料來源：`sliding_primary_by_year.csv`。
 
 FIFO3 多找出 29 個事件，但多產生 252 個誤報。以公司為群集做 1,000 次成對 percentile bootstrap，FIFO3 減最新模型的 AP 差為 0.0130（95% CI [0.0019, 0.0241]），Recall 差為 0.0507（[0.0284, 0.0748]）；AUC、F1 與 Precision 的區間跨零。排除暖機、僅保留完整三模型池的 2005–2018 後，AP 差為 0.0153（[0.0027, 0.0280]），Recall 差為 0.0584（[0.0324, 0.0857]）。逐年度 FIFO AP 勝 8 年、平 1 年，Recall 勝 10 年、平 4 年，因此這是少數類 AP／Recall 的整體支持，不是年度全面支配。
 
@@ -1098,11 +1133,265 @@ Pool3 相較 Pool1 的 AP、AUC 與 Recall 差分別為 0.0249、0.0126 與 0.07
 
 此結果否定「三年窗口已證明最佳」的寫法。三年在主指標 AP 上點估計最高且位於成本與 Recall/Precision 取捨的中間，故本文維持事前設定，不依 Test 事後改選一年或五年。若部署目標明確以 Recall 最大化，五年可能值得優先驗證；若重視 F1、Precision 與更新成本，一年則可能更合適。
 
+#### 4.5.6.1 2／3／5／7 年窗口與單模型對照
+
+依 §3.10.5 固定候選設定後，完成四種訓練窗口、十個種子、十個共同 Test 年度的回測。每個窗口與 seed 初始化三個模型，之後新增九個，共 12 個；四種窗口與十個 seed 合計訓練 480 個模型。Newest 重用 FIFO3 中的最新模型，不另外訓練。八種窗口×方法配置均評估相同的 33,636 筆 company-year、5,512 家公司與 289 個破產事件。三年 FIFO3 的逐筆機率與原實驗一致至 CSV 輸出精度。
+
+**表 4-17A　擴充窗口之最新單模型與 FIFO3 比較（2009–2018）**
+
+| 年數 | 方法 | 年度平均 AP | 年度 AP SD | pooled AP | AUC | F1 | Recall | Precision |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|
+| 2 | FIFO3 | 0.1474 | 0.0787 | 0.1274 | 0.8579 | 0.1714 | 0.1661 | 0.1771 |
+| 2 | Newest | 0.1095 | 0.0624 | 0.0813 | 0.8261 | 0.1473 | 0.1315 | 0.1674 |
+| 3 | FIFO3 | 0.1418 | 0.0759 | 0.1215 | 0.8576 | 0.1917 | 0.2145 | 0.1732 |
+| 3 | Newest | 0.1219 | 0.0584 | 0.0966 | 0.8450 | 0.1656 | 0.1384 | 0.2062 |
+| 5 | FIFO3 | 0.1307 | 0.0733 | 0.1106 | 0.8571 | 0.1672 | 0.2664 | 0.1218 |
+| 5 | Newest | 0.1284 | 0.0714 | 0.1050 | 0.8356 | 0.1749 | 0.1834 | 0.1672 |
+| 7 | FIFO3 | 0.1291 | 0.0930 | 0.1082 | 0.8667 | 0.1778 | 0.2388 | 0.1417 |
+| 7 | Newest | 0.1262 | 0.0821 | 0.1107 | 0.8569 | 0.1422 | 0.1730 | 0.1208 |
+
+註：數值為各 seed 分別計算後之平均；年度 AP SD 為十個年度 AP 的樣本標準差，並非信賴區間。除年度平均 AP 與年度 AP SD 外，其餘效能欄位均由 pooled Test predictions 計算。AP 採 average precision 定義。年度 Test 正例數與盛行率、G-Mean、FPR 操作點及完整 seed 結果另存於 `by_year_all_seeds.csv` 與 `summary.csv`。
+
+FIFO3 的年度平均 AP 由兩年之 0.1474，隨三、五、七年窗口變為 0.1418、0.1307、0.1291；pooled AP 排序相同。因此，在本次固定配置下，增加訓練歷史未帶來 AP 的單調改善。另一方面，七年 FIFO3 的 AUC 為 0.8667，五年的 Recall 為 0.2664，三年的 F1 為 0.1917，分別為四種 FIFO3 配置中的最高點估計。單一指標的排名不能代表所有操作需求；七年窗口的年度 AP SD 亦較高，不能據此主張較長歷史更穩定。
+
+Newest 與 FIFO3 的差距隨窗口改變。兩年窗口的 pooled AP 由單模型 0.0813 增至集成 0.1274；五年則為 0.1050 與 0.1106；七年單模型的 pooled AP 0.1107 反而略高於 FIFO3 的 0.1082。七年之年度平均 AP 仍由 0.1262 增至 0.1291，顯示年度等權摘要與跨年度合併排序不必一致。這些觀察提示模型池的增益依窗口而異，仍不能區分模型互補與額外歷史涵蓋的作用。
+
+![2／3／5／7 年窗口的年度平均與 pooled AP](../results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/analysis/20260920T194618884788Z/window_sensitivity.png)
+
+**圖 4-3A　2／3／5／7 年窗口的年度平均與 pooled AP**
+
+註：左圖各年度等權，右圖合併全部 Test 列；兩圖分別標示縱軸刻度。皆為點估計，差異區間見表 4-17B。
+
+**表 4-17B　公司群聚與年度區塊的成對 AP 差異區間**
+
+| 差值方向 | pooled AP 差 | 公司群聚 95% CI | 年度平均 AP 差 | 年度區塊 2 年 CI | 年度區塊 3 年 CI |
+|---|---:|---|---:|---|---|
+| W3_FIFO3 − W2_FIFO3 | -0.0059 | [-0.0247, 0.0133] | -0.0056 | [-0.0222, 0.0098] | [-0.0179, 0.0051] |
+| W3_FIFO3 − W5_FIFO3 | 0.0109 | [-0.0096, 0.0313] | 0.0111 | [-0.0105, 0.0301] | [-0.0071, 0.0321] |
+| W3_FIFO3 − W7_FIFO3 | 0.0133 | [-0.0108, 0.0379] | 0.0126 | [-0.0314, 0.0541] | [-0.0243, 0.0538] |
+| W2_FIFO3 − W2_Newest | 0.0461 | [0.0255, 0.0669] | 0.0379 | [0.0138, 0.0703] | [0.0165, 0.0666] |
+| W3_FIFO3 − W3_Newest | 0.0249 | [0.0054, 0.0434] | 0.0199 | [-0.0037, 0.0542] | [-0.0003, 0.0483] |
+| W5_FIFO3 − W5_Newest | 0.0056 | [-0.0091, 0.0225] | 0.0023 | [-0.0113, 0.0159] | [-0.0096, 0.0148] |
+| W7_FIFO3 − W7_Newest | -0.0025 | [-0.0191, 0.0140] | 0.0030 | [-0.0082, 0.0153] | [-0.0097, 0.0150] |
+
+註：W 代表基模型訓練年數，正差代表左側較高。公司區間採 seed 42、5,512 家公司、1,000 次重抽的 pooled AP 差；年度區間採跨 seed 平均後的年度 AP 差、十個年度與 2,000 次 circular moving-block 重抽。兩者統計量與不確定性範圍不同。全部為探索性、未做多重比較校正的邊際區間，不作確認性顯著性判定。
+
+三年對兩年、五年、七年的 AP 差，在公司與兩種年度區塊區間中均跨零，不能確認某個窗口優於三年，也不能據此宣稱等效。兩年 FIFO3 對兩年 Newest 的 AP 差在三種區間中皆為正；但這仍是探索性的架構差異，且歷史涵蓋由兩年增加至四年。三年 FIFO3 對三年 Newest 的公司區間未跨零，年度區塊區間則跨零，表示此優勢對不確定性的定義敏感，不能將公司重抽結果延伸為未來年度穩健性。五年與七年集成相對單模型的 AP 差均未獲明確支持。
+
+十個 seed 的全部逐筆機率、閾值與分類結果完全一致，指標的 seed SD 在浮點精度內為零；這反映本次固定管線未產生可觀測的種子變異，不是十份獨立實證，也不支持對資料擾動或未來年度的穩定性推論。
+
+**表 4-17C　各窗口的訓練資料負擔與實測 fitting 時間**
+
+| 年數 | 每 seed 訓練模型數 | 累積 fitting rows | 每窗口正例範圍 | 訓練秒數中位數 |
+|---:|---:|---:|---|---:|
+| 2 | 12 | 89,353 | 51–117 | 3.92 |
+| 3 | 12 | 135,671 | 79–168 | 5.98 |
+| 5 | 12 | 232,014 | 137–254 | 9.94 |
+| 7 | 12 | 335,047 | 152–312 | 16.22 |
+
+註：fitting rows 計入重疊窗口重複使用的訓練列，並非 unique company-year。每窗口正例範圍為採樣前計數。時間為每個 seed 的 12 次前處理、採樣與模型擬合時間加總，再取十個 seed 的中位數；不含整體讀檔、Validation 閾值搜尋、預測、結果寫入及不確定性分析，也未測量峰值記憶體或封存成本。
+
+更長窗口確實增加每個模型可用的正例與訓練資料量，但這不足以保證較好的 AP。此結果支持將窗口視為研究設計中的取捨參數，並保留三年為原先指定的基準，不依此次 Test 最高點估計事後改選兩年。此處沒有執行固定總跨度下的 Old/New 分組比例或預測權重搜尋。
+
+資料來源：本研究之 [2／3／5／7 年敏感度 run manifest](../results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/manifest.json)、[摘要](../results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/analysis/20260920T194618884788Z/summary.csv)、[公司區間](../results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/analysis/20260920T194618884788Z/company_bootstrap.csv)、[年度區塊區間](../results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/analysis/20260920T194618884788Z/annual_block_sensitivity.csv)、[訓練成本](../results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/analysis/20260920T194618884788Z/cost_by_seed.csv)、[分析與查核紀錄](../results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z/analysis/20260920T194618884788Z/analysis_manifest.json)。
+
+#### 4.5.6.2 已退出分組實驗之歷史紀錄
+
+原 B-data 分組結果已[封存](../docs/archive/study3b_b_data/thesis_retired_20260929.md)。本次分表結果見 §4.5.8，不包含此分支。
+
 ### 4.5.7 Study 3B 小結
 
 Study 3B 已完成 batch backtest、Old/New 同步滑動的 16 輪延伸、凍結模型老化矩陣，以及可跨程序恢復的 `initialize/update/predict` 實作。結果顯示 Pool3 整體設計相較單一最新三年模型具有 AP 與 Recall 優勢，但 Precision 未改善，且資料涵蓋與模型保留效益仍混合；Tomek、三年窗口與 Pool3 亦未共同獲得「最佳組合」證據。較精確的結論是：三年／Pool3／Tomek 是透明、可重現且活躍模型容量固定的第一版基準。每輪只新增一個模型成立，但原始資料讀取、退役模型封存與 registry 歷史仍會累積，不能據此宣稱總計算與儲存成本恆定。
 
+2／3／5／7 年擴充進一步顯示，延長歷史並未使 FIFO3 的年度平均或 pooled AP 上升；兩年 AP、七年 AUC、五年 Recall 與三年 F1 的點估計各有優勢。三年相對其餘窗口的 AP 差異區間均跨零，且三年集成對單模型的 AP 優勢未在年度區塊敏感度中獲明確支持。因此保留預先指定的三年基準，並將效能取捨與不確定性範圍納入結論。
+
+
 ---
+
+<!-- STUDY3B_FULL_RESULTS_START -->
+### 4.5.8 多分類器、採樣、集成與 FS 的分階段結果（執行中快照）
+
+本快照納入完整完成的 3/10 個 seeds：42, 123, 456。Test 特徵年 2009–2018；每個方法、每個 seed 共 33,636 筆 Test 預測。
+
+所有表皆為已完成 seeds 的平均。Pooled 先於每個 seed 合併年度預測計算指標，再取 seed 平均；年度平均則先對每個 seed 的年度指標等權平均，再取 seed 平均。二者分表，不將重複 seed 視為新的公司樣本。CSV 另保留 seed 標準差與各 seed 數值；標準差不是信賴區間。本次為執行中快照，不能當作十種子最終結論。
+
+配置依名稱排列，不以 Test 排名重新選模型。FS 的基礎集成可能隨 seed／年度不同，FS 表比較的是同一年度已選配置上的 FS 規則。
+
+資料來源：[分表索引](../results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/separated_tables/20260929T043613746104Z/README.md)、[快照來源與查核](../results/phase_flexible/study3b_full_pipeline/runs/20260928T185026381432Z/separated_tables/20260929T043613746104Z/snapshot_manifest.json)。
+
+以下主文僅列 pooled 表；年度平均另於各類分表文件呈現，以免兩種摘要混用。
+
+#### 4.5.8.1 單模型與採樣
+
+**Logistic Regression（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `Newest_lr_hybrid` | 0.7994 | 0.0588 | 0.1131 | 0.4346 | 0.1926 | 0.0800 |
+| `Newest_lr_none` | 0.7171 | 0.0566 | 0.1232 | 0.3965 | 0.1592 | 0.1004 |
+| `Newest_lr_over` | 0.8010 | 0.0577 | 0.0999 | 0.4534 | 0.2111 | 0.0654 |
+| `Newest_lr_under` | 0.7203 | 0.0581 | 0.1163 | 0.3790 | 0.1453 | 0.0970 |
+
+**Random Forest（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `Newest_rf_hybrid` | 0.8387 | 0.0419 | 0.0934 | 0.4318 | 0.1926 | 0.0633 |
+| `Newest_rf_none` | 0.8419 | 0.1425 | 0.2132 | 0.4528 | 0.2065 | 0.2205 |
+| `Newest_rf_over` | 0.8393 | 0.0411 | 0.0914 | 0.4244 | 0.1869 | 0.0616 |
+| `Newest_rf_under` | 0.8416 | 0.1438 | 0.2070 | 0.4350 | 0.1903 | 0.2285 |
+
+**XGBoost（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `Newest_xgb_hybrid` | 0.8020 | 0.0597 | 0.1112 | 0.4203 | 0.1799 | 0.0805 |
+| `Newest_xgb_none` | 0.8391 | 0.0954 | 0.1743 | 0.4265 | 0.1834 | 0.1661 |
+| `Newest_xgb_over` | 0.7993 | 0.0559 | 0.1109 | 0.4034 | 0.1661 | 0.0845 |
+| `Newest_xgb_under` | 0.8450 | 0.0966 | 0.1656 | 0.3712 | 0.1384 | 0.2062 |
+
+**LightGBM（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `Newest_lgb_hybrid` | 0.8112 | 0.0586 | 0.1051 | 0.4042 | 0.1684 | 0.0786 |
+| `Newest_lgb_none` | 0.8088 | 0.0850 | 0.1690 | 0.3803 | 0.1453 | 0.2019 |
+| `Newest_lgb_over` | 0.8096 | 0.0546 | 0.1043 | 0.4066 | 0.1684 | 0.0762 |
+| `Newest_lgb_under` | 0.8226 | 0.0867 | 0.1714 | 0.4185 | 0.1765 | 0.1667 |
+
+**MLP（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `Newest_mlp_hybrid` | 0.6369 | 0.0332 | 0.0712 | 0.3345 | 0.1142 | 0.0529 |
+| `Newest_mlp_none` | 0.6684 | 0.0591 | 0.1046 | 0.3207 | 0.1038 | 0.1155 |
+| `Newest_mlp_over` | 0.6374 | 0.0340 | 0.0697 | 0.3229 | 0.1061 | 0.0519 |
+| `Newest_mlp_under` | 0.6667 | 0.0569 | 0.0980 | 0.3394 | 0.1165 | 0.0846 |
+
+**SVM（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `Newest_svm_hybrid` | 0.7351 | 0.0516 | 0.0899 | 0.3821 | 0.1488 | 0.0645 |
+| `Newest_svm_none` | 0.5613 | 0.0177 | 0.0186 | 0.5182 | 0.4602 | 0.0095 |
+| `Newest_svm_over` | 0.7332 | 0.0512 | 0.0883 | 0.3746 | 0.1430 | 0.0639 |
+| `Newest_svm_under` | 0.5584 | 0.0164 | 0.0182 | 0.5041 | 0.4083 | 0.0093 |
+
+#### 4.5.8.2 集成
+
+**跨年度 FIFO（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `FIFO_lgb_hybrid` | 0.8139 | 0.0464 | 0.1011 | 0.4078 | 0.1696 | 0.0720 |
+| `FIFO_lgb_none` | 0.8330 | 0.1040 | 0.1646 | 0.4263 | 0.1834 | 0.1493 |
+| `FIFO_lgb_over` | 0.8107 | 0.0451 | 0.0943 | 0.3835 | 0.1499 | 0.0696 |
+| `FIFO_lgb_under` | 0.8383 | 0.1007 | 0.1768 | 0.4305 | 0.1869 | 0.1677 |
+| `FIFO_lr_hybrid` | 0.8023 | 0.0700 | 0.1196 | 0.4033 | 0.1649 | 0.0938 |
+| `FIFO_lr_none` | 0.7161 | 0.0602 | 0.1154 | 0.3561 | 0.1280 | 0.1051 |
+| `FIFO_lr_over` | 0.8034 | 0.0699 | 0.1193 | 0.4142 | 0.1742 | 0.0907 |
+| `FIFO_lr_under` | 0.7169 | 0.0615 | 0.1185 | 0.3655 | 0.1349 | 0.1057 |
+| `FIFO_mlp_hybrid` | 0.6599 | 0.0327 | 0.0576 | 0.2876 | 0.0842 | 0.0450 |
+| `FIFO_mlp_none` | 0.6999 | 0.0760 | 0.1287 | 0.3499 | 0.1234 | 0.1364 |
+| `FIFO_mlp_over` | 0.6522 | 0.0301 | 0.0513 | 0.3072 | 0.0969 | 0.0353 |
+| `FIFO_mlp_under` | 0.7038 | 0.0755 | 0.1218 | 0.3416 | 0.1176 | 0.1266 |
+| `FIFO_rf_hybrid` | 0.8472 | 0.0395 | 0.0746 | 0.3581 | 0.1315 | 0.0525 |
+| `FIFO_rf_none` | 0.8606 | 0.1509 | 0.1856 | 0.4637 | 0.2180 | 0.1654 |
+| `FIFO_rf_over` | 0.8460 | 0.0390 | 0.0734 | 0.3675 | 0.1384 | 0.0501 |
+| `FIFO_rf_under` | 0.8659 | 0.1532 | 0.2118 | 0.4805 | 0.2330 | 0.1945 |
+| `FIFO_svm_hybrid` | 0.7384 | 0.0476 | 0.0899 | 0.3732 | 0.1419 | 0.0659 |
+| `FIFO_svm_none` | 0.5703 | 0.0258 | 0.0184 | 0.5211 | 0.5063 | 0.0094 |
+| `FIFO_svm_over` | 0.7356 | 0.0466 | 0.0871 | 0.3889 | 0.1546 | 0.0607 |
+| `FIFO_svm_under` | 0.5734 | 0.0239 | 0.0185 | 0.5216 | 0.5017 | 0.0094 |
+| `FIFO_xgb_hybrid` | 0.8118 | 0.0508 | 0.1044 | 0.3983 | 0.1615 | 0.0773 |
+| `FIFO_xgb_none` | 0.8576 | 0.1176 | 0.1921 | 0.4386 | 0.1938 | 0.1905 |
+| `FIFO_xgb_over` | 0.8156 | 0.0490 | 0.1062 | 0.3797 | 0.1465 | 0.0841 |
+| `FIFO_xgb_under` | 0.8576 | 0.1215 | 0.1917 | 0.4611 | 0.2145 | 0.1732 |
+
+**跨採樣（最新窗口）（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `SamplingNewest_lgb` | 0.8193 | 0.0702 | 0.1040 | 0.3768 | 0.1442 | 0.0816 |
+| `SamplingNewest_lr` | 0.8000 | 0.0674 | 0.1024 | 0.4170 | 0.1776 | 0.0722 |
+| `SamplingNewest_mlp` | 0.6562 | 0.0468 | 0.0657 | 0.3038 | 0.0946 | 0.0549 |
+| `SamplingNewest_rf` | 0.8579 | 0.0542 | 0.1150 | 0.4744 | 0.2307 | 0.0767 |
+| `SamplingNewest_svm` | 0.7357 | 0.0536 | 0.0946 | 0.3629 | 0.1338 | 0.0739 |
+| `SamplingNewest_xgb` | 0.8349 | 0.0809 | 0.1193 | 0.3668 | 0.1361 | 0.1066 |
+
+**跨採樣＋FIFO（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `SamplingFIFO_lgb` | 0.8211 | 0.0644 | 0.1088 | 0.4058 | 0.1684 | 0.0808 |
+| `SamplingFIFO_lr` | 0.8025 | 0.0747 | 0.1176 | 0.3877 | 0.1522 | 0.0959 |
+| `SamplingFIFO_mlp` | 0.6811 | 0.0463 | 0.0714 | 0.2797 | 0.0807 | 0.0732 |
+| `SamplingFIFO_rf` | 0.8642 | 0.0507 | 0.1024 | 0.4117 | 0.1753 | 0.0732 |
+| `SamplingFIFO_svm` | 0.7401 | 0.0578 | 0.0852 | 0.3564 | 0.1292 | 0.0636 |
+| `SamplingFIFO_xgb` | 0.8370 | 0.0715 | 0.1169 | 0.3889 | 0.1534 | 0.0945 |
+
+**跨分類器（最新窗口）（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `ClassifierNewest_hybrid` | 0.8161 | 0.0619 | 0.1270 | 0.4109 | 0.1719 | 0.1015 |
+| `ClassifierNewest_none` | 0.8532 | 0.1318 | 0.1835 | 0.4737 | 0.2272 | 0.1539 |
+| `ClassifierNewest_over` | 0.8128 | 0.0614 | 0.1078 | 0.3979 | 0.1615 | 0.0814 |
+| `ClassifierNewest_under` | 0.8534 | 0.1242 | 0.1744 | 0.4702 | 0.2238 | 0.1430 |
+
+**跨分類器＋FIFO（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `ClassifierFIFO_hybrid` | 0.8215 | 0.0555 | 0.1089 | 0.3769 | 0.1442 | 0.0876 |
+| `ClassifierFIFO_none` | 0.8607 | 0.1544 | 0.1949 | 0.4708 | 0.2238 | 0.1747 |
+| `ClassifierFIFO_over` | 0.8183 | 0.0548 | 0.1146 | 0.3888 | 0.1534 | 0.0915 |
+| `ClassifierFIFO_under` | 0.8625 | 0.1511 | 0.1943 | 0.4656 | 0.2191 | 0.1759 |
+
+**跨分類器＋跨採樣（最新窗口）（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `CombinedNewest` | 0.8262 | 0.0878 | 0.1311 | 0.4355 | 0.1938 | 0.1000 |
+
+**跨分類器＋跨採樣＋FIFO（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `CombinedFIFO` | 0.8318 | 0.0803 | 0.1230 | 0.3746 | 0.1419 | 0.1087 |
+
+**Validation 選擇集成策略（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `ValidationSelectedEnsemble` | 0.8249 | 0.0982 | 0.1937 | 0.4294 | 0.1857 | 0.2029 |
+
+#### 4.5.8.3 特徵選擇
+
+**選定集成的 FS 對照（含 no-FS）（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `SelectedEnsemble_cart_r50` | 0.8261 | 0.1131 | 0.1916 | 0.4372 | 0.1926 | 0.2014 |
+| `SelectedEnsemble_cart_r80` | 0.8210 | 0.1073 | 0.1784 | 0.4303 | 0.1869 | 0.1783 |
+| `SelectedEnsemble_mi_r50` | 0.8278 | 0.0981 | 0.1774 | 0.4420 | 0.1972 | 0.1612 |
+| `SelectedEnsemble_mi_r80` | 0.8219 | 0.1005 | 0.1902 | 0.4564 | 0.2111 | 0.1852 |
+| `SelectedEnsemble_none_r100` | 0.8249 | 0.0982 | 0.1937 | 0.4294 | 0.1857 | 0.2029 |
+| `SelectedEnsemble_rfe_r50` | 0.8274 | 0.1038 | 0.1803 | 0.4220 | 0.1799 | 0.1899 |
+| `SelectedEnsemble_rfe_r80` | 0.8208 | 0.1051 | 0.1934 | 0.4511 | 0.2053 | 0.1899 |
+| `SelectedEnsemble_shap_r50` | 0.8344 | 0.1152 | 0.1871 | 0.4535 | 0.2076 | 0.1716 |
+| `SelectedEnsemble_shap_r80` | 0.8223 | 0.1085 | 0.1878 | 0.4397 | 0.1949 | 0.1838 |
+
+**Validation 再選擇 FS／no-FS 策略（Pooled）**
+
+| 配置 | AUC | AP | F1 | G-Mean | Recall | Precision |
+|---|---:|---:|---:|---:|---:|---:|
+| `ValidationSelectedFS` | 0.8269 | 0.0986 | 0.1891 | 0.4128 | 0.1719 | 0.2152 |
+
+上述比較保留全部預定義配置，沒有將最高 Test 分數當作可部署的選擇規則。只有 ValidationSelectedEnsemble 與 ValidationSelectedFS 代表逐年以 Validation AP 選擇的策略；固定配置的 Test 差異僅作描述。FS 的 no-FS 列重用相同已選集成，可作該階段的配對對照。尚未完成全部 seeds 與本輪差異的不確定性分析，不據此更新研究假設的最終判定、摘要或宣稱方法全面優越。
+
+
+<!-- STUDY3B_FULL_RESULTS_END -->
 
 ## 4.6 Study 4：成本敏感分析
 
@@ -1132,11 +1421,11 @@ Re-training 的 Type 1 Error 高達 0.2450，遠超 ensemble\_new\_3 的 0.0674�
 
 ### 4.7.2 動態選擇在非平穩資料中的侷限性
 
-DES 和 DCS 的設計前提是「特徵空間中的局部相似性能反映預測能力的相似性」。然而，在跨越金融危機的時序切割下，以 2008 年前後樣本混合構建的 DSEL 中，K-NN 鄰域可能同時包含危機前與危機後的樣本，導致局部競爭力估計失準。此發現為 DES 在時序概念漂移資料中的應用提供了實證邊界：當 DSEL 無法保持局部分布一致性時，靜態集成反而更穩健。
+本研究只對特定 DES／DCS 實作提供診斷。局部鄰域混合不同時期可能影響能力估計，但本文未單獨識別此機制；靜態端的 Test-selected oracle 與 DSEL 重疊限制，也使結果無法支持靜態集成普遍更穩健。
 
 ### 4.7.3 特徵選取的穩定性議題
 
-Study 2 的特徵穩定性分析揭示了一個在時序資料中常被忽略的問題：特徵選取策略不只影響當期效能，更影響選出特徵集的跨期一致性。r50 在各方法下的 Jaccard 均值普遍低於 r80，意謂著保留 50% 特徵的策略在不同年份切割下的特徵集相差較大，可能導致在不同時期部署模型時，特徵的語意解讀不一致。r80 在降維與穩定性之間提供了較佳的平衡點。
+Study 2 的 r80 原始 Jaccard 均值較高，但特徵集合較大本身會提高機會重疊，且 105 pair 非獨立。因此本稿僅描述集合重疊，不將 r80 解讀為更佳穩定性或最佳降維平衡點。Chance-adjusted 指標及合適的重抽設計留作未來研究，不列為 B 主線收斂前必須追加的實驗。
 
 ### 4.7.4 DAWCE 框架的機制合理性
 
@@ -1167,9 +1456,9 @@ Study 3A 與 3B 對歷史知識提出兩種不同處理。A 路線允許 Validat
 | H₂₁：MI r80 FS 提升 AUC | **診斷性支持** | 相依 15-split 原始 p = 0.000305 |
 | H₂₂：r80 穩定性 > r50 | **描述性支持，確認性檢定無效** | r80 均值較高；105 pair 存在偽重複 |
 | H₃₁：Selected weighting > Equal | **部分支持** | 15-split 方向一致；rolling 僅 AUC 對 Equal6 經 Holm 後顯著 |
-| H₃₂：ROSS ≥ Fixed boundary | **不成立** | ValROSS no-FS F1 = 0.1947 < Fixed no-FS F1 = 0.2039 |
+| H₃₂：ROSS ≥ Fixed boundary | **未建立無偏比較結論** | 表 4-7 為 Test-selected 權重摘要，不用於確認此假設 |
 | H₃₃：Pool3 > Pool1 | **整體設計方向支持，機制未分離** | AP/AUC/Recall 差的公司 bootstrap CI 未跨 0；但 Pool3 同時增加歷史涵蓋，對同五年 Recent5y 的 AP 差 CI 跨 0 |
-| H₃₄：Tomek／三年／Pool3 為最佳組合 | **尚未獲支持** | Tomek vs None、Window3 vs Window1/5 的主要 ranking CI 跨 0；Pool3 未一致高於 Pool2/5；未設等效界值，故不作「不成立」推論 |
+| H₃₄：參考設定的敏感度與取捨 | **尚未獲支持** | Tomek vs None、Window3 vs Window1/5 的主要 ranking CI 跨 0；Pool3 未一致高於 Pool2/5；未設等效界值，故不作「不成立」推論 |
 | H₄₁：10-seed 重現性 | **未完成主流程驗證** | 現有結果為 LightGBM/block-CV；seed 傳遞已修正但尚未依主流程重跑 |
 
 **核心結論陳述**
@@ -1180,7 +1469,7 @@ Study 3A 與 3B 對歷史知識提出兩種不同處理。A 路線允許 Validat
 
 3. **特徵選取的效能與穩定性線索（H₂₁、H₂₂ 尚待獨立驗證）**。MI r80 對 New\_3 AUC 呈正向診斷結果，表列穩定性組合的 r80 Jaccard 均值也高於 r50；但 15-split 相依性與 105 個 pair 的偽重複使原始 p-value 不具確認性。80% 保留率可視為本資料上的候選設定，尚不能宣稱為帕雷托最佳或一般性最佳點。
 
-4. **DAWCE 改善等權集成，但 ROSS 未優於固定邊界，且 DAWCE 未超越強單模型（H₃₁ 部分支持、H₃₂ 不支持）**。ROSS 依 Validation AUC 將候選邊界從 2012 年調整至 2009 年，但 ValROSS no-FS 的 Test F1（0.1947）低於 Fixed no-FS（0.2039）。DAWCE 對 Equal6 的 15-split 差異具一致方向；rolling 中 AdaptiveChoice 僅在 AUC 上經 Holm 校正後優於 Equal6。公平消融與 rolling 均未顯示 DAWCE/AdaptiveChoice 優於 `New_under`，故證據支持「避免固定等權稀釋」，不支持動態框架必然優於固定邊界或最佳單模型。
+4. **Validation 選擇有條件改善等權基準，未建立對強單模型的優勢**。相依 15-split 僅作方向性診斷；rolling 中 AdaptiveChoice 的年度 AUC 對 Equal6 經 Holm 校正後為正，但仍受年度相依性限制。表 4-7 為 Test-selected 權重摘要，不用於確認 ROSS 對固定邊界的優劣。公平消融與 rolling 未建立 DAWCE／AdaptiveChoice 超越 `New_under` 的證據。
 
 5. **條件錯誤成本敏感度顯示排序會隨權重改變**。在未依盛行率加權的 $S_r=\mathrm{FPR}+r\mathrm{FNR}$ 下，不同 $r$ 會選出不同配置。此項只作排序敏感度診斷；在加入類別盛行率與實際 FP/FN 金額前，不解讀為部署期望成本。
 
@@ -1188,7 +1477,8 @@ Study 3A 與 3B 對歷史知識提出兩種不同處理。A 路線允許 Validat
 
 7. **B-model 建立可持續模型生命週期，而 Pool3 整體設計具有方向性支持（H₃₃）**。固定三年窗口與 Tomek 下，Pool3 相較 Pool1 的 AP、AUC 與 Recall 差異區間未跨零；但模型數增加亦同步延長歷史聯集，對同五年 Recent5y 的 AP 差區間跨零。B-model 對同目標 A-inspired baseline 的點估計較高，但差異區間也跨零。故目前貢獻在於可恢復、活躍池容量固定的更新機制與多窗口互補線索，不是 A/B 勝負或純集成效益定論。
 
-8. **主設定不是已證明的最佳前處理組合（H₃₄ 不支持）**。Sampling 消融未確認 Tomek 優於 None；Pool5 具有最高 AP/AUC、Pool2 具有最高 F1、Pool3 具有最高一般閾值 Recall；窗口五年提高 Recall、三年提高 AP、窗口一年提高 F1/Precision 並大幅降低 fitting rows。三年／Pool3／Tomek 應稱為預先指定基準，不得稱為最佳組合。
+8. **主設定不是已證明的最佳前處理組合（H₃₄ 不支持）**。Sampling 消融未確認 Tomek 優於 None；在原容量消融中，Pool5 具有最高 AP/AUC、Pool2 具有最高 F1、Pool3 具有最高一般閾值 Recall。新增 2／3／5／7 年窗口分析中，FIFO3 的年度平均 AP 為 0.1474／0.1418／0.1307／0.1291；七年 AUC、五年 Recall 與三年 F1 的點估計較高，但三年相對其餘窗口的 AP 公司及年度區塊區間均跨零。兩年 AP 較高不足以支持事後改選；三年／Pool3／Tomek 應稱為預先指定基準，不得稱為最佳組合。
+
 
 ---
 
@@ -1204,7 +1494,7 @@ Study 3A 與 3B 對歷史知識提出兩種不同處理。A 路線允許 Validat
 
 - **邊界選擇的重新定義**：ROSS 將「Old/New 分界點選擇」從人工假設或即時偵測器觸發的問題，重新定義為以驗證集 F1/AUC 為目標函數的回溯最佳化問題（Algorithm 1）。此重新定義使邊界選擇具備可重現性、客觀性，並對「初始期不穩定」的資料具備天然適應性——這是傳統偵測器無法提供的特性。
 
-- **群組加權的設計**：DAWCE 以模型「所屬時期群組」而非「個別模型表現」為加權粒度，允許選擇 $w_{\text{new}} = 1.0$ 的極端配置，在新期知識明顯占優的情境下（本研究 Study 1 以 $p < 0.001$ 確認）反映更精確的知識優先性。探索性 AWE-inspired 診斷中，個別權重因各模型 AUC 差距有限，Old/New 比例仍接近 0.14:0.19；此結果用於說明機制差異，不作無偏效能比較。
+- **群組加權的設計**：DAWCE 以模型「所屬時期群組」而非「個別模型表現」為加權粒度，允許選擇 $w_{\text{new}} = 1.0$ 的極端配置，在新期知識明顯占優的情境下（Study 1 僅提供相依切割下的描述性方向）反映更精確的知識優先性。探索性 AWE-inspired 診斷中，個別權重因各模型 AUC 差距有限，Old/New 比例仍接近 0.14:0.19；此結果用於說明機制差異，不作無偏效能比較。
 
 DAWCE 不引入新的分類器架構，而是在現有模型池基礎上以 validation-guided 最佳化系統性處理兩個長期依賴人工決策的問題，具備較低的遷移成本。公平消融同時界定其限制：現行群組加權只改善群組間比例，無法自動排除群組內弱模型；因此其方法貢獻是可重現的決策框架，而非在所有設定下優於單模型的新分類器。
 
@@ -1238,7 +1528,7 @@ Study 3B 將「模型可永續推移」轉為可測試的生命週期契約：�
 
 **限制 1：結論的資料集特異性**
 
-本研究的所有統計推論均基於單一資料集（美國破產預測，1999–2018）。Medical（Diabetes 130）與 Stock 資料集的結果僅作輔助參考，尚未達到支持跨域普化的論證強度。具體而言，以下結論目前僅在破產預測情境下獲得統計支持：(a) ROSS 可由 Validation 自動選出邊界；(b) validation-selected weighting 優於固定等權；(c) 在公平消融下，`New_under` 優於現行 DAWCE；(d) Static oracle upper bound 高於 DES/DCS。上述結果均不應外推為跨資料集的一般定律。
+本稿實證來自單一美國破產資料集。A 的相依切割、oracle 與重疊驗證只作診斷；rolling 對 Equal6 的有限支持、B 的 pooled 公司區間及敏感度均不能外推為跨市場普遍效益。Medical／Stock 不作本文跨域驗證證據。
 
 **限制 2：ROSS 的回顧式設計**
 
@@ -1250,7 +1540,7 @@ ROSS 在設計上為離線、回顧式搜尋，需要上一批次完整標籤才
 
 **限制 4：前處理修正後仍需跨資料集重現**
 
-本研究已修正 Phase 4/5 確認性實驗的前處理流程：缺失值補值、StandardScaler 與特徵選取器均僅以 fitting data 擬合，再套用至 Validation 與 Test，並重跑主要 ROSS、DAWCE、15-split 與公平消融結果。修正後部分原始效能主張不再成立，顯示前處理隔離的重要性；目前更新後結論仍僅建立於單一主要資料集，需再以其他時序資料集重現。
+現行 Phase 4 前處理已使用 fitting data 的均值與 scaler，B 亦保存各模型獨立前處理及訓練來源。但現行程式狀態不等於所有歷史檔案都有完整版本證據；本文將缺乏完整 provenance、Test-selected 或 Validation 重疊的 A 表格保留為歷史診斷，不納入主要無偏結論。
 
 **限制 5：AWE-inspired 診斷的 Validation 重疊**
 
@@ -1266,7 +1556,7 @@ ROSS 在設計上為離線、回顧式搜尋，需要上一批次完整標籤才
 
 **限制 8：公司年度 panel 與 entity-level 泛化**
 
-訓練期與測試期公司高度重疊：3,700 家測試公司中有 3,232 家（87.35%）已出現在訓練期，而且同一公司的標籤在資料內固定。模型雖未使用公司識別碼，但目前結果主要衡量已見與未見公司混合的未來年度辨識，不能直接外推為對全新公司的泛化能力。後續應報告 seen/unseen company 分層效能，並加入 company-level holdout 或 cluster bootstrap。
+既有 A 狀態目標切割的訓練期與測試期公司高度重疊：3,700 家測試公司中有 3,232 家（87.35%）已出現在訓練期，而且原始 status_label 對公司固定；此敘述不適用於 B 的逐列重建事件 target。模型雖未使用公司識別碼，但目前結果主要衡量已見與未見公司混合的未來年度辨識，不能直接外推為對全新公司的泛化能力。後續應報告 seen/unseen company 分層效能，並加入 company-level holdout 或 cluster bootstrap。
 
 **限制 9：特徵穩定性檢定的偽重複**
 
@@ -1274,7 +1564,7 @@ ROSS 在設計上為離線、回顧式搜尋，需要上一批次完整標籤才
 
 **限制 10：多種子驗證尚未對齊主流程**
 
-現有 10-seed 結果採 LightGBM/block-CV，並非主要 XGBoost 實驗的完整重跑；產生舊結果時 DES 路徑也未完整接收外部 seed。程式已修正，但 H₄₁ 尚未獲確認，仍需統一資料切割、基學習器、取樣、DSEL 與閾值後重新驗證。
+現有 10-seed 結果採 LightGBM/block-CV，並非主要 XGBoost 實驗的完整重跑；產生舊結果時 DES 路徑也未完整接收外部 seed。程式已修正，但 H₄₁ 尚未獲確認，若未來保留 A 主流程重現性主張，需統一資料切割、基學習器、取樣、DSEL 與閾值後另行驗證；本稿不作該主張。
 
 **限制 11：不平衡指標與成本解讀尚待補強**
 
@@ -1288,6 +1578,9 @@ Study 3B 已以 AP 作主要指標並報公司群聚區間，但既有 Study 1�
 
 Study 3B 的 paired bootstrap 以公司為群聚單位，能避免把同公司跨年度列當成完全獨立；2009–2018 主比較使用 5,512 家公司，Old/New 同步滑動延伸則涵蓋 2003–2018。兩者都未重抽時間區塊，也未重新訓練模型，因此區間只反映既有 predictions 的公司組成不確定性，不等於未來景氣循環、訓練變異或跨市場不確定性。凍結模型老化矩陣在高年齡只剩早期 origin cohorts，亦不能將觀察到的 AP 下降解讀為純模型年齡的因果效果。
 
+§4.5.6.1 的擴充另補年度 AP 差的 circular moving-block bootstrap（區塊長度 2／3），不回溯取代上述既有公司區間。此分析僅有十個年度，區塊長度選擇及首尾循環連接皆是敏感度假設；它未重訓模型，也未聯合重抽公司與時間。三年 FIFO3 對 Newest 的年度 AP 差區間跨零，故正文所述公司群聚優勢應保留此時間限制。十個種子的預測一致只表示本次管線未呈現可觀測的 seed 變異，不能排除資料擾動、不同景氣或跨市場風險。
+
+
 **限制 14：消融尚未覆蓋交互作用**
 
 Sampling、Pool size 與 Window width 目前採單因子消融，可辨識各因素在主設定附近的邊際效果，但沒有完整 factorial design。因本輪主要差異多有重疊區間，若事後依 Test 搜尋所有組合，將產生多重比較與 winner's curse；後續應先預註冊主要指標、候選組合與選擇規則。
@@ -1296,7 +1589,7 @@ Sampling、Pool size 與 Window width 目前採單因子消融，可辨識各因
 
 **方向 1：補強 B 路線的時間推論與退休規則**
 
-在不回頭使用既有 Test 選參的前提下，預先比較 FIFO 與 Validation-based retirement，並加入年度 block bootstrap、rolling-origin 跨期摘要及更新 wall time／記憶體／磁碟成本。由於只有十個測試年度，時間推論應以敏感度和效果方向呈現，不追求過度精確的 p-value。
+在不回頭使用既有 Test 選參的前提下，預先比較 FIFO 與 Validation-based retirement。本次窗口擴充已補年度區塊敏感度、跨期 AP 摘要與 fitting 時間；後續仍需公司與時間聯合不確定性、完整更新 wall time、記憶體及磁碟成本。由於只有十個測試年度，時間推論應以敏感度和效果方向呈現，不追求過度精確的 p-value。
 
 **方向 2：取得可驗證的事件日期與標籤成熟時間**
 
@@ -1332,9 +1625,9 @@ Baena-García, M., del Campo-Ávila, J., Fidalgo, R., Bifet, A., Gavalda, R., & 
 
 Bifet, A., & Gavalda, R. (2007). Learning from time-changing data with adaptive windowing. In *Proceedings of the 2007 SIAM International Conference on Data Mining* (pp. 443–448). SIAM. https://doi.org/10.1137/1.9781611972771.42
 
-Brzezinski, D., & Stefanowski, J. (2014). Reacting to different types of concept drift: The accuracy updated ensemble algorithm. *IEEE Transactions on Neural Networks and Learning Systems*, *25*(1), 81–94. https://doi.org/10.1109/TNNLS.2013.2251352
+Brzezinski, D., & Stefanowski, J. (2014b). Reacting to different types of concept drift: The accuracy updated ensemble algorithm. *IEEE Transactions on Neural Networks and Learning Systems*, *25*(1), 81–94. https://doi.org/10.1109/TNNLS.2013.2251352
 
-Brzezinski, D., & Stefanowski, J. (2014). Combining block-based and online methods in learning ensembles from concept drifting data streams. *Information Sciences*, *265*, 50–67. https://doi.org/10.1016/j.ins.2013.12.011
+Brzezinski, D., & Stefanowski, J. (2014a). Combining block-based and online methods in learning ensembles from concept drifting data streams. *Information Sciences*, *265*, 50–67. https://doi.org/10.1016/j.ins.2013.12.011
 
 Chawla, N. V., Bowyer, K. W., Hall, L. O., & Kegelmeyer, W. P. (2002). SMOTE: Synthetic minority over-sampling technique. *Journal of Artificial Intelligence Research*, *16*, 321–357. https://doi.org/10.1613/jair.953
 
@@ -1380,7 +1673,7 @@ Wang, H., Fan, W., Yu, P. S., & Han, J. (2003). Mining concept-drifting data str
 
 Wang, L., Zhang, X., Su, H., & Zhu, J. (2024). A comprehensive survey of continual learning: Theory, method and application. *IEEE Transactions on Pattern Analysis and Machine Intelligence*, *46*(8), 5362–5383. https://doi.org/10.1109/TPAMI.2024.3367329
 
-Wang, S., Minku, L. L., & Yao, X. (2013). Resampling-based ensemble methods for online class imbalance learning. *IEEE Transactions on Knowledge and Data Engineering*, *27*(5), 1356–1368. https://doi.org/10.1109/TKDE.2014.2345380
+Wang, S., Minku, L. L., & Yao, X. (2015). Resampling-based ensemble methods for online class imbalance learning. *IEEE Transactions on Knowledge and Data Engineering*, *27*(5), 1356–1368. https://doi.org/10.1109/TKDE.2014.2345380
 
 Žliobaitė, I. (2010). Learning under concept drift: An overview. *arXiv preprint arXiv:1010.4784*. https://arxiv.org/abs/1010.4784
 

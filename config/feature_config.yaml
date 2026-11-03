@@ -62,14 +62,6 @@ time_series_features:
     - "is_quarter_end"
     - "is_month_end"
     
-  # Technical indicators (for stock data)
-  technical_indicators:
-    - "SMA"   # Simple Moving Average
-    - "EMA"   # Exponential Moving Average
-    - "RSI"   # Relative Strength Index
-    - "MACD"  # Moving Average Convergence Divergence
-    - "Bollinger_Bands"
-    - "ATR"   # Average True Range
 
 # Feature importance threshold
 importance_threshold: 0.01  # Features below this importance will be removed

@@ -1,0 +1,45 @@
+{
+  "selected_config": "ClassifierFIFO_under",
+  "selected_fs": "none_r100",
+  "ranking": [
+    {
+      "candidate": "none_r100",
+      "validation_AP": 0.3075789585174116
+    },
+    {
+      "candidate": "rfe_r80",
+      "validation_AP": 0.30254181910648187
+    },
+    {
+      "candidate": "rfe_r50",
+      "validation_AP": 0.29273488239126977
+    },
+    {
+      "candidate": "cart_r80",
+      "validation_AP": 0.2779289268067073
+    },
+    {
+      "candidate": "mi_r80",
+      "validation_AP": 0.2706880494133826
+    },
+    {
+      "candidate": "cart_r50",
+      "validation_AP": 0.2700945016770449
+    },
+    {
+      "candidate": "shap_r50",
+      "validation_AP": 0.25986845010437765
+    },
+    {
+      "candidate": "shap_r80",
+      "validation_AP": 0.24932503588690164
+    },
+    {
+      "candidate": "mi_r50",
+      "validation_AP": 0.17896130095054355
+    }
+  ],
+  "validation_year": 2012,
+  "test_used": false,
+  "note": "Sequential screening reuses validation; final evidence is held-out annual test"
+}

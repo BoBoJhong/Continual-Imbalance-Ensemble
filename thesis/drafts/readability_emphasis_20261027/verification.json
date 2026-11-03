@@ -1,0 +1,61 @@
+{
+  "status": "passed",
+  "pages": 65,
+  "pdf_sha256": "b2fd551ce9d3a9c77b7828ebae5efcca939bcbd03571f23c2df4fe3547f0888f",
+  "locations": {
+    "Baseline 指定情境之驗證選定超參數": [
+      10,
+      23
+    ],
+    "實驗一 Baseline 各分類器與訓練策略之測試結果": [
+      10,
+      41
+    ],
+    "實驗二各特徵條件之 pooled AUC": [
+      10,
+      46
+    ],
+    "實驗二各特徵條件之 pooled F1-score": [
+      10,
+      46
+    ],
+    "以公司為單位的統計比較": [
+      7,
+      38
+    ],
+    "可解釋人工智慧": [
+      6,
+      14,
+      33
+    ]
+  },
+  "native_compile": "passed",
+  "source_hashes_current": true,
+  "compile_issues": [],
+  "tests_passed": 24,
+  "editor_compile": "success",
+  "visual_review": "All pages reviewed in contact sheets; selected parameter table, XAI text, statistical explanation, Baseline and FS result tables inspected at larger size; final paragraph pagination checked.",
+  "bold_rule": "within specified comparison groups; displayed ties included; not significance or Test selection",
+  "hyperparameter_context": "Old 1999–2011 / Hybrid; six saved validation-selected configurations",
+  "references": [
+    {
+      "title": "A problem-agnostic approach to feature selection and analysis using SHAP",
+      "year": 2025,
+      "doi": "10.1186/s40537-024-01041-1",
+      "source": "https://link.springer.com/article/10.1186/s40537-024-01041-1"
+    },
+    {
+      "title": "Statistical Significance of Feature Importance Rankings",
+      "year": 2025,
+      "source": "https://proceedings.mlr.press/v286/goldwasser25a.html"
+    }
+  ],
+  "bold_numeric_spans": {
+    "23": 34,
+    "41": 21,
+    "46": 13
+  },
+  "source_checks": "all five passed",
+  "handoff": "thesis/handoffs/20261027T122402493037Z",
+  "handoff_check": "passed"
+}

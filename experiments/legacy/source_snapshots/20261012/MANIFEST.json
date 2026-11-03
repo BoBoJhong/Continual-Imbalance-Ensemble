@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-12",
+  "reason": "Preserve exact pre-refactor sources used by existing manifests; shared helper extraction only.",
+  "files": [
+    {
+      "original_path": "experiments/phase_flexible/study3b_full_pipeline.py",
+      "snapshot_path": "study3b_full_pipeline.py.txt",
+      "sha256": "fb4e7479029210c45afd9c83c530c36e6bff909b421af6b27a960775a8aac91c"
+    },
+    {
+      "original_path": "experiments/phase2_ensemble/dynamic/des/bankruptcy_standard_dynamic.py",
+      "snapshot_path": "bankruptcy_standard_dynamic.py.txt",
+      "sha256": "cd2f915543f66238c7fda57cac875eda5698e77ea0201d37ba40543da1477191"
+    }
+  ]
+}

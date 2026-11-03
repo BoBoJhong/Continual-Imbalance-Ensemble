@@ -1,0 +1,209 @@
+{
+  "selected": "FIFO_rf_under",
+  "ranking": [
+    {
+      "candidate": "FIFO_rf_under",
+      "validation_AP": 0.3084968024885877
+    },
+    {
+      "candidate": "FIFO_rf_none",
+      "validation_AP": 0.3059894622224693
+    },
+    {
+      "candidate": "ClassifierFIFO_under",
+      "validation_AP": 0.26068013505611054
+    },
+    {
+      "candidate": "ClassifierFIFO_none",
+      "validation_AP": 0.2593637346690348
+    },
+    {
+      "candidate": "ClassifierNewest_under",
+      "validation_AP": 0.2583118831210723
+    },
+    {
+      "candidate": "ClassifierNewest_none",
+      "validation_AP": 0.23887883458209608
+    },
+    {
+      "candidate": "FIFO_lgb_under",
+      "validation_AP": 0.21922355035701874
+    },
+    {
+      "candidate": "SamplingFIFO_lr",
+      "validation_AP": 0.20921012171891026
+    },
+    {
+      "candidate": "FIFO_lr_under",
+      "validation_AP": 0.2090926816218251
+    },
+    {
+      "candidate": "FIFO_lr_none",
+      "validation_AP": 0.20270741835399705
+    },
+    {
+      "candidate": "FIFO_lgb_none",
+      "validation_AP": 0.20137314113067992
+    },
+    {
+      "candidate": "FIFO_lr_over",
+      "validation_AP": 0.19445280176980265
+    },
+    {
+      "candidate": "FIFO_lr_hybrid",
+      "validation_AP": 0.19082819850707147
+    },
+    {
+      "candidate": "FIFO_xgb_under",
+      "validation_AP": 0.19063189484901852
+    },
+    {
+      "candidate": "SamplingFIFO_lgb",
+      "validation_AP": 0.18885928399115792
+    },
+    {
+      "candidate": "FIFO_xgb_none",
+      "validation_AP": 0.1843340999690969
+    },
+    {
+      "candidate": "FIFO_lgb_hybrid",
+      "validation_AP": 0.18283670318519565
+    },
+    {
+      "candidate": "SamplingFIFO_xgb",
+      "validation_AP": 0.18002722406107793
+    },
+    {
+      "candidate": "SamplingNewest_lr",
+      "validation_AP": 0.175854208986803
+    },
+    {
+      "candidate": "FIFO_lgb_over",
+      "validation_AP": 0.16272453993418684
+    },
+    {
+      "candidate": "SamplingNewest_lgb",
+      "validation_AP": 0.1600238704100276
+    },
+    {
+      "candidate": "FIFO_xgb_hybrid",
+      "validation_AP": 0.146096048587258
+    },
+    {
+      "candidate": "SamplingFIFO_rf",
+      "validation_AP": 0.13700552148563802
+    },
+    {
+      "candidate": "FIFO_xgb_over",
+      "validation_AP": 0.13694560202157308
+    },
+    {
+      "candidate": "CombinedFIFO",
+      "validation_AP": 0.13373765936486465
+    },
+    {
+      "candidate": "FIFO_mlp_under",
+      "validation_AP": 0.1325201329097227
+    },
+    {
+      "candidate": "CombinedNewest",
+      "validation_AP": 0.12650285584846022
+    },
+    {
+      "candidate": "FIFO_rf_hybrid",
+      "validation_AP": 0.12497121237237276
+    },
+    {
+      "candidate": "FIFO_rf_over",
+      "validation_AP": 0.12483354463307933
+    },
+    {
+      "candidate": "SamplingNewest_xgb",
+      "validation_AP": 0.11508552066333846
+    },
+    {
+      "candidate": "SamplingNewest_rf",
+      "validation_AP": 0.10389431661213154
+    },
+    {
+      "candidate": "SamplingNewest_mlp",
+      "validation_AP": 0.10337716472484461
+    },
+    {
+      "candidate": "ClassifierFIFO_hybrid",
+      "validation_AP": 0.090722031395111
+    },
+    {
+      "candidate": "ClassifierFIFO_over",
+      "validation_AP": 0.09055326249590422
+    },
+    {
+      "candidate": "FIFO_mlp_none",
+      "validation_AP": 0.087513246335017
+    },
+    {
+      "candidate": "FIFO_svm_none",
+      "validation_AP": 0.08076236150496466
+    },
+    {
+      "candidate": "ClassifierNewest_over",
+      "validation_AP": 0.07416082608878621
+    },
+    {
+      "candidate": "ClassifierNewest_hybrid",
+      "validation_AP": 0.07163978363251361
+    },
+    {
+      "candidate": "SamplingFIFO_mlp",
+      "validation_AP": 0.06940669660064036
+    },
+    {
+      "candidate": "FIFO_svm_under",
+      "validation_AP": 0.06427417792595772
+    },
+    {
+      "candidate": "FIFO_mlp_over",
+      "validation_AP": 0.0599326269682225
+    },
+    {
+      "candidate": "FIFO_mlp_hybrid",
+      "validation_AP": 0.05743811952175496
+    },
+    {
+      "candidate": "SamplingFIFO_svm",
+      "validation_AP": 0.022173585242891525
+    },
+    {
+      "candidate": "SamplingNewest_svm",
+      "validation_AP": 0.0219454752875739
+    },
+    {
+      "candidate": "FIFO_svm_over",
+      "validation_AP": 0.021816948515028536
+    },
+    {
+      "candidate": "FIFO_svm_hybrid",
+      "validation_AP": 0.020849083116559093
+    }
+  ],
+  "members": [
+    [
+      "rf",
+      "under",
+      2012
+    ],
+    [
+      "rf",
+      "under",
+      2013
+    ],
+    [
+      "rf",
+      "under",
+      2014
+    ]
+  ],
+  "validation_year": 2015,
+  "selection_metric": "AP",
+  "test_used": false
+}

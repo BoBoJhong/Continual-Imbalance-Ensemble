@@ -1,0 +1,68 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.125\linewidth}>{\raggedright\arraybackslash}p{0.125\linewidth}>{\raggedright\arraybackslash}p{0.125\linewidth}>{\raggedright\arraybackslash}p{0.125\linewidth}@{}}
+\caption{事件標籤 Baseline 各採樣設定之結果}\label{tab:results-baseline-sampling}\\
+\toprule
+分類器 & 策略 & 採樣 & 驗證 AUC & AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{7}{c}{表~\thetable（續）}\\
+\toprule
+分類器 & 策略 & 採樣 & 驗證 AUC & AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{7}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+\multirow[t]{12}{=}{XGBoost} & \multirow[t]{4}{=}{Old} & None & 0.8993 & \textbf{0.8716} & 0.1546 & \textbf{0.3143} \\*
+ &  & Under & \textbf{0.8994} & 0.8710 & \textbf{0.1590} & 0.2748 \\*
+ &  & Over & 0.7824 & 0.7532 & 0.0755 & 0.1630 \\*
+ &  & Hybrid & 0.7818 & 0.7544 & 0.0746 & 0.1731 \\*
+ & \multirow[t]{4}{=}{New} & None & \textbf{0.8461} & 0.7970 & \textbf{0.1663} & 0.3277 \\*
+ &  & Under & 0.8457 & 0.7965 & 0.1595 & 0.3109 \\*
+ &  & Over & 0.8393 & \textbf{0.8577} & 0.1463 & \textbf{0.3689} \\*
+ &  & Hybrid & 0.8397 & \textbf{0.8577} & 0.1598 & 0.3496 \\*
+ & \multirow[t]{4}{=}{Retrain} & None & 0.9004 & 0.8799 & \textbf{0.1943} & 0.2849 \\*
+ &  & Under & \textbf{0.9009} & \textbf{0.8862} & 0.1830 & \textbf{0.3252} \\*
+ &  & Over & 0.7955 & 0.7644 & 0.0771 & 0.1714 \\*
+ &  & Hybrid & 0.7973 & 0.7673 & 0.0759 & 0.1319 \\
+\addlinespace[4pt]
+\multirow[t]{12}{=}{LightGBM} & \multirow[t]{4}{=}{Old} & None & 0.9042 & \textbf{0.8691} & \textbf{0.1429} & \textbf{0.4782} \\*
+ &  & Under & \textbf{0.9046} & 0.8689 & 0.1405 & \textbf{0.4782} \\*
+ &  & Over & 0.7794 & 0.7564 & 0.0810 & 0.1412 \\*
+ &  & Hybrid & 0.7389 & 0.7548 & 0.0629 & 0.1597 \\*
+ & \multirow[t]{4}{=}{New} & None & 0.8453 & \textbf{0.8677} & \textbf{0.1534} & 0.0975 \\*
+ &  & Under & 0.8428 & 0.8643 & 0.1356 & 0.0891 \\*
+ &  & Over & \textbf{0.8457} & 0.8645 & 0.1343 & 0.3639 \\*
+ &  & Hybrid & 0.8445 & 0.8619 & 0.1340 & \textbf{0.3790} \\*
+ & \multirow[t]{4}{=}{Retrain} & None & \textbf{0.9060} & \textbf{0.8793} & \textbf{0.1721} & \textbf{0.4445} \\*
+ &  & Under & 0.9003 & 0.8739 & 0.1362 & 0.1345 \\*
+ &  & Over & 0.7946 & 0.7779 & 0.0753 & 0.2689 \\*
+ &  & Hybrid & 0.8117 & 0.7886 & 0.0674 & 0.3706 \\
+\addlinespace[4pt]
+\multirow[t]{12}{=}{Random Forest} & \multirow[t]{4}{=}{Old} & None & 0.9060 & \textbf{0.8847} & 0.2188 & 0.4277 \\*
+ &  & Under & \textbf{0.9105} & 0.8709 & \textbf{0.2423} & 0.3008 \\*
+ &  & Over & 0.8276 & 0.8075 & 0.0650 & \textbf{0.5504} \\*
+ &  & Hybrid & 0.8369 & 0.8118 & 0.0667 & 0.5235 \\*
+ & \multirow[t]{4}{=}{New} & None & 0.8370 & 0.8333 & 0.2956 & 0.3412 \\*
+ &  & Under & 0.8455 & \textbf{0.8433} & \textbf{0.3025} & 0.3286 \\*
+ &  & Over & \textbf{0.8513} & 0.8401 & 0.0832 & \textbf{0.4748} \\*
+ &  & Hybrid & 0.8512 & 0.8387 & 0.0758 & 0.3294 \\*
+ & \multirow[t]{4}{=}{Retrain} & None & \textbf{0.9106} & 0.8747 & \textbf{0.2499} & 0.3134 \\*
+ &  & Under & 0.9070 & \textbf{0.8880} & 0.2028 & 0.4882 \\*
+ &  & Over & 0.8340 & 0.8291 & 0.0688 & \textbf{0.5731} \\*
+ &  & Hybrid & 0.8320 & 0.8256 & 0.0698 & 0.5378 \\
+\addlinespace[4pt]
+\multirow[t]{12}{=}{Logistic Regression} & \multirow[t]{4}{=}{Old} & None & 0.8332 & 0.7523 & 0.1190 & \textbf{0.1765} \\*
+ &  & Under & 0.8320 & 0.7449 & 0.1203 & \textbf{0.1765} \\*
+ &  & Over & \textbf{0.8734} & \textbf{0.7901} & 0.1409 & 0.1697 \\*
+ &  & Hybrid & 0.8662 & \textbf{0.7901} & \textbf{0.1415} & 0.1756 \\*
+ & \multirow[t]{4}{=}{New} & None & 0.7982 & 0.7642 & 0.0990 & 0.2941 \\*
+ &  & Under & 0.7981 & 0.7642 & 0.1004 & \textbf{0.3025} \\*
+ &  & Over & \textbf{0.8164} & \textbf{0.7734} & 0.1288 & 0.1849 \\*
+ &  & Hybrid & 0.8120 & 0.7720 & \textbf{0.1361} & 0.1916 \\*
+ & \multirow[t]{4}{=}{Retrain} & None & 0.8422 & 0.7457 & 0.1114 & \textbf{0.1681} \\*
+ &  & Under & 0.8431 & 0.7445 & 0.1102 & \textbf{0.1681} \\*
+ &  & Over & 0.8606 & \textbf{0.7932} & 0.1370 & 0.1353 \\*
+ &  & Hybrid & \textbf{0.8627} & 0.7905 & \textbf{0.1441} & 0.1445 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究事件標籤 Baseline 實驗結果)\par 各值為十個種子平均；超參數依 2014 年驗證 AUC 由 24 組候選選出，候選 0 為集成池使用的預設參數。粗體比較同一分類器與策略下的四種採樣。Under、Over、Hybrid 分別為 TomekLinks、ADASYN、SMOTEENN。}
+\endgroup

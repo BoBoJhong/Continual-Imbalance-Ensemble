@@ -1,0 +1,5 @@
+# Copy this section into your Codex config; do not replace the entire config.
+[mcp_servers.playwright]
+command = "node"
+args = ["C:/0_git workspace/Continual-Imbalance-Ensemble/scripts/thesis/start-playwright.mjs"]
+startup_timeout_sec = 60

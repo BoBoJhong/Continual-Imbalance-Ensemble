@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "n_test_rows": 12282,
+  "n_test_positive": 287,
+  "n_test_companies": 3700,
+  "n_positive_companies": 119,
+  "n_predictors_replayed": 560,
+  "n_tests": 165,
+  "max_metric_replay_error": 8.326672684688674e-17,
+  "kernel_unit_weight_error": 2.220446049250313e-16,
+  "row_pairing": "all 90 archives match exact source row IDs and labels",
+  "missing_configurations": 0,
+  "weights_sha256": "a7d6879d7135f8523556f48aaba13f2630c0c641808afee39a5dc65deee4bd18",
+  "rejected_by_experiment": {
+    "experiment1": 6,
+    "experiment2": 9
+  }
+}

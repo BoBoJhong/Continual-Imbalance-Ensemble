@@ -1,0 +1,9 @@
+# Preserve exact bytes for research inputs, provenance and hashed source snapshots.
+/data/** -text
+/results/** -text
+/thesis/** -text
+/experiments/** -text
+/scripts/** -text
+/src/** -text
+/config/** -text
+/docs/** -text

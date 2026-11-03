@@ -1,0 +1,29 @@
+\chapter{實驗設計與結果}
+\section{實驗環境}
+本節應記錄 Python、相關套件版本、硬體規格、隨機種子與訓練參數，以利實驗重現。
+\section{實驗結果}
+\begin{table}[htbp]
+  \centering
+  \caption{不同模型訓練策略比較表（欄位示例，請填入真實結果）}
+  \label{tab:baseline}
+  \begin{tabular}{lccc}
+    \toprule
+    訓練策略 & Precision & Recall & F1-score\\
+    \midrule
+    Old & --- & --- & ---\\
+    New & --- & --- & ---\\
+    Retrain & --- & --- & ---\\
+    \bottomrule
+  \end{tabular}
+
+  \smallskip{\small 資料來源：研究者整理（示例）。}
+\end{table}
+
+表~\ref{tab:baseline} 示範如何引用表格。請勿將破折號示例視為實際結果。
+\begin{figure}[htbp]
+\centering
+\fbox{\parbox[c][3cm][c]{0.7\textwidth}{\centering 此處放置研究流程圖或模型比較圖\\（示例占位）}}
+\caption{研究流程圖（示例）}\label{fig:framework}
+\end{figure}
+
+圖~\ref{fig:framework} 為圖片位置及連續編號示例。

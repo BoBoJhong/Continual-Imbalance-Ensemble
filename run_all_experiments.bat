@@ -5,7 +5,7 @@ echo.
 echo ============================================================
 echo  Continual-Imbalance-Ensemble  一鍵執行所有實驗
 echo ============================================================
-echo  Phase 1: Baseline          (bankruptcy / stock / medical)
+echo  Phase 1: Baseline          (bankruptcy / medical)
 echo  Phase 2: Ensemble          (static combinations)
 echo  Phase 3: Dynamic           (DES / DCS)
 echo  Phase 4: Feature (Study II)(feature selection sweep)

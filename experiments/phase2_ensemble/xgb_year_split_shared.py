@@ -1,5 +1,5 @@
 """
-XGB Old/New 年份切割 — 靜態與動態 DES 共用訓練（Bankruptcy / Stock / Medical）。
+XGB Old/New 年份切割 — 靜態與動態 DES 共用訓練（Bankruptcy / Medical）。
 """
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 from src.data import DataPreprocessor, ImbalanceSampler
 
 from experiments._shared.common_bankruptcy import YEAR_SPLITS, get_bankruptcy_year_split
-from experiments._shared.common_dataset import MEDICAL_YEAR_SPLITS, STOCK_YEAR_SPLITS, get_medical_year_split, get_stock_year_split
+from experiments._shared.common_dataset import MEDICAL_YEAR_SPLITS, get_medical_year_split
 
 from experiments.phase2_ensemble.xgb_oldnew_ensemble_common import (
     SAMPLING_STRATEGIES,
@@ -319,28 +319,6 @@ def iter_bankruptcy_year_splits(logger: logging.Logger) -> Tuple[List[dict], Lis
     return all_static, all_des
 
 
-def iter_stock_year_splits(logger: logging.Logger, ticker: str = "spx") -> Tuple[List[dict], List[dict]]:
-    sampler = ImbalanceSampler()
-    all_static: List[dict] = []
-    all_des: List[dict] = []
-    mi = f"_{ticker}"
-    for label, old_end_year in STOCK_YEAR_SPLITS:
-        sr, dr = process_one_year_split(
-            label,
-            old_end_year,
-            logger,
-            sampler,
-            get_split=lambda lg, oy, t=ticker: get_stock_year_split(
-                lg,
-                old_end_year=oy,
-                ticker=t,
-                return_years=True,
-            ),
-            model_infix=mi,
-        )
-        all_static.extend(sr)
-        all_des.extend(dr)
-    return all_static, all_des
 
 
 def iter_medical_year_splits(logger: logging.Logger) -> Tuple[List[dict], List[dict]]:

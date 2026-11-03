@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "pdf_sha256": "5f287d4d9ed640fca6fb791167f855ed4b7fbf4a0133cba1fdc5932096186afe",
+  "pdf_pages": 37,
+  "old_stage_titles_present": false,
+  "experiment1_pdf_page": 15,
+  "experiment1_printed_page": 5,
+  "experiment2_pdf_page": 23,
+  "experiment2_printed_page": 13,
+  "native_export": "passed; pinned Biber backend selected by environment wrapper",
+  "editor_preview": "passed; built-in compiler uses BibTeX backend by default",
+  "visual_check": "overview, experiment1, experiment2 and appendix pages reviewed"
+}

@@ -1,0 +1,26 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.25\linewidth}>{\raggedright\arraybackslash}p{0.69\linewidth}@{}}
+\caption{本研究本機設備與固定年份執行設定}\label{tab:method-hardware}\\
+\toprule
+項目 & 規格／設定 \\
+\midrule\endfirsthead
+\multicolumn{2}{c}{表~\thetable（續）}\\
+\toprule
+項目 & 規格／設定 \\
+\midrule\endhead
+\midrule\multicolumn{2}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+CPU & Intel Core i7-10870H，2.20 GHz；8 核心、16 邏輯處理器 \\
+記憶體 & 32 GB（安裝容量） \\
+作業系統 & Windows 11 家用版，64 位元；版本 10.0.26200 \\
+獨立顯示卡 & NVIDIA GeForce GTX 1650 Ti；4096 MiB 顯示記憶體 \\
+內建顯示晶片 & Intel UHD Graphics \\
+本機 NVIDIA 驅動 & 592.82（本次查核值） \\
+固定年份 XGBoost & CPU；hist 樹建構，未設定 CUDA device \\
+FS 執行 & scikit-learn 決策樹／MI 與 LightGBM CPU 設定；最多四執行緒 \\
+查核日期 & 2026 年 10 月 27 日 \\
+\end{longtable}
+\noindent{\footnotesize 資料來源：依使用者指定，採本機系統查核與實驗程式設定整理。設備具有 GPU 不代表所有方法都使用 GPU；本次查得的作業系統及驅動版本不回推為每次歷史執行的原始版本。}
+\endgroup

@@ -1,0 +1,372 @@
+[
+  {
+    "case": "prepared-package-check",
+    "outcome": "pass",
+    "expected": "pass",
+    "value": {
+      "schema_version": 1,
+      "status": "prepared_not_uploaded",
+      "created_at_utc": "2026-10-14T16:24:35.882664+00:00",
+      "target": {
+        "project_url": "https://www.overleaf.com/project/000000000000000000000000",
+        "project_id": "000000000000000000000000",
+        "local_source": "thesis/latex"
+      },
+      "document": "main",
+      "font_mode": "offline-fixture-default",
+      "files": [
+        {
+          "path": "chapters/03_method.tex",
+          "sha256": "750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c",
+          "matches_original_template": false
+        },
+        {
+          "path": "chapters/appendix.tex",
+          "sha256": "d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d",
+          "matches_original_template": false
+        },
+        {
+          "path": "chapters/current.tex",
+          "sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c",
+          "matches_original_template": true
+        }
+      ],
+      "compiled_source_sha256": {
+        "main.tex": "33ddde16e251331596b81e4fd5adc6cbbb67cf53fb5ca21a090043e84454a66a",
+        "chapters/03_method.tex": "750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c",
+        "chapters/appendix.tex": "d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d",
+        "chapters/current.tex": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c"
+      },
+      "result_source_sha256": {},
+      "pdf_sha256": "247f4a080ee001480e844d4131c3ff279b37ecf2a466a3ff23f6b4b8e6d76e2d",
+      "build_report_sha256": "5ba3032a0cdbd14a83709939b2857a488405cc4eb90f386e81b9dad5bee9c367",
+      "authorization": "A prepared package does not authorize online writing."
+    },
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n"
+  },
+  {
+    "case": "import-offline-full-backup-1",
+    "outcome": "pass",
+    "expected": "pass",
+    "value": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\scratch\\thesis_skill_forward_test\\scenario2\\zip-runs\\20261014T162435917871Z\\offline-full-backup-1\\source",
+    "console": "Imported full source ZIP: C:\\0_git workspace\\Continual-Imbalance-Ensemble\\scratch\\thesis_skill_forward_test\\scenario2\\zip-runs\\20261014T162435917871Z\\offline-full-backup-1\\source\n"
+  },
+  {
+    "case": "import-offline-full-backup-2",
+    "outcome": "pass",
+    "expected": "pass",
+    "value": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\scratch\\thesis_skill_forward_test\\scenario2\\zip-runs\\20261014T162435917871Z\\offline-full-backup-2\\source",
+    "console": "Imported full source ZIP: C:\\0_git workspace\\Continual-Imbalance-Ensemble\\scratch\\thesis_skill_forward_test\\scenario2\\zip-runs\\20261014T162435917871Z\\offline-full-backup-2\\source\n"
+  },
+  {
+    "case": "baseline-complete-fixture",
+    "outcome": "pass",
+    "expected": "pass",
+    "value": {
+      "project_id": "000000000000000000000000",
+      "observed_at_utc": "2026-10-14T16:24:36.112893+00:00",
+      "sha256": {
+        "chapters/03_method.tex": "e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af",
+        "chapters/appendix.tex": null,
+        "chapters/current.tex": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c"
+      },
+      "backup_archive_sha256": "0dec4686ddb945fe5460afc766c0b2a770363d4144ad0ff60de64e7b3c4d0f68",
+      "evidence": "Local comparison of a provided full backup; not live browser verification."
+    },
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\nRemote baseline recorded locally; this does not authorize overwriting it\n"
+  },
+  {
+    "case": "plan-unchanged-backup-update-create-current",
+    "outcome": "pass",
+    "expected": "pass",
+    "value": [
+      {
+        "path": "chapters/03_method.tex",
+        "action": "update",
+        "remote_sha256": "e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af",
+        "baseline_sha256": "e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af",
+        "local_sha256": "750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c"
+      },
+      {
+        "path": "chapters/appendix.tex",
+        "action": "create",
+        "remote_sha256": null,
+        "baseline_sha256": null,
+        "local_sha256": "d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d"
+      },
+      {
+        "path": "chapters/current.tex",
+        "action": "already-current",
+        "remote_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c",
+        "baseline_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c",
+        "local_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c"
+      }
+    ],
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n[\n  {\n    \"path\": \"chapters/03_method.tex\",\n    \"action\": \"update\",\n    \"remote_sha256\": \"e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af\",\n    \"baseline_sha256\": \"e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af\",\n    \"local_sha256\": \"750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c\"\n  },\n  {\n    \"path\": \"chapters/appendix.tex\",\n    \"action\": \"create\",\n    \"remote_sha256\": null,\n    \"baseline_sha256\": null,\n    \"local_sha256\": \"d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d\"\n  },\n  {\n    \"path\": \"chapters/current.tex\",\n    \"action\": \"already-current\",\n    \"remote_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\",\n    \"baseline_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\",\n    \"local_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\"\n  }\n]\n"
+  },
+  {
+    "case": "import-offline-full-backup-conflict",
+    "outcome": "pass",
+    "expected": "pass",
+    "value": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\scratch\\thesis_skill_forward_test\\scenario2\\zip-runs\\20261014T162435917871Z\\offline-full-backup-conflict\\source",
+    "console": "Imported full source ZIP: C:\\0_git workspace\\Continual-Imbalance-Ensemble\\scratch\\thesis_skill_forward_test\\scenario2\\zip-runs\\20261014T162435917871Z\\offline-full-backup-conflict\\source\n"
+  },
+  {
+    "case": "plan-changed-backup-conflict",
+    "outcome": "pass",
+    "expected": "pass",
+    "value": [
+      {
+        "path": "chapters/03_method.tex",
+        "action": "conflict",
+        "remote_sha256": "1ab2363cf40b3d9636ba2d78056460f42d95b257077ea2544cf1cae548faab35",
+        "baseline_sha256": "e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af",
+        "local_sha256": "750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c"
+      },
+      {
+        "path": "chapters/appendix.tex",
+        "action": "create",
+        "remote_sha256": null,
+        "baseline_sha256": null,
+        "local_sha256": "d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d"
+      },
+      {
+        "path": "chapters/current.tex",
+        "action": "already-current",
+        "remote_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c",
+        "baseline_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c",
+        "local_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c"
+      }
+    ],
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n[\n  {\n    \"path\": \"chapters/03_method.tex\",\n    \"action\": \"conflict\",\n    \"remote_sha256\": \"1ab2363cf40b3d9636ba2d78056460f42d95b257077ea2544cf1cae548faab35\",\n    \"baseline_sha256\": \"e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af\",\n    \"local_sha256\": \"750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c\"\n  },\n  {\n    \"path\": \"chapters/appendix.tex\",\n    \"action\": \"create\",\n    \"remote_sha256\": null,\n    \"baseline_sha256\": null,\n    \"local_sha256\": \"d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d\"\n  },\n  {\n    \"path\": \"chapters/current.tex\",\n    \"action\": \"already-current\",\n    \"remote_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\",\n    \"baseline_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\",\n    \"local_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\"\n  }\n]\n"
+  },
+  {
+    "case": "import-offline-full-backup-current",
+    "outcome": "pass",
+    "expected": "pass",
+    "value": "C:\\0_git workspace\\Continual-Imbalance-Ensemble\\scratch\\thesis_skill_forward_test\\scenario2\\zip-runs\\20261014T162435917871Z\\offline-full-backup-current\\source",
+    "console": "Imported full source ZIP: C:\\0_git workspace\\Continual-Imbalance-Ensemble\\scratch\\thesis_skill_forward_test\\scenario2\\zip-runs\\20261014T162435917871Z\\offline-full-backup-current\\source\n"
+  },
+  {
+    "case": "plan-already-current-all",
+    "outcome": "pass",
+    "expected": "pass",
+    "value": [
+      {
+        "path": "chapters/03_method.tex",
+        "action": "already-current",
+        "remote_sha256": "750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c",
+        "baseline_sha256": "e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af",
+        "local_sha256": "750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c"
+      },
+      {
+        "path": "chapters/appendix.tex",
+        "action": "already-current",
+        "remote_sha256": "d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d",
+        "baseline_sha256": null,
+        "local_sha256": "d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d"
+      },
+      {
+        "path": "chapters/current.tex",
+        "action": "already-current",
+        "remote_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c",
+        "baseline_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c",
+        "local_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c"
+      }
+    ],
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n[\n  {\n    \"path\": \"chapters/03_method.tex\",\n    \"action\": \"already-current\",\n    \"remote_sha256\": \"750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c\",\n    \"baseline_sha256\": \"e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af\",\n    \"local_sha256\": \"750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c\"\n  },\n  {\n    \"path\": \"chapters/appendix.tex\",\n    \"action\": \"already-current\",\n    \"remote_sha256\": \"d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d\",\n    \"baseline_sha256\": null,\n    \"local_sha256\": \"d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d\"\n  },\n  {\n    \"path\": \"chapters/current.tex\",\n    \"action\": \"already-current\",\n    \"remote_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\",\n    \"baseline_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\",\n    \"local_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\"\n  }\n]\n"
+  },
+  {
+    "case": "repeat-baseline-preserved",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Remote baseline already exists; preserve it and prepare a new handoff if needed",
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n"
+  },
+  {
+    "case": "working-edit-after-package",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Working source changed; handoff is stale",
+    "console": ""
+  },
+  {
+    "case": "tampered-frozen-snapshot",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Handoff snapshot differs from compiled source: chapters/03_method.tex",
+    "console": ""
+  },
+  {
+    "case": "tampered-package-pdf",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Handoff build proof or PDF has changed",
+    "console": ""
+  },
+  {
+    "case": "changed-target",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Handoff target changed; prepare a package for the intended project",
+    "console": ""
+  },
+  {
+    "case": "traversal-file-prepare",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Path escapes allowed directory: ../outside.tex",
+    "console": ""
+  },
+  {
+    "case": "duplicate-file-prepare",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Invalid, duplicate or excluded handoff file: chapters/03_method.tex",
+    "console": ""
+  },
+  {
+    "case": "final-restored-check",
+    "outcome": "pass",
+    "expected": "pass",
+    "value": {
+      "schema_version": 1,
+      "status": "prepared_not_uploaded",
+      "created_at_utc": "2026-10-14T16:24:35.882664+00:00",
+      "target": {
+        "project_url": "https://www.overleaf.com/project/000000000000000000000000",
+        "project_id": "000000000000000000000000",
+        "local_source": "thesis/latex"
+      },
+      "document": "main",
+      "font_mode": "offline-fixture-default",
+      "files": [
+        {
+          "path": "chapters/03_method.tex",
+          "sha256": "750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c",
+          "matches_original_template": false
+        },
+        {
+          "path": "chapters/appendix.tex",
+          "sha256": "d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d",
+          "matches_original_template": false
+        },
+        {
+          "path": "chapters/current.tex",
+          "sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c",
+          "matches_original_template": true
+        }
+      ],
+      "compiled_source_sha256": {
+        "main.tex": "33ddde16e251331596b81e4fd5adc6cbbb67cf53fb5ca21a090043e84454a66a",
+        "chapters/03_method.tex": "750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c",
+        "chapters/appendix.tex": "d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d",
+        "chapters/current.tex": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c"
+      },
+      "result_source_sha256": {},
+      "pdf_sha256": "247f4a080ee001480e844d4131c3ff279b37ecf2a466a3ff23f6b4b8e6d76e2d",
+      "build_report_sha256": "5ba3032a0cdbd14a83709939b2857a488405cc4eb90f386e81b9dad5bee9c367",
+      "authorization": "A prepared package does not authorize online writing."
+    },
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n"
+  },
+  {
+    "case": "empty-backup-plan",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "[Errno 2] No such file or directory: 'C:\\\\0_git workspace\\\\Continual-Imbalance-Ensemble\\\\scratch\\\\thesis_skill_forward_test\\\\scenario2\\\\source-receipt.json'",
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n"
+  },
+  {
+    "case": "empty-backup-baseline",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "[Errno 2] No such file or directory: 'C:\\\\0_git workspace\\\\Continual-Imbalance-Ensemble\\\\scratch\\\\thesis_skill_forward_test\\\\scenario2\\\\source-receipt.json'",
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n"
+  },
+  {
+    "case": "missing-backup-file-plan",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Backup receipt, project, ZIP or complete source inventory differs",
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n"
+  },
+  {
+    "case": "edited-backup-file-plan",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Backup receipt, project, ZIP or complete source inventory differs",
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n"
+  },
+  {
+    "case": "extra-backup-file-plan",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Backup receipt, project, ZIP or complete source inventory differs",
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n"
+  },
+  {
+    "case": "edited-retained-zip-plan",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Backup receipt, project, ZIP or complete source inventory differs",
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n"
+  },
+  {
+    "case": "wrong-receipt-project-plan",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Backup receipt, project, ZIP or complete source inventory differs",
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n"
+  },
+  {
+    "case": "wrong-project-import",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Backup project does not match configured target",
+    "console": ""
+  },
+  {
+    "case": "preserve-existing-backup-import",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "Use a new backup directory; existing backups are preserved",
+    "console": ""
+  },
+  {
+    "case": "restored-verified-backup-plan",
+    "outcome": "pass",
+    "expected": "pass",
+    "value": [
+      {
+        "path": "chapters/03_method.tex",
+        "action": "update",
+        "remote_sha256": "e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af",
+        "baseline_sha256": "e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af",
+        "local_sha256": "750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c"
+      },
+      {
+        "path": "chapters/appendix.tex",
+        "action": "create",
+        "remote_sha256": null,
+        "baseline_sha256": null,
+        "local_sha256": "d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d"
+      },
+      {
+        "path": "chapters/current.tex",
+        "action": "already-current",
+        "remote_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c",
+        "baseline_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c",
+        "local_sha256": "8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c"
+      }
+    ],
+    "console": "PASS: handoff snapshots, compilation proof, target and working sources match\n[\n  {\n    \"path\": \"chapters/03_method.tex\",\n    \"action\": \"update\",\n    \"remote_sha256\": \"e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af\",\n    \"baseline_sha256\": \"e6435eba705af38a59a488a4cedc89d24a3b212d6102997c71bdf57ff66451af\",\n    \"local_sha256\": \"750b4813230b1c4d745ead8567f3adbc0a7e6bb9414ee589d24864ecb35e0a5c\"\n  },\n  {\n    \"path\": \"chapters/appendix.tex\",\n    \"action\": \"create\",\n    \"remote_sha256\": null,\n    \"baseline_sha256\": null,\n    \"local_sha256\": \"d6e67cc04a59f7c6f896cd897ae04672e7cb074fb0a8caec848ca86d58cae99d\"\n  },\n  {\n    \"path\": \"chapters/current.tex\",\n    \"action\": \"already-current\",\n    \"remote_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\",\n    \"baseline_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\",\n    \"local_sha256\": \"8b3bd15e09b3673b1f3f138e4a72331455b80b3b6cca35bdc27134b316b6c89c\"\n  }\n]\n"
+  },
+  {
+    "case": "failed-build-prepare",
+    "outcome": "rejected",
+    "expected": "rejected",
+    "error": "A successful build of the requested document is required",
+    "console": ""
+  }
+]

@@ -1,0 +1,23 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\Needspace{13\baselineskip}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.11\linewidth}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}@{}}
+\caption{固定年份資料分區與兩種標籤之正類紀錄數}\label{tab:method-partitions}\\
+\toprule
+分區 & 年份 & 紀錄數 & 事件標籤正類 & 最終狀態正類 & 主要用途 \\
+\midrule\endfirsthead
+\multicolumn{6}{c}{表~\thetable（續）}\\
+\toprule
+分區 & 年份 & 紀錄數 & 事件標籤正類 & 最終狀態正類 & 主要用途 \\
+\midrule\endhead
+\midrule\multicolumn{6}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+Old-fit & 1999–2011 & 55,927 & 403（0.72\%） & 4,442 & Old 模型訓練；前處理與特徵選取擬合 \\
+New-fit & 2012–2013 & 6,969 & 54（0.77\%） & 349 & New 模型訓練 \\
+DSEL & 2014 & 1,752 & 17（0.97\%） & 71 & 動態選擇的局部能力估計 \\
+Calibration & 2014 & 1,752 & 16（0.91\%） & 71 & 靜態候選選擇與分類門檻 \\
+Test & 2015–2018 & 12,282 & 119（0.97\%） & 287 & 設定固定後的最終評估 \\
+\end{longtable}
+\noindent{\footnotesize (資料來源：本研究實驗資料分區彙整)\par 數值為公司年度紀錄數，不是獨立公司數。事件標籤只把破產公司最後一個觀測年度記為正類；最終狀態標籤把破產公司所有年度記為正類。兩種標籤使用相同資料列與分區。}
+\endgroup

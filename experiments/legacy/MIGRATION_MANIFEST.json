@@ -1,0 +1,370 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "scope": "Historical Phase 2/3 entrypoints only; result/data paths retained.",
+  "entries": [
+    {
+      "original_path": "experiments/phase2_ensemble/static/all_combinations.py",
+      "archived_path": "experiments/legacy/phase2_ensemble/static/all_combinations.py",
+      "original_sha256": "e2e5fab14f49efa99ee579849493f35eda2e0ff955be0fd0d19058c899924347",
+      "archived_sha256": "bd421ecac26e0f77be31346df9b2f62429bccb06ded79564b3380e33999a946d",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false,
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "c8fe2cae95c97e9aa9bc5176af17802e745e97cd4c7df6e6fd72e5b446febb53",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "experiments/phase2_ensemble/static/undersampling.py",
+      "archived_path": "experiments/legacy/phase2_ensemble/static/undersampling.py",
+      "original_sha256": "3aa7cb921da92158abb0a167c5c7315aaeef3208b9dcd06d8e5dee27bca93acc",
+      "archived_sha256": "1949f0a3a663cc9e1d5e9a13581996ace9beee8bf5cd85da60e55e3efea6f3db",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false,
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "4722d6a15322c4f5e80435f8dd6b33660e314fd2c113d23d28797279572ba272",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "experiments/phase2_ensemble/static/oversampling.py",
+      "archived_path": "experiments/legacy/phase2_ensemble/static/oversampling.py",
+      "original_sha256": "effaeef47aad87c410d31da8338edae18414a51e2fc09f214e9fe68e8fcf10da",
+      "archived_sha256": "aabb6dc4e8afead7b7507281aa54900b9062f1a6d22507e75f325f40388a5fb3",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false,
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "38cf52ba20864a52c327b6ea85de346888dccaa4020826183058a09f3e65ba50",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "experiments/phase2_ensemble/static/hybrid.py",
+      "archived_path": "experiments/legacy/phase2_ensemble/static/hybrid.py",
+      "original_sha256": "6a903993717c207855954021e7c3d4ce73081d0273b86e17fd4de0bd99fbec55",
+      "archived_sha256": "bf88bdfe114d2bace6b9c8447fe95b7817d77a41e1134cabbfe9d080c99f5018",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false,
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "48624d3e55940221681ac503110471c8a05fac5d22d638dfba85d2253d6a48ed",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "experiments/phase2_ensemble/dynamic/des/standard.py",
+      "archived_path": "experiments/legacy/phase2_ensemble/dynamic/des/standard.py",
+      "original_sha256": "9d7dd12f1181b4ef9edcf6bb97cd2d27da76557047fac884e927419cd5bdfc3f",
+      "archived_sha256": "b53a9cc153f175eb4790759ffa412e0da8f623e1316edb4950cb7e17d6d26daa",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[5]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false,
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "31b66ce547fcbb6fd2b069f11864df61a937dc8d29079f44ef40aaf0a9bf83b8",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "experiments/phase2_ensemble/dynamic/des/advanced.py",
+      "archived_path": "experiments/legacy/phase2_ensemble/dynamic/des/advanced.py",
+      "original_sha256": "80251c23184ab78f973d25fbae9084a42de603f6c64f0e42abd949dc024edb10",
+      "archived_sha256": "980d4ff0485fa7858da69bdef8f99d6b7afacc370d819b9465c5ca27561c6631",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[5]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false,
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "cebf9bd97880df295aa8698cbf28137ce14b8173bb038e9682e69caf2b730d03",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "experiments/phase2_ensemble/dynamic/dcs/comparison.py",
+      "archived_path": "experiments/legacy/phase2_ensemble/dynamic/dcs/comparison.py",
+      "original_sha256": "3b2cac16ad5fc731d49d6e312794acff679e297c7d8ceebe2b032764258efb67",
+      "archived_sha256": "00ced469ad8bbefbd256a4e50cb626e82dedd0542512d92956102ca904fb58f1",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[5]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false,
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "19d927f46997d8c0e108e80fc84cbe92d0a80194eb720985a865c193b1ac4abb",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "experiments/phase2_ensemble/static/xgb_oldnew_bankruptcy_year_splits_static.py",
+      "archived_path": "experiments/legacy/phase2_ensemble/static/xgb_oldnew_bankruptcy_year_splits_static.py",
+      "original_sha256": "55f83d42453127fe76c302fe06737caa6daf1f76049e2233f3413e9e8cdbc531",
+      "archived_sha256": "56da0c104f1d8220add3a29b28d0ebe28768f9f89143eb977a41754e507a23af",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase2_ensemble/dynamic/des/xgb_oldnew_bankruptcy_year_splits_des.py",
+      "archived_path": "experiments/legacy/phase2_ensemble/dynamic/des/xgb_oldnew_bankruptcy_year_splits_des.py",
+      "original_sha256": "626c5c344cef840c2481b445cdad76f1e75a843cc731a2796d1e1f125830af10",
+      "archived_sha256": "5bd057dc0f9ff09d8d925c79ff9aa6d9b673e2285505679a83f012312b9094d2",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[5]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase2_ensemble/dynamic/dcs/xgb_oldnew_bankruptcy_year_splits_dcs.py",
+      "archived_path": "experiments/legacy/phase2_ensemble/dynamic/dcs/xgb_oldnew_bankruptcy_year_splits_dcs.py",
+      "original_sha256": "a0fa1cc34a38f2352611d740f54d011fc9e501595787435978b14e06c59008b7",
+      "archived_sha256": "593d5adaa49436b22a2716378ff3b1476704784c7c3feffb08dc8b42bebb4278",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[5]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase3_feature/fs_study.py",
+      "archived_path": "experiments/legacy/phase3_feature/fs_study.py",
+      "original_sha256": "9ff9dd781422eba2e2e2c516a0e556ed37b64ab80b78ef0e05aec696cf0c764b",
+      "archived_sha256": "bac3a79dbb1294872260c95dfbee0fee33f961c34bf71bc7fb0a9b009947adb0",
+      "bootstrap_before": "Path(__file__).parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[3]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false,
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "a85a79b63c3857817a32e2a6da83ae89315bbb67ec5a0b275ae8687eef70d82b",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "experiments/phase3_feature/fs_sweep.py",
+      "archived_path": "experiments/legacy/phase3_feature/fs_sweep.py",
+      "original_sha256": "16bb907c06aeb3eec2ad92fb30c4ae7657224b99b788519505d092016d74233d",
+      "archived_sha256": "fe06de34a1119373c6e1411d319a83b0cc2d81cdecb3da497cdcf2f100d59000",
+      "bootstrap_before": "Path(__file__).parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[3]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false,
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "9cc247b1cc9d29ac4a16f849d01998da101a121a68f66a4f1f5cee10a6593815",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "experiments/phase3_feature/xgb_bankruptcy_year_splits_fs.py",
+      "archived_path": "experiments/legacy/phase3_feature/xgb_bankruptcy_year_splits_fs.py",
+      "original_sha256": "78fcb06198345fcb34b0f5f2489af669894ad9cbbb2d713d7881a4e1117a7d63",
+      "archived_sha256": "7d777a25bf6a106b020555fbb5e817f0354e26696e43366f0b167a71a6e7b5e9",
+      "bootstrap_before": "Path(__file__).parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[3]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase3_feature/xgb_bankruptcy_year_splits_fs_advanced.py",
+      "archived_path": "experiments/legacy/phase3_feature/xgb_bankruptcy_year_splits_fs_advanced.py",
+      "original_sha256": "66e3661cbae127cc0d1e353eb430631a39a88f4f9d4dcd4e74bffb8788da1abb",
+      "archived_sha256": "706c770fde9235f6f592700dfcb58e560d9626e3c26257e8977ffc99190ad74d",
+      "bootstrap_before": "Path(__file__).parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[3]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase3_feature/xgb_bankruptcy_year_splits_fs_dcs.py",
+      "archived_path": "experiments/legacy/phase3_feature/xgb_bankruptcy_year_splits_fs_dcs.py",
+      "original_sha256": "4b6fbec2805d58cd45fef2c3a59758fb5aac9fcef7f867c16aa4186cc2a2d82c",
+      "archived_sha256": "6938c2829a2ddb624747ce6c1e937a06f69f1ad6a31ae33370b5d2ef376485bb",
+      "bootstrap_before": "Path(__file__).parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[3]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase3_feature/xgb_bankruptcy_year_splits_fs_full.py",
+      "archived_path": "experiments/legacy/phase3_feature/xgb_bankruptcy_year_splits_fs_full.py",
+      "original_sha256": "f8e236bfa7584c2ff9e4178b6e3de5cf3958add78d9534bf0a3ba997e3bc3e61",
+      "archived_sha256": "e0cd43f4beb2eecb5366e2d6c84ce6f552c490703a081735ebb6bc2d13fc9b07",
+      "bootstrap_before": "Path(__file__).parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[3]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase3_feature/xgb_bankruptcy_year_splits_rfe.py",
+      "archived_path": "experiments/legacy/phase3_feature/xgb_bankruptcy_year_splits_rfe.py",
+      "original_sha256": "1cc9c35192b27dad1b155a4505e2285e1798331a10aef0e793e96ae41aefdbe6",
+      "archived_sha256": "9e11600cbead292347bd5d3f6778fbb3925a46b1e0a856961c981ad858578c73",
+      "bootstrap_before": "Path(__file__).parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[3]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase3_feature/mutual_info/fs_study.py",
+      "archived_path": "experiments/legacy/phase3_feature/mutual_info/fs_study.py",
+      "original_sha256": "3ade9cc34a99cbb7baf360e7da3297b8f302dab711125bad4fb63444b659f919",
+      "archived_sha256": "68bd8a818671cfdc51f5641f37fdc302f168c356d81f0af7cad88a504811a558",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false,
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "d2c9848d7aa3b9d87cea4fb4a6d6abc25e7ab8f40ea8d710feedc2a3f8c7df82",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "experiments/phase3_feature/mutual_info/fs_sweep.py",
+      "archived_path": "experiments/legacy/phase3_feature/mutual_info/fs_sweep.py",
+      "original_sha256": "9fa8aa259b6ece0786952cc9ee76637d0b92ea688ebaed97c58b1478e11ee375",
+      "archived_sha256": "35d19f2f42706ed53ec36544d60b86619873e9d66c8f30fdd4b7989a4376d0ef",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false,
+      "revisions": [
+        {
+          "date": "2026-10-12",
+          "reason": "Stock scope retired by user request",
+          "previous_sha256": "4e1e8e0b489ebb83c15b6e0d8e443b7edd5f370097706839b047a0d581fa23b5",
+          "removal_ledger": "docs/REMOVED_STOCK_20261012.json"
+        }
+      ]
+    },
+    {
+      "original_path": "experiments/phase3_feature/mutual_info/xgb_bankruptcy_year_splits_fs.py",
+      "archived_path": "experiments/legacy/phase3_feature/mutual_info/xgb_bankruptcy_year_splits_fs.py",
+      "original_sha256": "d6029b512772344d2bb6bb227a8a8ea6e9bc91355b9f2bafea441d571f43fb4b",
+      "archived_sha256": "d5037afe2894541378474c7eba8b19f6917e0302bcdf51e4f86520d9be977876",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase3_feature/mutual_info/xgb_bankruptcy_year_splits_fs_advanced.py",
+      "archived_path": "experiments/legacy/phase3_feature/mutual_info/xgb_bankruptcy_year_splits_fs_advanced.py",
+      "original_sha256": "9c9b38e5f2cee902b3037012b0e2ccff3e78f7c086d445ff73cfdf841adf2eb9",
+      "archived_sha256": "add200393c1de9f922268ef176dd40b7d46315b7c87abd7ed58de9d4c99cead3",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": true
+    },
+    {
+      "original_path": "experiments/phase3_feature/mutual_info/xgb_bankruptcy_year_splits_fs_dcs.py",
+      "archived_path": "experiments/legacy/phase3_feature/mutual_info/xgb_bankruptcy_year_splits_fs_dcs.py",
+      "original_sha256": "a8665481ce45782268b73696f3f7eeb4092011186d2f67fa5cfb0a6dc2b8832e",
+      "archived_sha256": "a590d6fe041926ec40f97627c762683ff9aecb9f18a12eae919919d3970dc132",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase3_feature/mutual_info/xgb_bankruptcy_year_splits_fs_full.py",
+      "archived_path": "experiments/legacy/phase3_feature/mutual_info/xgb_bankruptcy_year_splits_fs_full.py",
+      "original_sha256": "c7ba71b5014913602b4fd6ecfa8bebfbb84af63851d75e62e9e7a48c8a6ba253",
+      "archived_sha256": "777b48cc0d9bc882b63d9c031f4c5e9c953706ff60473f3aa505e10fd2d2a441",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase3_feature/rfe/xgb_bankruptcy_year_splits_rfe.py",
+      "archived_path": "experiments/legacy/phase3_feature/rfe/xgb_bankruptcy_year_splits_rfe.py",
+      "original_sha256": "e9972dd6be7b08c00c5e67fad7993b2753350f6e3ef41f627c8877c746f00c70",
+      "archived_sha256": "8273510d102aa7089918cfa75ba37dfa243c490fb31f456013dee1ff3efe60e6",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": false
+    },
+    {
+      "original_path": "experiments/phase3_feature/shap/xgb_bankruptcy_year_splits_fs_advanced.py",
+      "archived_path": "experiments/legacy/phase3_feature/shap/xgb_bankruptcy_year_splits_fs_advanced.py",
+      "original_sha256": "36fd5e7daff99d3a7657e9c01c6f4a7f96ff03a3f2e2bf7ae423413d46fce37e",
+      "archived_sha256": "52666ea81c53d35f2afa75cdfb5b3f94788cc550654e59d3cb7f5bffc0ae85a0",
+      "bootstrap_before": "Path(__file__).resolve().parent.parent.parent.parent",
+      "bootstrap_after": "Path(__file__).resolve().parents[4]",
+      "status": "historical_protocol",
+      "outputs": "Existing results paths retained; entry execution may regenerate historical outputs.",
+      "added_module_bootstrap": true
+    }
+  ]
+}

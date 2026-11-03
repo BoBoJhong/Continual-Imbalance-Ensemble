@@ -1,0 +1,76 @@
+{
+  "date": "2026-11-03",
+  "status": "verified_before_push",
+  "publication_branch": "codex/thesis-event-update-20261103",
+  "base_commit": "d6c4e34eeae25ef6069f46a2f062b94519607056",
+  "original_local_branch": "chore/commit-backlog-20261030",
+  "original_local_head_not_used_as_parent": "c42dc81ff3029c8df5b2c4a108f7414d89a08d0a",
+  "excluded_brfss_tracked_files": 584,
+  "excluded_mixed_research_spec_backups": 4,
+  "only_brfss_named_files_published": [
+    "docs/BRFSS支線停止紀錄_20261103.md",
+    "docs/audits/2026-11/BRFSS支線停止驗證_20261103.json"
+  ],
+  "protected_candidate_documents_sha256": {
+    "docs/KHP健康資料集_採用說明.md": "8329943cd156b2cc236b99b8102c6ab6ceedce12895d7b2b5583d6f74167d773",
+    "docs/KHP欄位變更與實驗影響檢核_20261103.md": "80fe8dbd063cb75f4e206f73de27253d81b4856930a539d13d4514924d6d42ed",
+    "docs/MEPS縱貫住院預測_採用評估.md": "21b849ea38d3eeaac830f51941ed8d5e13c28308cd6103752cb82e1de8d33af7",
+    "docs/RAND_HRS健康資料集_候選檢核.md": "909f5054daffe6d9024f6509c5bc6e52b209b4ce84b72dd090fd017233df1a6f",
+    "docs/RAND_HRS健康資料集_採用說明.md": "56250590a79ac3f28f5b75954bc2af4e3f6fdfe8a3e6f3a7b8e990c23db619f4",
+    "docs/長期健康追蹤資料候選_20261103.md": "1f66c50de2f85ec0e1cf4ac856a40a4ca2ff4ef91add7dd86da3423b06698ca4"
+  },
+  "latest_work_coverage": "complete except explicitly retired content; slides and scope documents updated",
+  "tests": {
+    "passed": 59,
+    "scope": [
+      "standard dynamic selectors",
+      "fixed event baselines",
+      "event label split",
+      "seen/unseen company analysis",
+      "thesis sync",
+      "handoffs",
+      "reader tables"
+    ],
+    "environment": "project .venv (DESlib 0.3.7), pytest loaded from existing user site; no dependency install"
+  },
+  "python_active_sources_parse": 213,
+  "source_checks": {
+    "working_tree": "passed",
+    "restored_git_snapshot": "passed"
+  },
+  "git_snapshot_restore": {
+    "files": 10739,
+    "text_blobs_restored_exactly": 10119,
+    "missing": []
+  },
+  "byte_preservation": ".gitattributes preserves research source, data, results, thesis and document bytes",
+  "latex_build": {
+    "status": "passed",
+    "all_source_hashes_match": true,
+    "pdf_sha256": "cdad694ad76a0a9560a4640e175b889820e5bee1f02d10b335b7bb77f3e97dc7",
+    "warnings": [
+      "NCU NOTICE: Signed form forms/authorization.pdf not inserted.",
+      "NCU NOTICE: Signed form forms/advisor.pdf not inserted.",
+      "NCU NOTICE: Signed form forms/committee.pdf not inserted."
+    ]
+  },
+  "presentation": {
+    "tool": "built-in image_gen",
+    "edited_slides": [
+      "02-research-question.png",
+      "03-methodology.png",
+      "04-contributions.png"
+    ],
+    "slide_png_sha256": {
+      "00-cover.png": "f6e874b7d6a41faf413be1516250450f7a17c118df2eb1ecb6e53b9c41faebb9",
+      "01-introduction.png": "88091cd0c03ac56643bb96143c944ad722b486f4b78ac4eb0b48bff4bc0aeb8c",
+      "02-research-question.png": "f1768a6f39d7666342e14f9ef9b9de14e4a02b2c601db23e115a98507ccacb92",
+      "03-methodology.png": "54f715cebc9b11bad19694a4eec77551e3fc6fdcaeb23a049d247d323921c99e",
+      "04-contributions.png": "322225ebdfc8ffce09557d60857d132ba6426e3cd43fe96e7d6f8087afc47f5e"
+    },
+    "both_zips_match_current_folder": true,
+    "visual_review": "passed"
+  },
+  "backup_location": ".local/git-publish-20261103/",
+  "remote_main_change": "none; publishing only the named new branch"
+}

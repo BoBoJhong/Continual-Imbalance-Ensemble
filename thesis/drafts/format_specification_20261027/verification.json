@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "guideline_source": "C:\\Users\\coolc\\Downloads\\3-02-2學位論文撰寫體例參考.pdf",
+  "guideline_sha256": "665c1bd6e88cd35feebee4473c06d6c35e4411b16efab38e6a4f3ad696fd110b",
+  "guideline_pages": 32,
+  "pdf": "thesis\\latex\\build\\main.pdf",
+  "pdf_sha256": "aedbfccdbfc0540ec0771923538f62cd333b9d93b2ed284d2eae0e032752cf54",
+  "pages": 55,
+  "source_hashes_current": true,
+  "a4_all_pages": true,
+  "footer_physical_center_error_pt": -0.002227783203125,
+  "footer_baseline_bottom_mm": 15.000118001302083,
+  "undefined_missing_overfull": [],
+  "native_build": "passed",
+  "editor_compile": "success",
+  "visual_contact_sheets": "tmp/pdfs/format-specification/contact-{1,2,3}.png",
+  "visual_detail_pages": [
+    7,
+    10,
+    27,
+    31,
+    44,
+    45,
+    46,
+    48,
+    53,
+    54,
+    55
+  ],
+  "research_source_check": "passed",
+  "missing_form_notices": [
+    "authorization",
+    "advisor",
+    "committee"
+  ],
+  "handoff": "thesis/handoffs/20261027T065313449531Z",
+  "handoff_check": "passed",
+  "visual_review": "all 55 pages reviewed in contact sheets; cover, abstracts, contents, lists, symbols, chapter headings, references, FS table and appendix checked at larger size; final footer location measured"
+}

@@ -1,0 +1,69 @@
+{
+  "run": "results/phase2_ensemble/standard_dynamic_event/runs/20261031T114653242210Z",
+  "protocol": "fixed_bankruptcy_standard_deslib_fit_only_fs_event_target_v1",
+  "seeds": [
+    42,
+    123,
+    456,
+    789,
+    2024,
+    7,
+    21,
+    84,
+    168,
+    999
+  ],
+  "fs": [
+    "no_fs",
+    "mi_r50",
+    "mi_r80",
+    "cart_r50",
+    "cart_r80",
+    "shap_r50",
+    "shap_r80",
+    "rfe_r50",
+    "rfe_r80"
+  ],
+  "methods": [
+    "Old3",
+    "New3",
+    "Equal6",
+    "ValidationSelectedStatic",
+    "DCS_OLA",
+    "DCS_LCA",
+    "KNORA_E",
+    "KNORA_U"
+  ],
+  "metrics": [
+    "AUC",
+    "F1",
+    "Recall"
+  ],
+  "groups": [
+    "seen",
+    "unseen",
+    "seen_new_fit",
+    "seen_old_fit_only"
+  ],
+  "contrasts": [
+    [
+      "New3",
+      "Old3"
+    ],
+    [
+      "ValidationSelectedStatic",
+      "Equal6"
+    ],
+    [
+      "Equal6",
+      "New3"
+    ]
+  ],
+  "group_rule": "seen = company has any Old_fit (1999-2011) or New_fit (2012-2013) row; seen_new_fit = has a New_fit row; seen_old_fit_only = Old_fit rows only; 2014 DSEL/Calibration membership is recorded but does not define groups",
+  "replicates": 4999,
+  "bootstrap_seed": 20261030,
+  "resampling": "companies with replacement within (group, label) strata; all rows retained",
+  "estimand": "mean of ten seed-specific metrics within a company group",
+  "intervals": "pointwise percentile 95%; descriptive, no hypothesis tests or multiplicity claims",
+  "scope": "retrospective exploratory replay of saved predictions; no refit, no test-based selection"
+}

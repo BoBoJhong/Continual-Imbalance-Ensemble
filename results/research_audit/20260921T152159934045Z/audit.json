@@ -1,0 +1,77 @@
+{
+  "created_utc": "2026-09-21T15:21:58.681947+00:00",
+  "scope": "Saved predictions and manuscript provenance; no training, no model selection",
+  "raw_sha256": "d64ed85ae786d75113455ae238feb24015d19716c10ec1de3a90a52eddc7b04a",
+  "raw_counts": {
+    "rows": 78682,
+    "companies": 8971,
+    "failed_status_rows": 5220,
+    "failed_status_fraction": 0.06634300094049465,
+    "reconstructed_events": 609,
+    "reconstructed_event_fraction": 0.007740016776391042,
+    "event_date_independently_verified": false
+  },
+  "runs": {
+    "window": {
+      "path": "results/phase_flexible/study3b_window_sensitivity/runs/20260916T151731817838Z",
+      "source_hashes_match": true,
+      "seed42_cohort_and_labels_match_raw_reconstruction": true,
+      "predictions_sha256": "9c9adcc5b7f26bee8e0ef054031ba880fd001773094c90f938830c3af954922e",
+      "packages": {
+        "numpy": "2.4.2",
+        "pandas": "3.0.1",
+        "scikit-learn": "1.8.0",
+        "imbalanced-learn": "0.14.1",
+        "xgboost": "3.2.0"
+      }
+    },
+    "ratio": {
+      "path": "results/phase_flexible/study3b_oldnew_ratio_sensitivity/runs/20260921T053146649843Z",
+      "source_hashes_match": true,
+      "seed42_cohort_and_labels_match_raw_reconstruction": true,
+      "predictions_sha256": "cfe487a1c33dc8d0da71e50648dc3b02c20e22e25420b29df90599f0d989165e",
+      "packages": {
+        "numpy": "2.4.2",
+        "pandas": "3.0.1",
+        "scikit-learn": "1.8.0",
+        "imbalanced-learn": "0.14.1",
+        "xgboost": "3.2.0"
+      }
+    }
+  },
+  "ross_saved_candidates": {
+    "count": 12,
+    "start_min": 2000,
+    "start_max": 2011,
+    "best": {
+      "old_end_year": 2008,
+      "drift_start_year": 2009,
+      "old_window": "1999-2008",
+      "new_window": "2009-2011",
+      "validation_window": "2012-2014",
+      "old_n": 45046,
+      "new_n": 10881,
+      "val_n": 10473,
+      "best_old_sampling": "none",
+      "best_new_sampling": "undersampling",
+      "old_val_AUC": 0.776244,
+      "new_val_AUC": 0.85678,
+      "gap_new_minus_old_val_AUC": 0.080536,
+      "old_val_F1": 0.267319,
+      "new_val_F1": 0.384865,
+      "gap_new_minus_old_val_F1": 0.117546,
+      "old_val_Recall": 0.334012,
+      "new_val_Recall": 0.362525,
+      "old_val_Precision": 0.222826,
+      "new_val_Precision": 0.410138,
+      "rank_by_new_val_auc": 1,
+      "rank_by_new_val_f1": 5
+    }
+  },
+  "thesis": {
+    "sha256": "7289c8a9c32f45c4bd35e94e9b822f6e70f136f906c73532e0071b1829e329b2",
+    "relative_links_checked": 21,
+    "missing_relative_links": [],
+    "final_document_render_checked": false
+  }
+}

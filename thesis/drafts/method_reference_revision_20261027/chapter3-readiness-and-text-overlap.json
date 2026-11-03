@@ -1,0 +1,36 @@
+{
+  "purpose": "read-only review; not institutional plagiarism or AI detection",
+  "scope": "chapter 3 in each of two PDFs only",
+  "our_pages": [
+    13,
+    35
+  ],
+  "reference_pages": [
+    25,
+    44
+  ],
+  "our_sha256": "6af20d6587e6b26250ab0a7d43960a0c5cd07589ee42cb5b284cddba520a73cb",
+  "reference_sha256": "d81e85a2f98d47d8a3bb4374e75b149800ddbff903ce6c5deeb4be82d1864e08",
+  "normalization": "NFKC, lowercase; retain Han/ASCII letters/digits; remove whitespace/punctuation; at least 10 Han characters per window",
+  "exact_contiguous_windows": {
+    "20": {
+      "distinct_shared_windows": 0,
+      "examples": []
+    },
+    "30": {
+      "distinct_shared_windows": 0,
+      "examples": []
+    },
+    "50": {
+      "distinct_shared_windows": 0,
+      "examples": []
+    }
+  },
+  "limitations": [
+    "Does not search external publications, websites or thesis databases",
+    "Does not detect translated or paraphrased copying or image similarity",
+    "Does not calculate an institutional similarity score or plagiarism rate",
+    "AI-generated percentage not measured; assistant contributed to drafting and editing"
+  ],
+  "latex_modified": false
+}

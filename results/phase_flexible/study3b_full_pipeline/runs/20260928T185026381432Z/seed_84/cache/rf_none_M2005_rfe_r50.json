@@ -1,0 +1,44 @@
+{
+  "job_id": "rf_none_M2005_rfe_r50",
+  "seed": 84,
+  "classifier": "rf",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2003,
+    2004,
+    2005
+  ],
+  "n_train": 12970,
+  "positive_before": 115,
+  "n_after": 12970,
+  "positive_after": 115,
+  "fs": "rfe",
+  "ratio": 0.5,
+  "selected_features": [
+    "X1",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X15",
+    "X16",
+    "X17"
+  ],
+  "n_features": 9,
+  "fit_predict_seconds": 8.85520600003656,
+  "params": {
+    "n_estimators": 200,
+    "class_weight": null,
+    "random_state": 84,
+    "n_jobs": 4,
+    "max_depth": null
+  },
+  "warnings": [],
+  "selector_seed": 84,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-10-01T01:42:04.499997+00:00",
+  "cache_sha256": "6394ac98b4882ab722407db019b885b4b36809f0c60021bd4b79186ded14ffbe"
+}

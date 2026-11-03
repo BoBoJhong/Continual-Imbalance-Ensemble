@@ -1,0 +1,29 @@
+[
+  {
+    "phase": 1,
+    "objects": 27,
+    "edges": 17,
+    "minimum_font_pt_at_180mm": 9.0,
+    "minimum_font_pt_at_90mm": 4.5,
+    "recommended_width_mm": 180,
+    "separate_validation_nodes": 1
+  },
+  {
+    "phase": 2,
+    "objects": 27,
+    "edges": 16,
+    "minimum_font_pt_at_180mm": 9.0,
+    "minimum_font_pt_at_90mm": 4.5,
+    "recommended_width_mm": 180,
+    "separate_validation_nodes": 1
+  },
+  {
+    "phase": 3,
+    "objects": 32,
+    "edges": 17,
+    "minimum_font_pt_at_180mm": 9.0,
+    "minimum_font_pt_at_90mm": 4.5,
+    "recommended_width_mm": 180,
+    "separate_validation_nodes": 1
+  }
+]

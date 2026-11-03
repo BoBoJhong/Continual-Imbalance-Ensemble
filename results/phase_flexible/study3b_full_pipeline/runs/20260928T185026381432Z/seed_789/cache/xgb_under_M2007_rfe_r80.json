@@ -1,0 +1,51 @@
+{
+  "job_id": "xgb_under_M2007_rfe_r80",
+  "seed": 789,
+  "classifier": "xgb",
+  "sampling": "under",
+  "sampler": "TomekLinks",
+  "train_years": [
+    2005,
+    2006,
+    2007
+  ],
+  "n_train": 12342,
+  "positive_before": 150,
+  "n_after": 12287,
+  "positive_after": 150,
+  "fs": "rfe",
+  "ratio": 0.8,
+  "selected_features": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X15",
+    "X17"
+  ],
+  "n_features": 14,
+  "fit_predict_seconds": 2.1540964000159875,
+  "params": {
+    "objective": "binary:logistic",
+    "eval_metric": "auc",
+    "seed": 789,
+    "tree_method": "hist",
+    "verbosity": 0,
+    "random_state": 789,
+    "n_jobs": 4
+  },
+  "warnings": [],
+  "selector_seed": 789,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-09-29T06:46:53.115774+00:00",
+  "cache_sha256": "d71e32dda61d87d789babb5d5929e50a5d53852cc4a58c82a565ef08474ec8e1"
+}

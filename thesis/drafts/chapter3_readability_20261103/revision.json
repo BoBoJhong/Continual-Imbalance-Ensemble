@@ -1,0 +1,16 @@
+{
+  "before_chars": 33313,
+  "after_chars": 24097,
+  "before_sha256": "56e98c7ec9b0074ab78a394c9c0c9b4ba8b0fd4bd8503680abca666bbe1dc227",
+  "after_sha256": "7be0c8a51b6df3a2b664b4a837f7fe145ac0c9bcce590273f53378f2a40db083",
+  "removed_labels": [
+    "eq:method-count",
+    "tab:method-parameters",
+    "tab:method-split-summary",
+    "tab:method-stages"
+  ],
+  "preserved_inputs": [
+    "generated/event-results-20261103/event-partitions.tex",
+    "generated/deep-baseline-reference-20261103/settings.tex"
+  ]
+}

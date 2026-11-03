@@ -1,0 +1,47 @@
+{
+  "job_id": "lgb_under_M2012_cart_r50",
+  "seed": 84,
+  "classifier": "lgb",
+  "sampling": "under",
+  "sampler": "TomekLinks",
+  "train_years": [
+    2010,
+    2011,
+    2012
+  ],
+  "n_train": 10623,
+  "positive_before": 86,
+  "n_after": 10592,
+  "positive_after": 86,
+  "fs": "cart",
+  "ratio": 0.5,
+  "selected_features": [
+    "X11",
+    "X12",
+    "X15",
+    "X16",
+    "X18",
+    "X9",
+    "X10",
+    "X13",
+    "X6"
+  ],
+  "n_features": 9,
+  "fit_predict_seconds": 1.4660160000203177,
+  "params": {
+    "objective": "binary",
+    "metric": "auc",
+    "verbosity": -1,
+    "seed": 84,
+    "deterministic": true,
+    "force_col_wise": true,
+    "boosting_type": "gbdt",
+    "num_threads": 4
+  },
+  "warnings": [],
+  "selector_seed": 84,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-10-01T02:49:36.474904+00:00",
+  "cache_sha256": "18e49200b01eb937166103449c8eae35aa7bb688c412097ddf909990ccf61392"
+}

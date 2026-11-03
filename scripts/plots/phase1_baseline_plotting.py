@@ -55,7 +55,7 @@ METHOD_COLORS_MLP = {
     "Old+New": "#3D9970",
 }
 
-# sklearn MLP（medical、stock、舊版 bankruptcy MLP）等三策略 raw。
+# sklearn MLP（medical、舊版 bankruptcy MLP）等三策略 raw。
 METHOD_ORDER_LEGACY_THREE = ["Old", "Old+New", "New"]
 METHOD_COLORS_LEGACY_THREE = {
     "Old": "#5B8DB8",
@@ -100,8 +100,6 @@ def dataset_label_from_raw_stem(stem: str, raw_suffix: str) -> str:
         return "Bankruptcy"
     if stem.startswith("medical"):
         return "Medical"
-    if stem.startswith("stock"):
-        return "Stock"
     return stem.replace(raw_suffix, "").replace("_", " ").title()
 
 

@@ -1,0 +1,15 @@
+reference,comparison,metric,block_length,difference,ci95_low,ci95_high,n_years,replicates,scope
+W3_FIFO3,W2_FIFO3,annual_macro_AP,2,-0.005624595527666012,-0.022196268877890182,0.009789998389284033,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W3_FIFO3,W5_FIFO3,annual_macro_AP,2,0.011081599379486528,-0.0105230977313125,0.030095790177971777,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W3_FIFO3,W7_FIFO3,annual_macro_AP,2,0.012639821673009938,-0.03137017274786217,0.05405632211845849,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W2_FIFO3,W2_Newest,annual_macro_AP,2,0.037866055272155086,0.013776884131451263,0.07030804850538469,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W3_FIFO3,W3_Newest,annual_macro_AP,2,0.01991802966728635,-0.0036549709868056793,0.05423672984625243,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W5_FIFO3,W5_Newest,annual_macro_AP,2,0.0023415458620238993,-0.011304452255178348,0.015943843782639737,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W7_FIFO3,W7_Newest,annual_macro_AP,2,0.002959782742201019,-0.008153443631200966,0.015267057673905186,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W3_FIFO3,W2_FIFO3,annual_macro_AP,3,-0.005624595527666012,-0.017931569481348705,0.005132124683748451,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W3_FIFO3,W5_FIFO3,annual_macro_AP,3,0.011081599379486528,-0.007103407204582993,0.03206366819022258,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W3_FIFO3,W7_FIFO3,annual_macro_AP,3,0.012639821673009938,-0.024344749321153502,0.05382320065472539,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W2_FIFO3,W2_Newest,annual_macro_AP,3,0.037866055272155086,0.016486732549344636,0.06660168028571944,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W3_FIFO3,W3_Newest,annual_macro_AP,3,0.01991802966728635,-0.0003230930882964482,0.048269094119239776,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W5_FIFO3,W5_Newest,annual_macro_AP,3,0.0023415458620238993,-0.009632394204297057,0.014783883618878786,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference
+W7_FIFO3,W7_Newest,annual_macro_AP,3,0.002959782742201019,-0.009692729944178847,0.015012706748055858,10,2000,exploratory circular annual blocks; no retraining; not joint company-time inference

@@ -1,0 +1,25 @@
+\begingroup
+\small\setstretch{1.12}\setlength{\tabcolsep}{3pt}
+\setlength{\LTleft}{\fill}\setlength{\LTright}{\fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}@{}}
+\caption{實驗一固定年份集成之 pooled 結果}\label{tab:stats-exp1-descriptive}\\
+\toprule
+方法 & AUC & F1-score & Recall \\
+\midrule\endfirsthead
+\multicolumn{4}{c}{表~\thetable（續）}\\
+\toprule
+方法 & AUC & F1-score & Recall \\
+\midrule\endhead
+\midrule\multicolumn{4}{r}{續下頁}\\\endfoot
+\bottomrule\endlastfoot
+Old3 & 0.7134\(\pm\)0.0046 & 0.1168\(\pm\)0.0046 & 0.2383\(\pm\)0.0759 \\
+New3 & 0.7959\(\pm\)0.0027 & 0.2007\(\pm\)0.0090 & 0.2268\(\pm\)0.0361 \\
+Equal6 & 0.7815\(\pm\)0.0026 & 0.1815\(\pm\)0.0065 & 0.2690\(\pm\)0.0414 \\
+V-static & 0.8152\(\pm\)0.0040 & 0.2355\(\pm\)0.0159 & 0.2481\(\pm\)0.0233 \\
+DCS-OLA & 0.7386\(\pm\)0.0078 & 0.1542\(\pm\)0.0078 & 0.2909\(\pm\)0.0607 \\
+DCS-LCA & 0.7369\(\pm\)0.0087 & 0.1631\(\pm\)0.0083 & 0.3195\(\pm\)0.0354 \\
+KNORA-E & 0.7613\(\pm\)0.0052 & 0.1837\(\pm\)0.0058 & 0.2714\(\pm\)0.0345 \\
+KNORA-U & 0.7481\(\pm\)0.0079 & 0.1817\(\pm\)0.0081 & 0.2620\(\pm\)0.0428 \\
+\end{longtable}
+\noindent{\footnotesize 資料來源：本研究實驗結果整理。\par 數值為十個種子的平均值與種子標準差；標準差不等同公司抽樣之標準誤。V-static 為 Calibration AP 選定的混合靜態方案；Equal6 為六模型等權平均。}
+\endgroup

@@ -1,0 +1,31 @@
+{
+  "observed_at": "2026-10-27T14:14:48.4277498+08:00",
+  "scope": "Current local machine, supplied by user as experiment equipment",
+  "cpu": [
+    {
+      "Name": "Intel(R) Core(TM) i7-10870H CPU @ 2.20GHz",
+      "NumberOfCores": 8,
+      "NumberOfLogicalProcessors": 16
+    }
+  ],
+  "physical_memory_bytes": 34123927552,
+  "os": {
+    "Caption": "Microsoft Windows 11 家用版",
+    "Version": "10.0.26200",
+    "OSArchitecture": "64 位元"
+  },
+  "gpu": [
+    {
+      "Name": "NVIDIA GeForce GTX 1650 Ti",
+      "AdapterRAM": 4293918720,
+      "DriverVersion": "32.0.15.9282"
+    },
+    {
+      "Name": "Intel(R) UHD Graphics",
+      "AdapterRAM": 1073741824,
+      "DriverVersion": "30.0.101.1994"
+    }
+  ],
+  "installed_ram_bytes": 34359738368.0,
+  "nvidia_smi_summary": "NVIDIA GeForce GTX 1650 Ti, 4096 MiB, 592.82"
+}

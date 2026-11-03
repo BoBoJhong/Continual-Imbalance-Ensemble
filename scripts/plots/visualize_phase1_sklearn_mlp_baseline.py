@@ -2,7 +2,7 @@
 Phase 1 sklearn MLP Baseline 視覺化（非 Torch 版）
 ================================================
 讀取 results/phase1_baseline/mlp/*_year_splits_mlp_raw.csv
-（含 bankruptcy / medical / stock；三策略：Old / Old+New / New）。
+（含 bankruptcy / medical；三策略：Old / Old+New / New）。
 
 使用：
     python scripts/plots/visualize_phase1_sklearn_mlp_baseline.py

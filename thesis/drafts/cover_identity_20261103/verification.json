@@ -1,0 +1,30 @@
+{
+  "verified_at_utc": "2026-11-02T16:43:59.476934+00:00",
+  "scope": "title and author/advisor identity only; results unchanged",
+  "values": {
+    "ncuCNtitle": "非穩態類別不平衡資料之模型集成與特徵選取研究",
+    "ncuENtitle": "Ensemble Learning and Feature Selection for Non-Stationary Class-Imbalanced Data",
+    "ncuStudent": "鍾柏安",
+    "ncuAdvisor": "蔡志豐"
+  },
+  "checks": {
+    "cover_ncuCNtitle": true,
+    "cover_ncuStudent": true,
+    "cover_ncuAdvisor": true,
+    "inner_title": true,
+    "chinese_abstract_title": true,
+    "english_abstract_title": true,
+    "pdf_metadata_title": true,
+    "pdf_metadata_author": true
+  },
+  "pages": 78,
+  "desktop_compile": "success (main.tex via existing 03_method.tex session)",
+  "native_export": "Biber startup failed (Windows DLL relocation); same main.pdf compiled with BibTeX fallback",
+  "remaining_export_warnings": [
+    "biblatex fall-back backend",
+    "undefined references summary / rerun BibTeX request"
+  ],
+  "data_source_check": "failed: scripts/analysis/fixed_company_statistics.py changed; not repaired or rebound",
+  "formal_handoff": "not prepared: native build report failed and existing data-source validation is stale",
+  "pdf_sha256": "62faf4303c0985873ed031cbae0f93e9fd08073a33a34670bdc6999de110c331"
+}

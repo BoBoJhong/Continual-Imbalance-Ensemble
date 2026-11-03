@@ -1,0 +1,53 @@
+{
+  "job_id": "lr_over_M2010_none_r100",
+  "seed": 456,
+  "classifier": "lr",
+  "sampling": "over",
+  "sampler": "ADASYN",
+  "train_years": [
+    2008,
+    2009,
+    2010
+  ],
+  "n_train": 11225,
+  "positive_before": 116,
+  "n_after": 22230,
+  "positive_after": 11121,
+  "fs": "none",
+  "ratio": 1.0,
+  "selected_features": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ],
+  "n_features": 18,
+  "fit_predict_seconds": 0.21095909998985007,
+  "params": {
+    "class_weight": null,
+    "random_state": 456,
+    "solver": "lbfgs",
+    "max_iter": 1000,
+    "warm_start": false
+  },
+  "warnings": [],
+  "selector_seed": 456,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-09-29T00:20:05.683763+00:00",
+  "cache_sha256": "1f086c6e278f935480b59622f9ce1d026c47fbaf7cc0000cce1d4f0c481a8e69"
+}

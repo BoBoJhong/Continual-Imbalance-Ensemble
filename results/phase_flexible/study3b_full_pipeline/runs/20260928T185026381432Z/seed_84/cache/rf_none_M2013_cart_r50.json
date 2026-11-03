@@ -1,0 +1,44 @@
+{
+  "job_id": "rf_none_M2013_cart_r50",
+  "seed": 84,
+  "classifier": "rf",
+  "sampling": "none",
+  "sampler": "None",
+  "train_years": [
+    2011,
+    2012,
+    2013
+  ],
+  "n_train": 10482,
+  "positive_before": 79,
+  "n_after": 10482,
+  "positive_after": 79,
+  "fs": "cart",
+  "ratio": 0.5,
+  "selected_features": [
+    "X11",
+    "X15",
+    "X10",
+    "X1",
+    "X16",
+    "X12",
+    "X13",
+    "X7",
+    "X18"
+  ],
+  "n_features": 9,
+  "fit_predict_seconds": 6.30901129997801,
+  "params": {
+    "n_estimators": 200,
+    "class_weight": null,
+    "random_state": 84,
+    "n_jobs": 4,
+    "max_depth": null
+  },
+  "warnings": [],
+  "selector_seed": 84,
+  "selector_fit_scope": "original_training_only_before_sampling",
+  "future_labels_used": false,
+  "completed_at": "2026-10-01T03:17:46.796829+00:00",
+  "cache_sha256": "6c9471568f3a6807f73fabd8da3a90d2c307109db0ba672ffb0fddff7dcef474"
+}

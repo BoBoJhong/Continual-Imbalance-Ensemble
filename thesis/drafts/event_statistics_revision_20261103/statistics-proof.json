@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "source_sha256": {
+    "scripts/thesis/export_event_statistics.py": "f5b6401744c9f497e966caa21479f6e7cfa012505f0ae327e256b02344009047",
+    "scripts/thesis/export_fixed_statistics.py": "8e72ad11477b85aa29266af63405352afff11bea976f2d97a56c7d314b469fe1",
+    "results/statistical_tests/fixed_two_experiments_event/20261031T120706072983Z/manifest.json": "32f6776b6fd6a72cf6ce2e51a883efa1ce9d76d1d8515760ba6ac7cb0e397747"
+  },
+  "generated_sha256": {
+    "thesis/latex/generated/event-statistics-20261103/appendix-experiment1.tex": "035d73ede33e467e1614e6ab002878a3192e0cb605ad5e1400d8c6e0acb7ae83",
+    "thesis/latex/generated/event-statistics-20261103/appendix-experiment2-AUC.tex": "e32808f5bccafd6b339e3a14642667f10c1c7b1be4e8675410794a9b3ae86a01",
+    "thesis/latex/generated/event-statistics-20261103/appendix-experiment2-F1.tex": "5649c13513f93635bbca189ad84234918ff05d98c5515581476e1a10208f42d7",
+    "thesis/latex/generated/event-statistics-20261103/appendix-experiment2-Recall.tex": "733b37adf76a95e150be37fc158fd01497aa0e5611845176c77f4921512f53dd",
+    "thesis/latex/generated/event-statistics-20261103/experiment1-auc-tests.tex": "01c7bbaf4f68531ac1a0d71b7226e08f4e08e6a2f1159fe947b5345beabc87a9",
+    "thesis/latex/generated/event-statistics-20261103/export-manifest.json": "d59e70e3c467384b6fd20d722e8cc891a585ed1cab98d75182fb0783b9cee513",
+    "thesis/latex/generated/event-statistics-20261103/summary.json": "366d6502c52e1b2d8132c2ffecb3c30d23e129021ef54ef5e0930b5a4cd4669b"
+  }
+}

@@ -1,0 +1,164 @@
+[
+  {
+    "current_feature": "X1",
+    "best": {
+      "old_feature": "X1",
+      "scale": 1000.0,
+      "n_matching": 55705,
+      "fraction": 0.7079764113774434
+    }
+  },
+  {
+    "current_feature": "X2",
+    "best": {
+      "old_feature": "X10",
+      "scale": 1000.0,
+      "n_matching": 55365,
+      "fraction": 0.7036552197453039
+    }
+  },
+  {
+    "current_feature": "X3",
+    "best": {
+      "old_feature": "X2",
+      "scale": 1000.0,
+      "n_matching": 55520,
+      "fraction": 0.7056251747540734
+    }
+  },
+  {
+    "current_feature": "X4",
+    "best": {
+      "old_feature": "X11",
+      "scale": 1000.0,
+      "n_matching": 56436,
+      "fraction": 0.7172669733865433
+    }
+  },
+  {
+    "current_feature": "X5",
+    "best": {
+      "old_feature": "X3",
+      "scale": 1000.0,
+      "n_matching": 53494,
+      "fraction": 0.6798759563813833
+    }
+  },
+  {
+    "current_feature": "X6",
+    "best": {
+      "old_feature": "X12",
+      "scale": 1000.0,
+      "n_matching": 55594,
+      "fraction": 0.7065656694034214
+    }
+  },
+  {
+    "current_feature": "X7",
+    "best": {
+      "old_feature": "X4",
+      "scale": 1000.0,
+      "n_matching": 55647,
+      "fraction": 0.707239266922549
+    }
+  },
+  {
+    "current_feature": "X8",
+    "best": {
+      "old_feature": "X13",
+      "scale": 1000.0,
+      "n_matching": 55502,
+      "fraction": 0.705396405785313
+    }
+  },
+  {
+    "current_feature": "X9",
+    "best": {
+      "old_feature": "X5",
+      "scale": 1000.0,
+      "n_matching": 60061,
+      "fraction": 0.7633385018174423
+    }
+  },
+  {
+    "current_feature": "X10",
+    "best": {
+      "old_feature": "X14",
+      "scale": 1000.0,
+      "n_matching": 55497,
+      "fraction": 0.7053328588495463
+    }
+  },
+  {
+    "current_feature": "X11",
+    "best": {
+      "old_feature": "X6",
+      "scale": 1000.0,
+      "n_matching": 55343,
+      "fraction": 0.7033756132279302
+    }
+  },
+  {
+    "current_feature": "X12",
+    "best": {
+      "old_feature": "X15",
+      "scale": 1000.0,
+      "n_matching": 55739,
+      "fraction": 0.7084085305406573
+    }
+  },
+  {
+    "current_feature": "X13",
+    "best": {
+      "old_feature": "X7",
+      "scale": 1000.0,
+      "n_matching": 55841,
+      "fraction": 0.7097048880302992
+    }
+  },
+  {
+    "current_feature": "X14",
+    "best": {
+      "old_feature": "X9",
+      "scale": 1000.0,
+      "n_matching": 55246,
+      "fraction": 0.702142802674055
+    }
+  },
+  {
+    "current_feature": "X15",
+    "best": {
+      "old_feature": "X8",
+      "scale": 1.0,
+      "n_matching": 68164,
+      "fraction": 0.8663226659210493
+    }
+  },
+  {
+    "current_feature": "X16",
+    "best": {
+      "old_feature": "X17",
+      "scale": 1000.0,
+      "n_matching": 55560,
+      "fraction": 0.7061335502402074
+    }
+  },
+  {
+    "current_feature": "X17",
+    "best": {
+      "old_feature": "X9",
+      "scale": 1000.0,
+      "n_matching": 55246,
+      "fraction": 0.702142802674055
+    }
+  },
+  {
+    "current_feature": "X18",
+    "best": {
+      "old_feature": "X18",
+      "scale": 1000.0,
+      "n_matching": 55519,
+      "fraction": 0.70561246536692
+    }
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "chapters/01_introduction.tex": "cd670824cf3bad4c5deb3fceb8c13a8d829d0898e7f3f2d47a9d90d714306bfb",
+  "chapters/02_literature.tex": "964315a703e4403918733a711e7647589978360120a8fb85e8971561cb783028",
+  "chapters/03_method.tex": "c00aff0e966fd95931a40a1fcdea9d1f8575b8f2f87e0f96373b2d4dc6fe7206",
+  "chapters/04_experiments.tex": "1fd5ff6674d122e05588a072c214a1a01110a28c200158260cf307774b7eb213",
+  "chapters/05_conclusion.tex": "a6b17fde83f4a8cc09a797d711d561cd10b44b6621031051ee09d28a0a172f29",
+  "chapters/appendix.tex": "ad6ae2795671635661f1ba8213ff46fe0df9c09f83c4a2d0b3198007bdc9046b",
+  "config.tex": "f5b6342578716ff2415e04d79cff0d5d35fe2d6554c73a34a005d60c611224b1",
+  "figures/README.txt": "f8aa2c8ae635cfc138e5448be82a5f9d8acc73aa2b13b1c6c8af02a4c342407b",
+  "fonts/kaiu.ttf": "d5cb3539cd9cab3d38fccc5e04c42b6adc11d7dcf87bea624f1b269c6c360c6d",
+  "forms/README_正式文件放這裡.txt": "0ece7c8401c6bfdd8b42c39ff956fa512ab495b38938db7ee437771368b74b4b",
+  "frontmatter/abstract_en.tex": "f794289e111d6a979f52205d5a498e78b85db42be8c10960b33980d49c9ef297",
+  "frontmatter/abstract_zh.tex": "db7691ada9214e59aa477e16d65c1211303ea72c75823c052b78344f75cd877b",
+  "frontmatter/acknowledgments.tex": "1999956df42b4f1dbb1ce0dd8c64cae5e334b940c8bc22e6c20bd3046d28ab7c",
+  "frontmatter/symbols.tex": "b4e60fd3e748bf110345e02b140852311bff00a90b0d96d3ba954811ff561053",
+  "legacy_reference/masterthesisXe.tex": "ef15a652b701f88b218bb6305f3484ce714f0d82b3d87bde0afef144c75040c9",
+  "legacy_reference/ncuthesisXe.cls": "fd17c458cfd85f9ba12b466949a6b98c35f6fffb3dfd8ee7b225c60e9c3fcaba",
+  "legacy_reference/readme.txt": "0f2c1a9d1180ce2af3043835b3099da35b60c4887fa50b4893bae221fd835439",
+  "main.tex": "acbbc9dd350d684a449b993ed016d6be483fb0368f4ac4e7190a0761cb8a2973",
+  "ncuimthesis.cls": "27bdf2fe65c734e230c0a118604a6c5dd28147fc60684f8b58d353f8a571d079",
+  "README_請先看.md": "4f072944f480f689487fd7d127bd993db568be825795f65a8fe6d5c8868cbd07",
+  "references.bib": "ed5c8fcb4991e88f77e0557daa2fa8ba714aba1ab4290b71898c411cf96099f5"
+}

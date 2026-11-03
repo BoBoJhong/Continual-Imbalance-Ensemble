@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "verified_at_utc": "2026-11-03T07:35:45.425115+00:00",
+  "scope": [
+    "restore TabM and TabICL methods, saved settings and provisional historical scores",
+    "add continual learning keywords and clarify limited two-stage model-level updates"
+  ],
+  "pages": 92,
+  "pdf_sha256": "1a2be73facecd0d751a04252c93f7f3bea2e162ac26d821eae44a6b738dac97a",
+  "tests": {
+    "passed": 39,
+    "command": "python -m pytest tests/test_thesis_sync.py tests/test_thesis_handoff.py tests/test_thesis_reader_tables.py -q -p no:cacheprovider"
+  },
+  "source_checks": "passed: sync_results and deep-baseline reference exporter",
+  "numerical_check": "independent raw-CSV means agree for all 6 strategy rows and 24 sampling rows; raw results unchanged",
+  "build": "passed: strict fonts, XeLaTeX with Biber 2.22, no undefined references, missing characters or overfull boxes",
+  "visual_review": {
+    "pages": [
+      3,
+      4,
+      18,
+      34,
+      52,
+      77,
+      78
+    ],
+    "result": "both abstracts one page, both keywords present, new method/summary/appendix tables readable, no clipping observed; grouping and split table note corrected"
+  },
+  "keywords": [
+    "持續學習",
+    "continual learning"
+  ],
+  "position": "one offline simulated pool expansion from Old to Old+New; not repeated deployments or tested long-term forgetting",
+  "new_citation": {
+    "key": "elwell2011incremental",
+    "doi": "10.1109/TNN.2011.2160459",
+    "verification": "author PDF p.1517 plus PubMed metadata; see literature-check.md"
+  },
+  "pending": [
+    "event-target reruns for TabM and TabICL",
+    "historical TabICL backend verification",
+    "multi-update and forgetting evaluation"
+  ],
+  "handoff": "thesis/handoffs/20261103T073451919743Z"
+}

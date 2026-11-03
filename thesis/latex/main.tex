@@ -1,0 +1,54 @@
+%!TEX program = xelatex
+% Overleaf: Settings > Compiler > XeLaTeX; Main document > main.tex
+\documentclass{ncuimthesis}
+\input{config.tex}
+% The editor uses its built-in BibTeX route; the pinned native export uses Biber.
+\ifdefined\ncuNativeBuild
+  \PassOptionsToPackage{backend=biber}{biblatex}
+\else
+  \PassOptionsToPackage{backend=bibtex}{biblatex}
+\fi
+\usepackage[style=numeric,sorting=none,giveninits=true,maxbibnames=2,minbibnames=1]{biblatex}
+\input{ncu-reference-style.tex}
+\addbibresource{references.bib}
+\hypersetup{pdftitle={\ncuCNtitle},pdfauthor={\ncuStudent}}
+\begin{document}
+\hypersetup{pageanchor=false} % 封面、書名頁與正式文件不建立重複頁碼錨點
+% 依中央大學 114 學年度新版裝訂次序。
+\ncuCover
+\ncuInnerTitle
+% 注意：以下均應使用實際取得之正式文件，不能以示意簽名頁代替。
+\ncuInsertForm{authorization} % 中央大學圖書館學位論文授權書
+\ifncuEmbargo\ncuInsertForm{embargo}\fi % 僅延後公開才需要
+\ncuInsertForm{advisor}       % 論文指導教授推薦書（簽名）
+\ifncuTBP
+  \ncuInsertForm{tbp-confirmation}
+  \IfFileExists{frontmatter/tbp-discussion.tex}{\input{frontmatter/tbp-discussion.tex}}{}
+\fi
+\ncuInsertForm{committee}     % 口試委員審定書（簽名）
+% 中英文摘要至表目錄：羅馬數字 i,ii,iii ...
+\ncuStartFront
+\input{frontmatter/abstract_zh.tex}
+\input{frontmatter/abstract_en.tex}
+\input{frontmatter/acknowledgments.tex}
+\clearpage\phantomsection\addcontentsline{toc}{chapter}{目錄}\tableofcontents
+\clearpage\phantomsection\addcontentsline{toc}{chapter}{圖目錄}\listoffigures
+\clearpage\phantomsection\addcontentsline{toc}{chapter}{表目錄}\listoftables
+% Symbols are explained at first use in the corresponding chapter.
+% 第一章開始連同參考文獻、附錄：阿拉伯數字 1,2,3 ...
+\ncuStartMain
+\input{chapters/01_introduction.tex}
+\input{chapters/02_literature.tex}
+\input{chapters/03_method.tex}
+\input{chapters/04_experiments.tex}
+\input{chapters/05_conclusion.tex}
+\clearpage
+\begingroup
+\setlength{\emergencystretch}{2em}
+\setcounter{biburllcpenalty}{9000}
+\printbibliography[title={參考文獻},heading=bibintoc]
+\endgroup
+% 附錄依序接在參考文獻後，頁碼不中斷。
+\ncuBeginAppendices
+\input{chapters/appendix.tex}
+\end{document}

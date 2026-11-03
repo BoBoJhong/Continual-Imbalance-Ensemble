@@ -13,6 +13,7 @@ dependencies = [
     "pandas==2.3.3",
     "scipy==1.17.1",
     "scikit-learn==1.8.0",
+    "deslib==0.3.7",
     "imbalanced-learn==0.14.1",
     "lightgbm==4.6.0",
     "xgboost==3.2.0",

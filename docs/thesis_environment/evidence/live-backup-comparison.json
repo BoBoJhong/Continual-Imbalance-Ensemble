@@ -1,0 +1,100 @@
+{
+  "backup": ".local\\overleaf-backups\\20261014T162215Z\\source",
+  "package": "thesis\\handoffs\\20261014T162413846931Z",
+  "remote_file_comparison": [
+    {
+      "path": "config.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "main.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "ncuimthesis.cls",
+      "same_as_local": true
+    },
+    {
+      "path": "README_請先看.md",
+      "same_as_local": true
+    },
+    {
+      "path": "references.bib",
+      "same_as_local": true
+    },
+    {
+      "path": "chapters/01_introduction.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "chapters/02_literature.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "chapters/03_method.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "chapters/04_experiments.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "chapters/05_conclusion.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "chapters/appendix.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "figures/README.txt",
+      "same_as_local": true
+    },
+    {
+      "path": "fonts/kaiu.ttf",
+      "same_as_local": true
+    },
+    {
+      "path": "forms/README_正式文件放這裡.txt",
+      "same_as_local": true
+    },
+    {
+      "path": "frontmatter/abstract_en.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "frontmatter/abstract_zh.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "frontmatter/acknowledgments.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "frontmatter/symbols.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "legacy_reference/masterthesisXe.tex",
+      "same_as_local": true
+    },
+    {
+      "path": "legacy_reference/ncuthesisXe.cls",
+      "same_as_local": true
+    },
+    {
+      "path": "legacy_reference/readme.txt",
+      "same_as_local": true
+    }
+  ],
+  "plan": [
+    {
+      "path": "chapters/03_method.tex",
+      "action": "already-current",
+      "remote_sha256": "c00aff0e966fd95931a40a1fcdea9d1f8575b8f2f87e0f96373b2d4dc6fe7206",
+      "baseline_sha256": "c00aff0e966fd95931a40a1fcdea9d1f8575b8f2f87e0f96373b2d4dc6fe7206",
+      "local_sha256": "c00aff0e966fd95931a40a1fcdea9d1f8575b8f2f87e0f96373b2d4dc6fe7206"
+    }
+  ],
+  "scope": "Read-only live download; local baseline/plan using that same backup. No online write."
+}
