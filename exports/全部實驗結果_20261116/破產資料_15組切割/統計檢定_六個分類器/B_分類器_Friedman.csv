@@ -1,0 +1,7 @@
+﻿setting,metric,k,n_splits,chi2,p,mean_rank_XGBoost,mean_rank_LightGBM,mean_rank_LogisticRegression,mean_rank_RandomForest,mean_rank_TabICL,mean_rank_TabM,p_holm,significant
+New_none,AUC,6,15,52.2190,<0.0001,1.7333,3.1333,5.6000,2.0667,3.4000,5.0667,<0.0001,yes
+New_none,F1,6,15,23.4190,0.0003,3.2000,3.0667,4.7333,1.9333,4.6000,3.4667,0.0003,yes
+New_none,Recall,6,15,26.4667,<0.0001,2.9333,4.2667,5.1333,1.9333,3.1333,3.6000,0.0001,yes
+pool6_mean,AUC,6,15,57.6286,<0.0001,3.6000,3.4667,4.4667,1.8000,1.6667,6.0000,<0.0001,yes
+pool6_mean,F1,6,15,53.2095,<0.0001,2.4000,3.6667,2.0000,5.0000,5.7333,2.2000,<0.0001,yes
+pool6_mean,Recall,6,15,31.1524,<0.0001,3.7333,3.3333,1.2000,3.8667,4.5333,4.3333,<0.0001,yes

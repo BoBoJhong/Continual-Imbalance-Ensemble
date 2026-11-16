@@ -1,0 +1,56 @@
+全部實驗結果（2026-11-16 從原始結果重新產生）
+
+每個分類器一個 Excel 檔，每檔分 AUC、F1、Recall 三頁，四位小數，10 個種子取平均。
+標示方式：粗體＝該列最高；綠底＝該欄最高；灰底＝平均列／平均欄。
+
+破產資料_15組切割（Test＝2015–2018 合併）
+  破產_XGBoost_基線+集成+特徵選取.xlsx：基線、集成（靜態／DES／DCS）、特徵選取集成 9 頁，
+    加上 2026-11-17 補做的兩項額外檢查 16 頁（排除2018_*、修正前_*，見下方）
+  破產_RandomForest_基線+集成.xlsx：基線、集成（補充，見下方）、XGB對RF 比較，共 9 頁
+  破產_LightGBM／LogisticRegression／TabM／TabICL_基線.xlsx：只有基線，各 3 頁
+  基線表由上到下：Old 1yr→15yr、16yr(retrain)、New 15yr→1yr、avg
+  欄：none、undersampling、oversampling、hybrid、avg
+  統計檢定_六個分類器：2026-11-13 的統計檢定表（「未四捨五入」資料夾是原始數字）
+  注意：TabM 的 Old 1yr（只有 1999 年）那一列要小心解讀，提前停止用的保留資料裡沒有破產公司。
+
+新生兒資料_5組切割（Test＝2022–2023 出生年合併）
+  統計檢定_六個分類器：2026-11-16 補做，做法與破產資料完全相同（規格第 11 節：A 基線、B 分類器、C 集成、D 特徵選取）；
+    程式是破產資料的同一支，只把切割換成 5 組、retrain 換成 retrain_6（scripts/analysis/year_splits_statistics_any.py；
+    用同一個包裝重算破產資料，10 個檔案與 11-13 版逐位元組相同）。
+    限制：只有 5 組切割時，配對 Wilcoxon 檢定就算 5 組全部同方向，p 最小也只有 0.0625，所以 A、B 配對、C、D
+    不可能出現「顯著」，只能看「A 較高／較低切割數」（5/5 表示每組切割都同方向）。B 的 Friedman 檢定不受此限，6 項中 4 項顯著。
+  新生兒_XGBoost_基線+集成+特徵選取.xlsx：9 頁
+  新生兒_RandomForest_基線+集成.xlsx：基線、集成（補充，見下方）、XGB對RF 比較，共 9 頁
+  新生兒_LightGBM／LogisticRegression／TabM／TabICL_基線.xlsx：各 3 頁
+  基線表由上到下：Old 1yr→5yr、6yr(retrain)、New 5yr→1yr、avg
+
+額外檢查（破產資料 15 組切割，XGBoost 模型池，沒有特徵選取；規格「尚未決定的項目」第 1、2 項）
+  做法：當初只存了種子 42 的逐筆預測，所以用論文那次的參數、種子、資料切法和同一份程式重新訓練模型池。
+        重訓後 2015–2018 的基線 6,200 筆、集成 9,450 筆與論文逐筆比對，AUC、F1、Recall、門檻差異都是 0。
+  1. 排除 2018（分頁 排除2018_*）：2018 年的 36 個破產是由資料結尾推定的。模型、門檻、V-static 都不變，
+     只把 Test 限縮到 2015–2017（83 個破產）。統計檢定家族 C（69 項）兩邊比較：顯著 42 項 → 46 項，
+     69 項中 63 項結論相同；不同的 6 項中 4 項是「不顯著 → 顯著」（方向不變），2 項是平均差很小、方向翻轉、兩邊都不顯著。
+     檢定檔：統計檢定_六個分類器/C_集成_排除2018.csv。
+  2. 修正前對照（分頁 修正前_*）：同樣 6 個模型，用套件預設設定組合（不校正、0.5 判定、DCS 平手取第一個、
+     KNORA-U 原本加權），即固定切割版論文的「修正前」。修正後的動態集成明顯較好（AUC 平均約高 0.12–0.36）；
+     但靜態 V-static 在修正前反而略高（AUC 0.9205 對 0.9146）。只是對照，沒有做統計檢定。
+  結果位置：results/extra_checks_15splits/（本 worktree）；程式：scripts/experiments/year_splits_extra_checks.py、
+            scripts/analysis/export_year_splits_extra_checks.py
+
+補充：RF 模型池集成（2026-11-16 加跑，放在兩份資料的 RandomForest_基線+集成.xlsx 內）
+  基線頁的數字來自原本的 RF 基線（論文用的那次），與先前的 RandomForest_基線.xlsx 逐格相同；集成頁來自這次加跑。
+  做法：與 XGBoost 集成相同（Old×3＋New×3、靜態／DES／DCS、10 個種子），只把模型池換成 Random Forest；
+        參數沿用 RF 基線用驗證資料挑好的那組；沒有做特徵選取。
+  頁面：基線、集成（與論文的表同樣排法），加上「XGB對RF_指標」比較頁（各方法對所有切割的平均、差、RF 較高的切割數）。
+  檢查：基線部分與原本 RF 基線比對，F1、Recall、門檻完全相同；AUC 只在小數第 6 位以後有極小差異，四位小數的表格完全相同。
+  破產資料 split 1+15（Old 只有 1999 年）有 4 個種子的 Old_over 模型校正失敗，改用平均機率代替（見 anomalies.csv）。
+  結果位置：results/supplement_rf_pool/（本 worktree）；程式：scripts/experiments/run_rf_pool_supplement.py、
+            scripts/analysis/export_rf_pool_supplement.py
+
+檢查：12 份 Excel 與 2026-11-10～13 交付的版本逐格比對，數字完全相同。
+
+來源（相對於 .claude/worktrees/）
+  破產 XGBoost：experiment-structure-data-check-957647/results/phase2_ensemble/year_splits_author2022_event/runs/20261110T062400490941Z
+  破產其他五種：nice-panini-f23610/results/phase1_baseline/year_splits_author2022_event/{lgb,rf,lr,tabm,tabicl}/runs/
+  新生兒全部：friendly-volhard-e1aff0/results/（phase2_ensemble/year_splits_natality_event、phase1_baseline/year_splits_natality_event）
+  規格：docs/15組年份切割三實驗規格_20261110.md、docs/新生兒資料年份切割三實驗規格_20261110.md

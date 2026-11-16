@@ -1,0 +1,199 @@
+﻿classifier,group,A,B,metric,n_splits,mean_diff,median_diff,A_higher,A_lower,ties,W,p,p_holm,significant
+XGBoost,A1 New vs Old,New_none,Old_none,AUC,5,0.006595716218987735,0.016683164301771858,3,2,0,6.0,0.8125,1.0,no
+XGBoost,A1 New vs Old,New_under,Old_under,AUC,5,0.006971237808348163,0.01575056826978105,3,2,0,6.0,0.8125,1.0,no
+XGBoost,A1 New vs Old,New_over,Old_over,AUC,5,0.003060798923099961,0.007134053655496464,4,1,0,5.0,0.625,1.0,no
+XGBoost,A1 New vs Old,New_hybrid,Old_hybrid,AUC,5,0.003080690498260785,0.012289397791576673,3,2,0,6.0,0.8125,1.0,no
+XGBoost,A2 sampling vs none (New),New_under,New_none,AUC,5,0.0003763326314539572,3.774815129609088e-05,3,2,0,6.0,0.8125,1.0,no
+XGBoost,A2 sampling vs none (New),New_over,New_none,AUC,5,-0.002627385080852207,-0.004218488142462173,2,3,0,3.0,0.3125,1.0,no
+XGBoost,A2 sampling vs none (New),New_hybrid,New_none,AUC,5,-0.0007315520058276404,-0.001987786820827675,2,3,0,6.0,0.8125,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_none,New_none,AUC,5,0.010857723082929139,0.0006756162640216834,4,1,0,2.0,0.1875,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_under,New_under,AUC,5,0.010182954261207144,0.00033943192245755593,4,1,0,2.0,0.1875,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_over,New_over,AUC,5,-0.010198117222086411,-0.016189441005446503,1,4,0,2.0,0.1875,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,5,0.007501600187187973,0.0007318773326701056,3,2,0,5.0,0.625,1.0,no
+XGBoost,A1 New vs Old,New_none,Old_none,F1,5,0.014362317790110778,0.03069450187638928,3,2,0,3.0,0.3125,1.0,no
+XGBoost,A1 New vs Old,New_under,Old_under,F1,5,0.012946332132547821,0.02469311105725308,3,2,0,4.0,0.4375,1.0,no
+XGBoost,A1 New vs Old,New_over,Old_over,F1,5,-0.03073856446534832,-0.02876251727210516,0,5,0,0.0,0.0625,1.0,no
+XGBoost,A1 New vs Old,New_hybrid,Old_hybrid,F1,5,-0.017886780132621072,-0.02054204360059053,1,4,0,2.0,0.1875,1.0,no
+XGBoost,A2 sampling vs none (New),New_under,New_none,F1,5,-0.0005969819210534189,5.508644748308811e-05,3,2,0,7.0,1.0,1.0,no
+XGBoost,A2 sampling vs none (New),New_over,New_none,F1,5,-0.026055150570238616,-0.03221158084881243,1,4,0,2.0,0.1875,1.0,no
+XGBoost,A2 sampling vs none (New),New_hybrid,New_none,F1,5,-0.0013651030700839394,-0.0009597810577442467,2,3,0,7.0,1.0,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_none,New_none,F1,5,0.019855344413667687,0.021013752160134236,4,1,0,1.0,0.125,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_under,New_under,F1,5,0.014823588894596396,0.015524094672238475,3,2,0,3.0,0.3125,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_over,New_over,F1,5,0.029505200080882744,0.016171943562122704,5,0,0,0.0,0.0625,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,5,0.027504373394708348,0.02487524741595437,5,0,0,0.0,0.0625,1.0,no
+XGBoost,A1 New vs Old,New_none,Old_none,Recall,5,0.012398190045248869,0.02126696832579189,3,2,0,4.0,0.4375,1.0,no
+XGBoost,A1 New vs Old,New_under,Old_under,Recall,5,0.004886877828054281,0.018552036199095012,3,2,0,7.0,1.0,1.0,no
+XGBoost,A1 New vs Old,New_over,Old_over,Recall,5,0.0066968325791855075,-0.0076923076923077205,2,3,0,6.0,0.8125,1.0,no
+XGBoost,A1 New vs Old,New_hybrid,Old_hybrid,Recall,5,0.010316742081447994,0.012217194570135814,3,2,0,5.0,0.625,1.0,no
+XGBoost,A2 sampling vs none (New),New_under,New_none,Recall,5,-0.005429864253393701,-0.008144796380090524,1,4,0,2.0,0.1875,1.0,no
+XGBoost,A2 sampling vs none (New),New_over,New_none,Recall,5,0.005610859728506756,-0.009049773755656076,2,3,0,6.0,0.8125,1.0,no
+XGBoost,A2 sampling vs none (New),New_hybrid,New_none,Recall,5,0.020995475113122174,0.01900452488687787,5,0,0,0.0,0.0625,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_none,New_none,Recall,5,0.011764705882352944,0.006787330316742057,5,0,0,0.0,0.0625,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_under,New_under,Recall,5,0.009502262443438925,0.0076923076923077205,4,1,0,1.0,0.125,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_over,New_over,Recall,5,0.012036199095022636,0.037556561085972884,3,2,0,3.0,0.3125,1.0,no
+XGBoost,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,5,0.01520361990950223,0.01538461538461533,5,0,0,0.0,0.0625,1.0,no
+LightGBM,A1 New vs Old,New_none,Old_none,AUC,5,-0.0066209449743770635,5.294523736876222e-05,3,2,0,7.0,1.0,1.0,no
+LightGBM,A1 New vs Old,New_under,Old_under,AUC,5,-0.005788264095780771,0.0007717298708850295,3,2,0,7.0,1.0,1.0,no
+LightGBM,A1 New vs Old,New_over,Old_over,AUC,5,-0.005828349822816303,-0.0015214489921066,2,3,0,5.0,0.625,1.0,no
+LightGBM,A1 New vs Old,New_hybrid,Old_hybrid,AUC,5,-0.003406013928311369,0.010657872301024218,3,2,0,6.0,0.8125,1.0,no
+LightGBM,A2 sampling vs none (New),New_under,New_none,AUC,5,0.0010479016475529069,7.30279136117451e-05,3,2,0,6.0,0.8125,1.0,no
+LightGBM,A2 sampling vs none (New),New_over,New_none,AUC,5,-0.014038294609391145,-0.016243990126899144,1,4,0,1.0,0.125,1.0,no
+LightGBM,A2 sampling vs none (New),New_hybrid,New_none,AUC,5,-0.013564929265868164,-0.011603458656589072,1,4,0,1.0,0.125,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_none,New_none,AUC,5,0.014858081852461024,0.0056559891591084765,4,1,0,2.0,0.1875,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_under,New_under,AUC,5,0.013489881140814309,0.005143718820237453,4,1,0,2.0,0.1875,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_over,New_over,AUC,5,0.01399971152836621,0.007003314352521661,4,1,0,1.0,0.125,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,5,0.013726917008326022,0.0010524152731168357,3,2,0,5.0,0.625,1.0,no
+LightGBM,A1 New vs Old,New_none,Old_none,F1,5,-0.019065746280540263,-0.028799219126033504,0,5,0,0.0,0.0625,1.0,no
+LightGBM,A1 New vs Old,New_under,Old_under,F1,5,-0.01555063773190638,-0.019230715278562016,0,5,0,0.0,0.0625,1.0,no
+LightGBM,A1 New vs Old,New_over,Old_over,F1,5,0.036751652454569086,0.02090688376994726,5,0,0,0.0,0.0625,1.0,no
+LightGBM,A1 New vs Old,New_hybrid,Old_hybrid,F1,5,0.020120731522176194,0.004999767371153208,3,2,0,5.0,0.625,1.0,no
+LightGBM,A2 sampling vs none (New),New_under,New_none,F1,5,0.002243621712094335,0.0017221005765610253,4,1,0,2.0,0.1875,1.0,no
+LightGBM,A2 sampling vs none (New),New_over,New_none,F1,5,-0.0016676963352291406,-0.0017109058483243955,1,4,0,3.0,0.3125,1.0,no
+LightGBM,A2 sampling vs none (New),New_hybrid,New_none,F1,5,-0.00461935491667792,-0.003621736870549064,1,4,0,3.0,0.3125,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_none,New_none,F1,5,0.016007679075470516,0.01713160640382444,5,0,0,0.0,0.0625,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_under,New_under,F1,5,0.010020606181116132,0.013078670912305412,5,0,0,0.0,0.0625,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_over,New_over,F1,5,-0.01247917437257121,-0.016459292447471185,0,5,0,0.0,0.0625,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,5,0.0005321968888894468,0.0006585061711145146,3,2,0,6.0,0.8125,1.0,no
+LightGBM,A1 New vs Old,New_none,Old_none,Recall,5,-0.053574660633484185,-0.04751131221719457,0,5,0,0.0,0.0625,1.0,no
+LightGBM,A1 New vs Old,New_under,Old_under,Recall,5,-0.04434389140271496,-0.03846153846153849,0,5,0,0.0,0.0625,1.0,no
+LightGBM,A1 New vs Old,New_over,Old_over,Recall,5,0.03276018099547513,0.028054298642534004,4,1,0,1.0,0.125,1.0,no
+LightGBM,A1 New vs Old,New_hybrid,Old_hybrid,Recall,5,0.026606334841628942,0.029864253393665108,3,2,0,5.0,0.625,1.0,no
+LightGBM,A2 sampling vs none (New),New_under,New_none,Recall,5,0.004072398190045234,0.0036199095022624306,4,1,0,1.0,0.125,1.0,no
+LightGBM,A2 sampling vs none (New),New_over,New_none,Recall,5,0.031221719457013596,0.042533936651583726,4,0,1,0.0,0.125,1.0,no
+LightGBM,A2 sampling vs none (New),New_hybrid,New_none,Recall,5,0.032488687782805434,0.061538461538461486,3,2,0,4.0,0.4375,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_none,New_none,Recall,5,0.045158371040724024,0.04389140271493214,5,0,0,0.0,0.0625,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_under,New_under,Recall,5,0.022986425339366578,0.027149321266968396,5,0,0,0.0,0.0625,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_over,New_over,Recall,5,0.013936651583710425,0.007239819004524917,4,1,0,3.0,0.3125,1.0,no
+LightGBM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,5,0.0018099547511312374,-0.024886877828054266,2,3,0,7.0,1.0,1.0,no
+LogisticRegression,A1 New vs Old,New_none,Old_none,AUC,5,0.005031966774801866,0.006510631874591444,4,1,0,2.0,0.1875,1.0,no
+LogisticRegression,A1 New vs Old,New_under,Old_under,AUC,5,0.004871883218128659,0.00724714454601505,4,1,0,2.0,0.1875,1.0,no
+LogisticRegression,A1 New vs Old,New_over,Old_over,AUC,5,0.027018478450907324,0.022326908204026275,4,1,0,2.0,0.1875,1.0,no
+LogisticRegression,A1 New vs Old,New_hybrid,Old_hybrid,AUC,5,0.026484815028371078,0.02224038946400586,4,1,0,2.0,0.1875,1.0,no
+LogisticRegression,A2 sampling vs none (New),New_under,New_none,AUC,5,-0.00019374919734700403,-0.0003373844108610635,2,3,0,3.0,0.3125,1.0,no
+LogisticRegression,A2 sampling vs none (New),New_over,New_none,AUC,5,-0.017026733335161026,-0.018750417322676127,0,5,0,0.0,0.0625,1.0,no
+LogisticRegression,A2 sampling vs none (New),New_hybrid,New_none,AUC,5,-0.014840100150617253,-0.016546236963749683,0,5,0,0.0,0.0625,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_none,New_none,AUC,5,0.000798524972645831,-0.001299293983876293,2,3,0,7.0,1.0,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_under,New_under,AUC,5,0.0009467284120330488,-0.0010290907035125363,2,3,0,6.0,0.8125,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_over,New_over,AUC,5,0.009215153542325893,0.006791573215772728,4,1,0,2.0,0.1875,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,5,0.008517493540953991,0.006076366040018155,4,1,0,2.0,0.1875,1.0,no
+LogisticRegression,A1 New vs Old,New_none,Old_none,F1,5,0.010265054706340404,0.004784688995215447,3,2,0,4.0,0.4375,1.0,no
+LogisticRegression,A1 New vs Old,New_under,Old_under,F1,5,0.0032809706882675925,-0.0035226237473428568,2,3,0,7.0,1.0,1.0,no
+LogisticRegression,A1 New vs Old,New_over,Old_over,F1,5,0.016915249465783867,0.01220502704269355,3,2,0,4.0,0.4375,1.0,no
+LogisticRegression,A1 New vs Old,New_hybrid,Old_hybrid,F1,5,0.021669841124243007,0.02716234891071273,4,1,0,2.0,0.1875,1.0,no
+LogisticRegression,A2 sampling vs none (New),New_under,New_none,F1,5,-0.004568673906933829,-0.006084234154409673,1,4,0,2.0,0.1875,1.0,no
+LogisticRegression,A2 sampling vs none (New),New_over,New_none,F1,5,-0.03307111610048569,-0.03207387824599345,0,5,0,0.0,0.0625,1.0,no
+LogisticRegression,A2 sampling vs none (New),New_hybrid,New_none,F1,5,-0.019808638307084604,-0.017415567826954526,0,5,0,0.0,0.0625,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_none,New_none,F1,5,0.014254563756144544,0.01874124523015991,5,0,0,0.0,0.0625,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_under,New_under,F1,5,0.01719737247052956,0.012543644122591624,5,0,0,0.0,0.0625,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_over,New_over,F1,5,0.023533780621206323,0.014819408083767471,5,0,0,0.0,0.0625,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,5,0.004125483289362286,-0.005046082264442919,2,3,0,7.0,1.0,1.0,no
+LogisticRegression,A1 New vs Old,New_none,Old_none,Recall,5,-0.0036199095022624306,0.004524886877828149,3,2,0,7.0,1.0,1.0,no
+LogisticRegression,A1 New vs Old,New_under,Old_under,Recall,5,-0.009049773755656132,-0.004524886877828094,2,3,0,5.0,0.625,1.0,no
+LogisticRegression,A1 New vs Old,New_over,Old_over,Recall,5,0.034570135746606355,0.030769230769230826,4,1,0,1.0,0.125,1.0,no
+LogisticRegression,A1 New vs Old,New_hybrid,Old_hybrid,Recall,5,0.029864253393665153,0.031674208144796434,3,2,0,3.0,0.3125,1.0,no
+LogisticRegression,A2 sampling vs none (New),New_under,New_none,Recall,5,-0.009049773755656155,-0.01357466063348417,1,3,1,1.0,0.25,1.0,no
+LogisticRegression,A2 sampling vs none (New),New_over,New_none,Recall,5,0.03058823529411765,0.031674208144796434,5,0,0,0.0,0.0625,1.0,no
+LogisticRegression,A2 sampling vs none (New),New_hybrid,New_none,Recall,5,0.01095022624434384,0.016289592760180993,4,1,0,4.0,0.4375,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_none,New_none,Recall,5,0.02262443438914029,0.01357466063348417,5,0,0,0.0,0.0625,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_under,New_under,Recall,5,0.03619909502262443,0.03619909502262442,5,0,0,0.0,0.0625,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_over,New_over,Recall,5,-0.016561085972850685,-0.017647058823529405,0,5,0,0.0,0.0625,1.0,no
+LogisticRegression,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,5,-0.031312217194570134,-0.025791855203619873,0,5,0,0.0,0.0625,1.0,no
+RandomForest,A1 New vs Old,New_none,Old_none,AUC,5,0.00044379131352305644,0.009249701887999229,3,2,0,6.0,0.8125,1.0,no
+RandomForest,A1 New vs Old,New_under,Old_under,AUC,5,-0.0003525325841563509,0.011032390609702403,3,2,0,6.0,0.8125,1.0,no
+RandomForest,A1 New vs Old,New_over,Old_over,AUC,5,0.0037737310859694783,0.0025992420339570055,4,1,0,4.0,0.4375,1.0,no
+RandomForest,A1 New vs Old,New_hybrid,Old_hybrid,AUC,5,0.008535262529093179,0.01508422837079848,4,1,0,3.0,0.3125,1.0,no
+RandomForest,A2 sampling vs none (New),New_under,New_none,AUC,5,0.0007503640873746109,0.0013497480821357266,4,1,0,5.0,0.625,1.0,no
+RandomForest,A2 sampling vs none (New),New_over,New_none,AUC,5,-0.010696390544181967,-0.013734161786858934,0,5,0,0.0,0.0625,1.0,no
+RandomForest,A2 sampling vs none (New),New_hybrid,New_none,AUC,5,-0.006231642494465173,-0.008880040731830796,2,3,0,3.0,0.3125,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_none,New_none,AUC,5,0.005351486646982417,-0.0011382060090143753,2,3,0,6.0,0.8125,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_under,New_under,AUC,5,0.00017150184634355802,-0.004922951569866996,2,3,0,7.0,1.0,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_over,New_over,AUC,5,-0.004101519492480965,-0.0057177216337457315,1,4,0,3.0,0.3125,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,5,0.006636568625365591,0.004628434089293587,5,0,0,0.0,0.0625,1.0,no
+RandomForest,A1 New vs Old,New_none,Old_none,F1,5,-0.006357047778263636,-0.005325823551296238,2,3,0,5.0,0.625,1.0,no
+RandomForest,A1 New vs Old,New_under,Old_under,F1,5,-0.01570922495555005,-0.017898319068589075,1,4,0,1.0,0.125,1.0,no
+RandomForest,A1 New vs Old,New_over,Old_over,F1,5,0.00753536075206288,-0.008697134864438627,2,3,0,6.0,0.8125,1.0,no
+RandomForest,A1 New vs Old,New_hybrid,Old_hybrid,F1,5,0.00526769677881952,-0.0076756909947574,2,3,0,7.0,1.0,1.0,no
+RandomForest,A2 sampling vs none (New),New_under,New_none,F1,5,-0.0026127611660085592,0.0004348030130483238,3,2,0,7.0,1.0,1.0,no
+RandomForest,A2 sampling vs none (New),New_over,New_none,F1,5,-0.0576188836241074,-0.05200936538719386,0,5,0,0.0,0.0625,1.0,no
+RandomForest,A2 sampling vs none (New),New_hybrid,New_none,F1,5,-0.05139486165439548,-0.05358210783356682,0,5,0,0.0,0.0625,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_none,New_none,F1,5,0.010793914273419502,0.007739950287482089,4,1,0,1.0,0.125,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_under,New_under,F1,5,0.004058265044179032,-0.00103380822085819,2,3,0,6.0,0.8125,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_over,New_over,F1,5,-0.02766883813897104,-0.03633232036182199,0,5,0,0.0,0.0625,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,5,0.012367556716623285,0.011875278953481616,5,0,0,0.0,0.0625,1.0,no
+RandomForest,A1 New vs Old,New_none,Old_none,Recall,5,-0.024162895927601836,-0.023529411764705965,1,4,0,2.0,0.1875,1.0,no
+RandomForest,A1 New vs Old,New_under,Old_under,Recall,5,-0.03909502262443437,-0.029864253393665163,1,4,0,2.0,0.1875,1.0,no
+RandomForest,A1 New vs Old,New_over,Old_over,Recall,5,0.04733031674208142,0.04705882352941171,3,2,0,3.0,0.3125,1.0,no
+RandomForest,A1 New vs Old,New_hybrid,Old_hybrid,Recall,5,0.03049773755656109,-0.00995475113122174,2,3,0,6.0,0.8125,1.0,no
+RandomForest,A2 sampling vs none (New),New_under,New_none,Recall,5,-0.008687782805429856,-0.003619909502262486,2,3,0,7.0,1.0,1.0,no
+RandomForest,A2 sampling vs none (New),New_over,New_none,Recall,5,0.021266968325791856,0.03393665158371045,3,2,0,5.0,0.625,1.0,no
+RandomForest,A2 sampling vs none (New),New_hybrid,New_none,Recall,5,0.007420814479638027,0.014479638009049833,4,1,0,5.0,0.625,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_none,New_none,Recall,5,-0.00470588235294116,-0.008144796380090524,2,3,0,7.0,1.0,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_under,New_under,Recall,5,-0.004615384615384632,0.0013574660633484115,3,2,0,7.0,1.0,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_over,New_over,Recall,5,-0.026877828054298624,-0.044343891402714886,2,3,0,3.0,0.3125,1.0,no
+RandomForest,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,5,0.010497737556561115,0.01583710407239819,4,1,0,3.0,0.3125,1.0,no
+TabICL,A1 New vs Old,New_none,Old_none,AUC,5,0.0018006306108215408,0.001578938567713295,3,2,0,4.0,0.4375,1.0,no
+TabICL,A1 New vs Old,New_under,Old_under,AUC,5,-0.00043069178933063945,-0.0007317237693005296,2,3,0,6.0,0.8125,1.0,no
+TabICL,A1 New vs Old,New_over,Old_over,AUC,5,0.001703190671446131,0.00284411304584542,3,2,0,6.0,0.8125,1.0,no
+TabICL,A1 New vs Old,New_hybrid,Old_hybrid,AUC,5,-0.0009677017558207713,0.0015382727123920414,3,2,0,7.0,1.0,1.0,no
+TabICL,A2 sampling vs none (New),New_under,New_none,AUC,5,-0.0021021380684844273,4.742833112225675e-05,3,2,0,7.0,1.0,1.0,no
+TabICL,A2 sampling vs none (New),New_over,New_none,AUC,5,-0.010673671128004835,-0.011688544138491741,0,5,0,0.0,0.0625,1.0,no
+TabICL,A2 sampling vs none (New),New_hybrid,New_none,AUC,5,-0.014086289418721632,-0.014735798772380293,0,5,0,0.0,0.0625,1.0,no
+TabICL,A3 Retrain vs New,Retrain_none,New_none,AUC,5,-0.0028390613797338203,-0.0014785365615613832,0,5,0,0.0,0.0625,1.0,no
+TabICL,A3 Retrain vs New,Retrain_under,New_under,AUC,5,-0.001108108726050805,-0.0018971503074850515,1,4,0,5.0,0.625,1.0,no
+TabICL,A3 Retrain vs New,Retrain_over,New_over,AUC,5,0.0010570107991450194,-0.0024435060269072384,2,3,0,7.0,1.0,1.0,no
+TabICL,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,5,0.005698261173526786,0.0018323806906462847,3,2,0,5.0,0.625,1.0,no
+TabICL,A1 New vs Old,New_none,Old_none,F1,5,0.006722886644655734,0.007282770341441425,4,1,0,4.0,0.4375,1.0,no
+TabICL,A1 New vs Old,New_under,Old_under,F1,5,-0.01598464793486285,-0.005047845312912802,1,4,0,4.0,0.4375,1.0,no
+TabICL,A1 New vs Old,New_over,Old_over,F1,5,-0.0013241225449774797,-0.010352090410819415,2,3,0,6.0,0.8125,1.0,no
+TabICL,A1 New vs Old,New_hybrid,Old_hybrid,F1,5,0.0038342621974910007,0.008890430960949991,3,2,0,6.0,0.8125,1.0,no
+TabICL,A2 sampling vs none (New),New_under,New_none,F1,5,-0.01862209183147754,-0.00810277801449727,2,3,0,4.0,0.4375,1.0,no
+TabICL,A2 sampling vs none (New),New_over,New_none,F1,5,-0.05514922257984708,-0.07162683990989988,0,5,0,0.0,0.0625,1.0,no
+TabICL,A2 sampling vs none (New),New_hybrid,New_none,F1,5,-0.05871942229636301,-0.0660990153646055,0,5,0,0.0,0.0625,1.0,no
+TabICL,A3 Retrain vs New,Retrain_none,New_none,F1,5,-0.012294460494442105,-0.01844607574950735,1,4,0,1.0,0.125,1.0,no
+TabICL,A3 Retrain vs New,Retrain_under,New_under,F1,5,0.00957010235453185,0.0013836804654618895,3,2,0,7.0,1.0,1.0,no
+TabICL,A3 Retrain vs New,Retrain_over,New_over,F1,5,-0.002637382687397305,0.007688619387590245,3,2,0,6.0,0.8125,1.0,no
+TabICL,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,5,0.012406080367067251,0.015638331931156435,4,1,0,2.0,0.1875,1.0,no
+TabICL,A1 New vs Old,New_none,Old_none,Recall,5,0.01266968325791853,0.013122171945701366,4,1,0,3.0,0.3125,1.0,no
+TabICL,A1 New vs Old,New_under,Old_under,Recall,5,0.005701357466063384,0.004977375565610842,3,2,0,5.0,0.625,1.0,no
+TabICL,A1 New vs Old,New_over,Old_over,Recall,5,0.020090497737556577,0.011764705882352955,5,0,0,0.0,0.0625,1.0,no
+TabICL,A1 New vs Old,New_hybrid,Old_hybrid,Recall,5,0.021628959276018083,0.034389140271493146,3,2,0,3.0,0.3125,1.0,no
+TabICL,A2 sampling vs none (New),New_under,New_none,Recall,5,-0.0028054298642533728,0.015837104072398245,3,2,0,7.0,1.0,1.0,no
+TabICL,A2 sampling vs none (New),New_over,New_none,Recall,5,-0.06054298642533934,-0.06968325791855201,0,5,0,0.0,0.0625,1.0,no
+TabICL,A2 sampling vs none (New),New_hybrid,New_none,Recall,5,-0.07194570135746606,-0.08235294117647057,0,5,0,0.0,0.0625,1.0,no
+TabICL,A3 Retrain vs New,Retrain_none,New_none,Recall,5,-0.00606334841628956,-0.010407239819004488,2,3,0,5.0,0.625,1.0,no
+TabICL,A3 Retrain vs New,Retrain_under,New_under,Recall,5,-0.037194570135746584,-0.0339366515837104,1,4,0,1.0,0.125,1.0,no
+TabICL,A3 Retrain vs New,Retrain_over,New_over,Recall,5,-0.011131221719457051,-0.01402714932126703,0,4,1,0.0,0.125,1.0,no
+TabICL,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,5,-0.010588235294117631,-0.00950226244343888,1,4,0,1.0,0.125,1.0,no
+TabM,A1 New vs Old,New_none,Old_none,AUC,5,0.006558260406847416,0.009458957573170834,4,1,0,4.0,0.4375,1.0,no
+TabM,A1 New vs Old,New_under,Old_under,AUC,5,0.004683513288748409,0.005769262050658086,4,1,0,5.0,0.625,1.0,no
+TabM,A1 New vs Old,New_over,Old_over,AUC,5,0.02096338491887133,0.01055299420702105,3,2,0,4.0,0.4375,1.0,no
+TabM,A1 New vs Old,New_hybrid,Old_hybrid,AUC,5,0.02613978088668405,0.02474884710878289,4,1,0,2.0,0.1875,1.0,no
+TabM,A2 sampling vs none (New),New_under,New_none,AUC,5,-0.0011985439007530685,-0.0004919203486138946,1,4,0,3.0,0.3125,1.0,no
+TabM,A2 sampling vs none (New),New_over,New_none,AUC,5,-0.019346369460500102,-0.021587398203126495,0,5,0,0.0,0.0625,1.0,no
+TabM,A2 sampling vs none (New),New_hybrid,New_none,AUC,5,-0.017374972970003212,-0.015368110166134152,0,5,0,0.0,0.0625,1.0,no
+TabM,A3 Retrain vs New,Retrain_none,New_none,AUC,5,0.0062820749801021595,0.0009321922172036423,3,2,0,4.0,0.4375,1.0,no
+TabM,A3 Retrain vs New,Retrain_under,New_under,AUC,5,0.007004936436708809,0.003032455675070822,5,0,0,0.0,0.0625,1.0,no
+TabM,A3 Retrain vs New,Retrain_over,New_over,AUC,5,0.004801463606789414,0.005570590862933877,4,1,0,4.0,0.4375,1.0,no
+TabM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,5,0.001795795070934303,-2.4945516285179714e-05,2,3,0,7.0,1.0,1.0,no
+TabM,A1 New vs Old,New_none,Old_none,F1,5,0.004312363899304905,0.00680505646206947,3,2,0,5.0,0.625,1.0,no
+TabM,A1 New vs Old,New_under,Old_under,F1,5,-0.003565844380868444,-0.010044323792037069,2,3,0,6.0,0.8125,1.0,no
+TabM,A1 New vs Old,New_over,Old_over,F1,5,-0.0005928069697545224,-0.0188848953636902,2,3,0,7.0,1.0,1.0,no
+TabM,A1 New vs Old,New_hybrid,Old_hybrid,F1,5,0.001756290279551842,0.0029761322465090556,3,2,0,7.0,1.0,1.0,no
+TabM,A2 sampling vs none (New),New_under,New_none,F1,5,-0.005675100726606108,-0.0033580380535503385,0,5,0,0.0,0.0625,1.0,no
+TabM,A2 sampling vs none (New),New_over,New_none,F1,5,-0.04079533602678247,-0.03700729024025173,0,5,0,0.0,0.0625,1.0,no
+TabM,A2 sampling vs none (New),New_hybrid,New_none,F1,5,-0.038246204056244106,-0.033380974147439735,0,5,0,0.0,0.0625,1.0,no
+TabM,A3 Retrain vs New,Retrain_none,New_none,F1,5,0.013145004466165022,0.009459483418829961,5,0,0,0.0,0.0625,1.0,no
+TabM,A3 Retrain vs New,Retrain_under,New_under,F1,5,0.013468376188484532,0.014040484644443463,5,0,0,0.0,0.0625,1.0,no
+TabM,A3 Retrain vs New,Retrain_over,New_over,F1,5,0.008899909038152631,0.012735196078749234,4,1,0,2.0,0.1875,1.0,no
+TabM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,5,0.00887177725293219,0.005541222451009908,3,2,0,4.0,0.4375,1.0,no
+TabM,A1 New vs Old,New_none,Old_none,Recall,5,0.006515837104072409,0.012217194570135759,3,2,0,7.0,1.0,1.0,no
+TabM,A1 New vs Old,New_under,Old_under,Recall,5,-0.001900452488687765,-0.005429864253393646,2,3,0,7.0,1.0,1.0,no
+TabM,A1 New vs Old,New_over,Old_over,Recall,5,0.001266968325791873,-0.003619909502262375,2,3,0,7.0,1.0,1.0,no
+TabM,A1 New vs Old,New_hybrid,Old_hybrid,Recall,5,0.014479638009049778,0.0221719457013575,4,1,0,4.0,0.4375,1.0,no
+TabM,A2 sampling vs none (New),New_under,New_none,Recall,5,-0.005248868778280536,-0.0031674208144796268,1,4,0,3.0,0.3125,1.0,no
+TabM,A2 sampling vs none (New),New_over,New_none,Recall,5,-0.031312217194570134,-0.028506787330316752,0,5,0,0.0,0.0625,1.0,no
+TabM,A2 sampling vs none (New),New_hybrid,New_none,Recall,5,-0.030859728506787355,-0.028054298642534004,0,5,0,0.0,0.0625,1.0,no
+TabM,A3 Retrain vs New,Retrain_none,New_none,Recall,5,0.019185520361990914,0.02307692307692305,5,0,0,0.0,0.0625,1.0,no
+TabM,A3 Retrain vs New,Retrain_under,New_under,Recall,5,0.008597285067873318,0.002262443438914019,3,1,1,2.0,0.375,1.0,no
+TabM,A3 Retrain vs New,Retrain_over,New_over,Recall,5,0.005701357466063361,0.006787330316742113,3,2,0,6.0,0.8125,1.0,no
+TabM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,5,-0.01828054298642533,-0.03529411764705881,1,4,0,3.5,0.375,1.0,no

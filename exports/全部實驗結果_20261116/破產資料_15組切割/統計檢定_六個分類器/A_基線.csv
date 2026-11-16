@@ -1,0 +1,199 @@
+﻿分類器,比較組,A,B,指標,切割數,平均差(A-B),中位數差(A-B),A較高切割數,A較低切割數,相同切割數,W,p值,Holm校正p值,顯著(Holm<0.05)
+XGBoost,A1 New vs Old,New_none,Old_none,AUC,15,0.1181,0.0704,13,2,0,7,0.0012,0.1276,no
+XGBoost,A1 New vs Old,New_under,Old_under,AUC,15,0.1130,0.0679,13,2,0,7,0.0012,0.1276,no
+XGBoost,A1 New vs Old,New_over,Old_over,AUC,15,0.1641,0.1408,15,0,0,0,<0.0001,0.0121,yes
+XGBoost,A1 New vs Old,New_hybrid,Old_hybrid,AUC,15,0.1698,0.1413,15,0,0,0,<0.0001,0.0121,yes
+XGBoost,A2 sampling vs none (New),New_under,New_none,AUC,15,-0.0000,0.0003,8,7,0,59,0.9780,1.0000,no
+XGBoost,A2 sampling vs none (New),New_over,New_none,AUC,15,-0.0292,-0.0212,0,15,0,0,<0.0001,0.0121,yes
+XGBoost,A2 sampling vs none (New),New_hybrid,New_none,AUC,15,-0.0277,-0.0187,0,15,0,0,<0.0001,0.0121,yes
+XGBoost,A3 Retrain vs New,Retrain_none,New_none,AUC,15,0.0042,-0.0003,7,8,0,36,0.1876,1.0000,no
+XGBoost,A3 Retrain vs New,Retrain_under,New_under,AUC,15,0.0045,0.0029,9,6,0,32,0.1205,1.0000,no
+XGBoost,A3 Retrain vs New,Retrain_over,New_over,AUC,15,-0.0262,-0.0326,2,13,0,3,0.0003,0.0427,yes
+XGBoost,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,15,-0.0258,-0.0319,2,13,0,3,0.0003,0.0427,yes
+XGBoost,A1 New vs Old,New_none,Old_none,F1,15,0.1725,0.1863,15,0,0,0,<0.0001,0.0121,yes
+XGBoost,A1 New vs Old,New_under,Old_under,F1,15,0.1787,0.2065,15,0,0,0,<0.0001,0.0121,yes
+XGBoost,A1 New vs Old,New_over,Old_over,F1,15,0.1554,0.1815,14,1,0,1,0.0001,0.0189,yes
+XGBoost,A1 New vs Old,New_hybrid,Old_hybrid,F1,15,0.1698,0.2161,14,1,0,2,0.0002,0.0266,yes
+XGBoost,A2 sampling vs none (New),New_under,New_none,F1,15,0.0090,0.0052,10,5,0,24,0.0413,1.0000,no
+XGBoost,A2 sampling vs none (New),New_over,New_none,F1,15,-0.0461,-0.0400,1,14,0,2,0.0002,0.0266,yes
+XGBoost,A2 sampling vs none (New),New_hybrid,New_none,F1,15,-0.0385,-0.0413,0,15,0,0,<0.0001,0.0121,yes
+XGBoost,A3 Retrain vs New,Retrain_none,New_none,F1,15,-0.0190,-0.0251,2,13,0,21,0.0256,1.0000,no
+XGBoost,A3 Retrain vs New,Retrain_under,New_under,F1,15,-0.0273,-0.0253,2,13,0,10,0.0026,0.2572,no
+XGBoost,A3 Retrain vs New,Retrain_over,New_over,F1,15,-0.0267,-0.0417,3,12,0,18,0.0151,0.9347,no
+XGBoost,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,15,-0.0340,-0.0539,3,12,0,10,0.0026,0.2572,no
+XGBoost,A1 New vs Old,New_none,Old_none,Recall,15,0.2099,0.1924,13,2,0,5,0.0006,0.0757,no
+XGBoost,A1 New vs Old,New_under,Old_under,Recall,15,0.2259,0.2303,14,1,0,1,0.0001,0.0189,yes
+XGBoost,A1 New vs Old,New_over,Old_over,Recall,15,0.1893,0.2429,13,2,0,13.5,0.0083,0.6437,no
+XGBoost,A1 New vs Old,New_hybrid,Old_hybrid,Recall,15,0.1844,0.2387,13,2,0,12,0.0043,0.3674,no
+XGBoost,A2 sampling vs none (New),New_under,New_none,Recall,15,0.0118,-0.0008,7,8,0,53,0.7197,1.0000,no
+XGBoost,A2 sampling vs none (New),New_over,New_none,Recall,15,-0.0708,-0.0538,4,11,0,17,0.0125,0.7969,no
+XGBoost,A2 sampling vs none (New),New_hybrid,New_none,Recall,15,-0.0848,-0.0706,2,13,0,11,0.0034,0.3055,no
+XGBoost,A3 Retrain vs New,Retrain_none,New_none,Recall,15,0.0437,0.0437,10,5,0,26,0.0534,1.0000,no
+XGBoost,A3 Retrain vs New,Retrain_under,New_under,Recall,15,0.0478,0.0378,12,3,0,14,0.0067,0.5640,no
+XGBoost,A3 Retrain vs New,Retrain_over,New_over,Recall,15,-0.0804,-0.0613,2,13,0,5,0.0006,0.0757,no
+XGBoost,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,15,-0.0766,-0.0748,2,13,0,4,0.0004,0.0547,no
+LightGBM,A1 New vs Old,New_none,Old_none,AUC,15,0.1050,0.0525,13,2,0,11,0.0034,0.3055,no
+LightGBM,A1 New vs Old,New_under,Old_under,AUC,15,0.1065,0.0516,13,2,0,7,0.0012,0.1276,no
+LightGBM,A1 New vs Old,New_over,Old_over,AUC,15,0.1548,0.1288,15,0,0,0,<0.0001,0.0121,yes
+LightGBM,A1 New vs Old,New_hybrid,Old_hybrid,AUC,15,0.1474,0.1260,15,0,0,0,<0.0001,0.0121,yes
+LightGBM,A2 sampling vs none (New),New_under,New_none,AUC,15,-0.0001,0.0009,10,5,0,41,0.3028,1.0000,no
+LightGBM,A2 sampling vs none (New),New_over,New_none,AUC,15,-0.0225,-0.0162,0,15,0,0,<0.0001,0.0121,yes
+LightGBM,A2 sampling vs none (New),New_hybrid,New_none,AUC,15,-0.0231,-0.0158,0,15,0,0,<0.0001,0.0121,yes
+LightGBM,A3 Retrain vs New,Retrain_none,New_none,AUC,15,-0.0033,-0.0056,3,12,0,31,0.1070,1.0000,no
+LightGBM,A3 Retrain vs New,Retrain_under,New_under,AUC,15,0.0108,0.0082,15,0,0,0,<0.0001,0.0121,yes
+LightGBM,A3 Retrain vs New,Retrain_over,New_over,AUC,15,-0.0183,-0.0227,1,14,0,4,0.0004,0.0547,no
+LightGBM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,15,-0.0159,-0.0119,2,13,0,5,0.0006,0.0757,no
+LightGBM,A1 New vs Old,New_none,Old_none,F1,15,0.1822,0.1876,15,0,0,0,<0.0001,0.0121,yes
+LightGBM,A1 New vs Old,New_under,Old_under,F1,15,0.1869,0.2114,15,0,0,0,<0.0001,0.0121,yes
+LightGBM,A1 New vs Old,New_over,Old_over,F1,15,0.1297,0.1531,13,2,0,3,0.0003,0.0427,yes
+LightGBM,A1 New vs Old,New_hybrid,Old_hybrid,F1,15,0.1344,0.1565,13,2,0,3,0.0003,0.0427,yes
+LightGBM,A2 sampling vs none (New),New_under,New_none,F1,15,0.0077,-0.0017,6,9,0,58,0.9341,1.0000,no
+LightGBM,A2 sampling vs none (New),New_over,New_none,F1,15,-0.0698,-0.0719,0,15,0,0,<0.0001,0.0121,yes
+LightGBM,A2 sampling vs none (New),New_hybrid,New_none,F1,15,-0.0636,-0.0703,0,15,0,0,<0.0001,0.0121,yes
+LightGBM,A3 Retrain vs New,Retrain_none,New_none,F1,15,-0.0628,-0.0717,0,15,0,0,<0.0001,0.0121,yes
+LightGBM,A3 Retrain vs New,Retrain_under,New_under,F1,15,-0.0415,-0.0476,2,13,0,7,0.0012,0.1276,no
+LightGBM,A3 Retrain vs New,Retrain_over,New_over,F1,15,0.0130,0.0104,11,4,0,15,0.0084,0.6439,no
+LightGBM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,15,0.0113,0.0142,10,5,0,25,0.0479,1.0000,no
+LightGBM,A1 New vs Old,New_none,Old_none,Recall,15,0.1564,0.1622,13,2,0,15,0.0084,0.6439,no
+LightGBM,A1 New vs Old,New_under,Old_under,Recall,15,0.2212,0.2109,14,1,0,1,0.0001,0.0189,yes
+LightGBM,A1 New vs Old,New_over,Old_over,Recall,15,0.2299,0.2235,13,2,0,6,0.0009,0.0966,no
+LightGBM,A1 New vs Old,New_hybrid,Old_hybrid,Recall,15,0.2119,0.2403,13,2,0,8,0.0015,0.1587,no
+LightGBM,A2 sampling vs none (New),New_under,New_none,Recall,15,0.0505,0.0420,13,2,0,9,0.0020,0.2034,no
+LightGBM,A2 sampling vs none (New),New_over,New_none,Recall,15,0.0314,0.0345,10,5,0,36,0.1876,1.0000,no
+LightGBM,A2 sampling vs none (New),New_hybrid,New_none,Recall,15,0.0166,0.0109,8,7,0,49.5,0.5509,1.0000,no
+LightGBM,A3 Retrain vs New,Retrain_none,New_none,Recall,15,0.1268,0.1235,15,0,0,0,0.0007,0.0759,no
+LightGBM,A3 Retrain vs New,Retrain_under,New_under,Recall,15,0.1124,0.1042,15,0,0,0,0.0007,0.0759,no
+LightGBM,A3 Retrain vs New,Retrain_over,New_over,Recall,15,-0.0105,-0.0050,6,9,0,47,0.4887,1.0000,no
+LightGBM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,15,0.0102,0.0143,9,6,0,45,0.3942,1.0000,no
+LogisticRegression,A1 New vs Old,New_none,Old_none,AUC,15,0.1150,0.1201,13,2,0,10,0.0026,0.2572,no
+LogisticRegression,A1 New vs Old,New_under,Old_under,AUC,15,0.1123,0.1204,13,2,0,10,0.0026,0.2572,no
+LogisticRegression,A1 New vs Old,New_over,Old_over,AUC,15,0.1467,0.1231,14,1,0,5,0.0006,0.0757,no
+LogisticRegression,A1 New vs Old,New_hybrid,Old_hybrid,AUC,15,0.1470,0.1199,14,1,0,3,0.0003,0.0427,yes
+LogisticRegression,A2 sampling vs none (New),New_under,New_none,AUC,15,-0.0000,-0.0000,7,8,0,58,0.9341,1.0000,no
+LogisticRegression,A2 sampling vs none (New),New_over,New_none,AUC,15,0.0318,0.0348,15,0,0,0,<0.0001,0.0121,yes
+LogisticRegression,A2 sampling vs none (New),New_hybrid,New_none,AUC,15,0.0318,0.0352,15,0,0,0,<0.0001,0.0121,yes
+LogisticRegression,A3 Retrain vs New,Retrain_none,New_none,AUC,15,0.0125,0.0149,11,4,0,22,0.0302,1.0000,no
+LogisticRegression,A3 Retrain vs New,Retrain_under,New_under,AUC,15,0.0123,0.0138,11,4,0,23,0.0353,1.0000,no
+LogisticRegression,A3 Retrain vs New,Retrain_over,New_over,AUC,15,0.0032,-0.0026,7,8,0,58,0.9341,1.0000,no
+LogisticRegression,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,15,0.0023,-0.0043,6,9,0,54,0.7615,1.0000,no
+LogisticRegression,A1 New vs Old,New_none,Old_none,F1,15,0.1225,0.1965,13,2,0,15,0.0084,0.6439,no
+LogisticRegression,A1 New vs Old,New_under,Old_under,F1,15,0.1243,0.1686,13,2,0,11,0.0034,0.3055,no
+LogisticRegression,A1 New vs Old,New_over,Old_over,F1,15,0.1081,0.1052,15,0,0,0,<0.0001,0.0121,yes
+LogisticRegression,A1 New vs Old,New_hybrid,Old_hybrid,F1,15,0.1095,0.1102,15,0,0,0,<0.0001,0.0121,yes
+LogisticRegression,A2 sampling vs none (New),New_under,New_none,F1,15,0.0037,-0.0013,5,8,2,42,0.8394,1.0000,no
+LogisticRegression,A2 sampling vs none (New),New_over,New_none,F1,15,-0.0029,-0.0222,6,9,0,45,0.4212,1.0000,no
+LogisticRegression,A2 sampling vs none (New),New_hybrid,New_none,F1,15,-0.0010,-0.0262,6,9,0,49,0.5614,1.0000,no
+LogisticRegression,A3 Retrain vs New,Retrain_none,New_none,F1,15,0.0136,-0.0066,7,8,0,57,0.8904,1.0000,no
+LogisticRegression,A3 Retrain vs New,Retrain_under,New_under,F1,15,0.0169,-0.0089,7,8,0,54,0.7615,1.0000,no
+LogisticRegression,A3 Retrain vs New,Retrain_over,New_over,F1,15,-0.0374,-0.0279,2,13,0,3,0.0003,0.0427,yes
+LogisticRegression,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,15,-0.0392,-0.0247,0,15,0,0,<0.0001,0.0121,yes
+LogisticRegression,A1 New vs Old,New_none,Old_none,Recall,15,0.1590,0.1765,12,2,1,11,0.0067,0.5640,no
+LogisticRegression,A1 New vs Old,New_under,Old_under,Recall,15,0.1165,0.1597,12,3,0,18,0.0151,0.9347,no
+LogisticRegression,A1 New vs Old,New_over,Old_over,Recall,15,0.1702,0.1975,13,2,0,8,0.0015,0.1587,no
+LogisticRegression,A1 New vs Old,New_hybrid,Old_hybrid,Recall,15,0.1602,0.2067,12,3,0,10,0.0026,0.2572,no
+LogisticRegression,A2 sampling vs none (New),New_under,New_none,Recall,15,-0.0401,0.0000,4,6,5,18,0.3613,1.0000,no
+LogisticRegression,A2 sampling vs none (New),New_over,New_none,Recall,15,0.2107,0.2647,14,1,0,15,0.0084,0.6439,no
+LogisticRegression,A2 sampling vs none (New),New_hybrid,New_none,Recall,15,0.1956,0.2319,14,1,0,15,0.0084,0.6439,no
+LogisticRegression,A3 Retrain vs New,Retrain_none,New_none,Recall,15,0.0186,0.0756,11,4,0,33,0.1250,1.0000,no
+LogisticRegression,A3 Retrain vs New,Retrain_under,New_under,Recall,15,0.0755,0.1008,12,3,0,20,0.0230,1.0000,no
+LogisticRegression,A3 Retrain vs New,Retrain_over,New_over,Recall,15,-0.0089,-0.0118,5,10,0,51,0.6387,1.0000,no
+LogisticRegression,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,15,0.0020,-0.0092,6,9,0,58,0.9341,1.0000,no
+RandomForest,A1 New vs Old,New_none,Old_none,AUC,15,0.0911,0.0440,11,4,0,16,0.0103,0.6973,no
+RandomForest,A1 New vs Old,New_under,Old_under,AUC,15,0.0877,0.0392,12,3,0,16,0.0103,0.6973,no
+RandomForest,A1 New vs Old,New_over,Old_over,AUC,15,0.1563,0.1220,13,2,0,3,0.0003,0.0427,yes
+RandomForest,A1 New vs Old,New_hybrid,Old_hybrid,AUC,15,0.1558,0.1236,13,2,0,3,0.0003,0.0427,yes
+RandomForest,A2 sampling vs none (New),New_under,New_none,AUC,15,-0.0001,0.0005,8,7,0,59,0.9780,1.0000,no
+RandomForest,A2 sampling vs none (New),New_over,New_none,AUC,15,-0.0218,-0.0198,0,15,0,0,<0.0001,0.0121,yes
+RandomForest,A2 sampling vs none (New),New_hybrid,New_none,AUC,15,-0.0202,-0.0191,0,15,0,0,<0.0001,0.0121,yes
+RandomForest,A3 Retrain vs New,Retrain_none,New_none,AUC,15,0.0084,0.0064,13,2,0,11,0.0034,0.3055,no
+RandomForest,A3 Retrain vs New,Retrain_under,New_under,AUC,15,0.0076,0.0067,10,5,0,15,0.0084,0.6439,no
+RandomForest,A3 Retrain vs New,Retrain_over,New_over,AUC,15,-0.0050,-0.0058,5,10,0,30,0.0946,1.0000,no
+RandomForest,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,15,-0.0073,-0.0096,5,10,0,27,0.0637,1.0000,no
+RandomForest,A1 New vs Old,New_none,Old_none,F1,15,0.1670,0.1771,14,1,0,4,0.0004,0.0547,no
+RandomForest,A1 New vs Old,New_under,Old_under,F1,15,0.1607,0.1644,14,1,0,5,0.0006,0.0757,no
+RandomForest,A1 New vs Old,New_over,Old_over,F1,15,0.1071,0.1254,14,1,0,1,0.0001,0.0189,yes
+RandomForest,A1 New vs Old,New_hybrid,Old_hybrid,F1,15,0.1106,0.1419,13,2,0,3,0.0003,0.0427,yes
+RandomForest,A2 sampling vs none (New),New_under,New_none,F1,15,-0.0013,-0.0061,5,10,0,45,0.4212,1.0000,no
+RandomForest,A2 sampling vs none (New),New_over,New_none,F1,15,-0.1346,-0.1382,0,15,0,0,<0.0001,0.0121,yes
+RandomForest,A2 sampling vs none (New),New_hybrid,New_none,F1,15,-0.1333,-0.1421,0,15,0,0,<0.0001,0.0121,yes
+RandomForest,A3 Retrain vs New,Retrain_none,New_none,F1,15,-0.0270,-0.0284,2,13,0,18,0.0151,0.9347,no
+RandomForest,A3 Retrain vs New,Retrain_under,New_under,F1,15,-0.0184,-0.0353,4,11,0,24,0.0413,1.0000,no
+RandomForest,A3 Retrain vs New,Retrain_over,New_over,F1,15,-0.0365,-0.0387,1,14,0,1,0.0001,0.0189,yes
+RandomForest,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,15,-0.0391,-0.0392,0,15,0,0,<0.0001,0.0121,yes
+RandomForest,A1 New vs Old,New_none,Old_none,Recall,15,0.1773,0.1496,14,1,0,1,0.0001,0.0189,yes
+RandomForest,A1 New vs Old,New_under,Old_under,Recall,15,0.1599,0.1277,14,1,0,2,0.0002,0.0266,yes
+RandomForest,A1 New vs Old,New_over,Old_over,Recall,15,0.1210,0.1412,14,1,0,6,0.0009,0.0966,no
+RandomForest,A1 New vs Old,New_hybrid,Old_hybrid,Recall,15,0.1591,0.1765,11,4,0,14,0.0067,0.5640,no
+RandomForest,A2 sampling vs none (New),New_under,New_none,Recall,15,0.0030,0.0025,10,5,0,45,0.3942,1.0000,no
+RandomForest,A2 sampling vs none (New),New_over,New_none,Recall,15,-0.1646,-0.1849,1,14,0,2,0.0002,0.0266,yes
+RandomForest,A2 sampling vs none (New),New_hybrid,New_none,Recall,15,-0.1238,-0.1496,4,11,0,14,0.0090,0.6439,no
+RandomForest,A3 Retrain vs New,Retrain_none,New_none,Recall,15,0.0384,0.0361,13,2,0,8,0.0015,0.1587,no
+RandomForest,A3 Retrain vs New,Retrain_under,New_under,Recall,15,-0.0032,-0.0034,7,8,0,55,0.7764,1.0000,no
+RandomForest,A3 Retrain vs New,Retrain_over,New_over,Recall,15,-0.0911,-0.0588,2,13,0,7,0.0012,0.1276,no
+RandomForest,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,15,-0.1403,-0.0857,1,14,0,1,0.0001,0.0189,yes
+TabICL,A1 New vs Old,New_none,Old_none,AUC,15,0.0942,0.0622,15,0,0,0,<0.0001,0.0121,yes
+TabICL,A1 New vs Old,New_under,Old_under,AUC,15,0.0953,0.0847,15,0,0,0,<0.0001,0.0121,yes
+TabICL,A1 New vs Old,New_over,Old_over,AUC,15,0.1093,0.1011,15,0,0,0,<0.0001,0.0121,yes
+TabICL,A1 New vs Old,New_hybrid,Old_hybrid,AUC,15,0.1085,0.1099,15,0,0,0,<0.0001,0.0121,yes
+TabICL,A2 sampling vs none (New),New_under,New_none,AUC,15,0.0010,0.0004,9,6,0,42,0.3303,1.0000,no
+TabICL,A2 sampling vs none (New),New_over,New_none,AUC,15,-0.0122,-0.0150,4,11,0,10,0.0026,0.2572,no
+TabICL,A2 sampling vs none (New),New_hybrid,New_none,AUC,15,-0.0123,-0.0112,3,12,0,12,0.0043,0.3674,no
+TabICL,A3 Retrain vs New,Retrain_none,New_none,AUC,15,-0.0070,-0.0107,3,12,0,17,0.0125,0.7969,no
+TabICL,A3 Retrain vs New,Retrain_under,New_under,AUC,15,-0.0092,-0.0115,2,13,0,4,0.0004,0.0547,no
+TabICL,A3 Retrain vs New,Retrain_over,New_over,AUC,15,-0.0159,-0.0159,0,15,0,0,<0.0001,0.0121,yes
+TabICL,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,15,-0.0166,-0.0171,1,14,0,2,0.0002,0.0266,yes
+TabICL,A1 New vs Old,New_none,Old_none,F1,15,0.1570,0.1632,15,0,0,0,<0.0001,0.0121,yes
+TabICL,A1 New vs Old,New_under,Old_under,F1,15,0.1615,0.1557,15,0,0,0,<0.0001,0.0121,yes
+TabICL,A1 New vs Old,New_over,Old_over,F1,15,0.1280,0.1593,14,1,0,1,0.0001,0.0189,yes
+TabICL,A1 New vs Old,New_hybrid,Old_hybrid,F1,15,0.1243,0.1523,15,0,0,0,<0.0001,0.0121,yes
+TabICL,A2 sampling vs none (New),New_under,New_none,F1,15,0.0091,0.0051,11,4,0,27,0.0637,1.0000,no
+TabICL,A2 sampling vs none (New),New_over,New_none,F1,15,-0.0661,-0.0780,0,15,0,0,<0.0001,0.0121,yes
+TabICL,A2 sampling vs none (New),New_hybrid,New_none,F1,15,-0.0632,-0.0733,0,15,0,0,<0.0001,0.0121,yes
+TabICL,A3 Retrain vs New,Retrain_none,New_none,F1,15,-0.0258,-0.0250,3,12,0,14,0.0067,0.5640,no
+TabICL,A3 Retrain vs New,Retrain_under,New_under,F1,15,-0.0459,-0.0445,2,13,0,5,0.0006,0.0757,no
+TabICL,A3 Retrain vs New,Retrain_over,New_over,F1,15,-0.0116,-0.0173,4,11,0,23,0.0353,1.0000,no
+TabICL,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,15,-0.0175,-0.0196,3,12,0,14,0.0067,0.5640,no
+TabICL,A1 New vs Old,New_none,Old_none,Recall,15,0.2344,0.2118,14,1,0,1,0.0001,0.0189,yes
+TabICL,A1 New vs Old,New_under,Old_under,Recall,15,0.2126,0.1882,15,0,0,0,<0.0001,0.0121,yes
+TabICL,A1 New vs Old,New_over,Old_over,Recall,15,0.2552,0.2731,15,0,0,0,0.0007,0.0759,no
+TabICL,A1 New vs Old,New_hybrid,Old_hybrid,Recall,15,0.2227,0.2185,15,0,0,0,<0.0001,0.0121,yes
+TabICL,A2 sampling vs none (New),New_under,New_none,Recall,15,-0.0050,0.0017,8,7,0,55,0.8040,1.0000,no
+TabICL,A2 sampling vs none (New),New_over,New_none,Recall,15,-0.0308,-0.0151,6,9,0,36,0.1728,1.0000,no
+TabICL,A2 sampling vs none (New),New_hybrid,New_none,Recall,15,-0.0494,-0.0420,4,11,0,28,0.0730,1.0000,no
+TabICL,A3 Retrain vs New,Retrain_none,New_none,Recall,15,-0.0253,-0.0076,6,9,0,41,0.3028,1.0000,no
+TabICL,A3 Retrain vs New,Retrain_under,New_under,Recall,15,-0.0497,-0.0731,3,12,0,15,0.0084,0.6439,no
+TabICL,A3 Retrain vs New,Retrain_over,New_over,Recall,15,-0.0803,-0.0739,0,15,0,0,<0.0001,0.0121,yes
+TabICL,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,15,-0.0718,-0.0857,3,12,0,6,0.0022,0.2132,no
+TabM,A1 New vs Old,New_none,Old_none,AUC,15,0.1705,0.1545,10,5,0,18,0.0151,0.9347,no
+TabM,A1 New vs Old,New_under,Old_under,AUC,15,0.1742,0.1639,12,3,0,16,0.0103,0.6973,no
+TabM,A1 New vs Old,New_over,Old_over,AUC,15,0.1990,0.2514,11,4,0,16,0.0103,0.6973,no
+TabM,A1 New vs Old,New_hybrid,Old_hybrid,AUC,15,0.2058,0.2483,12,3,0,14,0.0067,0.5640,no
+TabM,A2 sampling vs none (New),New_under,New_none,AUC,15,0.0063,0.0039,9,6,0,40,0.2769,1.0000,no
+TabM,A2 sampling vs none (New),New_over,New_none,AUC,15,-0.0061,-0.0124,6,9,0,42,0.3303,1.0000,no
+TabM,A2 sampling vs none (New),New_hybrid,New_none,AUC,15,-0.0029,-0.0038,7,8,0,52,0.6788,1.0000,no
+TabM,A3 Retrain vs New,Retrain_none,New_none,AUC,15,0.0137,0.0174,10,5,0,33,0.1354,1.0000,no
+TabM,A3 Retrain vs New,Retrain_under,New_under,AUC,15,0.0052,0.0027,8,7,0,52,0.6788,1.0000,no
+TabM,A3 Retrain vs New,Retrain_over,New_over,AUC,15,0.0172,0.0059,9,6,0,36,0.1876,1.0000,no
+TabM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,AUC,15,0.0239,0.0106,12,3,0,18,0.0151,0.9347,no
+TabM,A1 New vs Old,New_none,Old_none,F1,15,0.1605,0.2384,12,3,0,11,0.0034,0.3055,no
+TabM,A1 New vs Old,New_under,Old_under,F1,15,0.1666,0.2365,13,2,0,9,0.0020,0.2034,no
+TabM,A1 New vs Old,New_over,Old_over,F1,15,0.1364,0.1766,14,1,0,3,0.0003,0.0427,yes
+TabM,A1 New vs Old,New_hybrid,Old_hybrid,F1,15,0.1416,0.1850,14,1,0,1,0.0001,0.0189,yes
+TabM,A2 sampling vs none (New),New_under,New_none,F1,15,0.0036,0.0051,9,6,0,48,0.5245,1.0000,no
+TabM,A2 sampling vs none (New),New_over,New_none,F1,15,-0.0464,-0.0564,2,13,0,6,0.0009,0.0966,no
+TabM,A2 sampling vs none (New),New_hybrid,New_none,F1,15,-0.0434,-0.0463,1,14,0,5,0.0006,0.0757,no
+TabM,A3 Retrain vs New,Retrain_none,New_none,F1,15,0.0003,-0.0088,7,8,0,49,0.5614,1.0000,no
+TabM,A3 Retrain vs New,Retrain_under,New_under,F1,15,-0.0039,-0.0094,5,10,0,40,0.2769,1.0000,no
+TabM,A3 Retrain vs New,Retrain_over,New_over,F1,15,-0.0366,-0.0448,1,14,0,3,0.0003,0.0427,yes
+TabM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,F1,15,-0.0267,-0.0270,4,11,0,15,0.0084,0.6439,no
+TabM,A1 New vs Old,New_none,Old_none,Recall,15,0.2226,0.2723,15,0,0,0,<0.0001,0.0121,yes
+TabM,A1 New vs Old,New_under,Old_under,Recall,15,0.1939,0.2479,13,2,0,3,0.0003,0.0427,yes
+TabM,A1 New vs Old,New_over,Old_over,Recall,15,0.1523,0.1798,12,3,0,7,0.0012,0.1276,no
+TabM,A1 New vs Old,New_hybrid,Old_hybrid,Recall,15,0.1638,0.2176,12,3,0,8,0.0031,0.2886,no
+TabM,A2 sampling vs none (New),New_under,New_none,Recall,15,-0.0216,-0.0160,6,9,0,30,0.0946,1.0000,no
+TabM,A2 sampling vs none (New),New_over,New_none,Recall,15,-0.0489,-0.0353,5,10,0,23,0.0353,1.0000,no
+TabM,A2 sampling vs none (New),New_hybrid,New_none,Recall,15,-0.0470,-0.0345,5,10,0,20,0.0215,1.0000,no
+TabM,A3 Retrain vs New,Retrain_none,New_none,Recall,15,-0.0673,-0.0613,0,15,0,0,<0.0001,0.0121,yes
+TabM,A3 Retrain vs New,Retrain_under,New_under,Recall,15,-0.0356,-0.0303,5,10,0,19,0.0199,1.0000,no
+TabM,A3 Retrain vs New,Retrain_over,New_over,Recall,15,0.0673,0.0597,15,0,0,0,<0.0001,0.0121,yes
+TabM,A3 Retrain vs New,Retrain_hybrid,New_hybrid,Recall,15,0.0806,0.0731,15,0,0,0,0.0006,0.0759,no

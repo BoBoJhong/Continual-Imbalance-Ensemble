@@ -1,0 +1,168 @@
+{
+  "protocol": "year_splits15_bankruptcy_author2022_event_v1",
+  "status": "completed",
+  "created_at": "2026-11-15T18:48:36.856535+00:00",
+  "config": {
+    "classifier": "rf",
+    "baseline_only": false,
+    "seeds": [
+      42,
+      123,
+      456,
+      789,
+      2024,
+      7,
+      21,
+      84,
+      168,
+      999
+    ],
+    "splits": [
+      "split_1+15",
+      "split_2+14",
+      "split_3+13",
+      "split_4+12",
+      "split_5+11",
+      "split_6+10",
+      "split_7+9",
+      "split_8+8",
+      "split_9+7",
+      "split_10+6",
+      "split_11+5",
+      "split_12+4",
+      "split_13+3",
+      "split_14+2",
+      "split_15+1",
+      "retrain_16"
+    ],
+    "fs_configs": [
+      [
+        "none",
+        1.0
+      ]
+    ],
+    "budget": 24,
+    "threads": 3,
+    "workers": 5,
+    "k": 7,
+    "validation_ratio": 0.2,
+    "tune_seed": 42
+  },
+  "provenance": {
+    "raw_sha256": "dc73a8386d448523cff97ab6d0b17d1424c675ed61357b84b7588298e6641a6f",
+    "labels_sha256": "abe246e285d4f6214df8ae32d7dd245647c6c7cf89dc10e79eafc4830e44bf11",
+    "data_csv": "data/processed/bankruptcy_author2022_aligned_v1.csv",
+    "labels_csv": "data/processed/bankruptcy_event_labels_author2022_v1.csv",
+    "python": "3.12.14",
+    "versions": {
+      "deslib": "0.3.7",
+      "numpy": "2.4.2",
+      "pandas": "2.3.3",
+      "scikit-learn": "1.8.0",
+      "scipy": "1.17.1",
+      "xgboost": "3.2.0",
+      "imbalanced-learn": "0.14.1",
+      "lightgbm": "4.6.0"
+    },
+    "sources": {
+      "experiments/phase2_ensemble/dynamic/des/bankruptcy_year_splits_event.py": "41ce9a59a4ec33e8a8b468eeddb72e99816b5ab384d076f4d52dee268e0e9e6a",
+      "experiments/phase2_ensemble/dynamic/des/bankruptcy_standard_dynamic.py": "a6444cf18edb244033c9f249647621466ad88acacc79883ffda16bc4fb1c71ff",
+      "experiments/phase2_ensemble/dynamic/des/bankruptcy_standard_dynamic_event.py": "bc924919f77ef16f852824a119d32b0cfc9b81de148a76540b91c7abd5ba8b9a",
+      "experiments/phase2_ensemble/dynamic/des/bankruptcy_calibrated_ds_replay.py": "b0618e9a50decc8b758ec1c00375df807eb0cf84210de358e4d8582338a39e27",
+      "experiments/phase1_baseline/bankruptcy_fixed_event_baselines.py": "ec618a593c58b409c43a10ff8192b1d79cc9caf4bb773bba4faf1f9459183dea",
+      "experiments/_shared/common_modeling.py": "210d5bb3b3cb2a53b4a1eecbdd301a5bf7149393a0d591c0450724e4c27428ec",
+      "experiments/_shared/baseline_val_search.py": "0a44761277ee2c6b9a83cff04f49ca1200cc0764014bc5950dab26081f8e005b",
+      "src/ensemble/standard_dynamic.py": "a328d17d87d11859242223465ea8231ba5f2e949509f4103adfbee9bdd3d8085",
+      "src/data/sampler.py": "4aeb1e488f28f9141096214156e94c2568c2f57939fc2c5277ea1f456a3b3c5a",
+      "src/models/xgboost_wrapper.py": "7d45444407d25551af061658f992015891e81f6bfb04202fdbea7ae38225369e",
+      "src/models/lightgbm_wrapper.py": "17a6282348e27cecb6d7b5efc0317c270397015a0948ea72f3fee1ea5069d3c0",
+      "src/models/random_forest_wrapper.py": "b6e3074c6e6dc2d4bf4563ceca5f3912d042c71bf99b8151ce7eec596081f871",
+      "src/models/logistic_regression_wrapper.py": "dd656f1fd0af6f7741a0fdcb579a30e88f07c51643cc824ce1bb3bf63f4b5ff0",
+      "src/models/tabm_wrapper.py": "68f5480ad39176700ac6a2ad75ec428210f16fe9bd3ba9962b7d38617fdbbf4b",
+      "src/models/tabicl_wrapper.py": "86b8653e0674231d5a65417b2940b0c37bf26a9862685e884ae03d9fb04958c6",
+      "src/evaluation/metrics.py": "07f81f81138338e39e46d194e0aa5a39819d21c360b2968a18da0c0c4728c14e",
+      "config/model_config.yaml": "ac67e15f7666a83a6688d22d3a16848917ecfebc77c61637d8a8cb96c61edfac",
+      "config/sampling_config.yaml": "2692f15fabceeaf0f354ecba10c94b6ce99c28af510b815e8aecc8f1701e603d",
+      "config/dynamic_selection_correction_v3.json": "57ea02e8cbd832201c821a9e0a38edfe9dd806ff82f4c92a5bf7dfd212872692"
+    }
+  },
+  "command": [
+    "C:/Users/User/0_git/Continual-Imbalance-Ensemble/.claude/worktrees/export-experiment-results-spreadsheet-e8d5b3/scripts/experiments/run_rf_pool_supplement.py",
+    "--classifier",
+    "rf",
+    "--fs-methods",
+    "--workers",
+    "5",
+    "--threads",
+    "3",
+    "--reuse-tuning",
+    "results/phase1_baseline/year_splits_author2022_event/rf/runs/20261110T095833694876Z",
+    "--output-root",
+    "C:/Users/User/0_git/Continual-Imbalance-Ensemble/.claude/worktrees/export-experiment-results-spreadsheet-e8d5b3/results/supplement_rf_pool/bankruptcy/runs"
+  ],
+  "features": [
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5",
+    "X6",
+    "X7",
+    "X8",
+    "X9",
+    "X10",
+    "X11",
+    "X12",
+    "X13",
+    "X14",
+    "X15",
+    "X16",
+    "X17",
+    "X18"
+  ],
+  "slots": [
+    "Old_under",
+    "Old_over",
+    "Old_hybrid",
+    "New_under",
+    "New_over",
+    "New_hybrid"
+  ],
+  "samplers": {
+    "none": "None",
+    "under": "TomekLinks",
+    "over": "ADASYN",
+    "hybrid": "SMOTEENN"
+  },
+  "classifier": "rf",
+  "specification": "docs/15組年份切割三實驗規格_20261110.md",
+  "target": "reconstructed next-year event: failed company's final observed feature year=1; all other rows 0",
+  "label_ledger": {
+    "labels_sha256": "abe246e285d4f6214df8ae32d7dd245647c6c7cf89dc10e79eafc4830e44bf11",
+    "n_positive": 609,
+    "evidence_status": "annual_aggregate_verified_exact_availability_unverified"
+  },
+  "splits": "old_years k=1..15: Old=1999..1998+k, New=1999+k..2014; Test=2015-2018; retrain_16 = all training years, evaluated once",
+  "validation": "20% of every training year, stratified on the event label, seed 42+year; identical rows for every split; halved (seed 42) into disjoint DSEL/Calibration; not CV",
+  "representation": "impute, scale and supervised FS on Old_fit only, before sampling",
+  "tuning": "per split x period x sampler: fixed candidate budget (candidate 0 = factory default) ranked by validation AUC with seed 42; chosen parameters are reused for every seed and every FS setting",
+  "selection": "baseline F1 threshold on the whole validation set; ensemble Platt on DSEL, static AP ranking and F1 thresholds on Calibration only; Test evaluation only",
+  "dynamic_selection": "protocol v3 corrections C1-C4 (config/dynamic_selection_correction_v3.json), member decision threshold = DSEL event share of this run",
+  "departures_from_fixed_year_study": [
+    "validation is a within-training-year holdout (the 2014 year is training data for New), so validation and training years overlap; one company can be in a training year and in validation for another year",
+    "hyperparameters are tuned per split instead of reusing the fixed-year choices",
+    "too few events for ADASYN/SMOTE: neighbours are reduced, then resampling is skipped (see anomalies.csv)",
+    "a member whose Platt slope is not positive is replaced by the smoothed prior (see anomalies.csv)"
+  ],
+  "limitations": "early Old windows contain very few events (1999 has 3); seed SD is not independent-data uncertainty; annual label availability is reconstructed, not filing-date verified",
+  "tuning_reused_from": {
+    "run": "results/phase1_baseline/year_splits_author2022_event/rf/runs/20261110T095833694876Z",
+    "files": 124
+  },
+  "last_started_at": "2026-11-15T18:48:36.969127+00:00",
+  "pid": 22044,
+  "completed_at": "2026-11-15T20:23:39.207160+00:00",
+  "n_baseline_rows": 6200,
+  "n_ensemble_rows": 47250,
+  "n_anomaly_notes": 24
+}

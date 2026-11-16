@@ -1,0 +1,22 @@
+{
+  "purpose": "supplementary comparison: ensemble with a Random Forest pool (thesis pool is XGBoost)",
+  "wrapper": "run_rf_pool_supplement.py",
+  "wrapper_sha256": "6d536bf053126bfb47a21b24f99c0a52a2af73e2884f6cc300f4d5ac234a1626",
+  "runner": "C:\\Users\\User\\0_git\\Continual-Imbalance-Ensemble\\.claude\\worktrees\\friendly-volhard-e1aff0\\experiments\\phase2_ensemble\\dynamic\\des\\natality_year_splits_event.py",
+  "change": "only the guard 'The ensemble pool is XGBoost; other classifiers need --baseline-only' is skipped; the runner source is unchanged",
+  "feature_selection": "not run (ensemble without feature selection only)",
+  "argv": [
+    "C:/Users/User/0_git/Continual-Imbalance-Ensemble/.claude/worktrees/export-experiment-results-spreadsheet-e8d5b3/scripts/experiments/run_rf_pool_supplement.py",
+    "--classifier",
+    "rf",
+    "--fs-methods",
+    "--workers",
+    "3",
+    "--threads",
+    "3",
+    "--reuse-tuning",
+    "results/phase1_baseline/year_splits_natality_event/rf/runs/20261111T003557629987Z",
+    "--output-root",
+    "C:/Users/User/0_git/Continual-Imbalance-Ensemble/.claude/worktrees/export-experiment-results-spreadsheet-e8d5b3/results/supplement_rf_pool/natality/runs"
+  ]
+}

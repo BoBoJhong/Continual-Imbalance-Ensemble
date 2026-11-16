@@ -1,0 +1,58 @@
+{
+  "purpose": "S1 Test 2015-2017 and S3 DESlib-default reference for the 15 year-split XGBoost ensemble",
+  "xgb_run": "results/phase2_ensemble/year_splits_author2022_event/runs/20261110T062400490941Z",
+  "checkout": "C:/Users/User/0_git/Continual-Imbalance-Ensemble/.claude/worktrees/experiment-structure-data-check-957647",
+  "splits": [
+    "split_1+15",
+    "split_2+14",
+    "split_3+13",
+    "split_4+12",
+    "split_5+11",
+    "split_6+10",
+    "split_7+9",
+    "split_8+8",
+    "split_9+7",
+    "split_10+6",
+    "split_11+5",
+    "split_12+4",
+    "split_13+3",
+    "split_14+2",
+    "split_15+1",
+    "retrain_16"
+  ],
+  "seeds": [
+    42,
+    123,
+    456,
+    789,
+    2024,
+    7,
+    21,
+    84,
+    168,
+    999
+  ],
+  "k": 7,
+  "threads": 3,
+  "feature_selection": "none (no_fs only)",
+  "sources_sha256": {
+    "experiments/phase2_ensemble/dynamic/des/bankruptcy_year_splits_event.py": "34fd0aa774913b0ea135056f1787d87c5c70b22ebd015c6e08f452816e21bc68",
+    "experiments/phase2_ensemble/dynamic/des/bankruptcy_standard_dynamic.py": "a6444cf18edb244033c9f249647621466ad88acacc79883ffda16bc4fb1c71ff",
+    "experiments/phase2_ensemble/dynamic/des/bankruptcy_calibrated_ds_replay.py": "b0618e9a50decc8b758ec1c00375df807eb0cf84210de358e4d8582338a39e27",
+    "experiments/phase2_ensemble/dynamic/des/bankruptcy_standard_dynamic_event.py": "bc924919f77ef16f852824a119d32b0cfc9b81de148a76540b91c7abd5ba8b9a",
+    "src/ensemble/standard_dynamic.py": "a328d17d87d11859242223465ea8231ba5f2e949509f4103adfbee9bdd3d8085",
+    "year_splits_extra_checks.py": "212f53c1fa6729a4b93c66a81f882cab45372805ee42ca64e0163912813fe164"
+  },
+  "started_at": "2026-11-16T16:51:23.771208+00:00",
+  "argv": [
+    "C:/Users/User/0_git/Continual-Imbalance-Ensemble/.claude/worktrees/export-experiment-results-spreadsheet-e8d5b3/scripts/experiments/year_splits_extra_checks.py",
+    "--xgb-run",
+    "results/phase2_ensemble/year_splits_author2022_event/runs/20261110T062400490941Z",
+    "--out",
+    "C:/Users/User/0_git/Continual-Imbalance-Ensemble/.claude/worktrees/export-experiment-results-spreadsheet-e8d5b3/results/extra_checks_15splits",
+    "--workers",
+    "5",
+    "--threads",
+    "3"
+  ]
+}
